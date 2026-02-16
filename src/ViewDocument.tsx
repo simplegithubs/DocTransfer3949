@@ -961,9 +961,8 @@ const ViewDocument: React.FC = () => {
                         };
 
                         // For encrypted/vault files or non-Google Drive storage, show icon
-                        const showInlinePreview = !document.is_encrypted && !document.is_vault_file &&
-                            document.storage_type !== 'google_drive' &&
-                            ['image', 'video', 'audio', 'pdf'].includes(previewType);
+                        // For encrypted/vault files or non-Google Drive storage, show icon
+                        const showInlinePreview = false;
 
                         return (
                             <div style={{
