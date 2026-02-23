@@ -118,7 +118,7 @@ const Pricing: React.FC = () => {
                 currency: orderData.currency,
                 name: "DocTransfer",
                 description: `${planType.charAt(0).toUpperCase() + planType.slice(1)} Plan Subscription`,
-                image: "https://your-logo-url.com/logo.png", // Replace with actual logo
+                image: "/favicon.png", // Use local logo
                 order_id: orderData.id,
                 handler: async function (response: any) {
                     try {

@@ -27,11 +27,7 @@ import {
   PenTool,
   Clock
 } from 'lucide-react';
-import LanguageSelector from './components/LanguageSelector';
-import { useTranslation } from 'react-i18next';
-
 const LandingPage: React.FC = () => {
-  const { t } = useTranslation();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showProductMenu, setShowProductMenu] = useState(false);
 
@@ -75,6 +71,10 @@ const LandingPage: React.FC = () => {
     {
       question: "How do I upgrade to a paid plan?",
       answer: "You can upgrade your plan at any time by visiting our Pricing page. Choose the Standard or Business plan that suits your needs, and you'll get immediate access to advanced security features and increased limits."
+    },
+    {
+      question: "How do I create a custom plan?",
+      answer: "For teams with specific requirements or high volume needs, we offer custom enterprise plans. Please reach out to our support team at support@doctransfer.io to discuss a tailored solution for your organization."
     }
   ];
 
