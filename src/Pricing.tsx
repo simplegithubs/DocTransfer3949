@@ -65,43 +65,7 @@ const Pricing: React.FC = () => {
     const { user } = useUser();
     const navigate = useNavigate();
     const [loading, setLoading] = useState<string | null>(null);
-    const [trialLoading, setTrialLoading] = useState<string | null>(null);
 
-    const handleStartTrial = async (planType: 'standard' | 'business') => {
-        if (!user) {
-            alert('Please sign in to start a free trial.');
-            return;
-        }
-
-        try {
-            setTrialLoading(planType);
-
-            // Call the SECURITY DEFINER RPC function to start the trial
-            const { data, error } = await supabase.rpc('start_free_trial', {
-                p_user_id: user.id,
-                p_plan_type: planType
-            });
-
-            if (error) {
-                throw new Error(error.message);
-            }
-
-            // The RPC returns a JSON object with { success, error?, plan_type?, ... }
-            if (data && !data.success) {
-                alert(data.error || 'Could not start trial.');
-                return;
-            }
-
-            // Successfully started trial — navigate to dashboard
-            navigate('/dataroom');
-
-        } catch (err: any) {
-            console.error('Trial Error:', err);
-            alert(`Failed to start trial: ${err.message}`);
-        } finally {
-            setTrialLoading(null);
-        }
-    };
 
     const handleSubscribe = async (planType: 'standard' | 'business') => {
         if (!user) {
@@ -584,7 +548,7 @@ const Pricing: React.FC = () => {
                                     <>
                                         <button
                                             onClick={() => handleSubscribe(plan.planType!)}
-                                            disabled={!!loading || !!trialLoading}
+                                            disabled={!!loading}
                                             style={{
                                                 width: '100%',
                                                 padding: '1rem',
@@ -593,7 +557,7 @@ const Pricing: React.FC = () => {
                                                 background: '#3b82f6',
                                                 color: 'white',
                                                 fontWeight: 600,
-                                                cursor: (loading === plan.planType) ? 'not-allowed' : 'pointer',
+                                                cursor: loading === plan.planType ? 'not-allowed' : 'pointer',
                                                 transition: 'all 0.2s',
                                                 display: 'flex',
                                                 justifyContent: 'center',
@@ -602,14 +566,14 @@ const Pricing: React.FC = () => {
                                                 boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
                                             }}
                                             onMouseEnter={e => {
-                                                if (!loading && !trialLoading) {
+                                                if (!loading) {
                                                     e.currentTarget.style.transform = 'translateY(-2px)';
                                                     e.currentTarget.style.background = '#2563eb';
                                                     e.currentTarget.style.boxShadow = '0 6px 16px rgba(59, 130, 246, 0.4)';
                                                 }
                                             }}
                                             onMouseLeave={e => {
-                                                if (!loading && !trialLoading) {
+                                                if (!loading) {
                                                     e.currentTarget.style.transform = 'translateY(0)';
                                                     e.currentTarget.style.background = '#3b82f6';
                                                     e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
@@ -629,51 +593,7 @@ const Pricing: React.FC = () => {
                                             )}
                                         </button>
 
-                                        {/* Trial Button */}
-                                        <button
-                                            onClick={() => handleStartTrial(plan.planType!)}
-                                            disabled={!!trialLoading || !!loading}
-                                            style={{
-                                                width: '100%',
-                                                marginTop: '0.75rem',
-                                                padding: '0.875rem',
-                                                borderRadius: '12px',
-                                                border: `1px solid ${plan.accentColor}`,
-                                                background: '#ffffff',
-                                                color: plan.accentColor,
-                                                fontWeight: 600,
-                                                cursor: (trialLoading || loading) ? 'not-allowed' : 'pointer',
-                                                transition: 'all 0.2s',
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                gap: '0.5rem'
-                                            }}
-                                            onMouseEnter={e => {
-                                                if (!trialLoading && !loading) {
-                                                    e.currentTarget.style.background = `${plan.accentColor}05`;
-                                                    e.currentTarget.style.transform = 'translateY(-1px)';
-                                                }
-                                            }}
-                                            onMouseLeave={e => {
-                                                if (!trialLoading && !loading) {
-                                                    e.currentTarget.style.background = '#ffffff';
-                                                    e.currentTarget.style.transform = 'translateY(0)';
-                                                }
-                                            }}
-                                        >
-                                            {trialLoading === plan.planType ? (
-                                                <>
-                                                    <Loader2 size={18} className="animate-spin" />
-                                                    Starting Trial...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    Start 7-Day Free Trial
-                                                    <Sparkles size={16} />
-                                                </>
-                                            )}
-                                        </button>
+
                                     </>
                                 ) : (
                                     <Link to={plan.ctaLink} style={{ textDecoration: 'none' }}>
