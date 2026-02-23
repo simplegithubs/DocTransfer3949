@@ -46,7 +46,7 @@ if (!PUBLISHABLE_KEY) {
             VITE_CLERK_PUBLISHABLE_KEY
           </div>
           <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-            Please check your netlify.toml file or Netlify Console logs to ensure the key is being picked up.
+            Please check your Vercel Project Settings or local .env file to ensure the key is being picked up.
           </p>
         </div>
       </div>
