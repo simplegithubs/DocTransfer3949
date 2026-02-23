@@ -71,6 +71,10 @@ const LandingPage: React.FC = () => {
     {
       question: "Is there a free plan?",
       answer: "Yes! Our Free Plan is generous for individuals. It includes basic password protection, download controls, and up to 10 secure uploads per day. It's not a trial—it's free forever."
+    },
+    {
+      question: "How do I upgrade to a paid plan?",
+      answer: "You can upgrade your plan at any time by visiting our Pricing page. Choose the Standard or Business plan that suits your needs, and you'll get immediate access to advanced security features and increased limits."
     }
   ];
 
