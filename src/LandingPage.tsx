@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 import Logo from './components/Logo';
 import SEO from './components/SEO';
+import UseCaseCards from './components/UseCaseCards';
 import {
   Shield,
   FileText,
@@ -369,6 +370,8 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
         </section>
+
+        <UseCaseCards />
 
         {/* Key Features Section */}
         <section className="features-section" id="features">
