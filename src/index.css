@@ -178,7 +178,54 @@ button {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
+  /* Reduced to accommodate nav bar */
+}
+
+.hero-feature-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 0.4rem;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  margin: 0 auto 1.5rem; /* Brought closer to image */
+  max-width: fit-content;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 10;
+}
+
+.hero-feature-nav .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-feature-nav .nav-item:hover {
+  background: rgba(248, 250, 252, 0.8);
+  color: #1e293b;
+
+}
+
+.hero-feature-nav .nav-item.active {
+  background: #f0f7ff;
+  color: #4f46e5;
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.05);
+  border-color: #e0e7ff;
 }
 
 .dashboard-preview {
@@ -2667,4 +2714,14 @@ input:focus+.toggle-slider {
   .company-logo {
     transform: scale(0.85);
   }
+}
+/* Animation for showcase mockups */
+@keyframes slideMainImage {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-15px); }
+  100% { transform: translateX(0); }
+}
+
+.dashboard-ui-mockup {
+  animation: slideMainImage 7s ease-in-out infinite;
 }

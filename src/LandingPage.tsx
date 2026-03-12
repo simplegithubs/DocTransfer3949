@@ -26,11 +26,22 @@ import {
   Fingerprint,
   Camera,
   PenTool,
-  Clock
+  Clock,
+  Filter,
+  RefreshCw,
+  Eye,
+  Monitor,
+  Type,
+  Calendar,
+  CheckSquare,
+  ArrowLeft,
+  Send
 } from 'lucide-react';
 const LandingPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showProductMenu, setShowProductMenu] = useState(false);
+  const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'esignature'>('upload');
+
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -268,6 +279,748 @@ const LandingPage: React.FC = () => {
               <button className="hero-btn-secondary">View Pricing</button>
             </Link>
           </div>
+
+          {/* Hero Feature Navigation Bar */}
+          <div className="hero-feature-nav">
+            <button
+              className={`nav-item ${activeFeature === 'upload' ? 'active' : ''}`}
+              onClick={() => setActiveFeature('upload')}
+            >
+              <Upload size={18} /> Upload documents
+            </button>
+            <button
+              className={`nav-item ${activeFeature === 'documents' ? 'active' : ''}`}
+              onClick={() => setActiveFeature('documents')}
+            >
+              <FileText size={18} /> Documents
+            </button>
+            <button
+              className={`nav-item ${activeFeature === 'permissions' ? 'active' : ''}`}
+              onClick={() => setActiveFeature('permissions')}
+            >
+              <Shield size={18} /> Audit Trail
+            </button>
+            <button
+              className={`nav-item ${activeFeature === 'analytics' ? 'active' : ''}`}
+              onClick={() => setActiveFeature('analytics')}
+            >
+              <BarChart3 size={18} /> Track visitor analytics
+            </button>
+            <button
+              className={`nav-item ${activeFeature === 'esignature' ? 'active' : ''}`}
+              onClick={() => setActiveFeature('esignature')}
+            >
+              <PenTool size={18} /> Esignature
+            </button>
+          </div>
+
+
+          {/* Hero Feature Showcase Content */}
+          <div className="hero-showcase-content" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+            {activeFeature === 'upload' && (
+              <div className="dashboard-ui-mockup" style={{
+                width: '100%',
+                maxWidth: '900px',
+                borderRadius: '24px',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
+                margin: '0 auto 6rem',
+                position: 'relative',
+                zIndex: 10,
+                overflow: 'hidden',
+                border: '1px solid #f3f4f6',
+                padding: '2rem'
+              }}>
+                <div style={{
+                  width: '100%',
+                  height: '400px',
+                  border: '2px dashed #e2e8f0',
+                  borderRadius: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: '#ffffff',
+                  transition: 'background-color 0.2s ease',
+                  cursor: 'pointer'
+                }}>
+                  <div style={{
+                    width: '120px',
+                    height: '120px',
+                    borderRadius: '50%',
+                    backgroundColor: '#f8fafc',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '2rem'
+                  }}>
+                    <FileText size={56} color="#64748b" strokeWidth={1.5} />
+                  </div>
+                  <h3 style={{
+                    fontSize: '1.6rem',
+                    fontWeight: 600,
+                    color: '#1e3a5f',
+                    marginBottom: '1rem',
+                    fontFamily: "'Inter', sans-serif"
+                  }}>
+                    Click to upload or drag and drop
+                  </h3>
+                  <p style={{
+                    fontSize: '1.2rem',
+                    color: '#94a3b8',
+                    marginBottom: '0.8rem',
+                    fontWeight: 400
+                  }}>
+                    Supports multiple files (Bundles)
+                  </p>
+                  <p style={{
+                    fontSize: '1.2rem',
+                    color: '#94a3b8',
+                    fontWeight: 400
+                  }}>
+                    Maximum file size: Unlimited per file
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {activeFeature === 'documents' && (
+              <div className="dashboard-ui-mockup" style={{
+                width: '100%',
+                maxWidth: '900px',
+                borderRadius: '20px',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.05), 0 0 0 10px rgba(255,255,255,0.5)',
+                margin: '0 auto 6rem',
+                position: 'relative',
+                zIndex: 10,
+                overflow: 'hidden',
+                border: '1px solid #f3f4f6'
+              }}>
+                {/* Header/Banner Section */}
+                <div style={{
+                  background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)',
+                  padding: '2.5rem',
+                  borderBottom: '1px solid #e5e7eb',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  minHeight: '200px'
+                }}>
+                  <div style={{ position: 'relative', zIndex: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                      <div style={{ padding: '0.35rem', background: 'white', borderRadius: '8px', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                      </div>
+                      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#4f46e5', margin: 0, fontStyle: 'italic' }}>
+                        DocTransfer Dashboard
+                      </h2>
+                    </div>
+                    <p style={{ color: '#6b7280', margin: 0, fontSize: '0.9rem', marginLeft: '2.5rem' }}>Welcome back! Here's what's happening.</p>
+                  </div>
+
+                  {/* Abstract Security Icon Center */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '180px',
+                    height: '180px',
+                    borderRadius: '50%',
+                    border: '1px dashed rgba(99, 102, 241, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <div style={{
+                      width: '140px',
+                      height: '140px',
+                      borderRadius: '50%',
+                      border: '1px solid rgba(99, 102, 241, 0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <div style={{
+                        width: '80px',
+                        height: '80px',
+                        background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
+                        borderRadius: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 10px 25px -5px rgba(139, 92, 246, 0.5)'
+                      }}>
+                        <Lock size={36} color="white" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Floating Elements */}
+                  <div style={{ position: 'absolute', top: '20%', left: '20%', background: 'white', padding: '0.75rem', borderRadius: '50%', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                    <FileText size={20} color="#4f46e5" />
+                  </div>
+                  <div style={{ position: 'absolute', bottom: '20%', left: '30%', background: 'white', padding: '0.5rem', borderRadius: '50%', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                    <Shield size={16} color="#10b981" />
+                  </div>
+                  <div style={{ position: 'absolute', top: '30%', right: '25%', background: 'white', padding: '0.6rem', borderRadius: '50%', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                    <Activity size={18} color="#3b82f6" />
+                  </div>
+                  <div style={{ position: 'absolute', bottom: '25%', right: '35%', background: 'white', padding: '0.4rem', borderRadius: '50%', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                    <CheckCircle size={14} color="#f43f5e" />
+                  </div>
+                </div>
+
+                {/* Sub-navigation bar */}
+                <div style={{ padding: '0.75rem 2rem', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', display: 'flex', gap: '0.75rem', overflowX: 'auto' }}>
+                  <button onClick={() => setActiveFeature('upload')} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                    <Upload size={15} /> Upload
+                  </button>
+                  <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /></svg> Google Drive <Lock size={11} opacity={0.5} />
+                  </button>
+                  <button onClick={() => setActiveFeature('documents')} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: '#8b5cf6', color: 'white', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                    <FileText size={15} /> Documents
+                  </button>
+                  <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                    <BarChart3 size={15} /> Analytics <Lock size={11} opacity={0.5} />
+                  </button>
+                  <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                    <Shield size={15} /> Audit Trail
+                  </button>
+                  <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                    <PenTool size={15} /> E-Signature
+                  </button>
+                </div>
+
+                {/* Main Content Area */}
+                <div style={{ padding: '1.5rem 2rem', background: '#f8fafc' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1f2937', margin: 0 }}>My Documents</h3>
+                    <input type="text" placeholder="Search documents..." readOnly style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid #e5e7eb', fontSize: '0.82rem', width: '200px', background: '#fff' }} />
+                  </div>
+
+                  {/* Documents Grid */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                    {[
+                      { name: 'screencapture-doctr...', size: '970.82 KB', date: '1/29/2026' },
+                      { name: 'screencapture-doctr...', size: '970.82 KB', date: '1/29/2026' },
+                      { name: 'signed-document (...', size: '8522.10 KB', date: '1/16/2026' },
+                      { name: 'Screenshot 2023-09...', size: '902.80 KB', date: '1/3/2026' },
+                      { name: 'screencapture-local...', size: '727.36 KB', date: '12/28/2025' },
+                      { name: 'G5FREV4WkAAInHT...', size: '250.92 KB', date: '12/26/2025' },
+                      { name: 'screencapture-local...', size: '727.36 KB', date: '12/26/2025' },
+                      { name: 'test-file.txt', size: '0.05 KB', date: '12/22/2025' },
+                      { name: 'screencapture-local...', size: '727.36 KB', date: '12/16/2025' }
+                    ].map((doc, i) => (
+                      <div key={i} style={{ border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1rem', backgroundColor: '#ffffff', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', marginBottom: '1rem' }}>
+                          <div style={{ padding: '0.4rem', background: '#eff6ff', borderRadius: '8px', color: '#4f46e5', flexShrink: 0 }}>
+                            <FileText size={15} />
+                          </div>
+                          <div style={{ flex: 1, overflow: 'hidden' }}>
+                            <h4 style={{ margin: 0, fontSize: '0.8rem', fontWeight: 600, color: '#1f2937', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.name}</h4>
+                            <p style={{ margin: 0, fontSize: '0.68rem', color: '#9ca3af', marginTop: '0.15rem' }}>{doc.size} • {doc.date}</p>
+                          </div>
+                          <div style={{ color: '#d1d5db', cursor: 'pointer', flexShrink: 0 }}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', gap: '0.4rem' }}>
+                          <button style={{ flex: 1, padding: '0.35rem', border: '1px solid #f3f4f6', background: '#ffffff', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 600, color: '#4b5563', cursor: 'pointer' }}>View</button>
+                          <button style={{ flex: 1, padding: '0.35rem', border: '1px solid #dcfce7', background: '#f0fdf4', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 600, color: '#166534', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem' }}>
+                            <BarChart3 size={11} /> Analytics
+                          </button>
+                          <button style={{ padding: '0.35rem 0.5rem', border: '1px solid #e0e7ff', background: '#f5f3ff', borderRadius: '6px', color: '#4f46e5', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                            <Shield size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeFeature === 'analytics' && (
+              <div className="dashboard-ui-mockup" style={{
+                width: '100%',
+                maxWidth: '1000px',
+                borderRadius: '24px',
+                backgroundColor: '#f8fafc',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
+                margin: '0 auto 6rem',
+                position: 'relative',
+                zIndex: 10,
+                overflow: 'hidden',
+                border: '1px solid #f1f5f9',
+                fontFamily: "'Inter', sans-serif"
+              }}>
+                {/* Dashboard Header */}
+                <div style={{ padding: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#ffffff', borderBottom: '1px solid #f1f5f9' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', margin: 0 }}>Unified Analytics</h2>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: '1px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#16a34a', padding: '0.2rem 0.6rem', borderRadius: '16px', fontSize: '0.7rem', fontWeight: 600 }}>
+                          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#22c55e' }}></div> LIVE
+                        </span>
+                      </div>
+                      <p style={{ margin: 0, color: '#6b7280', fontSize: '0.8rem', marginTop: '0.25rem' }}>Last updated: 2:33:43 PM</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <button style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '0.6rem 1rem', borderRadius: '8px', fontWeight: 500, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(34, 197, 94, 0.3)' }}>
+                      <Activity size={16} /> Live Mode
+                    </button>
+                    <select disabled style={{ padding: '0.6rem 1rem', borderRadius: '8px', border: '1px solid #e5e7eb', backgroundColor: '#ffffff', color: '#4b5563', fontSize: '0.9rem', appearance: 'none', paddingRight: '2rem', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1rem' }}>
+                      <option>Last 30 Days</option>
+                    </select>
+                    <button style={{ border: 'none', background: '#8b5cf6', color: 'white', padding: '0.6rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(139, 92, 246, 0.3)' }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Main Content Area */}
+                <div style={{ padding: '2rem' }}>
+                  {/* Stats Grid */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+                    {[
+                      { label: 'Total Views', value: '4', change: '+ 12%', color: '#8b5cf6', icon: Activity },
+                      { label: 'Unique Viewers', value: '4', change: '+ 5%', color: '#10b981', icon: Fingerprint },
+                      { label: 'Avg. Time', value: '10s', change: '↓ 2%', color: '#f59e0b', icon: Clock },
+                      { label: 'Engagement', value: '2%', change: 'Scroll & time based', color: '#8b5cf6', icon: BarChart3 },
+                    ].map((stat, i) => (
+                      <div key={i} style={{ backgroundColor: stat.color, padding: '1.5rem', borderRadius: '16px', color: 'white', boxShadow: `0 10px 15px -3px ${stat.color}40` }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: 0.9, marginBottom: '1rem', fontSize: '0.9rem', fontWeight: 500 }}>
+                          <stat.icon size={16} /> {stat.label}
+                        </div>
+                        <div style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>{stat.value}</div>
+                        <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>{stat.change}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Filter Toggles */}
+                  <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                    {[
+                      { label: 'All Metrics', icon: BarChart3, active: true },
+                      { label: 'Views', icon: Activity },
+                      { label: 'Devices', icon: Monitor },
+                      { label: 'Pages', icon: FileText },
+                      { label: 'Locations', icon: Droplets },
+                      { label: 'By Hour', icon: Clock },
+                      { label: 'Status', icon: CheckCircle },
+                    ].map((btn, i) => (
+                      <button key={i} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.6rem 1.25rem',
+                        borderRadius: '24px',
+                        border: 'none',
+                        backgroundColor: btn.active ? '#6366f1' : '#ffffff',
+                        color: btn.active ? 'white' : '#64748b',
+                        fontWeight: 600,
+                        fontSize: '0.85rem',
+                        cursor: 'pointer',
+                        whiteSpace: 'nowrap',
+                        boxShadow: btn.active ? '0 4px 6px -1px rgba(99, 102, 241, 0.4)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)'
+                      }}>
+                        <btn.icon size={14} /> {btn.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Chart Container */}
+                  <div style={{ backgroundColor: '#ffffff', borderRadius: '20px', padding: '2.5rem', border: '1px solid #f1f5f9', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.25rem' }}>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>Complete Analytics Overview</h3>
+                        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.85rem' }}>Real-time data visualization</p>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563' }}>
+                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#8b5cf6' }}></div> Views
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563' }}>
+                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b981' }}></div> Devices
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563' }}>
+                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#f59e0b' }}></div> Locations
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stylized Bar Chart */}
+                    <div style={{ height: '320px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '1rem', paddingBottom: '2.5rem', position: 'relative' }}>
+                      {/* Grid Lines */}
+                      {[0, 25, 50, 75, 100].map((line, index) => (
+                        <div key={line} style={{ position: 'absolute', bottom: `calc(${line}% + 2.5rem)`, left: 0, right: 0, height: '1px', borderBottom: '1px dashed #e5e7eb', zIndex: 0, display: 'flex', alignItems: 'center' }}>
+                          <span style={{ position: 'absolute', left: '-2rem', color: '#9ca3af', fontSize: '0.75rem', transform: 'translateY(50%)' }}>{index * 6}</span>
+                        </div>
+                      ))}
+
+                      {[
+                        { label: 'Feb 14', val: 12, col: '#8b5cf6' },
+                        { label: 'Desktop', val: 24, col: '#10b981' },
+                        { label: 'Page 1', val: 82, col: '#8b5cf6' },
+                        { label: '00:00', val: 0, col: '#8b5cf6' },
+                        { label: '06:00', val: 0, col: '#8b5cf6' },
+                        { label: '12:00', val: 6, col: '#3b82f6' },
+                        { label: '18:00', val: 6, col: '#3b82f6' },
+                        { label: '21:00', val: 0, col: '#3b82f6' },
+                        { label: 'Completed', val: 6, col: '#14b8a6' },
+                        { label: 'Pending', val: 6, col: '#14b8a6' },
+                        { label: 'Dropped', val: 42, col: '#14b8a6' },
+                      ].map((bar, i) => (
+                        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: '1rem', zIndex: 1, height: '100%', position: 'relative' }}>
+                          {bar.val > 0 && (
+                            <div style={{
+                              width: '32px',
+                              height: `${bar.val}%`,
+                              backgroundColor: bar.col,
+                              borderRadius: '6px',
+                              transition: 'height 1s ease-out'
+                            }}></div>
+                          )}
+                          <span style={{ fontSize: '0.7rem', color: '#6b7280', transform: 'rotate(-45deg)', transformOrigin: 'top left', position: 'absolute', bottom: '-40px', left: '50%', whiteSpace: 'nowrap' }}>{bar.label}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Summary Footer */}
+                    <div style={{ marginTop: '3.5rem', display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
+                      {[
+                        { label: 'Views Over Time', color: '#8b5cf6' },
+                        { label: 'Device Distribution', color: '#10b981' },
+                        { label: 'Page Attention', color: '#a855f7' },
+                        { label: 'Top Locations', color: '#f59e0b' },
+                        { label: 'Views by Hour', color: '#3b82f6' },
+                        { label: 'Completion Status', color: '#14b8a6' },
+                      ].map((item, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#4b5563', fontWeight: 500 }}>
+                          <div style={{ width: '16px', height: '12px', borderRadius: '3px', backgroundColor: item.color }}></div> {item.label}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Floating Notification */}
+                  <div style={{
+                    marginTop: '2rem',
+                    width: '140px',
+                    backgroundColor: '#ffffff',
+                    padding: '0.75rem',
+                    borderRadius: '16px',
+                    border: '1px solid #f1f5f9',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    position: 'absolute',
+                    bottom: '-2rem',
+                    left: '-2rem'
+                  }}>
+                    <div style={{ width: '30px', height: '40px', borderRadius: '4px', border: '1px solid #8b5cf6', backgroundColor: '#faf5ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8b5cf6' }}>
+                      <Monitor size={14} />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', lineHeight: '1.2' }}>5</div>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Desktop</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeFeature === 'permissions' && (
+              <div className="dashboard-ui-mockup" style={{
+                width: '100%',
+                maxWidth: '960px',
+                borderRadius: '12px',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                margin: '0 auto 6rem',
+                position: 'relative',
+                zIndex: 10,
+                border: '1px solid #f3f4f6',
+                fontFamily: "'Inter', sans-serif"
+              }}>
+                {/* Header */}
+                <div style={{ padding: '1.5rem 2rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                      <Shield size={22} color="#6366f1" strokeWidth={2.5} />
+                      <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#111827', margin: 0 }}>Audit Trail</h2>
+                    </div>
+                    <p style={{ margin: 0, color: '#6b7280', fontSize: '0.9rem' }}>Comprehensive, compliance-ready activity log.</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.75rem', border: '1px solid #e5e7eb', borderRadius: '6px', background: 'transparent', color: '#4b5563', fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s' }}>
+                      <Filter size={14} /> Filters
+                    </button>
+                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.75rem', border: '1px solid #e5e7eb', borderRadius: '6px', background: 'transparent', color: '#4b5563', fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s' }}>
+                      <Download size={14} /> Export CSV
+                    </button>
+                    <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.4rem 0.5rem', border: '1px solid #e5e7eb', borderRadius: '6px', background: 'transparent', color: '#4b5563', cursor: 'pointer', transition: 'all 0.2s' }}>
+                      <RefreshCw size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Table Header */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(100px, 1fr) minmax(180px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(280px, 2.5fr)', padding: '0.75rem 2rem', borderBottom: '1px solid #f3f4f6', borderTop: '1px solid #f3f4f6', fontSize: '0.7rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: '#fafafa' }}>
+                  <div>TIMESTAMP (UTC)</div>
+                  <div>EVENT</div>
+                  <div>USER & DEVICE</div>
+                  <div>LOCATION (IP)</div>
+                  <div>DOCUMENT / DETAILS</div>
+                </div>
+
+                {/* Table Body */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {[
+                    {
+                      date: 'Feb 16',
+                      year: '2026',
+                      eventIcon: Download,
+                      eventColor: '#10b981',
+                      eventBg: '#d1fae5',
+                      eventBorder: '#a7f3d0',
+                      eventText: 'Document Downloaded',
+                      user: 'Anonymous User',
+                      device: 'Chrome',
+                      location: 'Patna, India',
+                      ip: '106.214.9.54',
+                      doc: 'Screenshot 2023-09-24 220453.png',
+                      details: null
+                    },
+                    {
+                      date: 'Feb 16',
+                      year: '2026',
+                      eventIcon: Eye,
+                      eventColor: '#3b82f6',
+                      eventBg: '#dbeafe',
+                      eventBorder: '#bfdbfe',
+                      eventText: 'Document Viewed',
+                      user: 'Anonymous User',
+                      device: 'Chrome',
+                      location: 'Patna, India',
+                      ip: '106.214.9.54',
+                      doc: 'Screenshot 2023-09-24 220453.png',
+                      details: 'viewer_agent: Mozilla/5.0 (Windows NT 10.0; Win64;...'
+                    },
+                    {
+                      date: 'Feb 16',
+                      year: '2026',
+                      eventIcon: Eye,
+                      eventColor: '#3b82f6',
+                      eventBg: '#dbeafe',
+                      eventBorder: '#bfdbfe',
+                      eventText: 'Document Viewed',
+                      user: 'Anonymous User',
+                      device: 'Chrome',
+                      location: 'Patna, India',
+                      ip: '106.214.9.54',
+                      doc: 'Screenshot 2023-09-24 220453.png',
+                      details: 'viewer_agent: Mozilla/5.0 (Windows NT 10.0; Win64;...'
+                    },
+                    {
+                      date: 'Feb 16',
+                      year: '2026',
+                      eventIcon: FileText,
+                      eventColor: '#a855f7',
+                      eventBg: '#f3e8ff',
+                      eventBorder: '#e9d5ff',
+                      eventText: 'Document Uploaded',
+                      user: 'Anonymous User',
+                      device: 'Chrome',
+                      location: 'Patna, India',
+                      ip: '106.214.9.54',
+                      doc: 'Screenshot 2023-09-24 220453.png',
+                      details: 'bundleId: null, fileName: Screenshot 2023-09-24 22...'
+                    }
+                  ].map((row, i) => (
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: 'minmax(100px, 1fr) minmax(180px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(280px, 2.5fr)', padding: '1.25rem 2rem', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none', alignItems: 'start' }}>
+                      <div style={{ color: '#374151', fontSize: '0.85rem' }}>
+                        <div style={{ fontWeight: 500, color: '#4b5563' }}>{row.date}</div>
+                        <div style={{ color: '#9ca3af', marginTop: '0.1rem' }}>{row.year}</div>
+                      </div>
+
+                      <div>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.25rem 0.6rem', borderRadius: '20px', border: `1px solid ${row.eventBorder}`, backgroundColor: row.eventBg, color: row.eventColor, fontSize: '0.75rem', fontWeight: 600 }}>
+                          <row.eventIcon size={12} strokeWidth={2.5} />
+                          {row.eventText}
+                        </div>
+                      </div>
+
+                      <div style={{ fontSize: '0.85rem' }}>
+                        <div style={{ fontWeight: 600, color: '#374151' }}>{row.user}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#6b7280', marginTop: '0.3rem', fontSize: '0.8rem' }}>
+                          <Monitor size={12} /> {row.device}
+                        </div>
+                      </div>
+
+                      <div style={{ fontSize: '0.85rem' }}>
+                        <div style={{ fontWeight: 500, color: '#374151' }}>{row.location}</div>
+                        <div style={{ color: '#9ca3af', marginTop: '0.3rem', fontSize: '0.8rem' }}>{row.ip}</div>
+                      </div>
+
+                      <div style={{ fontSize: '0.85rem', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 500, color: '#4f46e5', marginBottom: row.details ? '0.5rem' : '0' }}>
+                          <FileText size={14} />
+                          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.doc}</span>
+                        </div>
+                        {row.details && (
+                          <div style={{ backgroundColor: '#f9fafb', padding: '0.3rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', color: '#6b7280', fontFamily: 'monospace', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', border: '1px solid #f3f4f6' }}>
+                            {row.details}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Footer */}
+                <div style={{ padding: '1rem 2rem', borderTop: '1px solid #f3f4f6', backgroundColor: '#fafafa', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ color: '#6b7280', fontSize: '0.8rem' }}>Showing 4 events</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#059669', fontSize: '0.8rem', fontWeight: 600, backgroundColor: '#d1fae5', padding: '0.4rem 0.75rem', borderRadius: '6px', border: '1px solid #a7f3d0' }}>
+                    <Shield size={14} /> HIPAA / NIST Compliant Log
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeFeature === 'esignature' && (
+              <div className="dashboard-ui-mockup" style={{
+                width: '100%',
+                maxWidth: '960px',
+                borderRadius: '16px',
+                backgroundColor: '#f4f4f5',
+                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+                margin: '0 auto 6rem',
+                position: 'relative',
+                zIndex: 10,
+                padding: '1.5rem',
+                fontFamily: "'Inter', sans-serif"
+              }}>
+                {/* Header Navbar */}
+                <div style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#ffffff',
+                  padding: '1rem 1.5rem', borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                    <button style={{
+                      display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#ffffff',
+                      border: '1px solid #e5e7eb', borderRadius: '8px', padding: '0.5rem 1rem',
+                      color: '#4b5563', fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer'
+                    }}>
+                      <ArrowLeft size={16} /> Back
+                    </button>
+                    <div style={{ width: '1px', height: '24px', backgroundColor: '#e5e7eb' }}></div>
+                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#111827' }}>Prepare Document</h3>
+                  </div>
+
+                  <button style={{
+                    display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#4f46e5',
+                    border: 'none', borderRadius: '8px', padding: '0.6rem 1.25rem',
+                    color: '#ffffff', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.3)'
+                  }}>
+                    <Send size={16} /> Send Request
+                  </button>
+                </div>
+
+                {/* Main Content Area */}
+                <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1.5rem', height: '520px' }}>
+                  {/* Left Sidebar - Drag Fields */}
+                  <div style={{
+                    width: '260px', backgroundColor: '#ffffff', borderRadius: '12px',
+                    padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', position: 'relative',
+                    boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)'
+                  }}>
+                    <h4 style={{ margin: '0 0 1.25rem 0.5rem', fontSize: '0.75rem', fontWeight: 700, color: '#9ca3af', letterSpacing: '0.05em' }}>
+                      DRAG FIELDS
+                    </h4>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                      {[
+                        { label: 'Signature', icon: Type, bg: '#6b46c1', color: '#ffffff' },
+                        { label: 'Initials', icon: Type, bg: '#8b5cf6', color: '#ffffff' },
+                        { label: 'Date Signed', icon: Calendar, bg: '#059669', color: '#ffffff' },
+                        { label: 'Text Box', icon: Type, bg: '#f59e0b', color: '#ffffff' },
+                        { label: 'Checkbox', icon: CheckSquare, bg: '#ef4444', color: '#ffffff' },
+                      ].map((field, i) => (
+                        <div key={i} style={{
+                          display: 'flex', alignItems: 'center', gap: '1rem',
+                          padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '8px',
+                          backgroundColor: '#ffffff', cursor: 'grab', boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
+                        }}>
+                          <div style={{
+                            width: '28px', height: '28px', borderRadius: '6px',
+                            backgroundColor: field.bg, color: field.color,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center'
+                          }}>
+                            <field.icon size={14} strokeWidth={2.5} />
+                          </div>
+                          <span style={{ fontSize: '0.9rem', fontWeight: 500, color: '#374151' }}>{field.label}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Fake scrollbar track */}
+                    <div style={{ position: 'absolute', right: '0.5rem', top: '4rem', bottom: '1.5rem', width: '4px', backgroundColor: '#f1f5f9', borderRadius: '2px' }}>
+                      <div style={{ width: '100%', height: '40%', backgroundColor: '#cbd5e1', borderRadius: '2px' }}></div>
+                    </div>
+                  </div>
+
+                  {/* Right Content - Document */}
+                  <div style={{
+                    flex: 1, backgroundColor: '#ffffff', borderRadius: '12px',
+                    padding: '3rem', position: 'relative', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)',
+                    overflow: 'hidden'
+                  }}>
+                    <div style={{ maxWidth: '600px', margin: '0 auto', color: '#374151', lineHeight: '1.6', fontSize: '0.95rem' }}>
+                      <p style={{ marginBottom: '1.25rem' }}>
+                        JavaScript is used to add behaviour and interactivity to the web page. It is also possible to manipulate the web page using JavaScript.
+                      </p>
+
+                      <p style={{ marginBottom: '1.25rem' }}>
+                        Simply we can say that JavaScript can manipulate the HTML & CSS of a web page, and this manipulation is done using <strong style={{ color: '#111827' }}>DOM (Document Object Model)</strong>.
+                      </p>
+
+                      <p style={{ marginBottom: '2.5rem' }}>
+                        JavaScript <strong style={{ color: '#111827' }}>access the DOM to manipulate the web page</strong>. Using DOM, the JavaScript gets access to <strong style={{ color: '#111827' }}>HTML as well as CSS</strong> of the web page and can also add behaviour to the HTML elements.
+                      </p>
+
+                      <h2 style={{ color: '#b91c1c', fontSize: '1.4rem', fontWeight: 700, marginBottom: '1rem' }}>
+                        DOM(Document Object Model)
+                      </h2>
+
+                      <p style={{ marginBottom: '2.5rem' }}>
+                        Document Object Model is an <strong style={{ color: '#111827' }}>API</strong> that represents and <strong style={{ color: '#111827' }}>interacts with HTML document</strong>. When a page is loaded, the browser creates the DOM for the web page. The DOM represents the document as a node tree, where each node represents part of the document. It can be an element, text, etc., just how that web page was written.
+                      </p>
+
+                      <h2 style={{ color: '#b91c1c', fontSize: '1.4rem', fontWeight: 700, marginBottom: '1rem' }}>
+                        API( Application programming interface )
+                      </h2>
+
+                      <p>
+                        In simple terms, API is an easy way by which you can use code written by somebody else in your own code.
+                      </p>
+                    </div>
+
+                    {/* Fake scrollbar track */}
+                    <div style={{ position: 'absolute', right: '0.5rem', top: '1rem', bottom: '1rem', width: '6px', backgroundColor: '#f8fafc', borderRadius: '3px' }}>
+                      <div style={{ width: '100%', height: '30%', backgroundColor: '#9ca3af', borderRadius: '3px', marginTop: '20%' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
 
           <div className="transfer-animation-container">
             <div className="transfer-scene">
