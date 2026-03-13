@@ -14,12 +14,15 @@ import {
 } from 'lucide-react';
 import { isValidGoogleDriveLink, getFileTypeFromUrl } from '../lib/google-drive-utils';
 import { supabase } from '../lib/supabase';
+import { hashPassword } from '../lib/security';
+import { useUser } from '@clerk/clerk-react';
 
 interface GoogleDriveTabProps {
     onDocumentUploaded?: () => void;
 }
 
 const GoogleDriveTab: React.FC<GoogleDriveTabProps> = ({ onDocumentUploaded }) => {
+    const { user } = useUser();
     const [googleDriveLink, setGoogleDriveLink] = useState('');
     const [fileName, setFileName] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
@@ -97,10 +100,11 @@ const GoogleDriveTab: React.FC<GoogleDriveTabProps> = ({ onDocumentUploaded }) =
                     google_drive_link: googleDriveLink,
                     share_link: shareLink,
                     allow_download: allowDownloads,
-                    password: passwordProtection ? password : null,
+                    password: passwordProtection ? await hashPassword(password) : null,
                     expires_at: linkExpiration ? expiresAt : null,
                     email_verification: emailVerification,
                     allowed_email: emailVerification && allowedEmail ? allowedEmail : null,
+                    user_id: user?.id || null,
                 });
 
             if (dbError) throw dbError;

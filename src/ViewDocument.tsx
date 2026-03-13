@@ -358,7 +358,10 @@ const ViewDocument: React.FC = () => {
         const target = isBundle ? bundleData : document;
 
         // Check if specific email is required
-        if (target?.allowed_email && target.allowed_email !== email) {
+        const targetAllowedEmail = target?.allowed_email?.trim().toLowerCase();
+        const inputEmail = email.trim().toLowerCase();
+
+        if (targetAllowedEmail && targetAllowedEmail !== inputEmail) {
             alert('Access denied. This document is not shared with this email address.');
             return;
         }
@@ -369,7 +372,7 @@ const ViewDocument: React.FC = () => {
         setShowCodeInput(true);
 
         // TODO: In production, integrate real email service (Resend/SendGrid/AWS SES)
-        alert(`Verification code sent to ${email}. Check your email.`);
+        alert(`Verification code sent to ${email}. Check your email. (DEMO MODE: Your code is ${code})`);
 
         // Development only - show code in console
         if (import.meta.env.DEV) {
