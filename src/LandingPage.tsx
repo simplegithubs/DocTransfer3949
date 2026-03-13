@@ -35,12 +35,13 @@ import {
   Calendar,
   CheckSquare,
   ArrowLeft,
-  Send
+  Send,
+  Globe
 } from 'lucide-react';
 const LandingPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showProductMenu, setShowProductMenu] = useState(false);
-  const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'esignature'>('upload');
+  const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'esignature' | 'google-drive'>('upload');
 
 
   const toggleFaq = (index: number) => {
@@ -384,6 +385,73 @@ const LandingPage: React.FC = () => {
               </div>
             )}
 
+            {activeFeature === 'google-drive' && (
+              <div className="dashboard-ui-mockup" style={{
+                width: '100%',
+                maxWidth: '900px',
+                borderRadius: '24px',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
+                margin: '0 auto 6rem',
+                position: 'relative',
+                zIndex: 10,
+                overflow: 'hidden',
+                border: '1px solid #f3f4f6',
+                padding: '2rem'
+              }}>
+                <div style={{
+                  width: '100%',
+                  height: '400px',
+                  border: '2px dashed #4285f4',
+                  borderRadius: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: '#f8faff',
+                  cursor: 'pointer'
+                }}>
+                  <div style={{
+                    width: '120px',
+                    height: '120px',
+                    borderRadius: '50%',
+                    backgroundColor: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '2rem',
+                    boxShadow: '0 4px 12px rgba(66, 133, 244, 0.2)'
+                  }}>
+                    <Globe size={56} color="#4285f4" strokeWidth={1.5} />
+                  </div>
+                  <h3 style={{
+                    fontSize: '1.6rem',
+                    fontWeight: 600,
+                    color: '#1e3a5f',
+                    marginBottom: '1rem',
+                    fontFamily: "'Inter', sans-serif"
+                  }}>
+                    Import from Google Drive
+                  </h3>
+                  <p style={{
+                    fontSize: '1.2rem',
+                    color: '#64748b',
+                    marginBottom: '0.8rem',
+                    fontWeight: 400
+                  }}>
+                    Connect your Drive account and share files directly
+                  </p>
+                  <p style={{
+                    fontSize: '1.2rem',
+                    color: '#94a3b8',
+                    fontWeight: 400
+                  }}>
+                    Upto 2TB file Transfer using Google Drive links
+                  </p>
+                </div>
+              </div>
+            )}
+
             {activeFeature === 'documents' && (
               <div className="dashboard-ui-mockup" style={{
                 width: '100%',
@@ -476,8 +544,8 @@ const LandingPage: React.FC = () => {
                   <button onClick={() => setActiveFeature('upload')} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
                     <Upload size={15} /> Upload
                   </button>
-                  <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /></svg> Google Drive <Lock size={11} opacity={0.5} />
+                  <button onClick={() => setActiveFeature('google-drive')} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /></svg> Google Drive
                   </button>
                   <button onClick={() => setActiveFeature('documents')} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: '#8b5cf6', color: 'white', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
                     <FileText size={15} /> Documents

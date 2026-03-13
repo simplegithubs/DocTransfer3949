@@ -583,14 +583,9 @@ const DataRoom: React.FC = () => {
                             <Upload size={16} /> Upload
                         </button>
                         <button onClick={() => {
-                            if (subscription?.plan_type === 'free' || !subscription) {
-                                handleLockedFeatureClick('Google Drive Integration');
-                            } else {
-                                setActiveTab('google-drive');
-                            }
+                            setActiveTab('google-drive');
                         }} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'google-drive' ? '#8b5cf6' : 'transparent', color: activeTab === 'google-drive' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <Globe size={16} /> Google Drive
-                            {(subscription?.plan_type === 'free' || !subscription) && <Lock size={14} />}
                         </button>
                         <button onClick={() => setActiveTab('documents')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'documents' ? '#8b5cf6' : 'transparent', color: activeTab === 'documents' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <FileText size={16} /> Documents

@@ -258,7 +258,7 @@ export const useSubscription = () => {
             'e_signature': ['free', 'standard', 'business'],
             'document_bundles': ['business'],
             'sso_integration': ['standard', 'business'],
-            'google_drive': ['standard', 'business'],
+            'google_drive': ['free', 'standard', 'business'],
             'white_label': ['business'],
             'dedicated_manager': ['business'],
             'custom_integrations': ['business'],
