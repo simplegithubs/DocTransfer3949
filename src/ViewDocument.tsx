@@ -9,6 +9,7 @@ import WatermarkOverlay from './components/WatermarkOverlay';
 import { applyPdfWatermark, applyImageWatermark } from './lib/watermarkGenerator';
 import WebcamGate from './components/WebcamGate';
 import { getPreviewType, getExtension } from './lib/fileTypes';
+import { decryptFile } from './lib/encryption';
 
 interface DocumentData {
     id: string;
@@ -92,7 +93,6 @@ const ViewDocument: React.FC = () => {
     const [isWatermarking, setIsWatermarking] = useState(false);
 
 
-    // Branding State
     const [branding, setBranding] = useState<{
         logo_url?: string;
         brand_color?: string;
@@ -100,10 +100,49 @@ const ViewDocument: React.FC = () => {
         remove_branding?: boolean;
     } | null>(null);
 
+    // Encryption State
+    const [decryptionKey, setDecryptionKey] = useState<string | null>(null);
+    const [decryptedUrl, setDecryptedUrl] = useState<string | null>(null);
+    const [isDecrypting, setIsDecrypting] = useState(false);
+
     useEffect(() => {
         fetchDocument();
         fetchViewerIp();
+        
+        // Extract encryption key from hash
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const key = hashParams.get('key');
+        if (key) setDecryptionKey(key);
     }, [shareLink]);
+
+    useEffect(() => {
+        if (document?.is_encrypted && decryptionKey && isAuthenticated && (document.email_verification ? isEmailVerified : true) && (document.require_snapshot ? isSnapshotVerified : true)) {
+            handleDecryption();
+        }
+    }, [document, decryptionKey, isAuthenticated, isEmailVerified, isSnapshotVerified]);
+
+    const handleDecryption = async () => {
+        if (!document || !decryptionKey || !document.encryption_iv || decryptedUrl) return;
+        
+        setIsDecrypting(true);
+        try {
+            const { data, error } = await supabase.storage
+                .from('documents')
+                .download(document.file_path);
+
+            if (error) throw error;
+
+            const decryptedBuffer = await decryptFile(data, decryptionKey, document.encryption_iv);
+            const blob = new Blob([decryptedBuffer], { type: document.file_type });
+            const url = URL.createObjectURL(blob);
+            setDecryptedUrl(url);
+        } catch (err) {
+            console.error('Decryption failed:', err);
+            setError('Failed to decrypt document. The encryption key might be missing or invalid.');
+        } finally {
+            setIsDecrypting(false);
+        }
+    };
 
     const fetchViewerIp = async () => {
         try {
@@ -486,51 +525,50 @@ const ViewDocument: React.FC = () => {
                 return;
             }
 
-            // Validate encryption keys if file is encrypted
-            if (document.is_encrypted) {
-                if (!document.encryption_key || !document.encryption_iv) {
-                    console.error('Missing encryption keys:', {
-                        has_key: !!document.encryption_key,
-                        has_iv: !!document.encryption_iv
-                    });
-                    alert('Error: Encryption keys are missing for this secure file. Please contact the file owner.');
-                    return;
-                }
-                console.log('✓ Encryption keys present');
-            }
-
             // Handle Supabase storage download
             console.log('Downloading from storage:', document.file_path);
-            const { data, error } = await supabase.storage
-                .from('documents')
-                .download(document.file_path);
+            
+            let blob: Blob;
+            
+            if (document.is_encrypted && decryptedUrl) {
+                // Already decrypted for preview
+                const response = await fetch(decryptedUrl);
+                blob = await response.blob();
+            } else if (document.is_encrypted && decryptionKey && document.encryption_iv) {
+                // Decrypt on the fly
+                console.log('Decrypting on the fly for download...');
+                const { data, error } = await supabase.storage
+                    .from('documents')
+                    .download(document.file_path);
+                
+                if (error) throw error;
+                
+                const decryptedBuffer = await decryptFile(data, decryptionKey, document.encryption_iv);
+                blob = new Blob([decryptedBuffer], { type: document.file_type });
+            } else {
+                // Standard download
+                const { data, error } = await supabase.storage
+                    .from('documents')
+                    .download(document.file_path);
 
-            if (error) {
-                console.error('Storage download error:', error);
-                throw error;
+                if (error) {
+                    console.error('Storage download error:', error);
+                    throw error;
+                }
+                blob = data;
             }
 
-            console.log('✓ Downloaded from storage, size:', data.size, 'bytes');
-
-            let blob = data;
-
-            if (document.is_encrypted && document.encryption_key && document.encryption_iv) {
-                // Legacy Encryption (Server-side key) - if we re-enable it later
-            }
+            console.log('✓ Blob ready, size:', blob.size, 'bytes');
 
             // Verify blob has content
             if (blob.size === 0) {
                 console.error('Error: Downloaded blob is empty');
-                alert('Error: Downloaded file is empty. This may indicate a decryption or storage issue.');
+                alert('Error: Downloaded file is empty.');
                 return;
             }
 
             console.log('Creating download link...');
-            console.log('Final blob:', {
-                size: blob.size,
-                type: blob.type
-            });
-
+            
             // Create download link
             const url = watermarkedUrl || window.URL.createObjectURL(blob);
             const a = window.document.createElement('a');
@@ -988,7 +1026,7 @@ const ViewDocument: React.FC = () => {
                                 {showInlinePreview && previewType === 'image' && (
                                     <div style={{ maxWidth: '100%', maxHeight: '500px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
                                         <img
-                                            src={watermarkedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={watermarkedUrl || decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
                                             alt={document.name}
                                             style={{ maxWidth: '100%', maxHeight: '500px', objectFit: 'contain' }}
                                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
@@ -1001,7 +1039,7 @@ const ViewDocument: React.FC = () => {
                                         <video
                                             controls
                                             style={{ width: '100%', maxHeight: '500px' }}
-                                            src={supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
                                         >
                                             Your browser does not support video playback.
                                         </video>
@@ -1022,7 +1060,7 @@ const ViewDocument: React.FC = () => {
                                         <audio
                                             controls
                                             style={{ width: '100%' }}
-                                            src={supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
                                         >
                                             Your browser does not support audio playback.
                                         </audio>
@@ -1032,7 +1070,7 @@ const ViewDocument: React.FC = () => {
                                 {showInlinePreview && previewType === 'pdf' && (
                                     <div style={{ width: '100%', height: '800px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
                                         <iframe
-                                            src={watermarkedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={watermarkedUrl || decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
                                             style={{ width: '100%', height: '100%', border: 'none' }}
                                             title={document.name}
                                         />
@@ -1100,6 +1138,25 @@ const ViewDocument: React.FC = () => {
                                             ? 'Secure encrypted file - Download to view'
                                             : `${fileExt.toUpperCase()} file - Click download to access`}
                                     </p>
+                                )}
+
+                                {/* Decrypting Overlay */}
+                                {isDecrypting && (
+                                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.8)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 50, backdropFilter: 'blur(4px)' }}>
+                                        <div className="animate-spin" style={{ width: '32px', height: '32px', border: '3px solid #e5e7eb', borderTopColor: '#4f46e5', borderRadius: '50%', marginBottom: '1rem' }}></div>
+                                        <p style={{ fontWeight: '600', color: '#4f46e5' }}>Decrypting secure content...</p>
+                                    </div>
+                                )}
+
+                                {/* Missing Key UI */}
+                                {document.is_encrypted && !decryptionKey && !isDecrypting && (
+                                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.95)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 60, padding: '2rem', textAlign: 'center' }}>
+                                        <div style={{ padding: '1.5rem', background: '#fee2e2', borderRadius: '50%', marginBottom: '1.5rem' }}>
+                                            <AlertCircle size={48} color="#dc2626" />
+                                        </div>
+                                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#111827', marginBottom: '0.5rem' }}>Encrypted Content</h3>
+                                        <p style={{ color: '#6b7280', maxWidth: '300px' }}>This document is encrypted with AES-256. You need the full secure link with the encryption key to view it.</p>
+                                    </div>
                                 )}
                             </div>
                         );

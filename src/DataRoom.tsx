@@ -28,6 +28,7 @@ import {
 import { supabase } from './lib/supabase';
 import { hashPassword } from './lib/security';
 import GoogleDriveTab from './components/GoogleDriveTab';
+import { encryptFile, generateEncryptionKey } from './lib/encryption';
 import AnalyticsDashboard from './components/analytics/AnalyticsDashboard';
 import DashboardAnimation from './components/DashboardAnimation';
 import AuditTrail from './components/AuditTrail';
@@ -108,6 +109,7 @@ const DataRoom: React.FC = () => {
 
     const [maxViewsEnabled, setMaxViewsEnabled] = useState(false);
     const [maxViews, setMaxViews] = useState(1);
+    const [aesEncryptionEnabled, setAesEncryptionEnabled] = useState(false);
 
     // Subscription and premium features
     const { subscription, usage, dailyUploadCount, isLoading: subLoading, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
@@ -226,6 +228,8 @@ const DataRoom: React.FC = () => {
         setIsUploading(true);
         setUploadError(null);
 
+        const encryptionKey = aesEncryptionEnabled ? generateEncryptionKey() : null;
+
         try {
             console.log('=== UPLOAD DEBUG START ===');
             console.log(`Selected ${selectedFiles.length} files`);
@@ -276,10 +280,21 @@ const DataRoom: React.FC = () => {
 
                 console.log('Uploading to path:', sanitizedFilePath);
 
-                // 3. Upload to Supabase storage
+                // 3. Encrypt if enabled
+                let fileToUpload: File | Blob = file;
+                let encryptionIv: string | null = null;
+
+                if (aesEncryptionEnabled && encryptionKey) {
+                    console.log('Encrypting file...');
+                    const { encryptedBlob, iv } = await encryptFile(file, encryptionKey);
+                    fileToUpload = encryptedBlob;
+                    encryptionIv = iv;
+                }
+
+                // 4. Upload to Supabase storage
                 const { error: uploadError } = await supabase.storage
                     .from('documents')
-                    .upload(sanitizedFilePath, file, {
+                    .upload(sanitizedFilePath, fileToUpload, {
                         cacheControl: '3600',
                         upsert: false
                     });
@@ -321,9 +336,9 @@ const DataRoom: React.FC = () => {
 
                         // Encryption / Vault Fields
                         is_vault_file: false,
-                        is_encrypted: false,
-                        encryption_key: null,
-                        encryption_iv: null,
+                        is_encrypted: aesEncryptionEnabled,
+                        encryption_key: null, // Stored in URL hash only
+                        encryption_iv: encryptionIv,
 
                         original_file_name: file.name,
                         original_file_type: file.type,
@@ -337,6 +352,9 @@ const DataRoom: React.FC = () => {
 
                 // Construct Link for this doc
                 let finalLink = `${window.location.origin}/view/${docShareLink}`;
+                if (aesEncryptionEnabled && encryptionKey) {
+                    finalLink += `#key=${encryptionKey}`;
+                }
 
                 uploadedDocs.push({
                     id: docData.id,
@@ -367,7 +385,10 @@ const DataRoom: React.FC = () => {
 
             // Set state based on Single vs Bundle
             if (bundleId && bundleShareLink) {
-                const finalBundleLink = `${window.location.origin}/view/${bundleShareLink}`;
+                let finalBundleLink = `${window.location.origin}/view/${bundleShareLink}`;
+                if (aesEncryptionEnabled && encryptionKey) {
+                    finalBundleLink += `#key=${encryptionKey}`;
+                }
                 setUploadedBundleLink(finalBundleLink);
                 setUploadedDoc(uploadedDocs[0]); // Just to trigger "Success" UI if it relies on this
             } else {
@@ -785,10 +806,24 @@ const DataRoom: React.FC = () => {
                                                     }}
                                                 />
                                             )}
+                                        </div>                                        {/* AES-256 Encryption */}
+                                        <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: aesEncryptionEnabled ? '#f5f3ff' : '#ffffff', transition: 'all 0.2s' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <div style={{ padding: '8px', background: '#e0e7ff', borderRadius: '8px' }}>
+                                                        <Shield size={18} style={{ color: '#4f46e5' }} />
+                                                    </div>
+                                                    <div>
+                                                        <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#374151', display: 'block' }}>AES-256 Encryption</span>
+                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Encrypt file content client-side</span>
+                                                    </div>
+                                                </div>
+                                                <label className="toggle-switch">
+                                                    <input type="checkbox" checked={aesEncryptionEnabled} onChange={(e) => setAesEncryptionEnabled(e.target.checked)} />
+                                                    <span className="toggle-slider"></span>
+                                                </label>
+                                            </div>
                                         </div>
-
-
-
 
                                         {/* Self-Destruct Rules (Expiration & View Limits) */}
                                         <SelfDestructSettings
