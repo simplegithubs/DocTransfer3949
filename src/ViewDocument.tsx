@@ -7,6 +7,7 @@ import { comparePassword, rateLimiter } from './lib/security';
 import { FileText, Download, AlertCircle, Lock as LockIcon, Package, ArrowRight, ExternalLink, Flame, ShieldCheck, Video, Music, Image as ImageIcon, Table, Archive } from 'lucide-react';
 import { logDocumentView, logDocumentDownload, logPasswordVerification, logEmailVerification } from './lib/auditLogger';
 import WatermarkOverlay from './components/WatermarkOverlay';
+import { applyPdfWatermark, applyImageWatermark } from './lib/watermarkGenerator';
 import BiometricGate from './components/BiometricGate';
 import WebcamGate from './components/WebcamGate';
 import { getPreviewType, getExtension } from './lib/fileTypes';
@@ -25,6 +26,7 @@ interface DocumentData {
     screenshot_protection: boolean;
     email_verification: boolean;
     allowed_email?: string;
+    apply_watermark?: boolean;
     // Encryption fields
     is_encrypted?: boolean;
     encryption_key?: string;
@@ -93,6 +95,11 @@ const ViewDocument: React.FC = () => {
     // Vault State
     const [vaultKey, setVaultKey] = useState<string | null>(null);
 
+    // Watermark State
+    const [watermarkedUrl, setWatermarkedUrl] = useState<string | null>(null);
+    const [viewerIp, setViewerIp] = useState<string>('Unknown IP');
+    const [isWatermarking, setIsWatermarking] = useState(false);
+
     useEffect(() => {
         // Extract key from hash if present (Magic Link)
         const hash = window.location.hash;
@@ -116,7 +123,18 @@ const ViewDocument: React.FC = () => {
 
     useEffect(() => {
         fetchDocument();
+        fetchViewerIp();
     }, [shareLink]);
+
+    const fetchViewerIp = async () => {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            if (data.ip) setViewerIp(data.ip);
+        } catch (e) {
+            console.warn('Failed to fetch viewer IP:', e);
+        }
+    };
 
     const fetchDocument = async () => {
         try {
@@ -177,6 +195,12 @@ const ViewDocument: React.FC = () => {
                 .single()
                 .then(({ data: brandingData }) => {
                     if (brandingData) setBranding(brandingData);
+                    
+                    // Apply Watermarking if enabled - do it after branding fetch to ensure order
+                    const previewType = getPreviewType(getExtension(data.name));
+                    if (data.apply_watermark && (previewType === 'pdf' || previewType === 'image') && !data.is_encrypted) {
+                        handleDocumentWatermarking(data);
+                    }
                 });
         }
 
@@ -222,6 +246,64 @@ const ViewDocument: React.FC = () => {
         // Auto-authenticate logic
         if ((!data.password || data.password === '') && !data.email_verification) {
             setIsAuthenticated(true);
+        }
+    };
+
+    const handleDocumentWatermarking = async (data: any) => {
+        setIsWatermarking(true);
+        try {
+            console.log('Applying interior watermark...');
+            const { data: fileData, error: downloadError } = await supabase.storage
+                .from('documents')
+                .download(data.file_path);
+
+            if (downloadError) throw downloadError;
+
+            const watermarkConfig = data.watermark_config || {
+                text: 'CONFIDENTIAL',
+                color: '#ff0000',
+                opacity: 0.2,
+                fontSize: 24,
+                rotation: -45,
+                layout: 'tiled'
+            };
+
+            const previewType = getPreviewType(getExtension(data.name));
+            let processedUrl = '';
+
+            if (previewType === 'pdf') {
+                const processedPdf = await applyPdfWatermark(
+                    await fileData.arrayBuffer(),
+                    watermarkConfig,
+                    {
+                        email: isEmailVerified ? email : undefined,
+                        ip: viewerIp,
+                        date: new Date().toLocaleDateString()
+                    }
+                );
+                const blob = new Blob([processedPdf as BlobPart], { type: 'application/pdf' });
+                processedUrl = URL.createObjectURL(blob);
+            } else if (previewType === 'image') {
+                const processedImageBlob = await applyImageWatermark(
+                    fileData,
+                    watermarkConfig,
+                    {
+                        email: isEmailVerified ? email : undefined,
+                        ip: viewerIp,
+                        date: new Date().toLocaleDateString()
+                    }
+                );
+                processedUrl = URL.createObjectURL(processedImageBlob);
+            }
+
+            if (processedUrl) {
+                setWatermarkedUrl(processedUrl);
+                console.log('✓ Interior watermark applied successfully');
+            }
+        } catch (err) {
+            console.error('Failed to apply interior watermark:', err);
+        } finally {
+            setIsWatermarking(false);
         }
     };
 
@@ -528,7 +610,7 @@ const ViewDocument: React.FC = () => {
             });
 
             // Create download link
-            const url = window.URL.createObjectURL(blob);
+            const url = watermarkedUrl || window.URL.createObjectURL(blob);
             const a = window.document.createElement('a');
             a.href = url;
             a.download = document.name;
@@ -538,7 +620,9 @@ const ViewDocument: React.FC = () => {
             console.log('✓ Download triggered');
 
             // Cleanup
-            window.URL.revokeObjectURL(url);
+            if (!watermarkedUrl) {
+                window.URL.revokeObjectURL(url);
+            }
             window.document.body.removeChild(a);
 
             console.log('✓ Download triggered');
@@ -830,7 +914,7 @@ const ViewDocument: React.FC = () => {
                     config={document.watermark_config}
                     viewerInfo={{
                         email: isEmailVerified ? email : undefined,
-                        ip: '127.0.0.1',
+                        ip: viewerIp,
                         date: new Date().toLocaleString()
                     }}
                 />
@@ -893,16 +977,16 @@ const ViewDocument: React.FC = () => {
                         {document.allow_download && (
                             <button
                                 onClick={handleDownload}
-                                disabled={downloading}
+                                disabled={downloading || isWatermarking}
                                 style={{
                                     padding: '0.75rem 1.5rem',
-                                    background: downloading ? '#9ca3af' : (branding?.brand_color || '#4f46e5'),
+                                    background: (downloading || isWatermarking) ? '#9ca3af' : (branding?.brand_color || '#4f46e5'),
                                     color: 'white',
                                     border: 'none',
                                     borderRadius: '10px',
                                     fontWeight: '600',
                                     fontSize: '0.9rem',
-                                    cursor: downloading ? 'not-allowed' : 'pointer',
+                                    cursor: (downloading || isWatermarking) ? 'not-allowed' : 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.5rem',
@@ -910,9 +994,7 @@ const ViewDocument: React.FC = () => {
                                     boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)'
                                 }}
                             >
-                                {downloading ? (
-                                    'Processing...'
-                                ) : (
+                                {downloading ? 'Downloading...' : isWatermarking ? 'Applying Watermark...' : (
                                     <>
                                         <Download size={18} />
                                         Download File
@@ -965,7 +1047,8 @@ const ViewDocument: React.FC = () => {
 
                         // For encrypted/vault files or non-Google Drive storage, show icon
                         // For encrypted/vault files or non-Google Drive storage, show icon
-                        const showInlinePreview = false;
+                        // Show inline preview for PDF if watermarked
+                        const showInlinePreview = !!watermarkedUrl;
 
                         return (
                             <div style={{
@@ -998,7 +1081,7 @@ const ViewDocument: React.FC = () => {
                                 {showInlinePreview && previewType === 'image' && (
                                     <div style={{ maxWidth: '100%', maxHeight: '500px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
                                         <img
-                                            src={supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={watermarkedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
                                             alt={document.name}
                                             style={{ maxWidth: '100%', maxHeight: '500px', objectFit: 'contain' }}
                                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
@@ -1040,9 +1123,9 @@ const ViewDocument: React.FC = () => {
                                 )}
 
                                 {showInlinePreview && previewType === 'pdf' && (
-                                    <div style={{ width: '100%', height: '600px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
+                                    <div style={{ width: '100%', height: '800px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
                                         <iframe
-                                            src={supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={watermarkedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
                                             style={{ width: '100%', height: '100%', border: 'none' }}
                                             title={document.name}
                                         />

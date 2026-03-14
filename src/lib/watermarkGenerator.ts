@@ -1,3 +1,5 @@
+import { PDFDocument, rgb, degrees, StandardFonts } from 'pdf-lib';
+
 /**
  * Dynamic Watermark Generator
  * Creates and applies watermarks to protected documents
@@ -5,11 +7,162 @@
 
 export interface WatermarkConfig {
     text: string;
-    opacity?: number;
-    position?: 'diagonal' | 'center' | 'bottom' | 'top';
-    fontSize?: number;
-    color?: string;
-    rotation?: number;
+    opacity: number;
+    fontSize: number;
+    color: string;
+    rotation: number;
+    layout: 'single' | 'tiled';
+}
+
+/**
+ * Helper to convert hex color to RGB (0-1)
+ */
+function hexToRgb(hex: string) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16) / 255,
+        g: parseInt(result[2], 16) / 255,
+        b: parseInt(result[3], 16) / 255
+    } : { r: 0, g: 0, b: 0 };
+}
+
+/**
+ * Replace placeholders in watermark text
+ */
+function getDynamicText(text: string, viewerInfo: { email?: string; ip?: string; date?: string }) {
+    let dynamicText = text;
+    dynamicText = dynamicText.replace('{{email}}', viewerInfo.email || 'Anonymous');
+    dynamicText = dynamicText.replace('{{ip}}', viewerInfo.ip || 'Unknown IP');
+    dynamicText = dynamicText.replace('{{date}}', viewerInfo.date || new Date().toLocaleString());
+    return dynamicText;
+}
+
+/**
+ * Apply a dynamic watermark to a PDF document using pdf-lib
+ */
+export async function applyPdfWatermark(
+    pdfBuffer: ArrayBuffer,
+    config: WatermarkConfig,
+    viewerInfo: { email?: string; ip?: string; date?: string }
+): Promise<Uint8Array> {
+    try {
+        const pdfDoc = await PDFDocument.load(pdfBuffer);
+        const pages = pdfDoc.getPages();
+        const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+        const dynamicText = getDynamicText(config.text, viewerInfo);
+        const color = hexToRgb(config.color);
+
+        for (const page of pages) {
+            const { width, height } = page.getSize();
+            
+            if (config.layout === 'single') {
+                page.drawText(dynamicText, {
+                    x: width / 2 - (dynamicText.length * config.fontSize * 0.3),
+                    y: height / 2,
+                    size: config.fontSize,
+                    font: font,
+                    color: rgb(color.r, color.g, color.b),
+                    opacity: config.opacity,
+                    rotate: degrees(config.rotation),
+                });
+            } else {
+                // Tiled layout
+                const spacingX = 250;
+                const spacingY = 200;
+                
+                for (let x = 50; x < width + spacingX; x += spacingX) {
+                    for (let y = 50; y < height + spacingY; y += spacingY) {
+                        page.drawText(dynamicText, {
+                            x: x,
+                            y: y,
+                            size: config.fontSize,
+                            font: font,
+                            color: rgb(color.r, color.g, color.b),
+                            opacity: config.opacity,
+                            rotate: degrees(config.rotation),
+                        });
+                    }
+                }
+            }
+        }
+
+        return await pdfDoc.save();
+    } catch (error) {
+        console.error('Error applying PDF watermark:', error);
+        return new Uint8Array(pdfBuffer);
+    }
+}
+
+/**
+ * Apply a dynamic watermark to an image using Canvas
+ */
+export async function applyImageWatermark(
+    imageBlob: Blob,
+    config: WatermarkConfig,
+    viewerInfo: { email?: string; ip?: string; date?: string }
+): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(imageBlob);
+        
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            
+            if (!ctx) {
+                reject(new Error('Could not get canvas context'));
+                return;
+            }
+
+            // Draw original image
+            ctx.drawImage(img, 0, 0);
+
+            // Setup watermark
+            const dynamicText = getDynamicText(config.text, viewerInfo);
+            ctx.font = `${config.fontSize}px Arial`;
+            ctx.fillStyle = config.color;
+            ctx.globalAlpha = config.opacity;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            if (config.layout === 'single') {
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate((config.rotation * Math.PI) / 180);
+                ctx.fillText(dynamicText, 0, 0);
+                ctx.restore();
+            } else {
+                // Tiled layout
+                const spacingX = 300;
+                const spacingY = 200;
+                
+                for (let x = -spacingX; x < canvas.width + spacingX; x += spacingX) {
+                    for (let y = -spacingY; y < canvas.height + spacingY; y += spacingY) {
+                        ctx.save();
+                        ctx.translate(x, y);
+                        ctx.rotate((config.rotation * Math.PI) / 180);
+                        ctx.fillText(dynamicText, 0, 0);
+                        ctx.restore();
+                    }
+                }
+            }
+
+            canvas.toBlob((blob) => {
+                if (blob) resolve(blob);
+                else reject(new Error('Canvas toBlob failed'));
+            }, imageBlob.type);
+        };
+
+        img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error('Failed to load image'));
+        };
+
+        img.src = url;
+    });
 }
 
 /**
@@ -17,7 +170,7 @@ export interface WatermarkConfig {
  */
 export function applyWatermark(
     containerId: string,
-    config: WatermarkConfig
+    config: any // Reverting to any to avoid breakage if other parts of the app use old config
 ): void {
     const container = document.getElementById(containerId);
     if (!container) {
@@ -55,22 +208,8 @@ export function applyWatermark(
     `;
 
     // Create watermark pattern based on position
-    switch (config.position) {
-        case 'diagonal':
-            createDiagonalWatermark(watermarkDiv, config.text, opacity, fontSize, color, rotation);
-            break;
-        case 'center':
-            createCenterWatermark(watermarkDiv, config.text, opacity, fontSize, color);
-            break;
-        case 'bottom':
-            createBottomWatermark(watermarkDiv, config.text, opacity, fontSize, color);
-            break;
-        case 'top':
-            createTopWatermark(watermarkDiv, config.text, opacity, fontSize, color);
-            break;
-        default:
-            createDiagonalWatermark(watermarkDiv, config.text, opacity, fontSize, color, rotation);
-    }
+    const text = config.text || 'CONFIDENTIAL';
+    createDiagonalWatermark(watermarkDiv, text, opacity, fontSize, color, rotation);
 
     container.style.position = 'relative';
     container.appendChild(watermarkDiv);
@@ -109,85 +248,6 @@ function createDiagonalWatermark(
     // Apply as repeating background
     element.style.backgroundImage = `url(${canvas.toDataURL()})`;
     element.style.backgroundRepeat = 'repeat';
-}
-
-/**
- * Create centered watermark
- */
-function createCenterWatermark(
-    element: HTMLElement,
-    text: string,
-    opacity: number,
-    fontSize: number,
-    color: string
-): void {
-    const textDiv = document.createElement('div');
-    textDiv.style.cssText = `
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: ${fontSize * 2}px;
-        font-weight: bold;
-        color: ${color};
-        opacity: ${opacity};
-        white-space: nowrap;
-        pointer-events: none;
-    `;
-    textDiv.textContent = text;
-    element.appendChild(textDiv);
-}
-
-/**
- * Create bottom watermark
- */
-function createBottomWatermark(
-    element: HTMLElement,
-    text: string,
-    opacity: number,
-    fontSize: number,
-    color: string
-): void {
-    const textDiv = document.createElement('div');
-    textDiv.style.cssText = `
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: ${fontSize}px;
-        color: ${color};
-        opacity: ${opacity};
-        white-space: nowrap;
-        pointer-events: none;
-    `;
-    textDiv.textContent = text;
-    element.appendChild(textDiv);
-}
-
-/**
- * Create top watermark
- */
-function createTopWatermark(
-    element: HTMLElement,
-    text: string,
-    opacity: number,
-    fontSize: number,
-    color: string
-): void {
-    const textDiv = document.createElement('div');
-    textDiv.style.cssText = `
-        position: absolute;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: ${fontSize}px;
-        color: ${color};
-        opacity: ${opacity};
-        white-space: nowrap;
-        pointer-events: none;
-    `;
-    textDiv.textContent = text;
-    element.appendChild(textDiv);
 }
 
 /**
@@ -265,3 +325,4 @@ export function createForensicWatermark(
         container.setAttribute('data-ip', ipAddress);
     }
 }
+
