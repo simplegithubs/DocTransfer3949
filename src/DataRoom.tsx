@@ -14,20 +14,18 @@ import {
     Check,
     Eye,
     BarChart2,
-    Shield,
     Mail,
     Image as ImageIcon,
     PenTool,
     UserPlus,
-    Fingerprint,
     Flame,
     Settings,
     Clock,
     Minus,
-    Plus
+    Plus,
+    Shield
 } from 'lucide-react';
 import { supabase } from './lib/supabase';
-import { encryptFile } from './lib/crypto';
 import { hashPassword } from './lib/security';
 import GoogleDriveTab from './components/GoogleDriveTab';
 import AnalyticsDashboard from './components/analytics/AnalyticsDashboard';
@@ -36,7 +34,6 @@ import AuditTrail from './components/AuditTrail';
 import ESignatureDashboard from './components/esignature/ESignatureDashboard';
 
 import { logDocumentUpload } from './lib/auditLogger';
-import { registerBiometric, isBiometricAvailable } from './lib/webauthn';
 import useSubscription from './hooks/useSubscription';
 import PremiumBadge from './components/PremiumBadge';
 import UpgradeModal from './components/UpgradeModal';
@@ -111,14 +108,6 @@ const DataRoom: React.FC = () => {
 
     const [maxViewsEnabled, setMaxViewsEnabled] = useState(false);
     const [maxViews, setMaxViews] = useState(1);
-    const [vaultMode, setVaultMode] = useState(false);
-
-    // New Biometric State
-    const [requireBiometric, setRequireBiometric] = useState(false);
-    const [biometricCredentialId, setBiometricCredentialId] = useState<string | null>(null);
-    const [biometricRegistering, setBiometricRegistering] = useState(false);
-
-
 
     // Subscription and premium features
     const { subscription, usage, dailyUploadCount, isLoading: subLoading, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
@@ -216,44 +205,6 @@ const DataRoom: React.FC = () => {
         setFilePreview(null); // Will be set by useEffect
     };
 
-    const handleBiometricToggle = async (enabled: boolean) => {
-        if (!enabled) {
-            // User is disabling biometric protection
-            setRequireBiometric(false);
-            setBiometricCredentialId(null);
-            return;
-        }
-
-        // User is enabling biometric protection - register immediately
-        setBiometricRegistering(true);
-        setUploadError(null);
-
-        try {
-            // Check availability first
-            const available = await isBiometricAvailable();
-            if (!available) {
-                setUploadError('Biometric authentication is not available on this device. Please ensure you have Touch ID, Face ID, or Windows Hello enabled.');
-                return;
-            }
-
-            // Trigger registration
-            const result = await registerBiometric();
-
-            if (result.success && result.credentialId) {
-                setRequireBiometric(true);
-                setBiometricCredentialId(result.credentialId);
-                // Optional: Show success feedback
-                console.log('✓ Biometric registered successfully');
-            } else {
-                setUploadError(result.error || 'Failed to register biometric');
-            }
-        } catch (error: any) {
-            console.error('Biometric registration error:', error);
-            setUploadError('Failed to register biometric. Please try again.');
-        } finally {
-            setBiometricRegistering(false);
-        }
-    };
 
     const handleUpload = async () => {
         if (selectedFiles.length === 0) return;
@@ -279,10 +230,6 @@ const DataRoom: React.FC = () => {
             console.log('=== UPLOAD DEBUG START ===');
             console.log(`Selected ${selectedFiles.length} files`);
 
-            // Validate biometric requirement
-            if (requireBiometric && !biometricCredentialId) {
-                throw new Error('Biometric protection is enabled but registration was not completed. Please toggle biometric protection again.');
-            }
 
             // --- BUNDLE CREATION (if > 1 file) ---
             let bundleId: string | null = null;
@@ -303,7 +250,6 @@ const DataRoom: React.FC = () => {
                         expires_at: linkExpiration ? (
                             expirationMode === 'date' ? expiresAt : new Date(Date.now() + durationValue * (durationUnit === 'hours' ? 3600000 : durationUnit === 'days' ? 86400000 : 604800000)).toISOString()
                         ) : null,
-                        require_biometric: requireBiometric,
                         require_email_verification: emailVerification,
                         allowed_email: emailVerification ? allowedEmail : null
                     })
@@ -321,29 +267,6 @@ const DataRoom: React.FC = () => {
             for (const file of selectedFiles) {
                 console.log('Processing file:', file.name);
 
-                // 1. Prepare File (Encrypt if Vault Mode)
-                let fileToUpload = file;
-                let encryptionKey: string | null = null;
-                let encryptionIv: string | null = null;
-
-                if (vaultMode) {
-                    console.log('🔒 Encrypting file for Vault Mode...');
-                    try {
-                        const result = await encryptFile(file);
-                        const { encryptedBlob, key, iv } = result;
-
-                        fileToUpload = new File([encryptedBlob], file.name, {
-                            type: 'application/octet-stream' // Encrypted files are binary
-                        });
-
-                        encryptionKey = key; // Keep local for Magic Link, DO NOT STORE IN DB
-                        encryptionIv = iv;   // Store IV in DB
-                        console.log('✓ File encrypted successfully');
-                    } catch (encError) {
-                        console.error('Encryption failed:', encError);
-                        throw new Error(`Failed to encrypt file ${file.name}. Please try again.`);
-                    }
-                }
 
                 // 2. Generate unique file path
                 const timestamp = Date.now();
@@ -356,7 +279,7 @@ const DataRoom: React.FC = () => {
                 // 3. Upload to Supabase storage
                 const { error: uploadError } = await supabase.storage
                     .from('documents')
-                    .upload(sanitizedFilePath, fileToUpload, {
+                    .upload(sanitizedFilePath, file, {
                         cacheControl: '3600',
                         upsert: false
                     });
@@ -393,16 +316,14 @@ const DataRoom: React.FC = () => {
                         allowed_email: emailVerification ? allowedEmail : null,
                         apply_watermark: applyWatermark,
                         watermark_config: applyWatermark ? watermarkConfig : null,
-                        require_biometric: requireBiometric,
-                        biometric_credential_id: requireBiometric ? biometricCredentialId : null,
                         max_views: maxViewsEnabled ? maxViews : null,
-                        burn_after_reading: maxViewsEnabled, // Legacy flag, now used generally for "has view limit"
+                        burn_after_reading: maxViewsEnabled,
 
                         // Encryption / Vault Fields
-                        is_vault_file: vaultMode,
-                        is_encrypted: vaultMode,
+                        is_vault_file: false,
+                        is_encrypted: false,
                         encryption_key: null,
-                        encryption_iv: vaultMode ? encryptionIv : null,
+                        encryption_iv: null,
 
                         original_file_name: file.name,
                         original_file_type: file.type,
@@ -416,9 +337,6 @@ const DataRoom: React.FC = () => {
 
                 // Construct Link for this doc
                 let finalLink = `${window.location.origin}/view/${docShareLink}`;
-                if (vaultMode && encryptionKey) {
-                    finalLink += `#key=${encodeURIComponent(encryptionKey)}`;
-                }
 
                 uploadedDocs.push({
                     id: docData.id,
@@ -871,37 +789,6 @@ const DataRoom: React.FC = () => {
 
 
 
-                                        {/* Vault Mode */}
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.5rem', padding: '0.75rem', background: '#1e1b4b', borderRadius: '8px', border: '1px solid #4338ca' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                                    <Shield size={18} style={{ color: '#818cf8' }} />
-                                                    <div>
-                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                            <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#e0e7ff', display: 'block' }}>Vault Mode (Client-Side Encryption)</span>
-                                                            {isFeatureLocked?.('vault_mode') && <PremiumBadge size={14} />}
-                                                        </div>
-                                                        <span style={{ fontSize: '0.75rem', color: '#a5b4fc' }}>Zero-Knowledge: Server cannot read file.</span>
-                                                    </div>
-                                                </div>
-                                                <label className="toggle-switch">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={vaultMode}
-                                                        onChange={(e) => {
-                                                            if (isFeatureLocked?.('vault_mode')) {
-                                                                e.preventDefault();
-                                                                handleLockedFeatureClick('Vault Mode');
-                                                            } else {
-                                                                setVaultMode(e.target.checked);
-                                                            }
-                                                        }}
-                                                        disabled={isFeatureLocked?.('vault_mode')}
-                                                    />
-                                                    <span className="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
 
                                         {/* Self-Destruct Rules (Expiration & View Limits) */}
                                         <SelfDestructSettings
@@ -993,46 +880,6 @@ const DataRoom: React.FC = () => {
                                             )}
                                         </div>
 
-                                        {/* Biometric & Snapshot Gates */}
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem', background: '#f0fdf4', borderRadius: '12px', border: '1px solid #bbf7d0' }}>
-                                            <div style={{ paddingBottom: '0.5rem', borderBottom: '1px solid #dcfce7', fontSize: '0.85rem', fontWeight: '600', color: '#166534', letterSpacing: '0.05em' }}>
-                                                SECURITY GATES
-                                            </div>
-
-                                            {/* Biometric Toggle */}
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                                    <div style={{ padding: '8px', background: '#dcfce7', borderRadius: '8px' }}>
-                                                        <Fingerprint size={18} style={{ color: '#15803d' }} />
-                                                    </div>
-                                                    <div>
-                                                        <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#166534', display: 'block' }}>
-                                                            Require Biometrics
-                                                            {isFeatureLocked?.('biometric_auth') && <PremiumBadge size={14} />}
-                                                        </span>
-                                                        <span style={{ fontSize: '0.75rem', color: '#15803d' }}>FaceID / TouchID / Windows Hello</span>
-                                                        {biometricRegistering && <div style={{ fontSize: '0.75rem', color: '#ca8a04', marginTop: '0.2rem' }}>Registering...</div>}
-                                                        {requireBiometric && biometricCredentialId && <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.2rem' }}>✓ Device registered</div>}
-                                                    </div>
-                                                </div>
-                                                <label className="toggle-switch">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={requireBiometric}
-                                                        onChange={(e) => {
-                                                            if (isFeatureLocked?.('biometric_auth')) {
-                                                                e.preventDefault();
-                                                                handleLockedFeatureClick('Biometric Authentication');
-                                                            } else {
-                                                                handleBiometricToggle(e.target.checked);
-                                                            }
-                                                        }}
-                                                        disabled={biometricRegistering || isFeatureLocked?.('biometric_auth')}
-                                                    />
-                                                    <span className="toggle-slider"></span>
-                                                </label>
-                                            </div>
-                                        </div>
 
                                         {/* Watermark */}
                                         <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: applyWatermark ? '#f5f3ff' : '#ffffff', transition: 'all 0.2s' }}>

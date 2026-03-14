@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from './lib/supabase';
-import { decryptFile } from './lib/crypto';
 import * as pdfjsLib from 'pdfjs-dist';
 import {
     Check,
@@ -142,14 +141,6 @@ const SignDocument: React.FC = () => {
             if (error) throw error;
 
             let blob = data;
-            if (doc.is_encrypted && doc.encryption_key && doc.encryption_iv) {
-                blob = await decryptFile(
-                    data,
-                    doc.encryption_key,
-                    doc.encryption_iv,
-                    doc.original_file_type || doc.file_type
-                );
-            }
 
             if (doc.file_type === 'application/pdf' || doc.original_file_type === 'application/pdf') {
                 // Render PDF

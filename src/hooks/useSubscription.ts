@@ -253,8 +253,6 @@ export const useSubscription = () => {
             'advanced_analytics': ['standard', 'business'],
             'audit_trails': ['standard', 'business'],
             'priority_support': ['standard', 'business'],
-            'vault_mode': ['business'],
-            'biometric_auth': ['business'],
             'e_signature': ['free', 'standard', 'business'],
             'document_bundles': ['business'],
             'sso_integration': ['standard', 'business'],

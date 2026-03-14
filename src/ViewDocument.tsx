@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { supabase } from './lib/supabase';
-import { decryptFile } from './lib/crypto';
 import { comparePassword, rateLimiter } from './lib/security';
 import { FileText, Download, AlertCircle, Lock as LockIcon, Package, ArrowRight, ExternalLink, Flame, ShieldCheck, Video, Music, Image as ImageIcon, Table, Archive } from 'lucide-react';
 import { logDocumentView, logDocumentDownload, logPasswordVerification, logEmailVerification } from './lib/auditLogger';
 import WatermarkOverlay from './components/WatermarkOverlay';
 import { applyPdfWatermark, applyImageWatermark } from './lib/watermarkGenerator';
-import BiometricGate from './components/BiometricGate';
 import WebcamGate from './components/WebcamGate';
 import { getPreviewType, getExtension } from './lib/fileTypes';
 
@@ -31,7 +29,6 @@ interface DocumentData {
     is_encrypted?: boolean;
     encryption_key?: string;
     encryption_iv?: string;
-    is_vault_file?: boolean; // New field
     original_file_type?: string;
     watermark_config?: {
         text: string;
@@ -41,9 +38,7 @@ interface DocumentData {
         rotation: number;
         layout: 'single' | 'tiled';
     };
-    require_biometric: boolean;
     require_snapshot: boolean;
-    biometric_credential_id?: string;
     scan_status?: 'pending' | 'clean' | 'infected' | 'error';
     max_views?: number;
     view_count?: number;
@@ -59,7 +54,6 @@ interface BundleData {
     created_at: string;
     password?: string;
     expires_at?: string;
-    require_biometric: boolean;
     require_email_verification: boolean;
     allowed_email?: string;
     user_id?: string;
@@ -88,30 +82,15 @@ const ViewDocument: React.FC = () => {
     const [showCodeInput, setShowCodeInput] = useState(false);
 
     // Biometric/Snapshot State
-    const [isBiometricVerified, setIsBiometricVerified] = useState(false);
     const [isSnapshotVerified, setIsSnapshotVerified] = useState(false);
     const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
 
-    // Vault State
-    const [vaultKey, setVaultKey] = useState<string | null>(null);
 
     // Watermark State
     const [watermarkedUrl, setWatermarkedUrl] = useState<string | null>(null);
     const [viewerIp, setViewerIp] = useState<string>('Unknown IP');
     const [isWatermarking, setIsWatermarking] = useState(false);
 
-    useEffect(() => {
-        // Extract key from hash if present (Magic Link)
-        const hash = window.location.hash;
-        if (hash.includes('key=')) {
-            const params = new URLSearchParams(hash.substring(1)); // remove #
-            const key = params.get('key');
-            if (key) {
-                setVaultKey(decodeURIComponent(key));
-                console.log('🔑 Vault Key found in URL hash');
-            }
-        }
-    }, []);
 
     // Branding State
     const [branding, setBranding] = useState<{
@@ -473,15 +452,6 @@ const ViewDocument: React.FC = () => {
         }
     };
 
-    const handleBiometricSuccess = async () => {
-        setIsBiometricVerified(true);
-        if (currentSessionId) {
-            await supabase
-                .from('document_access_sessions')
-                .update({ verified_biometric: true })
-                .eq('session_id', currentSessionId);
-        }
-    };
 
     const handleSnapshotSuccess = async (url: string) => {
         setIsSnapshotVerified(true);
@@ -518,23 +488,13 @@ const ViewDocument: React.FC = () => {
 
             // Validate encryption keys if file is encrypted
             if (document.is_encrypted) {
-                // For Vault Mode, we only need IV stored on server. Key is with client.
-                if (document.is_vault_file) {
-                    if (!document.encryption_iv) {
-                        console.error('Missing encryption IV for vault file');
-                        alert('Error: Encryption IV is missing for this secure file.');
-                        return;
-                    }
-                } else {
-                    // Standard Encryption: Need both Key and IV from server
-                    if (!document.encryption_key || !document.encryption_iv) {
-                        console.error('Missing encryption keys:', {
-                            has_key: !!document.encryption_key,
-                            has_iv: !!document.encryption_iv
-                        });
-                        alert('Error: Encryption keys are missing for this secure file. Please contact the file owner.');
-                        return;
-                    }
+                if (!document.encryption_key || !document.encryption_iv) {
+                    console.error('Missing encryption keys:', {
+                        has_key: !!document.encryption_key,
+                        has_iv: !!document.encryption_iv
+                    });
+                    alert('Error: Encryption keys are missing for this secure file. Please contact the file owner.');
+                    return;
                 }
                 console.log('✓ Encryption keys present');
             }
@@ -554,45 +514,7 @@ const ViewDocument: React.FC = () => {
 
             let blob = data;
 
-            // Decrypt if Vault Mode
-            if (document.is_vault_file) {
-                console.log('🔒 Processing Vault File...');
-
-                let keyToUse = vaultKey;
-
-                // If key missing, prompt user
-                if (!keyToUse) {
-                    const userInput = prompt('This is a secure Vault file. Please enter the Decryption Key:');
-                    if (!userInput) {
-                        alert('Decryption key is required to access this file.');
-                        return;
-                    }
-                    keyToUse = userInput;
-                }
-
-                if (!document.encryption_iv) {
-                    alert('Error: Encryption IV missing. File cannot be decrypted.');
-                    return;
-                }
-
-                try {
-                    console.log('Attempting decryption...');
-                    const finalFileType = document.original_file_type || document.file_type;
-
-                    blob = await decryptFile(
-                        data,
-                        keyToUse,
-                        document.encryption_iv,
-                        finalFileType
-                    );
-
-                    console.log('✓ Decryption successful, size:', blob.size, 'bytes');
-                } catch (decryptError) {
-                    console.error('Decryption failed:', decryptError);
-                    alert('Failed to decrypt file. The key may be incorrect.');
-                    return;
-                }
-            } else if (document.is_encrypted && document.encryption_key && document.encryption_iv) {
+            if (document.is_encrypted && document.encryption_key && document.encryption_iv) {
                 // Legacy Encryption (Server-side key) - if we re-enable it later
             }
 
@@ -1004,27 +926,13 @@ const ViewDocument: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Security Gates (Biometric / Snapshot) */}
-                    {(document.require_biometric && !isBiometricVerified) || (document.require_snapshot && !document.require_biometric && !isSnapshotVerified) ? (
+                    {/* Snapshot Gate */}
+                    {document.require_snapshot && !isSnapshotVerified ? (
                         <div style={{ padding: '4rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#f9fafb', minHeight: '400px' }}>
-
-                            {/* Biometric Gate */}
-                            {document.require_biometric && !isBiometricVerified && (
-                                <BiometricGate
-                                    documentName={document.name}
-                                    credentialId={document.biometric_credential_id}
-                                    onVerified={handleBiometricSuccess}
-                                />
-                            )}
-
-                            {/* Snapshot Gate (Only if biometric passed or not required) */}
-                            {(!document.require_biometric || isBiometricVerified) && document.require_snapshot && !isSnapshotVerified && (
-                                <WebcamGate
-                                    documentName={document.name}
-                                    onVerified={handleSnapshotSuccess}
-                                />
-                            )}
-
+                            <WebcamGate
+                                documentName={document.name}
+                                onVerified={handleSnapshotSuccess}
+                            />
                         </div>
                     ) : (() => {
                         /* Document Preview Area - Determine preview type */
@@ -1033,7 +941,7 @@ const ViewDocument: React.FC = () => {
 
                         // Get file icon based on type
                         const getFileIconForType = () => {
-                            if (document.is_encrypted || document.is_vault_file) return <LockIcon size={48} color="#4f46e5" />;
+                            if (document.is_encrypted) return <LockIcon size={48} color="#4f46e5" />;
                             switch (previewType) {
                                 case 'video': return <Video size={48} color="#4f46e5" />;
                                 case 'audio': return <Music size={48} color="#4f46e5" />;
@@ -1045,8 +953,7 @@ const ViewDocument: React.FC = () => {
                             }
                         };
 
-                        // For encrypted/vault files or non-Google Drive storage, show icon
-                        // For encrypted/vault files or non-Google Drive storage, show icon
+                        // For encrypted files or non-Google Drive storage, show icon
                         // Show inline preview for PDF if watermarked
                         const showInlinePreview = !!watermarkedUrl;
 
@@ -1189,7 +1096,7 @@ const ViewDocument: React.FC = () => {
                                 {/* File type label for non-previewable */}
                                 {!showInlinePreview && (
                                     <p style={{ marginTop: '1.5rem', fontSize: '0.875rem', color: '#6b7280', textAlign: 'center' }}>
-                                        {document.is_encrypted || document.is_vault_file
+                                        {document.is_encrypted
                                             ? 'Secure encrypted file - Download to view'
                                             : `${fileExt.toUpperCase()} file - Click download to access`}
                                     </p>
