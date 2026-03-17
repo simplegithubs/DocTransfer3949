@@ -522,9 +522,14 @@ const DataRoom: React.FC = () => {
                             <Upload size={16} /> Upload
                         </button>
                         <button onClick={() => {
-                            setActiveTab('google-drive');
+                            if (isFeatureLocked('google_drive')) {
+                                handleLockedFeatureClick('Google Drive');
+                            } else {
+                                setActiveTab('google-drive');
+                            }
                         }} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'google-drive' ? '#8b5cf6' : 'transparent', color: activeTab === 'google-drive' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <Globe size={16} /> Google Drive
+                            {isFeatureLocked('google_drive') && <Lock size={14} />}
                         </button>
                         <button onClick={() => setActiveTab('documents')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'documents' ? '#8b5cf6' : 'transparent', color: activeTab === 'documents' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <FileText size={16} /> Documents
@@ -539,8 +544,15 @@ const DataRoom: React.FC = () => {
                             <BarChart2 size={16} /> Analytics
                             {isFeatureLocked('advanced_analytics') && <Lock size={14} />}
                         </button>
-                        <button onClick={() => setActiveTab('audit')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'audit' ? '#8b5cf6' : 'transparent', color: activeTab === 'audit' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
+                        <button onClick={() => {
+                            if (isFeatureLocked('audit_trails')) {
+                                handleLockedFeatureClick('Audit Trail');
+                            } else {
+                                setActiveTab('audit');
+                            }
+                        }} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'audit' ? '#8b5cf6' : 'transparent', color: activeTab === 'audit' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <Shield size={16} /> Audit Trail
+                            {isFeatureLocked('audit_trails') && <Lock size={14} />}
                         </button>
                         <button onClick={() => setActiveTab('esignature')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'esignature' ? '#8b5cf6' : 'transparent', color: activeTab === 'esignature' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <PenTool size={16} /> E-Signature
@@ -552,12 +564,76 @@ const DataRoom: React.FC = () => {
             {/* Main Content */}
             <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
                 {activeTab === 'google-drive' ? (
-                    <GoogleDriveTab onDocumentUploaded={fetchDocuments} />
+                    <div className="animate-fade-in">
+                        {isFeatureLocked('google_drive') ? (
+                            <div style={{ textAlign: 'center', padding: '5rem 2rem', background: 'white', borderRadius: '24px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+                                <div style={{ width: '80px', height: '80px', background: '#f5f3ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+                                    <Globe size={40} color="#8b5cf6" />
+                                </div>
+                                <h2 style={{ fontSize: '1.875rem', fontWeight: '800', color: '#111827', marginBottom: '1rem' }}>Google Drive Integration</h2>
+                                <p style={{ fontSize: '1.125rem', color: '#6b7280', marginBottom: '2.5rem', maxWidth: '500px', margin: '0 auto 2.5rem' }}>
+                                    Connect your Google Drive to directly upload and share files with DocTransfer. Available on Standard and Business plans.
+                                </p>
+                                <button
+                                    onClick={() => handleLockedFeatureClick('Google Drive')}
+                                    style={{
+                                        padding: '1rem 2.5rem',
+                                        background: 'linear-gradient(135deg, #8b5cf6 0%, #4f46e5 100%)',
+                                        color: 'white',
+                                        borderRadius: '12px',
+                                        border: 'none',
+                                        fontWeight: '600',
+                                        fontSize: '1.125rem',
+                                        cursor: 'pointer',
+                                        boxShadow: '0 10px 15px -3px rgba(139, 92, 246, 0.3)',
+                                        transition: 'transform 0.2s'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                                >
+                                    Upgrade to Unlock
+                                </button>
+                            </div>
+                        ) : (
+                            <GoogleDriveTab onDocumentUploaded={fetchDocuments} />
+                        )}
+                    </div>
                 ) : activeTab === 'analytics' ? (
                     <AnalyticsDashboard documentId={selectedDocumentId} />
                 ) : activeTab === 'audit' ? (
                     <div className="animate-fade-in">
-                        <AuditTrail documentId={selectedDocumentId || documents.map(d => d.id)} />
+                        {isFeatureLocked('audit_trails') ? (
+                            <div style={{ textAlign: 'center', padding: '5rem 2rem', background: 'white', borderRadius: '24px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+                                <div style={{ width: '80px', height: '80px', background: '#eef2ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+                                    <Shield size={40} color="#4f46e5" />
+                                </div>
+                                <h2 style={{ fontSize: '1.875rem', fontWeight: '800', color: '#111827', marginBottom: '1rem' }}>Audit Trail is Locked</h2>
+                                <p style={{ fontSize: '1.125rem', color: '#6b7280', marginBottom: '2.5rem', maxWidth: '500px', margin: '0 auto 2.5rem' }}>
+                                    Track every document interaction with a compliance-ready activity log. Available on Standard and Business plans.
+                                </p>
+                                <button
+                                    onClick={() => handleLockedFeatureClick('Audit Trail')}
+                                    style={{
+                                        padding: '1rem 2.5rem',
+                                        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                                        color: 'white',
+                                        borderRadius: '12px',
+                                        border: 'none',
+                                        fontWeight: '600',
+                                        fontSize: '1.125rem',
+                                        cursor: 'pointer',
+                                        boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)',
+                                        transition: 'transform 0.2s'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                                >
+                                    Upgrade to Unlock
+                                </button>
+                            </div>
+                        ) : (
+                            <AuditTrail documentId={selectedDocumentId || documents.map(d => d.id)} />
+                        )}
                     </div>
                 ) : activeTab === 'esignature' ? (
                     <ESignatureDashboard />
@@ -814,12 +890,27 @@ const DataRoom: React.FC = () => {
                                                         <Shield size={18} style={{ color: '#4f46e5' }} />
                                                     </div>
                                                     <div>
-                                                        <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#374151', display: 'block' }}>AES-256 Encryption</span>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                            <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#374151' }}>AES-256 Encryption</span>
+                                                            {isFeatureLocked('aes_encryption') && <PremiumBadge size={14} />}
+                                                        </div>
                                                         <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Encrypt file content client-side</span>
                                                     </div>
                                                 </div>
                                                 <label className="toggle-switch">
-                                                    <input type="checkbox" checked={aesEncryptionEnabled} onChange={(e) => setAesEncryptionEnabled(e.target.checked)} />
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={aesEncryptionEnabled}
+                                                        onChange={(e) => {
+                                                            if (isFeatureLocked('aes_encryption')) {
+                                                                 e.preventDefault();
+                                                                 handleLockedFeatureClick('AES-256 Encryption');
+                                                            } else {
+                                                                 setAesEncryptionEnabled(e.target.checked);
+                                                            }
+                                                        }}
+                                                        disabled={isFeatureLocked('aes_encryption')}
+                                                    />
                                                     <span className="toggle-slider"></span>
                                                 </label>
                                             </div>
