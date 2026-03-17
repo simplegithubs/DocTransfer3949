@@ -32,6 +32,15 @@ export interface FunnelStep {
     description: string;
 }
 
+export interface ReceiverDownload {
+    id: string;
+    document_id: string;
+    receiver_email: string;
+    downloaded_at: string;
+    ip_address: string;
+    user_agent: string;
+}
+
 export const analyticsService = {
     /**
      * Get daily statistics for a document
@@ -133,6 +142,39 @@ export const analyticsService = {
                     event: 'INSERT',
                     schema: 'public',
                     table: 'document_view_tracking',
+                    filter: `document_id=eq.${documentId}`
+                },
+                callback
+            )
+            .subscribe();
+    },
+
+    /**
+     * Get receiver download records for a document
+     */
+    async getReceiverDownloads(documentId: string): Promise<ReceiverDownload[]> {
+        const { data, error } = await supabase
+            .from('document_downloads')
+            .select('*')
+            .eq('document_id', documentId)
+            .order('downloaded_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    },
+
+    /**
+     * Subscribe to real-time download events
+     */
+    subscribeToDownloads(documentId: string, callback: (payload: any) => void) {
+        return supabase
+            .channel(`analytics-downloads-${documentId}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'document_downloads',
                     filter: `document_id=eq.${documentId}`
                 },
                 callback

@@ -16,7 +16,9 @@ import {
     AlertCircle,
     XCircle,
     TrendingUp,
-    Zap
+    Zap,
+    Mail,
+    Download
 } from 'lucide-react';
 import {
     XAxis,
@@ -32,6 +34,7 @@ import {
     Line
 } from 'recharts';
 import { analyticsService } from '../../lib/analyticsService';
+import type { ReceiverDownload } from '../../lib/analyticsService';
 
 interface AnalyticsDashboardProps {
     documentId?: string;
@@ -127,7 +130,7 @@ const CustomBarTooltip = ({ active, payload, label }: any) => {
 const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) => {
     const [loading, setLoading] = useState(true);
     const [timeRange, setTimeRange] = useState<number>(30);
-    const [activeMetric, setActiveMetric] = useState<'all' | 'views' | 'devices' | 'pages' | 'locations' | 'hours' | 'completion'>('all');
+    const [activeMetric, setActiveMetric] = useState<'all' | 'views' | 'devices' | 'pages' | 'locations' | 'hours' | 'completion' | 'downloads'>('all');
     const [isLive, setIsLive] = useState(true);
 
     // Data states
@@ -136,6 +139,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
     const [geoStats, setGeoStats] = useState<any[]>([]);
     const [deviceStats, setDeviceStats] = useState<any[]>([]);
     const [funnelData, setFunnelData] = useState<any[]>([]);
+    const [receiverDownloads, setReceiverDownloads] = useState<ReceiverDownload[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
@@ -153,6 +157,10 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
             fetchData();
             setLastUpdated(new Date());
         });
+        const downloadSub = analyticsService.subscribeToDownloads(documentId, () => {
+            fetchData();
+            setLastUpdated(new Date());
+        });
 
         // Auto-refresh every 30 seconds if live mode is on
         const interval = isLive ? setInterval(() => {
@@ -163,6 +171,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
         return () => {
             sessionSub.unsubscribe();
             viewSub.unsubscribe();
+            downloadSub.unsubscribe();
             if (interval) clearInterval(interval);
         };
     }, [documentId, timeRange, isLive]);
@@ -172,12 +181,13 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
         setLoading(true);
         setError(null);
         try {
-            const [daily, pages, geo, devices, funnel] = await Promise.all([
+            const [daily, pages, geo, devices, funnel, downloads] = await Promise.all([
                 analyticsService.getDailyStats(documentId, timeRange),
                 analyticsService.getPageAttention(documentId),
                 analyticsService.getGeoStats(documentId),
                 analyticsService.getDeviceStats(documentId),
-                analyticsService.getConversionFunnel(documentId)
+                analyticsService.getConversionFunnel(documentId),
+                analyticsService.getReceiverDownloads(documentId)
             ]);
 
             setDailyStats(daily);
@@ -185,6 +195,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
             setGeoStats(geo);
             setDeviceStats(devices);
             setFunnelData(funnel);
+            setReceiverDownloads(downloads);
         } catch (error: any) {
             console.error('Failed to fetch analytics:', error);
             setError(error.message || 'Failed to load analytics data');
@@ -426,7 +437,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
                     { key: 'pages', label: 'Pages', icon: Activity, color: 'violet' },
                     { key: 'locations', label: 'Locations', icon: Globe, color: 'orange' },
                     { key: 'hours', label: 'By Hour', icon: Clock, color: 'blue' },
-                    { key: 'completion', label: 'Status', icon: CheckCircle, color: 'teal' }
+                    { key: 'completion', label: 'Status', icon: CheckCircle, color: 'teal' },
+                    { key: 'downloads', label: 'Downloads', icon: Download, color: 'pink' }
                 ].map((filter) => (
                     <button
                         key={filter.key}
@@ -612,6 +624,111 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Receiver Downloads Section */}
+            <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <div className="flex justify-between items-center mb-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center">
+                            <Mail size={20} className="text-white" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-gray-900">Receiver Downloads</h3>
+                            <p className="text-gray-500 text-sm mt-0.5">
+                                {receiverDownloads.length} {receiverDownloads.length === 1 ? 'person' : 'people'} downloaded this file
+                            </p>
+                        </div>
+                    </div>
+                    <div className="px-4 py-2 bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200 rounded-xl">
+                        <span className="text-pink-700 font-bold text-lg">{receiverDownloads.length}</span>
+                        <span className="text-pink-500 text-sm ml-1">total</span>
+                    </div>
+                </div>
+
+                {receiverDownloads.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-12 text-center">
+                        <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-4">
+                            <Download size={32} className="text-gray-300" />
+                        </div>
+                        <p className="text-gray-400 font-medium">No downloads yet</p>
+                        <p className="text-gray-300 text-sm mt-1">When someone downloads this file, their email will appear here</p>
+                    </div>
+                ) : (
+                    <div className="overflow-hidden rounded-2xl border border-gray-100">
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                            <thead>
+                                <tr style={{ background: 'linear-gradient(135deg, #fdf2f8, #fce7f3)' }}>
+                                    <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#9d174d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</th>
+                                    <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#9d174d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Downloaded At</th>
+                                    <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#9d174d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Device</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {receiverDownloads.map((dl, index) => {
+                                    const ua = dl.user_agent || '';
+                                    const isMobile = /mobile|android|iphone/i.test(ua);
+                                    const isTablet = /tablet|ipad/i.test(ua);
+                                    const deviceLabel = isTablet ? 'Tablet' : isMobile ? 'Mobile' : 'Desktop';
+                                    const browserMatch = ua.match(/(Chrome|Firefox|Safari|Edge|Opera|OPR)/i);
+                                    const browserName = browserMatch ? browserMatch[1].replace('OPR', 'Opera') : 'Unknown';
+
+                                    return (
+                                        <tr
+                                            key={dl.id}
+                                            style={{
+                                                borderBottom: index < receiverDownloads.length - 1 ? '1px solid #f3f4f6' : 'none',
+                                                transition: 'background 0.15s'
+                                            }}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = '#fdf2f8'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                                        >
+                                            <td style={{ padding: '1rem 1.25rem' }}>
+                                                <div className="flex items-center gap-2">
+                                                    <div style={{
+                                                        width: '32px',
+                                                        height: '32px',
+                                                        borderRadius: '50%',
+                                                        background: 'linear-gradient(135deg, #ec4899, #f43f5e)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: 'white',
+                                                        fontSize: '0.75rem',
+                                                        fontWeight: '700'
+                                                    }}>
+                                                        {dl.receiver_email.charAt(0).toUpperCase()}
+                                                    </div>
+                                                    <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#1f2937' }}>
+                                                        {dl.receiver_email}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td style={{ padding: '1rem 1.25rem', fontSize: '0.875rem', color: '#6b7280' }}>
+                                                {new Date(dl.downloaded_at).toLocaleString()}
+                                            </td>
+                                            <td style={{ padding: '1rem 1.25rem' }}>
+                                                <span style={{
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.35rem',
+                                                    padding: '0.25rem 0.75rem',
+                                                    borderRadius: '20px',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '600',
+                                                    background: isMobile ? '#dbeafe' : isTablet ? '#ede9fe' : '#dcfce7',
+                                                    color: isMobile ? '#1e40af' : isTablet ? '#5b21b6' : '#166534'
+                                                }}>
+                                                    {deviceLabel} • {browserName}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { comparePassword, rateLimiter } from './lib/security';
-import { FileText, Download, AlertCircle, Lock as LockIcon, Package, ArrowRight, ExternalLink, Flame, ShieldCheck, Video, Music, Image as ImageIcon, Table, Archive } from 'lucide-react';
+import { FileText, Download, AlertCircle, Lock as LockIcon, Package, ArrowRight, ExternalLink, Flame, ShieldCheck, Video, Music, Image as ImageIcon, Table, Archive, Mail } from 'lucide-react';
 import { logDocumentView, logDocumentDownload, logPasswordVerification, logEmailVerification } from './lib/auditLogger';
 import WatermarkOverlay from './components/WatermarkOverlay';
 import { applyPdfWatermark, applyImageWatermark } from './lib/watermarkGenerator';
@@ -85,6 +85,11 @@ const ViewDocument: React.FC = () => {
     // Biometric/Snapshot State
     const [isSnapshotVerified, setIsSnapshotVerified] = useState(false);
     const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+
+    // Receiver Email Gate State (mandatory before download)
+    const [receiverEmail, setReceiverEmail] = useState('');
+    const [isReceiverEmailSubmitted, setIsReceiverEmailSubmitted] = useState(false);
+    const [showEmailModal, setShowEmailModal] = useState(false);
 
 
     // Watermark State
@@ -502,6 +507,25 @@ const ViewDocument: React.FC = () => {
         }
     };
 
+    const handleReceiverEmailSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!receiverEmail.trim()) return;
+        setIsReceiverEmailSubmitted(true);
+        setShowEmailModal(false);
+        // Trigger download after email is submitted
+        setTimeout(() => {
+            handleDownload();
+        }, 100);
+    };
+
+    const handleDownloadClick = () => {
+        if (isReceiverEmailSubmitted) {
+            handleDownload();
+        } else {
+            setShowEmailModal(true);
+        }
+    };
+
     const handleDownload = async () => {
         if (!document) return;
         setDownloading(true);
@@ -517,6 +541,23 @@ const ViewDocument: React.FC = () => {
                 has_encryption_key: !!document.encryption_key,
                 has_encryption_iv: !!document.encryption_iv
             });
+
+            // Track receiver download in document_downloads table
+            if (receiverEmail) {
+                try {
+                    await supabase
+                        .from('document_downloads')
+                        .insert({
+                            document_id: document.id,
+                            receiver_email: receiverEmail.trim().toLowerCase(),
+                            ip_address: viewerIp,
+                            user_agent: navigator.userAgent
+                        });
+                    console.log('✓ Download tracked for:', receiverEmail);
+                } catch (trackErr) {
+                    console.error('Failed to track download:', trackErr);
+                }
+            }
 
             // Check if it's a Google Drive link
             if (document.storage_type === 'google_drive' && document.google_drive_link) {
@@ -603,7 +644,7 @@ const ViewDocument: React.FC = () => {
         } finally {
             if (document) {
                 logDocumentDownload(document.id, {
-                    userEmail: email || undefined,
+                    userEmail: receiverEmail || email || undefined,
                     metadata: { storageType: document.storage_type }
                 });
             }
@@ -936,7 +977,7 @@ const ViewDocument: React.FC = () => {
 
                         {document.allow_download && (
                             <button
-                                onClick={handleDownload}
+                                onClick={handleDownloadClick}
                                 disabled={downloading || isWatermarking}
                                 style={{
                                     padding: '0.75rem 1.5rem',
@@ -1178,6 +1219,139 @@ const ViewDocument: React.FC = () => {
                     </a>
                 )}
             </div>
+
+            {/* Email Gate Modal */}
+            {showEmailModal && (
+                <div
+                    onClick={() => setShowEmailModal(false)}
+                    style={{
+                        position: 'fixed',
+                        inset: 0,
+                        background: 'rgba(0, 0, 0, 0.5)',
+                        backdropFilter: 'blur(4px)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 9999,
+                        animation: 'fadeIn 0.2s ease'
+                    }}
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                            background: 'white',
+                            borderRadius: '20px',
+                            padding: '2.5rem',
+                            maxWidth: '440px',
+                            width: '90%',
+                            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                            animation: 'slideUp 0.3s ease'
+                        }}
+                    >
+                        {/* Modal Header */}
+                        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                            <div style={{
+                                width: '64px',
+                                height: '64px',
+                                background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                                borderRadius: '16px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                margin: '0 auto 1rem'
+                            }}>
+                                <Mail size={28} color="white" />
+                            </div>
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#111827', marginBottom: '0.5rem' }}>
+                                Enter your email to download
+                            </h3>
+                            <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                                Please provide your email address to proceed with the download
+                            </p>
+                        </div>
+
+                        {/* Email Form */}
+                        <form onSubmit={handleReceiverEmailSubmit}>
+                            <input
+                                type="email"
+                                value={receiverEmail}
+                                onChange={(e) => setReceiverEmail(e.target.value)}
+                                placeholder="you@example.com"
+                                required
+                                autoFocus
+                                style={{
+                                    width: '100%',
+                                    padding: '0.875rem 1rem',
+                                    borderRadius: '12px',
+                                    border: '2px solid #e5e7eb',
+                                    fontSize: '1rem',
+                                    outline: 'none',
+                                    transition: 'border-color 0.2s',
+                                    marginBottom: '1rem',
+                                    boxSizing: 'border-box'
+                                }}
+                                onFocus={(e) => e.currentTarget.style.borderColor = '#4f46e5'}
+                                onBlur={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+                            />
+                            <button
+                                type="submit"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.875rem',
+                                    background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    fontWeight: '700',
+                                    fontSize: '1rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem',
+                                    transition: 'all 0.2s',
+                                    boxShadow: '0 4px 14px -3px rgba(79, 70, 229, 0.4)'
+                                }}
+                            >
+                                <Download size={18} />
+                                Download File
+                            </button>
+                        </form>
+
+                        {/* Cancel */}
+                        <button
+                            onClick={() => setShowEmailModal(false)}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                background: 'transparent',
+                                color: '#6b7280',
+                                border: 'none',
+                                borderRadius: '10px',
+                                fontWeight: '500',
+                                fontSize: '0.875rem',
+                                cursor: 'pointer',
+                                marginTop: '0.5rem',
+                                transition: 'color 0.2s'
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal animations */}
+            <style>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideUp {
+                    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+            `}</style>
         </div>
     );
 };
