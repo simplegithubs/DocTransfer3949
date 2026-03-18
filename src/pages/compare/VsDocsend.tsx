@@ -2,7 +2,12 @@ import React from 'react';
 import CompareLayout from '../../components/CompareLayout';
 import type { CompareFeature } from '../../components/CompareLayout';
 
+import { generateComparisonSchema, BASE_URL } from '../../lib/seo';
+
 const VsDocsend: React.FC = () => {
+    const slug = 'docsend-alternative';
+    const schema = generateComparisonSchema('DocSend', `${BASE_URL}/compare/${slug}`);
+
     const features: CompareFeature[] = [
         { feature: 'Free Plan', docTransfer: 'yes', docTransferNote: '10 uploads/day forever', competitor: 'no', competitorNote: '14-day trial only' },
         { feature: 'End-to-End Encryption', docTransfer: 'yes', docTransferNote: 'Zero-knowledge (Vault Mode)', competitor: 'no', competitorNote: 'Standard encryption' },
@@ -29,6 +34,8 @@ const VsDocsend: React.FC = () => {
                 "DocTransfer creates a legally binding audit trail with built-in e-signatures.",
                 "DocSend is better if you specifically need their 'Spaces' deal room for enterprise-scale teams."
             ]}
+            slug={slug}
+            schema={schema}
         />
     );
 };

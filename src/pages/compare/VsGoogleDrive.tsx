@@ -2,7 +2,12 @@ import React from 'react';
 import CompareLayout from '../../components/CompareLayout';
 import type { CompareFeature } from '../../components/CompareLayout';
 
+import { generateComparisonSchema, BASE_URL } from '../../lib/seo';
+
 const VsGoogleDrive: React.FC = () => {
+    const slug = 'google-drive-alternative';
+    const schema = generateComparisonSchema('Google Drive', `${BASE_URL}/compare/${slug}`);
+
     const features: CompareFeature[] = [
         { feature: 'View Tracking & Analytics', docTransfer: 'yes', docTransferNote: 'Page-by-page tracking', competitor: 'no', competitorNote: 'Basic "viewer" list only' },
         { feature: 'End-to-End Encryption', docTransfer: 'yes', docTransferNote: 'Google can\'t see your files', competitor: 'no', competitorNote: 'Google has the keys' },
@@ -28,6 +33,8 @@ const VsGoogleDrive: React.FC = () => {
                 "DocTransfer prevents leaks with watermarking; Google Drive files are easily forwarded.",
                 "DocTransfer makes you look professional; a G-Drive link looks like a draft."
             ]}
+            slug={slug}
+            schema={schema}
         />
     );
 };

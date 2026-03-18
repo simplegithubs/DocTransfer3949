@@ -22,6 +22,8 @@ interface CompareLayoutProps {
     features: CompareFeature[];
     verdict: string;
     verdictDetails: string[];
+    slug: string;
+    schema?: object;
     children?: React.ReactNode;
 }
 
@@ -40,6 +42,8 @@ const CompareLayout: React.FC<CompareLayoutProps> = ({
     features,
     verdict,
     verdictDetails,
+    slug,
+    schema,
     children,
 }) => {
     const otherComparisons = [
@@ -51,7 +55,7 @@ const CompareLayout: React.FC<CompareLayoutProps> = ({
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
-            <SEO title={title} description={description} keywords={keywords} url={`https://doctransfer.io/compare`} />
+            <SEO title={title} description={description} keywords={keywords} url={`https://doctransfer.io/compare/${slug}`} schema={schema} />
 
             {/* Header */}
             <header style={{

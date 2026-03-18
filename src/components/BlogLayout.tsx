@@ -12,6 +12,8 @@ interface BlogLayoutProps {
     publishDate: string;
     readTime: string;
     category: string;
+    slug: string;
+    schema?: object;
     children: React.ReactNode;
 }
 
@@ -22,6 +24,8 @@ const BlogLayout: React.FC<BlogLayoutProps> = ({
     publishDate,
     readTime,
     category,
+    slug,
+    schema,
     children,
 }) => {
     return (
@@ -30,7 +34,8 @@ const BlogLayout: React.FC<BlogLayoutProps> = ({
                 title={title}
                 description={description}
                 keywords={keywords}
-                url={`https://doctransfer.io/blog`}
+                url={`https://doctransfer.io/blog/${slug}`}
+                schema={schema}
             />
 
             {/* Header */}

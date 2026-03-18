@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const FreeESignatureTools: React.FC = () => {
+    const slug = 'free-esignature-tools';
+    const title = "5 Best Free E-Signature Tools in 2026 (For Small Business)";
+    const description = "Need to sign a contract quickly? Compare the top 5 free electronic signature tools that are legally binding and easy to use.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-03-15',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="5 Best Free E-Signature Tools in 2026 (For Small Business)"
-            description="Need to sign a contract quickly? Compare the top 5 free electronic signature tools that are legally binding and easy to use."
+            title={title}
+            description={description}
             keywords="free e-signature software, free docusign alternative, sign pdf online free, electronic signature free, best esign tools"
             publishDate="March 2026"
             readTime="10 min read"
             category="Comparison"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>Why Pay $600/Year for E-Signatures?</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1.5rem' }}>

@@ -2,7 +2,12 @@ import React from 'react';
 import CompareLayout from '../../components/CompareLayout';
 import type { CompareFeature } from '../../components/CompareLayout';
 
+import { generateComparisonSchema, BASE_URL } from '../../lib/seo';
+
 const VsDocusign: React.FC = () => {
+    const slug = 'docusign-alternative';
+    const schema = generateComparisonSchema('DocuSign', `${BASE_URL}/compare/${slug}`);
+
     const features: CompareFeature[] = [
         { feature: 'Legally Binding E-Signatures', docTransfer: 'yes', competitor: 'yes', competitorNote: 'Industry standard' },
         { feature: 'Document Analytics (Time per page)', docTransfer: 'yes', competitor: 'no', competitorNote: 'Signature status only' },
@@ -28,6 +33,8 @@ const VsDocusign: React.FC = () => {
                 "DocuSign is better if you need complex enterprise workflows (e.g. 20-person signing chains).",
                 "DocTransfer combines the data room + the signature tool in one."
             ]}
+            slug={slug}
+            schema={schema}
         />
     );
 };

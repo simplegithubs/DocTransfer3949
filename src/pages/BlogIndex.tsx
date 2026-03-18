@@ -4,6 +4,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-reac
 import Logo from '../components/Logo';
 import SEO from '../components/SEO';
 import { Clock, ArrowRight } from 'lucide-react';
+import { BASE_URL } from '../lib/seo';
 
 interface BlogPost {
     slug: string;
@@ -130,6 +131,7 @@ const BlogIndex: React.FC = () => {
                 title="Blog — Secure Document Sharing Tips & Guides"
                 description="Learn how to share documents securely, compare tools, and discover best practices for document security, analytics, and e-signatures."
                 keywords="secure document sharing blog, DocSend alternative, document security tips, e-signature guide"
+                url={`${BASE_URL}/blog`}
             />
 
             {/* Header */}

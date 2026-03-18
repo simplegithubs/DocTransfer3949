@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const RealEstateDocSecurity: React.FC = () => {
+    const slug = 'real-estate-document-sharing';
+    const title = "How Real Estate Agents Can Share Contracts Securely (2026 Guide)";
+    const description = "Real estate deals involve sensitive financial data. Learn how to protect your clients and your reputation with secure document sharing.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-02-15',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="How Real Estate Agents Can Share Contracts Securely (2026 Guide)"
-            description="Real estate deals involve sensitive financial data. Learn how to protect your clients and your reputation with secure document sharing."
+            title={title}
+            description={description}
             keywords="real estate document sharing, secure file sharing for realtors, secure contract sharing, real estate data security, secure closing documents"
             publishDate="February 2026"
             readTime="8 min read"
             category="Real Estate"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The Real Estate Cyber Risk is Real</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

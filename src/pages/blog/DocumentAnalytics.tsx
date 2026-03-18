@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const DocumentAnalytics: React.FC = () => {
+    const slug = 'document-analytics';
+    const title = "Document Analytics: How to Track Who Views Your Files";
+    const description = "Stop guessing if your client read your proposal. Learn how document analytics reveal engagement, time spent per page, and exactly when to follow up.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-03-01',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="Document Analytics: How to Track Who Views Your Files"
-            description="Stop guessing if your client read your proposal. Learn how document analytics reveal engagement, time spent per page, and exactly when to follow up."
+            title={title}
+            description={description}
             keywords="document analytics, track document views, file tracking software, proposal tracking, sales enablement analytics"
             publishDate="March 2026"
             readTime="7 min read"
             category="Features"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The Black Box of Email</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

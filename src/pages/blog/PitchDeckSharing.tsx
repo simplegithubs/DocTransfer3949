@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const PitchDeckSharing: React.FC = () => {
+    const slug = 'pitch-deck-sharing';
+    const title = "How VCs and Founders Share Pitch Decks Securely (2026)";
+    const description = "Stop sending your pitch deck as a PDF attachment. Learn how to track investor engagement and prevent your deck from being forwarded to competitors.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-04-05',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="How VCs and Founders Share Pitch Decks Securely (2026)"
-            description="Stop sending your pitch deck as a PDF attachment. Learn how to track investor engagement and prevent your deck from being forwarded to competitors."
+            title={title}
+            description={description}
             keywords="share pitch deck securely, pitch deck tracking, secure deck sharing, startup fundraising tips, investor updates"
             publishDate="April 2026"
             readTime="8 min read"
             category="Startups"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The PDF Problem</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

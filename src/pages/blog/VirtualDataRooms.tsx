@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const VirtualDataRooms: React.FC = () => {
+    const slug = 'virtual-data-room-guide';
+    const title = "Virtual Data Rooms: What They Are and 5 Free Options (2026)";
+    const description = "Need a Virtual Data Room (VDR) for due diligence but can't afford enterprise pricing? Discover the best free and low-cost VDR alternatives.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-03-20',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="Virtual Data Rooms: What They Are and 5 Free Options (2026)"
-            description="Need a Virtual Data Room (VDR) for due diligence but can't afford enterprise pricing? Discover the best free and low-cost VDR alternatives."
+            title={title}
+            description={description}
             keywords="virtual data room free, VDR software, data room for startups, free virtual data room, due diligence data room"
             publishDate="March 2026"
             readTime="10 min read"
             category="Guide"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>What is a Virtual Data Room?</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

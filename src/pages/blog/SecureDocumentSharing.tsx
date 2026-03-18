@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const SecureDocumentSharing: React.FC = () => {
+    const slug = 'secure-document-sharing';
+    const title = "How to Share Documents Securely in 2026: The Complete Guide";
+    const description = "Sharing sensitive files via email or standard cloud storage exposes you to data leaks. Learn the 7 must-have features for secure document sharing and step-by-step instructions to protect your files.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-02-01',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="How to Share Documents Securely in 2026: The Complete Guide"
-            description="Sharing sensitive files via email or standard cloud storage exposes you to data leaks. Learn the 7 must-have features for secure document sharing and step-by-step instructions to protect your files."
+            title={title}
+            description={description}
             keywords="how to share documents securely, secure file sharing, encrypted document sharing, secure file transfer, send files securely"
             publishDate="February 2026"
             readTime="10 min read"
             category="Security"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The False Sense of Security</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const NdaSigningGuide: React.FC = () => {
+    const slug = 'nda-signing-guide';
+    const title = "NDA Signing Made Simple: A Guide for Small Businesses";
+    const description = "Do you really need a lawyer to send an NDA? Learn how to send, track, and e-sign Non-Disclosure Agreements securely and legally in minutes.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-04-20',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="NDA Signing Made Simple: A Guide for Small Businesses"
-            description="Do you really need a lawyer to send an NDA? Learn how to send, track, and e-sign Non-Disclosure Agreements securely and legally in minutes."
+            title={title}
+            description={description}
             keywords="how to sign nda online, free nda template, electronic signature nda, secure nda sharing, non-disclosure agreement guide"
             publishDate="April 2026"
             readTime="8 min read"
             category="Legal"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The Paper Chase is Over</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

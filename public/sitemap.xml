@@ -1,55 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://doctransfer.io/</loc>
-    <lastmod>2026-01-26</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://doctransfer.org/</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://doctransfer.io/pricing</loc>
-    <lastmod>2026-01-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://doctransfer.io/sign-in</loc>
-    <lastmod>2026-01-26</lastmod>
+    <loc>https://doctransfer.org/pricing</loc>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://doctransfer.io/sign-up</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://doctransfer.org/blog</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Blog Index -->
+  <!-- Comparison Pages -->
   <url>
-    <loc>https://doctransfer.io/blog</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <loc>https://doctransfer.org/compare/docsend-alternative</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/compare/docusign-alternative</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/compare/google-drive-alternative</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/compare/dropbox-alternative</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <!-- Blog Posts -->
-  <url><loc>https://doctransfer.io/blog/docsend-alternatives</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/secure-document-sharing</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/end-to-end-encryption</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/watermark-documents</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/email-attachment-risks</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/real-estate-document-sharing</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/virtual-data-room-guide</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/pitch-deck-sharing</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/nda-signing-guide</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/law-firm-document-security</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/document-analytics</loc><priority>0.8</priority></url>
-  <url><loc>https://doctransfer.io/blog/free-esignature-tools</loc><priority>0.8</priority></url>
+  <url>
+    <loc>https://doctransfer.org/blog/docsend-alternatives</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/secure-document-sharing</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/end-to-end-encryption</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/watermark-documents</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/email-attachment-risks</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/real-estate-document-sharing</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/virtual-data-room-guide</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/pitch-deck-sharing</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/nda-signing-guide</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/law-firm-document-security</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/document-analytics</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/blog/free-esignature-tools</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 
-  <!-- Comparison Pages -->
-  <url><loc>https://doctransfer.io/compare/docsend-alternative</loc><priority>0.9</priority></url>
-  <url><loc>https://doctransfer.io/compare/docusign-alternative</loc><priority>0.9</priority></url>
-  <url><loc>https://doctransfer.io/compare/google-drive-alternative</loc><priority>0.9</priority></url>
-  <url><loc>https://doctransfer.io/compare/dropbox-alternative</loc><priority>0.9</priority></url>
+  <!-- Legal -->
+  <url>
+    <loc>https://doctransfer.org/terms</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://doctransfer.org/privacy</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>

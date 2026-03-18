@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const EmailAttachmentRisks: React.FC = () => {
+    const slug = 'email-attachment-risks';
+    const title = "Why Email Attachments Are a Security Risk (And What to Use Instead)";
+    const description = "Attached files are the #1 vector for data leaks and malware. Discover why cybersecurity experts warn against email attachments and what secure alternatives exist.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-05-10',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="Why Email Attachments Are a Security Risk (And What to Use Instead)"
-            description="Attached files are the #1 vector for data leaks and malware. Discover why cybersecurity experts warn against email attachments and what secure alternatives exist."
+            title={title}
+            description={description}
             keywords="email attachment security risk, secure file transfer alternatives, email security, dangers of email attachments, send files securely"
             publishDate="May 2026"
             readTime="7 min read"
             category="Security"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The "Forward" Button Problem</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

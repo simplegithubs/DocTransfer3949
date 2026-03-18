@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const WatermarkDocuments: React.FC = () => {
+    const slug = 'watermark-documents';
+    const title = "How to Watermark Documents to Prevent Leaks (2026 Guide)";
+    const description = "Static watermarks are easily removed. Learn how dynamic watermarking uses viewer identity to stop leaks before they happen.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-03-25',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="How to Watermark Documents to Prevent Leaks (2026 Guide)"
-            description="Static watermarks are easily removed. Learn how dynamic watermarking uses viewer identity to stop leaks before they happen."
+            title={title}
+            description={description}
             keywords="watermark documents, dynamic watermarking, prevent document leaks, secure pdf watermark, document security"
             publishDate="March 2026"
             readTime="7 min read"
             category="Security"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The Problem with "Confidential" Stamps</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

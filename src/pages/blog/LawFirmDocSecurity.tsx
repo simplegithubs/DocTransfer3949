@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const LawFirmDocSecurity: React.FC = () => {
+    const slug = 'law-firm-document-security';
+    const title = "Document Security for Law Firms: A 2026 Guide";
+    const description = "Attorney-client privilege is sacrosanct. Learn how modern law firms use encryption, audit trails, and client portals to protect sensitive case files.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-04-15',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="Document Security for Law Firms: A 2026 Guide"
-            description="Attorney-client privilege is sacrosanct. Learn how modern law firms use encryption, audit trails, and client portals to protect sensitive case files."
+            title={title}
+            description={description}
             keywords="law firm document security, legal file sharing, attorney client privilege digital, secure client portal for lawyers"
             publishDate="April 2026"
             readTime="10 min read"
             category="Legal"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The Digital Ethics Obligation</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

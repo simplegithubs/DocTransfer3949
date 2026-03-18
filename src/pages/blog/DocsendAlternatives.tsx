@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const DocsendAlternatives: React.FC = () => {
+    const slug = 'docsend-alternatives';
+    const title = "7 Best Free DocSend Alternatives in 2026 (Compared)";
+    const description = "DocSend is powerful — but expensive. Whether you're a startup founder sharing pitch decks, a real estate agent sending contracts, or a freelancer who just needs a better way to share files, there are compelling free alternatives that offer more features at lower cost.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-02-15',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="7 Best Free DocSend Alternatives in 2026 (Compared)"
-            description="DocSend is powerful — but expensive. Whether you're a startup founder sharing pitch decks, a real estate agent sending contracts, or a freelancer who just needs a better way to share files, there are compelling free alternatives that offer more features at lower cost."
+            title={title}
+            description={description}
             keywords="docsend alternative, docsend alternative free, docsend competitors, free docsend, document sharing with analytics"
             publishDate="February 2026"
             readTime="12 min read"
             category="Comparison"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>Why Look for a DocSend Alternative?</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

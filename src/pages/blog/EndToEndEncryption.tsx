@@ -2,15 +2,31 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import BlogLayout from '../../components/BlogLayout';
 
+import { generateBlogSchema, BASE_URL } from '../../lib/seo';
+
 const EndToEndEncryption: React.FC = () => {
+    const slug = 'end-to-end-encryption';
+    const title = "What Is End-to-End Encryption (And Why Your Files Need It)";
+    const description = "Encryption in transit vs. at rest vs. end-to-end: what's the difference? A non-technical guide to E2EE and why it's the gold standard for document security.";
+
+    const schema = generateBlogSchema({
+        title,
+        description,
+        publishDate: '2026-02-28',
+        author: 'DocTransfer Team',
+        url: `${BASE_URL}/blog/${slug}`
+    });
+
     return (
         <BlogLayout
-            title="What Is End-to-End Encryption (And Why Your Files Need It)"
-            description="Encryption in transit vs. at rest vs. end-to-end: what's the difference? A non-technical guide to E2EE and why it's the gold standard for document security."
+            title={title}
+            description={description}
             keywords="end-to-end encryption explained, e2ee document sharing, what is encryption, client-side encryption, zero knowledge architecture"
             publishDate="February 2026"
             readTime="8 min read"
             category="Security"
+            slug={slug}
+            schema={schema}
         >
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginTop: '2rem', marginBottom: '1rem' }}>The "Encryption" Marketing Gimmick</h2>
             <p style={{ color: '#4b5563', lineHeight: 1.8, marginBottom: '1rem' }}>

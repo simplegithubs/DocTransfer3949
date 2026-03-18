@@ -7,12 +7,13 @@ interface SEOProps {
     image?: string;
     url?: string;
     type?: 'website' | 'article' | 'product';
+    schema?: object;
 }
 
 /**
  * SEO Component - Updates page meta tags dynamically
  * Primary SEO is defined in index.html with structured data (JSON-LD)
- * This component handles page-specific overrides
+ * This component handles page-specific overrides and dynamic structured data
  */
 const SEO: React.FC<SEOProps> = ({
     title = 'Secure Document Sharing with E2E Encryption & Analytics',
@@ -20,6 +21,7 @@ const SEO: React.FC<SEOProps> = ({
     keywords = 'secure document sharing, document analytics, DocSend alternative, end-to-end encryption',
     image = 'https://doctransfer.io/og-image.png',
     url = 'https://doctransfer.io',
+    schema,
 }) => {
     const fullTitle = title.includes('DocTransfer') ? title : `${title} | DocTransfer`;
 
@@ -71,7 +73,22 @@ const SEO: React.FC<SEOProps> = ({
         const twitterImage = document.querySelector('meta[name="twitter:image"]');
         if (twitterImage) twitterImage.setAttribute('content', image);
 
-    }, [fullTitle, description, keywords, image, url]);
+        // Update / Add Schema Script
+        if (schema) {
+            let schemaScript = document.getElementById('page-schema');
+            if (!schemaScript) {
+                schemaScript = document.createElement('script');
+                schemaScript.id = 'page-schema';
+                schemaScript.setAttribute('type', 'application/ld+json');
+                document.head.appendChild(schemaScript);
+            }
+            schemaScript.textContent = JSON.stringify(schema);
+        } else {
+            const existingSchema = document.getElementById('page-schema');
+            if (existingSchema) existingSchema.remove();
+        }
+
+    }, [fullTitle, description, keywords, image, url, schema]);
 
     return null; // This component doesn't render anything
 };

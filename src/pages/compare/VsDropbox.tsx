@@ -2,7 +2,12 @@ import React from 'react';
 import CompareLayout from '../../components/CompareLayout';
 import type { CompareFeature } from '../../components/CompareLayout';
 
+import { generateComparisonSchema, BASE_URL } from '../../lib/seo';
+
 const VsDropbox: React.FC = () => {
+    const slug = 'dropbox-alternative';
+    const schema = generateComparisonSchema('Dropbox', `${BASE_URL}/compare/${slug}`);
+
     const features: CompareFeature[] = [
         { feature: 'Page-Level Analytics', docTransfer: 'yes', competitor: 'no', competitorNote: 'Only on "DocSend" plan' },
         { feature: 'End-to-End Encryption', docTransfer: 'yes', competitor: 'no', competitorNote: 'Standard encryption only' },
@@ -27,6 +32,8 @@ const VsDropbox: React.FC = () => {
                 "To get these features in Dropbox, you have to pay for their DocSend acquisition ($65/mo).",
                 "DocTransfer includes them for free."
             ]}
+            slug={slug}
+            schema={schema}
         />
     );
 };
