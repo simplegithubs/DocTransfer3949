@@ -33,7 +33,11 @@ import {
     Bomb,
     Timer,
     Eye,
-    EyeOff
+    EyeOff,
+    Twitter,
+    Instagram,
+    Youtube,
+    Linkedin
 } from 'lucide-react';
 import { supabase } from './lib/supabase';
 
@@ -695,7 +699,7 @@ const Pricing: React.FC = () => {
                     maxWidth: '1200px',
                     margin: '0 auto',
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
                     gap: '3rem',
                     marginBottom: '3rem'
                 }}>
@@ -732,6 +736,123 @@ const Pricing: React.FC = () => {
                             <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a></li>
                             <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Cookie Policy</a></li>
                         </ul>
+                    </div>
+                    <div>
+                        <h4 style={{ color: '#0f172a', fontWeight: 600, marginBottom: '1.5rem' }}>Social</h4>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <a
+                                href="https://x.com/Roushan71262"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    background: '#1da1f2',
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                    boxShadow: '0 4px 12px rgba(29, 161, 242, 0.3)',
+                                    transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(29, 161, 242, 0.4)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(29, 161, 242, 0.3)';
+                                }}
+                            >
+                                <Twitter size={18} />
+                            </a>
+                            <a
+                                href="https://www.instagram.com/doctransfer2227/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                    boxShadow: '0 4px 12px rgba(220, 39, 67, 0.3)',
+                                    transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(220, 39, 67, 0.4)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 39, 67, 0.3)';
+                                }}
+                            >
+                                <Instagram size={18} />
+                            </a>
+                            <a
+                                href="https://www.youtube.com/@doctransfer144"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    background: '#ff0000',
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                    boxShadow: '0 4px 12px rgba(255, 0, 0, 0.3)',
+                                    transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(255, 0, 0, 0.4)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 0, 0, 0.3)';
+                                }}
+                            >
+                                <Youtube size={18} />
+                            </a>
+                            <a
+                                href="https://www.linkedin.com/in/doctransfer-0a2291314/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '8px',
+                                    background: '#0077b5',
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                    boxShadow: '0 4px 12px rgba(0, 119, 181, 0.3)',
+                                    transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 119, 181, 0.4)';
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 119, 181, 0.3)';
+                                }}
+                            >
+                                <Linkedin size={18} />
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div style={{

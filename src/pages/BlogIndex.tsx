@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 import Logo from '../components/Logo';
 import SEO from '../components/SEO';
-import { Clock, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight, Twitter, Instagram, Youtube, Linkedin } from 'lucide-react';
 import { BASE_URL } from '../lib/seo';
 
 interface BlogPost {
@@ -276,6 +276,18 @@ const BlogIndex: React.FC = () => {
                         <Link to="/" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem' }}>Home</Link>
                         <Link to="/blog" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem' }}>Blog</Link>
                         <Link to="/pricing" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem' }}>Pricing</Link>
+                        <a href="https://x.com/Roushan71262" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }} title="Twitter">
+                            <Twitter size={14} />
+                        </a>
+                        <a href="https://www.instagram.com/doctransfer2227/" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }} title="Instagram">
+                            <Instagram size={14} />
+                        </a>
+                        <a href="https://www.youtube.com/@doctransfer144" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }} title="YouTube">
+                            <Youtube size={14} />
+                        </a>
+                        <a href="https://www.linkedin.com/in/doctransfer-0a2291314/" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }} title="LinkedIn">
+                            <Linkedin size={14} />
+                        </a>
                     </div>
                     <p style={{ fontSize: '0.8rem' }}>© 2026 DocTransfer. All rights reserved.</p>
                 </div>

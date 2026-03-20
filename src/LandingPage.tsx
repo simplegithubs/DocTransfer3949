@@ -36,7 +36,11 @@ import {
   CheckSquare,
   ArrowLeft,
   Send,
-  Globe
+  Globe,
+  Twitter,
+  Instagram,
+  Youtube,
+  Linkedin
 } from 'lucide-react';
 const LandingPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -50,40 +54,32 @@ const LandingPage: React.FC = () => {
 
   const faqs = [
     {
-      question: "What makes 'Vault Mode' different from standard encryption?",
-      answer: "Vault Mode uses client-side (end-to-end) encryption. Your files are encrypted in your browser before they ever leave your device. We never see your password or your files—only the encrypted blob. Even if our servers were compromised, your data would remain unreadable."
+      question: "How does End-to-End (E2E) Encryption protect my files?",
+      answer: "With our 'Vault Mode', your files are encrypted directly in your browser using AES-256 before they are uploaded. This means only you and your authorized recipients hold the decryption keys. Even DocTransfer cannot access the content of your encrypted files."
     },
     {
-      question: "How does Biometric Access work for recipients?",
-      answer: "When you enable Biometric Gate, recipients must authenticate using FaceID, TouchID, or Windows Hello on their device to view the document. This ensures that only a human present at the device can access the file, adding a physical layer of security beyond just a password."
+      question: "Can I import documents directly from Google Drive?",
+      answer: "Yes! Our seamless Google Drive integration allows you to browse and import your cloud files directly into DocTransfer. Once imported, you can apply all our advanced security features like E2E encryption and dynamic watermarking to your Drive documents."
     },
     {
-      question: "Can I use DocTransfer for legally binding signatures?",
-      answer: "Yes. Our E-Signature feature creates a legally binding audit trail, capturing the signer's IP, timestamp, and digital signature. It's perfect for contracts, NDAs, and agreements."
+      question: "What makes file transfers on DocTransfer 'Secure'?",
+      answer: "Beyond encryption, we provide granular access controls. You can set expiration dates, limit the number of views, password-protect links, and even restrict access to specific email domains or IP addresses, ensuring your files never fall into the wrong hands."
     },
     {
-      question: "How does the Dynamic Watermark prevent leaks?",
-      answer: "Our dynamic watermarking overlays the recipient's email address, IP address, and time of access directly onto the document view. If someone takes a screenshot or photo, their identity is stamped on the image, acting as a powerful deterrent against unauthorized sharing."
+      question: "How do Audit Trails help me track document activity?",
+      answer: "Our comprehensive Audit Trails record every single interaction with your documents. You'll see precise timestamps, IP addresses, geographic locations, and the specific actions taken (like viewing, downloading, or signing), providing a complete chain of custody."
     },
     {
-      question: "Can I send multiple files at once?",
-      answer: "Absolutely. With Document Bundles, you can upload multiple files (e.g., a contract, a presentation, and a spreadsheet) and share them all via a single secure link. You get unified analytics for the entire package."
+      question: "Are E-Signatures on DocTransfer legally binding?",
+      answer: "Yes, our E-Signature feature is designed to be legally binding and compliant with major electronic signature laws. Every signed document is accompanied by a detailed digital certificate and audit trail to verify the identity of the signer and the integrity of the document."
     },
     {
-      question: "Do recipients need to download an app?",
-      answer: "No downloads required. We pride ourselves on a frictionless experience. Recipients can view high-fidelity documents, unlock protected files, and even sign contracts directly in their secure mobile or desktop browser."
+      question: "What insights can I get from Page-by-Page Analytics?",
+      answer: "You get deep visibility into recipient engagement. See exactly how much time is spent on each page of your document. This helps you identify which parts of your pitch deck or contract are drawing the most interest and where recipients might be dropping off."
     },
     {
-      question: "What analytics will I see?",
-      answer: "You get granular, real-time tracking. See exactly when your document was opened, how long it was viewed, and a page-by-page breakdown of engagement. You'll know exactly which slide of your pitch deck they spent the most time on."
-    },
-    {
-      question: "Is there a free plan?",
-      answer: "Yes! Our Free Plan is generous for individuals. It includes basic password protection, download controls, and up to 10 secure uploads per day. It's not a trial—it's free forever."
-    },
-    {
-      question: "How do I upgrade to a paid plan?",
-      answer: "You can upgrade your plan at any time by visiting our Pricing page. Choose the Standard or Business plan that suits your needs, and you'll get immediate access to advanced security features and increased limits."
+      question: "How does Dynamic Watermarking deter unauthorized sharing?",
+      answer: "Dynamic Watermarking overlays the recipient's personal information (like email and IP address) directly onto the document in real-time. This makes any unauthorized screenshots or photos traceable back to the source, significantly reducing the risk of data leaks."
     }
   ];
 
@@ -1401,22 +1397,22 @@ const LandingPage: React.FC = () => {
         </section>
       </main>
 
-      <footer className="footer">
+       <footer className="footer">
         <div className="footer-content">
           <div className="footer-col">
-            <div style={{ marginBottom: '1rem' }}>
-              <Logo size={28} />
+            <div style={{ marginBottom: '1.5rem' }}>
+              <Logo size={32} />
             </div>
-            <p style={{ color: '#6b7280', fontSize: '0.9rem' }}>
-              Secure document sharing and analytics for modern teams.
+            <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6', maxWidth: '240px' }}>
+              Secure document sharing and analytics for modern teams. Built for privacy and speed.
             </p>
           </div>
           <div className="footer-col">
             <h4>Product</h4>
             <ul>
-              <li><a href="#">Features</a></li>
-              <li><a href="#">Security</a></li>
-              <li><a href="#">Pricing</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#security">Security</a></li>
+              <li><a href="/pricing">Pricing</a></li>
               <li><a href="#">Enterprise</a></li>
             </ul>
           </div>
@@ -1425,7 +1421,7 @@ const LandingPage: React.FC = () => {
             <ul>
               <li><a href="#">About Us</a></li>
               <li><a href="#">Careers</a></li>
-              <li><a href="#">Blog</a></li>
+              <li><a href="/blog">Blog</a></li>
               <li><a href="#">Contact</a></li>
             </ul>
           </div>
@@ -1438,33 +1434,158 @@ const LandingPage: React.FC = () => {
             </ul>
           </div>
           <div className="footer-col">
-            <h4>Contact</h4>
+            <h4>Support</h4>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
               <div style={{
-                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                padding: '0.5rem',
-                borderRadius: '8px',
-                color: 'white',
+                background: 'rgba(59, 130, 246, 0.1)',
+                border: '1px solid rgba(59, 130, 246, 0.2)',
+                padding: '0.6rem',
+                borderRadius: '12px',
+                color: '#60a5fa',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 4px 6px -1px rgba(59, 130, 246, 0.5)'
+                justifyContent: 'center'
               }}>
-                <Mail size={16} />
+                <Mail size={18} />
               </div>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#9ca3af', fontWeight: 500, textTransform: 'uppercase', marginBottom: '2px' }}>Email Us</div>
-                <a href="mailto:roushan@doctransfer.online" style={{ color: '#1f2937', fontWeight: 600, textDecoration: 'none', fontSize: '0.95rem', letterSpacing: '-0.01em' }}>
+                <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px' }}>Email Support</div>
+                <a href="mailto:roushan@doctransfer.online" style={{ color: 'white', fontWeight: 600, textDecoration: 'none', fontSize: '0.95rem' }}>
                   roushan@doctransfer.online
                 </a>
               </div>
             </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '2rem' }}>
+              <a
+                href="https://x.com/Roushan71262"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '0.6rem',
+                  borderRadius: '12px',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                }}
+              >
+                <Twitter size={18} />
+              </a>
+              <a
+                href="https://www.instagram.com/doctransfer2227/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '0.6rem',
+                  borderRadius: '12px',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.borderColor = 'transparent';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                }}
+              >
+                <Instagram size={18} />
+              </a>
+              <a
+                href="https://www.youtube.com/@doctransfer144"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '0.6rem',
+                  borderRadius: '12px',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#ff0000';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.borderColor = 'transparent';
+                  e.currentTarget.style.boxShadow = '0 10px 20px -5px rgba(255, 0, 0, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <Youtube size={18} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/doctransfer-0a2291314/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '0.6rem',
+                  borderRadius: '12px',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#0077b5';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.borderColor = 'transparent';
+                  e.currentTarget.style.boxShadow = '0 10px 20px -5px rgba(0, 119, 181, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <Linkedin size={18} />
+              </a>
+            </div>
           </div>
         </div>
-        <div style={{ textAlign: 'center', marginTop: '3rem', color: '#9ca3af', fontSize: '0.875rem' }}>
-          &copy; 2025 DocTransfer. All rights reserved.
+        
+        <div className="footer-bottom">
+          <p>© 2026 DocTransfer Inc. All rights reserved.</p>
+          <div style={{ display: 'flex', gap: '2rem' }}>
+            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy</a>
+            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Terms</a>
+            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Cookies</a>
+          </div>
         </div>
-      </footer >
+      </footer>
     </div >
   );
 };

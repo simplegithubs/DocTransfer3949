@@ -559,22 +559,52 @@ button {
 
 /* Footer */
 .footer {
-  padding: 4rem 2rem;
-  border-top: 1px solid #e5e7eb;
-  background-color: white;
+  padding: 6rem 2rem 4rem;
+  background-color: #0f172a; /* Deep navy */
+  color: #94a3b8;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--max-width);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
 }
 
 .footer-content {
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 3rem;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1.2fr;
+  gap: 4rem;
 }
 
 .footer-col h4 {
-  margin-bottom: 1.5rem;
-  color: var(--text-color);
+  margin-bottom: 2rem;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  position: relative;
+}
+
+.footer-col h4::after {
+  content: '';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 0;
+  width: 24px;
+  height: 2px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
 }
 
 .footer-col ul {
@@ -582,17 +612,56 @@ button {
 }
 
 .footer-col li {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .footer-col a {
   text-decoration: none;
-  color: var(--text-light);
-  transition: var(--transition);
+  color: #94a3b8;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  display: inline-block;
 }
 
 .footer-col a:hover {
-  color: var(--primary-color);
+  color: white;
+  transform: translateX(4px);
+}
+
+.footer-bottom {
+  max-width: var(--max-width);
+  margin: 4rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Data Room Page */
