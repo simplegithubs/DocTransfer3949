@@ -1454,8 +1454,8 @@ const LandingPage: React.FC = () => {
               </div>
               <div>
                 <div style={{ fontSize: '0.75rem', color: '#9ca3af', fontWeight: 500, textTransform: 'uppercase', marginBottom: '2px' }}>Email Us</div>
-                <a href="mailto:doctransfer144@gmail.com" style={{ color: '#1f2937', fontWeight: 600, textDecoration: 'none', fontSize: '0.95rem', letterSpacing: '-0.01em' }}>
-                  doctransfer144@gmail.com
+                <a href="mailto:roushan@doctransfer.online" style={{ color: '#1f2937', fontWeight: 600, textDecoration: 'none', fontSize: '0.95rem', letterSpacing: '-0.01em' }}>
+                  roushan@doctransfer.online
                 </a>
               </div>
             </div>
