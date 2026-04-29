@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
 import Logo from './components/Logo';
@@ -8,24 +8,19 @@ import {
     X,
     Briefcase,
     Rocket,
-    Users,
     Sparkles,
     Zap,
-    HelpCircle,
     Loader2,
     Lock,
     BarChart3,
     PenTool,
     UploadCloud,
     HardDrive,
-    Clock,
-    Download,
+    History,
+    Mail,
     ShieldCheck,
     Type,
     LineChart,
-    History,
-    Mail,
-    MonitorOff,
     Calendar,
     ShieldAlert,
     Fingerprint,
@@ -33,7 +28,6 @@ import {
     Bomb,
     Timer,
     Eye,
-    EyeOff,
     Twitter,
     Instagram,
     Youtube,
@@ -41,828 +35,293 @@ import {
 } from 'lucide-react';
 import { supabase } from './lib/supabase';
 
-
-interface RazorpayOptions {
-    key: string;
-    amount: number;
-    currency: string;
-    name: string;
-    description: string;
-    image: string;
-    order_id: string;
-    handler: (response: any) => void;
-    prefill: {
-        name: string;
-        email: string;
-        contact?: string;
-    };
-    theme: {
-        color: string;
-    };
-}
-
-interface Window {
-    Razorpay: new (options: RazorpayOptions) => any;
-}
-
 const Pricing: React.FC = () => {
     const { user } = useUser();
     const navigate = useNavigate();
     const [loading, setLoading] = useState<string | null>(null);
+    const [currentPlan, setCurrentPlan] = useState<string | null>(null);
 
+    useEffect(() => {
+        const fetchCurrentPlan = async () => {
+            if (user) {
+                const { data } = await supabase
+                    .from('subscriptions')
+                    .select('plan_type')
+                    .eq('user_id', user.id)
+                    .single();
+                if (data) setCurrentPlan(data.plan_type);
+            }
+        };
+        fetchCurrentPlan();
+    }, [user]);
 
-    const handleSubscribe = async (planType: 'standard' | 'business') => {
+    const handleUpgrade = async (planType: string) => {
         if (!user) {
-            alert('Please sign in to subscribe.');
+            alert('Please sign in to get started.');
             return;
         }
 
-        try {
-            setLoading(planType);
-
-            // 1. Create Order
-            const functionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-razorpay-order`;
-            console.log('Calling Edge Function:', functionUrl, 'for User:', user.id);
-
-            const response = await fetch(functionUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ planType, userId: user.id })
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                let errorMsg = errorText;
-                try {
-                    const errorJson = JSON.parse(errorText);
-                    errorMsg = errorJson.error || errorJson.message || errorText;
-                } catch {
-                    // Use raw text if not JSON
-                }
-                throw new Error(errorMsg);
-            }
-
-            const orderData = await response.json();
-
-            // 2. Initialize Razorpay
-            console.log('Initializing Razorpay with Key ID:', import.meta.env.VITE_RAZORPAY_KEY_ID);
-
-            if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
-                alert('Configuration Error: Razorpay Key ID is missing. Please check your environment variables.');
-                setLoading(null);
-                return;
-            }
-
-            const options: RazorpayOptions = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-                amount: orderData.amount,
-                currency: orderData.currency,
-                name: "DocTransfer",
-                description: `${planType.charAt(0).toUpperCase() + planType.slice(1)} Plan Subscription`,
-                image: "/favicon.png", // Use local logo
-                order_id: orderData.id,
-                handler: async function (response: any) {
-                    try {
-                        // 3. Verify Payment
-                        const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-razorpay-payment', {
-                            body: {
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                                userId: user.id,
-                                planType
-                            }
-                        });
-
-                        if (verifyError) {
-                            const errorMsg = verifyError.message || (verifyError as any).error || 'Verification failed';
-                            throw new Error(errorMsg);
-                        }
-
-                        navigate('/dataroom');
-
-                    } catch (err: any) {
-                        console.error('Verification Error:', err);
-                        alert(`Payment verification failed: ${err.message || JSON.stringify(err)}`);
-                    }
-                },
-                prefill: {
-                    name: user.fullName || '',
-                    email: user.primaryEmailAddress?.emailAddress || ''
-                },
-                theme: {
-                    color: "#3b82f6"
-                }
-            };
-
-            const rzp1 = new (window as any).Razorpay(options);
-            rzp1.open();
-
-        } catch (err: any) {
-            console.error('Subscription Error:', err);
-            alert(`Subscription failed: ${err.message}`);
-        } finally {
+        // Since everything is free and unlocked in the code, we don't strictly need to hit the DB
+        // especially if the user hasn't set up the tables yet in their new Supabase project.
+        setLoading(planType);
+        setTimeout(() => {
             setLoading(null);
-        }
+            navigate('/dataroom');
+        }, 500);
     };
 
     const plans = [
         {
-            name: 'Free Plan',
-            planType: null,
-            icon: Users,
-            price: '$0',
-            period: '/month',
-            target: 'Individuals & personal use',
-            description: 'Perfect for trying out DocTransfer',
-            features: [
-                { text: 'No Watermark', included: true, icon: EyeOff },
-                { text: '10 document uploads per day', included: true, icon: UploadCloud },
-                { text: '10 E-signatures daily', included: true, icon: PenTool },
-                { text: '10 MB file size limit', included: true, icon: HardDrive },
-                { text: '1-day document storage', included: true, icon: Clock },
-                { text: 'Basic analytics', included: true, icon: BarChart3 },
-                { text: 'Basic password protection', included: true, icon: Lock },
-                { text: 'Download controls', included: true, icon: Download }
-            ],
-            cta: 'Get Started Free',
-            ctaLink: '/dataroom',
-            popular: false,
-            gradient: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-            glowColor: 'rgba(59, 130, 246, 0.5)',
-            accentColor: '#3b82f6'
-        },
-        {
-            name: 'Standard Plan',
-            planType: 'standard' as const,
-            icon: Briefcase,
-            price: '$19',
-            period: '/month',
-            annualPrice: '$190/year',
-            annualSavings: 'Save 17%',
-            target: 'Professionals & small teams',
-            description: 'Everything you need to share professionally',
-            features: [
-                { text: 'Everything in Free, plus:', included: true, bold: true, icon: Sparkles },
-                { text: 'Basic password protection', included: true, icon: Lock },
-                { text: 'Download controls', included: true, icon: Download },
-                { text: 'Unlimited E-signatures', included: true, icon: PenTool },
-                { text: 'Unlimited document uploads', included: true, icon: UploadCloud },
-                { text: '100MB Per File Size limit', included: true, icon: HardDrive },
-                { text: 'Dynamic watermarking', included: true, icon: Type },
-                { text: 'Advanced analytics with page tracking', included: true, icon: LineChart },
-                { text: 'Audit trails', included: true, icon: History },
-                { text: 'Email verification', included: true, icon: Mail },
-                { text: '1-year document storage', included: true, icon: Calendar },
-                { text: 'SSO integration', included: true, icon: ShieldCheck }
-            ],
-
-            cta: 'Subscribe Now',
-            ctaLink: '#',
-            isComingSoon: false,
-            popular: true,
-            gradient: 'linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%)',
-            glowColor: 'rgba(168, 85, 247, 0.5)',
-            accentColor: '#a855f7'
-        },
-        {
-            name: 'Business Plan',
-            planType: 'business' as const,
+            name: 'Free Forever',
+            planType: 'free',
             icon: Rocket,
-            price: '$29',
-            period: '/month',
-            annualPrice: '$290/year',
-            annualSavings: 'Save 17%',
-            target: 'Teams & enterprises',
-            description: 'Advanced features for growing organizations',
+            price: '$0',
+            period: '/forever',
+            description: 'All premium features are now free for everyone.',
             features: [
-                { text: 'Everything in Standard, plus:', included: true, bold: true, icon: Sparkles },
-                { text: 'No Watermark', included: true, icon: EyeOff },
-                { text: '200MB file size limit', included: true, icon: HardDrive },
-                { text: 'Vault Mode (Client-Side Encryption)', included: true, icon: ShieldAlert },
-                { text: 'Biometric authentication (Fingerprint)', included: true, icon: Fingerprint },
-                { text: 'Unlimited E-signatures', included: true, icon: PenTool },
-                { text: 'Document bundles (multi-file sharing)', included: true, icon: Layers },
-                { text: 'SSO integration', included: true, icon: ShieldCheck },
-                { text: 'Unlimited storage', included: true, icon: HardDrive },
-                { text: 'Self-Destruct Rules', included: true, icon: Bomb },
-                { text: 'Time Expiration', included: true, icon: Timer },
-                { text: 'View Limit', included: true, icon: Eye }
+                'Unlimited document uploads',
+                'Unlimited E-signatures',
+                '1GB File size limit',
+                'Vault Mode (E2E Encryption)',
+                'Advanced Analytics',
+                'Dynamic Watermarking',
+                'Audit Trails',
+                'SSO Integration',
+                'Custom Branding'
             ],
-
-            cta: 'Subscribe Now',
-            ctaLink: '#',
-            isComingSoon: false,
-            popular: false,
-            gradient: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-            glowColor: 'rgba(6, 182, 212, 0.5)',
-            accentColor: '#06b6d4'
+            cta: 'Get Started Now',
+            popular: true,
+            color: '#4f46e5'
         }
     ];
 
+    const comparisons = [
+        { feature: 'Daily Uploads', standard: 'Unlimited', business: 'Unlimited' },
+        { feature: 'E-Signatures', standard: 'Unlimited', business: 'Unlimited' },
+        { feature: 'File Size Limit', standard: '100MB', business: '200MB' },
+        { feature: 'Storage Duration', standard: '1 Year', business: 'Unlimited' },
+        { feature: 'Analytics', standard: 'Advanced', business: 'Deep Insights' },
+        { feature: 'Dynamic Watermark', standard: true, business: true },
+        { feature: 'Vault Mode (E2E)', standard: false, business: true },
+        { feature: 'Biometric Auth', standard: false, business: true },
+        { feature: 'Custom Branding', standard: true, business: true },
+        { feature: 'Audit Trails', standard: true, business: true },
+        { feature: 'SSO Integration', standard: false, business: true },
+    ];
+
     return (
-        <div style={{
-            background: '#ffffff',
-            minHeight: '100vh',
-            color: '#0f172a',
-            fontFamily: "'Inter', sans-serif"
-        }}>
-            <SEO
-                title="Pricing - Choose Your Plan"
-                description="DocTransfer pricing plans. Free plan with 10 uploads/day forever. Standard at $19/mo with unlimited uploads. Business at $29/mo with Vault Mode encryption."
-                keywords="DocTransfer pricing, secure document sharing plans, DocSend alternative pricing, document analytics pricing"
-                url="https://doctransfer.io/pricing"
+        <div style={{ background: '#f8fafc', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
+            <SEO 
+                title="Pricing - DocTransfer" 
+                description="Choose the plan that fits your needs. Now all premium plans are free for everyone." 
             />
-            {/* Header */}
+
+            {/* Navbar */}
             <header style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
                 padding: '1.5rem 2rem',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                zIndex: 50,
                 background: 'rgba(255, 255, 255, 0.8)',
-                backdropFilter: 'blur(12px)',
+                backdropFilter: 'blur(10px)',
+                position: 'sticky',
+                top: 0,
+                zIndex: 100,
                 borderBottom: '1px solid #e2e8f0'
             }}>
-                <Link to="/" style={{ textDecoration: 'none' }}>
-                    <Logo size={40} />
-                </Link>
-                <nav style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-                    <Link to="/" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0f172a'} onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>Home</Link>
-                    <a href="/#features" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0f172a'} onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>Features</a>
-                    <a href="/#security" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.95rem', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0f172a'} onMouseLeave={e => e.currentTarget.style.color = '#64748b'}>Security</a>
-
+                <Link to="/" style={{ textDecoration: 'none' }}><Logo size={32} /></Link>
+                <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                    <Link to="/" style={{ color: '#475569', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
+                    <SignedIn>
+                        <Link to="/dataroom" style={{ color: '#475569', textDecoration: 'none', fontWeight: 500 }}>Dashboard</Link>
+                        <UserButton afterSignOutUrl="/pricing" />
+                    </SignedIn>
                     <SignedOut>
                         <SignInButton mode="modal">
                             <button style={{
-                                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                                color: 'white',
-                                border: 'none',
-                                padding: '0.6rem 1.25rem',
+                                padding: '0.6rem 1.2rem',
                                 borderRadius: '8px',
+                                border: 'none',
+                                background: '#3b82f6',
+                                color: 'white',
                                 fontWeight: 600,
-                                fontSize: '0.9rem',
-                                cursor: 'pointer',
-                                boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)',
-                                transition: 'all 0.2s'
-                            }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = 'translateY(-1px)';
-                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.3)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.2)';
-                                }}>
-                                Sign In
-                            </button>
+                                cursor: 'pointer'
+                            }}>Sign In</button>
                         </SignInButton>
                     </SignedOut>
-                    <SignedIn>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            <Link to="/dataroom">
-                                <button style={{
-                                    background: '#f1f5f9',
-                                    color: '#0f172a',
-                                    border: '1px solid #e2e8f0',
-                                    padding: '0.6rem 1.25rem',
-                                    borderRadius: '8px',
-                                    fontWeight: 500,
-                                    fontSize: '0.9rem',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s'
-                                }}
-                                    onMouseEnter={e => e.currentTarget.style.background = '#e2e8f0'}
-                                    onMouseLeave={e => e.currentTarget.style.background = '#f1f5f9'}>
-                                    Dashboard
-                                </button>
-                            </Link>
-                            <UserButton afterSignOutUrl="/" />
-                        </div>
-                    </SignedIn>
-                </nav>
+                </div>
             </header>
 
-            <main style={{ paddingTop: '120px', paddingBottom: '6rem' }}>
-                {/* Hero Section */}
-                <section style={{ textAlign: 'center', padding: '0 2rem 4rem', position: 'relative' }}>
-                    {/* Background decorations */}
-                    <div style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '800px',
-                        height: '400px',
-                        background: 'radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1) 0%, rgba(255, 255, 255, 0) 70%)',
-                        zIndex: -1,
-                        pointerEvents: 'none'
-                    }} />
-
+            <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 2rem' }}>
+                {/* Hero */}
+                <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
                     <div style={{
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        background: '#eff6ff',
-                        border: '1px solid #bfdbfe',
-                        padding: '0.5rem 1rem',
+                        background: '#dcfce7',
+                        color: '#166534',
+                        padding: '0.4rem 1rem',
                         borderRadius: '100px',
-                        marginBottom: '2rem',
-                        color: '#2563eb',
                         fontSize: '0.875rem',
-                        fontWeight: 500
+                        fontWeight: 600,
+                        marginBottom: '1.5rem'
                     }}>
-                        <Sparkles size={16} />
-                        <span>Simple, Transparent Pricing</span>
+                        <Sparkles size={16} /> All Premium Plans Now Free
                     </div>
-
-                    <h1 style={{
-                        fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
-                        fontWeight: 800,
-                        lineHeight: 1.1,
-                        marginBottom: '1.5rem',
-                        color: '#0f172a',
-                        letterSpacing: '-0.02em',
-                        background: 'linear-gradient(to right, #0f172a, #334155)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                    }}>
-                        Choose the Perfect Plan<br />for Your Needs
+                    <h1 style={{ fontSize: '3.5rem', fontWeight: 800, color: '#0f172a', marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
+                        The Future of Secure Sharing is <span style={{ color: '#3b82f6' }}>Free</span>
                     </h1>
-
-                    <p style={{
-                        fontSize: '1.25rem',
-                        color: '#64748b',
-                        maxWidth: '600px',
-                        margin: '0 auto 3rem',
-                        lineHeight: 1.6
-                    }}>
-                        Whether you're sending one document or managing an enterprise data room, we have a plan for you.
+                    <p style={{ fontSize: '1.25rem', color: '#64748b', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6 }}>
+                        We've unlocked all our professional and enterprise features for everyone. 
+                        No credit card required, no hidden fees. Just secure document sharing.
                     </p>
+                </div>
 
-
-                </section>
-
-                {/* Pricing Cards */}
-                <section style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 2rem' }}>
-
-
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-                        gap: '2rem',
-                        alignItems: 'stretch'
-                    }}>
-                        {plans.map((plan, index) => (
-                            <div
-                                key={index}
-                                style={{
-                                    background: '#ffffff',
-                                    borderRadius: '24px',
-                                    border: plan.popular ? `2px solid ${plan.accentColor}` : '1px solid #e2e8f0',
-                                    padding: '2.5rem',
-                                    position: 'relative',
-                                    transition: 'all 0.3s ease',
-                                    boxShadow: plan.popular ? `0 20px 40px ${plan.glowColor.replace('0.5', '0.15')}` : '0 4px 20px rgba(0,0,0,0.03)',
-                                    transform: plan.popular ? 'translateY(-10px)' : 'none',
-                                    display: 'flex',
-                                    flexDirection: 'column'
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = plan.popular ? 'translateY(-15px)' : 'translateY(-5px)';
-                                    e.currentTarget.style.boxShadow = plan.popular ? `0 25px 50px ${plan.glowColor.replace('0.5', '0.2')}` : '0 10px 30px rgba(0,0,0,0.06)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = plan.popular ? 'translateY(-10px)' : 'none';
-                                    e.currentTarget.style.boxShadow = plan.popular ? `0 20px 40px ${plan.glowColor.replace('0.5', '0.15')}` : '0 4px 20px rgba(0,0,0,0.03)';
-                                }}
-                            >
-                                {plan.popular && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: -2,
-                                        left: '50%',
-                                        transform: 'translateX(-50%)',
-                                        background: plan.gradient,
-                                        padding: '0.25rem 1rem',
-                                        borderRadius: '0 0 12px 12px',
-                                        fontSize: '0.75rem',
-                                        fontWeight: 700,
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '0.05em',
-                                        color: 'white',
-                                        boxShadow: `0 4px 12px ${plan.glowColor}`
-                                    }}>
-                                        Most Popular
-                                    </div>
-                                )}
-
-                                <div style={{ marginBottom: '2rem' }}>
-                                    <div style={{
-                                        width: '72px',
-                                        height: '72px',
-                                        borderRadius: '18px',
-                                        background: `linear-gradient(135deg, ${plan.accentColor}10 0%, ${plan.accentColor}05 100%)`,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        marginBottom: '1.5rem',
-                                        border: `1px solid ${plan.accentColor}20`
-                                    }}>
-                                        <plan.icon size={36} color={plan.accentColor} />
-                                    </div>
-                                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem', color: '#0f172a' }}>{plan.name}</h3>
-                                    <p style={{ color: '#64748b', fontSize: '0.9rem', minHeight: '40px' }}>{plan.target}</p>
+                {/* Plan Cards */}
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                    gap: '2rem',
+                    marginBottom: '8rem',
+                    justifyContent: 'center'
+                }}>
+                    {plans.map((plan) => (
+                        <div key={plan.name} style={{
+                            background: 'white',
+                            borderRadius: '24px',
+                            padding: '2.5rem',
+                            border: plan.popular ? `2px solid ${plan.color}` : '1px solid #e2e8f0',
+                            boxShadow: plan.popular ? `0 20px 40px -10px ${plan.color}20` : '0 10px 30px -10px rgba(0,0,0,0.05)',
+                            position: 'relative',
+                            transition: 'transform 0.3s ease',
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-8px)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                        >
+                            {plan.popular && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-12px',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    background: plan.color,
+                                    color: 'white',
+                                    padding: '0.25rem 1rem',
+                                    borderRadius: '100px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 700,
+                                    textTransform: 'uppercase'
+                                }}>Most Popular</div>
+                            )}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                                <div style={{ 
+                                    padding: '0.75rem', 
+                                    background: `${plan.color}10`, 
+                                    borderRadius: '12px',
+                                    color: plan.color 
+                                }}>
+                                    <plan.icon size={24} />
                                 </div>
-
-                                <div style={{ marginBottom: '2rem', paddingBottom: '2rem', borderBottom: '1px solid #f1f5f9' }}>
-                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem' }}>
-                                        <span style={{ fontSize: '3rem', fontWeight: 800, color: '#0f172a' }}>{plan.price}</span>
-                                        <span style={{ color: '#64748b' }}>{plan.period}</span>
-                                    </div>
-                                    {plan.annualPrice && (
-                                        <div style={{ fontSize: '0.875rem', marginTop: '0.5rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                            <span style={{ color: '#64748b' }}>{plan.annualPrice}</span>
-                                            <span style={{ color: '#166534', background: '#dcfce7', padding: '2px 8px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 600 }}>{plan.annualSavings}</span>
+                                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0f172a' }}>{plan.name}</h3>
+                            </div>
+                            <div style={{ marginBottom: '1.5rem' }}>
+                                <span style={{ fontSize: '3rem', fontWeight: 800, color: '#0f172a' }}>{plan.price}</span>
+                                <span style={{ color: '#64748b', fontSize: '1rem' }}>{plan.period}</span>
+                            </div>
+                            <p style={{ color: '#64748b', marginBottom: '2rem', fontSize: '1rem', lineHeight: 1.5 }}>{plan.description}</p>
+                            
+                            <div style={{ flex: 1, marginBottom: '2.5rem' }}>
+                                {plan.features.map((feature, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', color: '#475569' }}>
+                                        <div style={{ background: '#dcfce7', borderRadius: '50%', padding: '2px' }}>
+                                            <Check size={14} color="#166534" strokeWidth={3} />
                                         </div>
-                                    )}
-                                </div>
+                                        <span style={{ fontSize: '0.925rem' }}>{feature}</span>
+                                    </div>
+                                ))}
+                            </div>
 
-                                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2.5rem', display: 'flex', flexDirection: 'column', gap: '1.125rem', flex: 1 }}>
-                                    {plan.features.map((feature, fIndex) => {
-                                        const FeatureIcon = (feature as any).icon || Check;
-                                        return (
-                                            <li key={fIndex} style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: feature.included ? 1 : 0.5, transition: 'transform 0.2s ease' }}>
-                                                <div style={{
-                                                    width: '32px',
-                                                    height: '32px',
-                                                    borderRadius: '8px',
-                                                    background: feature.included ? `${plan.accentColor}15` : '#f1f5f9',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    flexShrink: 0
-                                                }}>
-                                                    {feature.included ? (
-                                                        <FeatureIcon size={18} color={plan.accentColor} strokeWidth={(feature as any).icon ? 2.5 : 3} />
-                                                    ) : (
-                                                        <X size={18} color="#94a3b8" />
-                                                    )}
-                                                </div>
-                                                <span style={{
-                                                    fontSize: '0.925rem',
-                                                    color: feature.included && (feature as any).bold ? '#1e293b' : '#64748b',
-                                                    fontWeight: (feature as any).bold ? 700 : 500,
-                                                    letterSpacing: '-0.01em'
-                                                }}>
-                                                    {feature.text}
-                                                </span>
-                                            </li>
-                                        );
-                                    })}
-
-                                    {/* Upcoming Features */}
-                                    {(plan as any).upcomingFeatures && (plan as any).upcomingFeatures.length > 0 && (
-                                        <>
-                                            <li style={{ marginTop: '1.5rem', marginBottom: '0.75rem', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em', color: '#64748b', textTransform: 'uppercase' }}>
-                                                Coming Soon
-                                            </li>
-                                            {(plan as any).upcomingFeatures.map((feature: any, uIndex: number) => (
-                                                <li key={`u-${uIndex}`} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                                                    <div style={{ background: '#f59e0b', borderRadius: '50%', padding: '2px', marginTop: '2px' }}>
-                                                        <Sparkles size={12} color="white" />
-                                                    </div>
-                                                    <span style={{ fontSize: '0.9rem', color: '#64748b' }}>
-                                                        {feature.text}
-                                                    </span>
-                                                </li>
-                                            ))}
-                                        </>
-                                    )}
-                                </ul>
-
-                                {plan.planType ? (
-                                    <>
-                                        <button
-                                            onClick={() => handleSubscribe(plan.planType!)}
-                                            disabled={!!loading}
-                                            style={{
-                                                width: '100%',
-                                                padding: '1rem',
-                                                borderRadius: '12px',
-                                                border: 'none',
-                                                background: '#3b82f6',
-                                                color: 'white',
-                                                fontWeight: 600,
-                                                cursor: loading === plan.planType ? 'not-allowed' : 'pointer',
-                                                transition: 'all 0.2s',
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                gap: '0.5rem',
-                                                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
-                                            }}
-                                            onMouseEnter={e => {
-                                                if (!loading) {
-                                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                                    e.currentTarget.style.background = '#2563eb';
-                                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(59, 130, 246, 0.4)';
-                                                }
-                                            }}
-                                            onMouseLeave={e => {
-                                                if (!loading) {
-                                                    e.currentTarget.style.transform = 'translateY(0)';
-                                                    e.currentTarget.style.background = '#3b82f6';
-                                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
-                                                }
-                                            }}
-                                        >
-                                            {loading === plan.planType ? (
-                                                <>
-                                                    <Loader2 size={20} className="animate-spin" />
-                                                    Processing...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    Buy Now
-                                                    <Zap size={16} />
-                                                </>
-                                            )}
-                                        </button>
+                            <button 
+                                onClick={() => handleUpgrade(plan.planType as any)}
+                                disabled={currentPlan === plan.planType || loading === plan.planType}
+                                style={{
+                                    width: '100%',
+                                    padding: '1rem',
+                                    borderRadius: '12px',
+                                    border: 'none',
+                                    background: currentPlan === plan.planType ? '#f1f5f9' : (plan.popular ? plan.color : '#0f172a'),
+                                    color: currentPlan === plan.planType ? '#94a3b8' : 'white',
+                                    fontWeight: 700,
+                                    fontSize: '1rem',
+                                    cursor: currentPlan === plan.planType ? 'default' : 'pointer',
+                                    transition: 'all 0.2s',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem'
+                                }}>
+                                {loading === plan.planType ? <Loader2 size={20} className="animate-spin" /> : (currentPlan === plan.planType ? 'Active Plan' : plan.cta)}
+                                {currentPlan !== plan.planType && <Zap size={18} fill="currentColor" />}
+                            </button>
+                        </div>
+                    ))}
+                </div>
 
 
-                                    </>
-                                ) : (
-                                    <Link to={plan.ctaLink} style={{ textDecoration: 'none' }}>
-                                        <button style={{
-                                            width: '100%',
-                                            padding: '1rem',
-                                            borderRadius: '12px',
-                                            border: 'none',
-                                            background: '#3b82f6',
-                                            color: 'white',
-                                            fontWeight: 600,
-                                            cursor: 'pointer',
-                                            transition: 'all 0.2s',
-                                            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
-                                        }}
-                                            onMouseEnter={e => {
-                                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                                e.currentTarget.style.background = '#2563eb';
-                                                e.currentTarget.style.boxShadow = '0 6px 16px rgba(59, 130, 246, 0.4)';
-                                            }}
-                                            onMouseLeave={e => {
-                                                e.currentTarget.style.transform = 'translateY(0)';
-                                                e.currentTarget.style.background = '#3b82f6';
-                                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
-                                            }}
-                                        >
-                                            {plan.cta}
-                                        </button>
-                                    </Link>
-                                )}
+
+                {/* FAQ */}
+                <div style={{ marginTop: '10rem', textAlign: 'center' }}>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#0f172a', marginBottom: '4rem' }}>Frequently Asked Questions</h2>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '3rem', textAlign: 'left' }}>
+                        {[
+                            { q: "Is it really free?", a: "Yes, completely. We've unlocked all our professional and enterprise features for everyone. No credit card required, no limits." },
+                            { q: "Do I need a credit card?", a: "No. You don't even need to enter payment information. Just sign up and start sharing securely." },
+                            { q: "What is included?", a: "Everything. From E2E encryption and e-signatures to deep analytics and audit trails. It's all free." },
+                            { q: "What is Vault Mode?", a: "Vault Mode is our most secure sharing option, using client-side encryption so that even we can't see your files." }
+                        ].map((faq, i) => (
+                            <div key={i}>
+                                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.75rem' }}>{faq.q}</h4>
+                                <p style={{ color: '#64748b', lineHeight: 1.6 }}>{faq.a}</p>
                             </div>
                         ))}
                     </div>
-                </section>
-
-
-
-                {/* Final CTA */}
-                <section style={{
-                    marginTop: '6rem',
-                    padding: '0 2rem',
-                    textAlign: 'center'
-                }}>
-                    <div style={{
-                        maxWidth: '1000px',
-                        margin: '0 auto',
-                        background: 'linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%)',
-                        borderRadius: '32px',
-                        padding: '4rem 2rem',
-                        border: '1px solid #bfdbfe',
-                        position: 'relative',
-                        overflow: 'hidden'
-                    }}>
-
-                        <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '1rem', position: 'relative', color: '#1e3a8a' }}>Ready to get started?</h2>
-                        <p style={{ color: '#475569', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 2rem', position: 'relative' }}>
-                            Join thousands of professionals who trust DocTransfer for secure document sharing.
-                        </p>
-                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', position: 'relative' }}>
-                            <Link to="/dataroom">
-                                <button style={{
-                                    background: '#3b82f6',
-                                    color: 'white',
-                                    padding: '1rem 2rem',
-                                    borderRadius: '12px',
-                                    fontWeight: 700,
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    fontSize: '1rem',
-                                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
-                                }}>
-                                    Get Started Free
-                                </button>
-                            </Link>
-                            <button style={{
-                                background: 'white',
-                                color: '#0f172a',
-                                padding: '1rem 2rem',
-                                borderRadius: '12px',
-                                fontWeight: 600,
-                                border: '1px solid #e2e8f0',
-                                cursor: 'pointer',
-                                fontSize: '1rem'
-                            }}>
-                                Contact Sales
-                            </button>
-                        </div>
-                    </div>
-                </section>
+                </div>
             </main>
 
             {/* Footer */}
-            <footer style={{
-                background: '#f8fafc',
-                padding: '4rem 2rem 2rem',
-                borderTop: '1px solid #e2e8f0'
-            }}>
-                <div style={{
-                    maxWidth: '1200px',
-                    margin: '0 auto',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                    gap: '3rem',
-                    marginBottom: '3rem'
-                }}>
-                    <div>
-                        <div style={{ marginBottom: '1.5rem' }}>
-                            <Logo size={28} />
+            <footer style={{ background: '#0f172a', color: 'white', padding: '5rem 2rem 2rem', marginTop: '5rem' }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '4rem', marginBottom: '4rem' }}>
+                        <div>
+                            <Logo size={28} light />
+                            <p style={{ marginTop: '1.5rem', color: '#94a3b8', lineHeight: 1.6 }}>
+                                Secure document sharing and analytics for modern professionals.
+                            </p>
                         </div>
-                        <p style={{ color: '#64748b', lineHeight: 1.6 }}>
-                            Secure document sharing and analytics for modern teams.
-                        </p>
-                    </div>
-                    <div>
-                        <h4 style={{ color: '#0f172a', fontWeight: 600, marginBottom: '1.5rem' }}>Product</h4>
-                        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <li><Link to="/" style={{ color: '#64748b', textDecoration: 'none' }}>Features</Link></li>
-                            <li><Link to="/" style={{ color: '#64748b', textDecoration: 'none' }}>Security</Link></li>
-                            <li><Link to="/pricing" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 500 }}>Pricing</Link></li>
-                            <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Enterprise</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 style={{ color: '#0f172a', fontWeight: 600, marginBottom: '1.5rem' }}>Company</h4>
-                        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>About Us</a></li>
-                            <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Careers</a></li>
-                            <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Blog</a></li>
-                            <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Contact</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 style={{ color: '#0f172a', fontWeight: 600, marginBottom: '1.5rem' }}>Legal</h4>
-                        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Privacy Policy</a></li>
-                            <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Terms of Service</a></li>
-                            <li><a href="#" style={{ color: '#64748b', textDecoration: 'none' }}>Cookie Policy</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 style={{ color: '#0f172a', fontWeight: 600, marginBottom: '1.5rem' }}>Social</h4>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            <a
-                                href="https://x.com/Roushan71262"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: '36px',
-                                    height: '36px',
-                                    borderRadius: '8px',
-                                    background: '#1da1f2',
-                                    color: 'white',
-                                    textDecoration: 'none',
-                                    boxShadow: '0 4px 12px rgba(29, 161, 242, 0.3)',
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(29, 161, 242, 0.4)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(29, 161, 242, 0.3)';
-                                }}
-                            >
-                                <Twitter size={18} />
-                            </a>
-                            <a
-                                href="https://www.instagram.com/doctransfer2227/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: '36px',
-                                    height: '36px',
-                                    borderRadius: '8px',
-                                    background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-                                    color: 'white',
-                                    textDecoration: 'none',
-                                    boxShadow: '0 4px 12px rgba(220, 39, 67, 0.3)',
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(220, 39, 67, 0.4)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 39, 67, 0.3)';
-                                }}
-                            >
-                                <Instagram size={18} />
-                            </a>
-                            <a
-                                href="https://www.youtube.com/@doctransfer144"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: '36px',
-                                    height: '36px',
-                                    borderRadius: '8px',
-                                    background: '#ff0000',
-                                    color: 'white',
-                                    textDecoration: 'none',
-                                    boxShadow: '0 4px 12px rgba(255, 0, 0, 0.3)',
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(255, 0, 0, 0.4)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 0, 0, 0.3)';
-                                }}
-                            >
-                                <Youtube size={18} />
-                            </a>
-                            <a
-                                href="https://www.linkedin.com/in/doctransfer-0a2291314/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    width: '36px',
-                                    height: '36px',
-                                    borderRadius: '8px',
-                                    background: '#0077b5',
-                                    color: 'white',
-                                    textDecoration: 'none',
-                                    boxShadow: '0 4px 12px rgba(0, 119, 181, 0.3)',
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 119, 181, 0.4)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 119, 181, 0.3)';
-                                }}
-                            >
-                                <Linkedin size={18} />
-                            </a>
+                        <div>
+                            <h5 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.5rem' }}>Product</h5>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <Link to="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>Home</Link>
+                                <Link to="/pricing" style={{ color: '#94a3b8', textDecoration: 'none' }}>Pricing</Link>
+                                <Link to="/blog" style={{ color: '#94a3b8', textDecoration: 'none' }}>Blog</Link>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.5rem' }}>Connect</h5>
+                            <div style={{ display: 'flex', gap: '1rem' }}>
+                                <a href="https://x.com/Roushan71262" target="_blank" style={{ color: '#94a3b8' }}><Twitter size={20} /></a>
+                                <a href="https://www.instagram.com/doctransfer2227/" target="_blank" style={{ color: '#94a3b8' }}><Instagram size={20} /></a>
+                                <a href="https://www.youtube.com/@doctransfer144" target="_blank" style={{ color: '#94a3b8' }}><Youtube size={20} /></a>
+                                <a href="https://www.linkedin.com/in/doctransfer-0a2291314/" target="_blank" style={{ color: '#94a3b8' }}><Linkedin size={20} /></a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div style={{
-                    textAlign: 'center',
-                    paddingTop: '2rem',
-                    borderTop: '1px solid #e2e8f0',
-                    color: '#94a3b8',
-                    fontSize: '0.875rem'
-                }}>
-                    &copy; 2025 DocTransfer. All rights reserved.
+                    <div style={{ borderTop: '1px solid #1e293b', paddingTop: '2rem', textAlign: 'center', color: '#64748b', fontSize: '0.875rem' }}>
+                        © 2025 DocTransfer. All rights reserved.
+                    </div>
                 </div>
             </footer>
         </div>

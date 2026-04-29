@@ -27,7 +27,6 @@ import {
 } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import { hashPassword } from './lib/security';
-import GoogleDriveTab from './components/GoogleDriveTab';
 import { encryptFile, generateEncryptionKey } from './lib/encryption';
 import AnalyticsDashboard from './components/analytics/AnalyticsDashboard';
 import DashboardAnimation from './components/DashboardAnimation';
@@ -71,7 +70,7 @@ const DataRoom: React.FC = () => {
     const { user } = useUser();
     const [documents, setDocuments] = useState<Document[]>([]);
     const [isDragging, setIsDragging] = useState(false);
-    const [activeTab, setActiveTab] = useState<'upload' | 'google-drive' | 'documents' | 'analytics' | 'audit' | 'esignature'>('upload');
+    const [activeTab, setActiveTab] = useState<'upload' | 'documents' | 'analytics' | 'audit' | 'esignature'>('upload');
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
 
@@ -304,6 +303,9 @@ const DataRoom: React.FC = () => {
                     if (uploadError.message?.includes('fetch') || uploadError.message?.includes('CORS')) {
                         throw new Error(`CORS Error: Your Supabase project is blocking requests from localhost.`);
                     }
+                    if (uploadError.message?.includes('Bucket not found')) {
+                        throw new Error(`Storage bucket 'documents' not found. Please run the SQL script in MASTER_SETUP.sql in your Supabase SQL Editor to fix this.`);
+                    }
                     throw new Error(`Storage upload failed for ${file.name}: ${uploadError.message}`);
                 }
 
@@ -521,16 +523,7 @@ const DataRoom: React.FC = () => {
                         <button onClick={() => setActiveTab('upload')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'upload' ? '#8b5cf6' : 'transparent', color: activeTab === 'upload' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <Upload size={16} /> Upload
                         </button>
-                        <button onClick={() => {
-                            if (isFeatureLocked('google_drive')) {
-                                handleLockedFeatureClick('Google Drive');
-                            } else {
-                                setActiveTab('google-drive');
-                            }
-                        }} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'google-drive' ? '#8b5cf6' : 'transparent', color: activeTab === 'google-drive' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
-                            <Globe size={16} /> Google Drive
-                            {isFeatureLocked('google_drive') && <Lock size={14} />}
-                        </button>
+
                         <button onClick={() => setActiveTab('documents')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'documents' ? '#8b5cf6' : 'transparent', color: activeTab === 'documents' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <FileText size={16} /> Documents
                         </button>
@@ -563,44 +556,10 @@ const DataRoom: React.FC = () => {
 
             {/* Main Content */}
             <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
-                {activeTab === 'google-drive' ? (
-                    <div className="animate-fade-in">
-                        {isFeatureLocked('google_drive') ? (
-                            <div style={{ textAlign: 'center', padding: '5rem 2rem', background: 'white', borderRadius: '24px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
-                                <div style={{ width: '80px', height: '80px', background: '#f5f3ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
-                                    <Globe size={40} color="#8b5cf6" />
-                                </div>
-                                <h2 style={{ fontSize: '1.875rem', fontWeight: '800', color: '#111827', marginBottom: '1rem' }}>Google Drive Integration</h2>
-                                <p style={{ fontSize: '1.125rem', color: '#6b7280', marginBottom: '2.5rem', maxWidth: '500px', margin: '0 auto 2.5rem' }}>
-                                    Connect your Google Drive to directly upload and share files with DocTransfer. Available on Standard and Business plans.
-                                </p>
-                                <button
-                                    onClick={() => handleLockedFeatureClick('Google Drive')}
-                                    style={{
-                                        padding: '1rem 2.5rem',
-                                        background: 'linear-gradient(135deg, #8b5cf6 0%, #4f46e5 100%)',
-                                        color: 'white',
-                                        borderRadius: '12px',
-                                        border: 'none',
-                                        fontWeight: '600',
-                                        fontSize: '1.125rem',
-                                        cursor: 'pointer',
-                                        boxShadow: '0 10px 15px -3px rgba(139, 92, 246, 0.3)',
-                                        transition: 'transform 0.2s'
-                                    }}
-                                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                                >
-                                    Upgrade to Unlock
-                                </button>
-                            </div>
-                        ) : (
-                            <GoogleDriveTab onDocumentUploaded={fetchDocuments} />
-                        )}
-                    </div>
-                ) : activeTab === 'analytics' ? (
+                {activeTab === 'analytics' ?
                     <AnalyticsDashboard documentId={selectedDocumentId} />
-                ) : activeTab === 'audit' ? (
+                : activeTab === 'audit' ?
+
                     <div className="animate-fade-in">
                         {isFeatureLocked('audit_trails') ? (
                             <div style={{ textAlign: 'center', padding: '5rem 2rem', background: 'white', borderRadius: '24px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
@@ -635,9 +594,10 @@ const DataRoom: React.FC = () => {
                             <AuditTrail documentId={selectedDocumentId || documents.map(d => d.id)} />
                         )}
                     </div>
-                ) : activeTab === 'esignature' ? (
+                : activeTab === 'esignature' ?
                     <ESignatureDashboard />
-                ) : activeTab === 'documents' ? (
+                : activeTab === 'documents' ?
+
                     <div className="animate-fade-in">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                             <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827' }}>My Documents</h2>
@@ -735,7 +695,8 @@ const DataRoom: React.FC = () => {
                             </div>
                         )}
                     </div>
-                ) : (
+                :
+
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                         <div style={{ background: 'white', borderRadius: '20px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', border: '1px solid #f3f4f6', maxWidth: '100%', margin: '0 auto', overflow: 'hidden' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '600px' }}>
@@ -1360,8 +1321,8 @@ const DataRoom: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                )}
-            </main >
+                }
+            </main>
 
             {/* Preview Modal */}
             {

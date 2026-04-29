@@ -16,6 +16,7 @@ const UsageLimitBanner: React.FC<UsageLimitBannerProps> = ({
     type = 'uploads'
 }) => {
     // Only show for free plan
+    return null;
     if (planType !== 'free') return null;
 
     const percentage = (currentUploads / maxUploads) * 100;

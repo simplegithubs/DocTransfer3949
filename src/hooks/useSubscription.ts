@@ -58,78 +58,127 @@ export const useSubscription = () => {
                     .single();
 
                 if (subError && subError.code !== 'PGRST116') { // PGRST116 = no rows returned
-                    throw subError;
+                    // If the table doesn't exist, we'll get an error.
+                    // Instead of crashing, we'll just fall through to the default plan.
+                    console.warn('Subscription table might be missing or inaccessible:', subError.message);
                 }
 
-                // If no subscription found, create a default free subscription
+                // If no subscription found, try to create one, or just use default
                 if (!subData) {
-                    const { data: newSub, error: createError } = await supabase
-                        .from('subscriptions')
-                        .insert({
+                    try {
+                        const { data: newSub, error: createError } = await supabase
+                            .from('subscriptions')
+                            .insert({
+                                user_id: user.id,
+                                plan_type: 'free',
+                                status: 'active'
+                            })
+                            .select()
+                            .single();
+
+                        if (!createError) {
+                            setSubscription(newSub);
+                        } else {
+                            // Fallback to local default if table is missing
+                            setSubscription({
+                                id: 'default',
+                                user_id: user.id,
+                                plan_type: 'free',
+                                status: 'active',
+                                current_period_start: null,
+                                current_period_end: null,
+                                cancel_at_period_end: false,
+                                trial_end: null,
+                                created_at: new Date().toISOString(),
+                                updated_at: new Date().toISOString()
+                            });
+                        }
+                    } catch (e) {
+                        // Fallback
+                        setSubscription({
+                            id: 'default',
                             user_id: user.id,
                             plan_type: 'free',
-                            status: 'active'
-                        })
-                        .select()
-                        .single();
-
-                    if (createError) throw createError;
-                    setSubscription(newSub);
+                            status: 'active',
+                            current_period_start: null,
+                            current_period_end: null,
+                            cancel_at_period_end: false,
+                            trial_end: null,
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        });
+                    }
                 } else {
                     setSubscription(subData);
                 }
 
-                // Fetch current month usage (legacy tracking, still useful for analytics)
+                // Fetch current month usage
                 const currentMonth = new Date().toISOString().slice(0, 7) + '-01';
-                const { data: usageData, error: usageError } = await supabase
-                    .from('subscription_usage')
-                    .select('documents_uploaded, storage_used, month')
-                    .eq('user_id', user.id)
-                    .eq('month', currentMonth)
-                    .single();
+                try {
+                    const { data: usageData, error: usageError } = await supabase
+                        .from('subscription_usage')
+                        .select('documents_uploaded, storage_used, month')
+                        .eq('user_id', user.id)
+                        .eq('month', currentMonth)
+                        .single();
 
-                if (usageError && usageError.code !== 'PGRST116') {
-                    throw usageError;
+                    if (!usageError || usageError.code === 'PGRST116') {
+                        setUsage(usageData || {
+                            documents_uploaded: 0,
+                            storage_used: 0,
+                            month: currentMonth
+                        });
+                    } else {
+                        setUsage({
+                            documents_uploaded: 0,
+                            storage_used: 0,
+                            month: currentMonth
+                        });
+                    }
+                } catch (e) {
+                    setUsage({
+                        documents_uploaded: 0,
+                        storage_used: 0,
+                        month: currentMonth
+                    });
                 }
-
-                setUsage(usageData || {
-                    documents_uploaded: 0,
-                    storage_used: 0,
-                    month: currentMonth
-                });
 
                 // Fetch DAILY tracking
-                const todayStart = new Date();
-                todayStart.setHours(0, 0, 0, 0);
-                const todayISO = todayStart.toISOString();
+                try {
+                    const todayStart = new Date();
+                    todayStart.setHours(0, 0, 0, 0);
+                    const todayISO = todayStart.toISOString();
 
-                // 1. Daily Upload Count
-                const { count: uploadCount, error: uploadCountError } = await supabase
-                    .from('documents')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('user_id', user.id)
-                    .gte('created_at', todayISO);
+                    // 1. Daily Upload Count
+                    const { count: uploadCount, error: uploadCountError } = await supabase
+                        .from('documents')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('user_id', user.id)
+                        .gte('created_at', todayISO);
 
-                if (!uploadCountError) {
-                    setDailyUploadCount(uploadCount || 0);
-                }
+                    if (!uploadCountError) {
+                        setDailyUploadCount(uploadCount || 0);
+                    }
 
-                // 2. Daily E-Signature Count
-                const { count: esignCount, error: esignCountError } = await supabase
-                    .from('documents')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('user_id', user.id)
-                    .eq('requires_signature', true)
-                    .gte('created_at', todayISO);
+                    // 2. Daily E-Signature Count
+                    const { count: esignCount, error: esignCountError } = await supabase
+                        .from('documents')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('user_id', user.id)
+                        .eq('requires_signature', true)
+                        .gte('created_at', todayISO);
 
-                if (!esignCountError) {
-                    setDailyESignatureCount(esignCount || 0);
+                    if (!esignCountError) {
+                        setDailyESignatureCount(esignCount || 0);
+                    }
+                } catch (e) {
+                    // Ignore daily fetch errors
                 }
 
                 setError(null);
             } catch (err) {
-                console.error('Error fetching subscription:', err);
-                setError(err as Error);
+                console.error('Error in fetchSubscription:', err);
+                // Don't set error state to avoid blocking the UI, just use defaults
             } finally {
                 setIsLoading(false);
             }
@@ -186,91 +235,28 @@ export const useSubscription = () => {
      * Check if user can upload based on their plan and usage
      */
     const canUpload = (): boolean => {
-        if (!subscription) return false;
-
-        // Paid plans have unlimited uploads
-        if (subscription.plan_type === 'standard' || subscription.plan_type === 'business') {
-            return true;
-        }
-
-        // Free plan: check if under 10 uploads TODAY
-        return dailyUploadCount < 10;
+        return true; // Unlimited uploads for everyone
     };
 
     /**
      * Check if user can create a new e-signature request
      */
     const canCreateESignature = (): boolean => {
-        if (!subscription) return false;
-
-        // Paid plans (Standard/Business) have unlimited e-signatures
-        if (subscription.plan_type === 'standard' || subscription.plan_type === 'business') {
-            return true;
-        }
-
-        // Free plan: check if under 10 e-signature requests TODAY
-        return dailyESignatureCount < 10;
+        return true; // Unlimited e-signatures for everyone
     };
 
     /**
      * Get max file size for user's plan (in bytes)
      */
     const getMaxFileSize = (): number => {
-        if (!subscription) return 10 * 1024 * 1024; // 10MB default for free
-
-        switch (subscription.plan_type) {
-            case 'free':
-                return 10 * 1024 * 1024; // 10MB
-            case 'standard':
-                return 100 * 1024 * 1024; // 100MB
-            case 'business':
-                return Infinity; // Unlimited
-            default:
-                return 10 * 1024 * 1024;
-        }
+        return 1024 * 1024 * 1024; // 1GB limit for everyone
     };
 
     /**
      * Check if user has access to a specific feature
      */
     const hasFeature = (feature: string): boolean => {
-        if (!subscription) return false;
-
-        // Check if subscription is active and not expired
-        const isActive = subscription.status === 'active' || subscription.status === 'trialing';
-        const isNotExpired = !subscription.current_period_end || new Date(subscription.current_period_end) > new Date();
-
-        const hasActivePaidPlan = isActive && isNotExpired && (subscription.plan_type === 'standard' || subscription.plan_type === 'business');
-
-        const featureMap: Record<string, string[]> = {
-            'custom_branding': ['standard', 'business'],
-            'link_expiration': ['business'],
-            'email_notifications': ['standard', 'business'],
-            'email_verification': ['standard', 'business'],
-            'screenshot_protection': ['standard', 'business'],
-            'watermarking': ['standard', 'business'],
-            'aes_encryption': ['standard', 'business'],
-            'burn_after_reading': ['business'],
-            'advanced_analytics': ['standard', 'business'],
-            'audit_trails': ['standard', 'business'],
-            'priority_support': ['standard', 'business'],
-            'e_signature': ['free', 'standard', 'business'],
-            'document_bundles': ['business'],
-            'sso_integration': ['standard', 'business'],
-            'google_drive': ['standard', 'business'],
-            'white_label': ['business'],
-            'dedicated_manager': ['business'],
-            'custom_integrations': ['business'],
-            'sla_guarantee': ['business'],
-            'password_protection': ['free', 'standard', 'business'],
-            'download_controls': ['free', 'standard', 'business'],
-        };
-
-        // Free features are always available regardless of plan status if they are in the 'free' list
-        if (featureMap[feature]?.includes('free')) return true;
-
-        // For premium features, check if user has an active paid plan
-        return hasActivePaidPlan && (featureMap[feature]?.includes(subscription.plan_type) || false);
+        return true; // All features unlocked for everyone
     };
 
     /**
@@ -302,17 +288,7 @@ export const useSubscription = () => {
      * Get storage duration in days
      */
     const getStorageDurationDays = (): number => {
-        if (!subscription) return 30;
-        switch (subscription.plan_type) {
-            case 'free':
-                return 1; // 1 day
-            case 'standard':
-                return 365; // 1 year
-            case 'business':
-                return 36500; // 100 years (effectively unlimited)
-            default:
-                return 30;
-        }
+        return 36500; // Unlimited for everyone
     };
 
     return {

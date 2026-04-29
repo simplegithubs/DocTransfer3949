@@ -87,7 +87,7 @@ const LandingPage: React.FC = () => {
     <div className="landing-page">
       <SEO
         title="Secure Document Sharing with E2E Encryption & Analytics"
-        description="Share documents securely with end-to-end encryption, dynamic watermarking, real-time analytics & e-signatures. Free DocSend alternative. 10 uploads/day free forever."
+        description="Share documents securely with end-to-end encryption, dynamic watermarking, real-time analytics & e-signatures. Free DocSend alternative. All premium features free forever."
         keywords="secure document sharing, DocSend alternative, end-to-end encryption, dynamic watermarking, document analytics, pitch deck sharing"
       />
       <header className="header">
@@ -267,7 +267,7 @@ const LandingPage: React.FC = () => {
           </div>
 
           <h1 className="hero-title-animated">Securely Sharing, Tracking and Manage All Document</h1>
-          <p className="hero-subtitle-animated">Share documents securely with real-time insights and control.</p>
+          <p className="hero-subtitle-animated">Share documents securely with real-time insights and control. All features free forever.</p>
           <div className="hero-actions">
             <Link to="/pricing">
               <button className="hero-btn-primary">Get Started Free</button>

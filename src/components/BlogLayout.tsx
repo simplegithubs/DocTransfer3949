@@ -162,7 +162,7 @@ const BlogLayout: React.FC<BlogLayoutProps> = ({
                         Ready to share documents securely?
                     </h3>
                     <p style={{ color: '#6b7280', marginBottom: '1.5rem', fontSize: '1rem' }}>
-                        10 uploads/day free forever. No credit card required.
+                        All features free forever. No credit card required.
                     </p>
                     <Link to="/pricing" style={{
                         display: 'inline-block',

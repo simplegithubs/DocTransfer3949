@@ -177,7 +177,7 @@ const CompareLayout: React.FC<CompareLayoutProps> = ({
             <section style={{ maxWidth: '900px', margin: '0 auto', padding: '1rem 2rem 3rem', textAlign: 'center' }}>
                 <div style={{ background: '#111827', borderRadius: '16px', padding: '3rem 2rem' }}>
                     <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'white', marginBottom: '0.75rem' }}>Ready to switch?</h2>
-                    <p style={{ color: '#9ca3af', marginBottom: '1.5rem' }}>10 uploads/day free forever. No credit card required.</p>
+                    <p style={{ color: '#6b7280', marginBottom: '1.5rem', fontSize: '1rem' }}>All features free forever. No credit card required.</p>
                     <Link to="/pricing" style={{
                         display: 'inline-block',
                         background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',

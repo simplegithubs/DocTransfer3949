@@ -3,9 +3,10 @@ import React from 'react';
 interface LogoProps {
     className?: string;
     size?: number | string;
+    light?: boolean;
 }
 
-export const Logo: React.FC<LogoProps> = ({ className = '', size = 32 }) => {
+export const Logo: React.FC<LogoProps> = ({ className = '', size = 32, light = false }) => {
     return (
         <div className={`flex items-center gap-2 ${className}`} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <svg
@@ -98,7 +99,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 32 }) => {
                 <span style={{
                     fontWeight: 800,
                     fontSize: typeof size === 'number' ? size * 0.75 : '1.5rem',
-                    background: 'linear-gradient(135deg, #06B6D4 0%, #3B82F6 50%, #8B5CF6 100%)',
+                    background: light ? '#ffffff' : 'linear-gradient(135deg, #06B6D4 0%, #3B82F6 50%, #8B5CF6 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
