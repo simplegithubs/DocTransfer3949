@@ -375,7 +375,7 @@ const LandingPage: React.FC = () => {
                     color: '#94a3b8',
                     fontWeight: 400
                   }}>
-                    Maximum file size: Unlimited per file
+                    Maximum file size: 20 MB per file
                   </p>
                 </div>
               </div>

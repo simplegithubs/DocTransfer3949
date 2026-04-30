@@ -81,7 +81,7 @@ const Pricing: React.FC = () => {
             features: [
                 'Unlimited document uploads',
                 'Unlimited E-signatures',
-                '1GB File size limit',
+                '20MB File size limit',
                 'Vault Mode (E2E Encryption)',
                 'Advanced Analytics',
                 'Dynamic Watermarking',
@@ -98,7 +98,7 @@ const Pricing: React.FC = () => {
     const comparisons = [
         { feature: 'Daily Uploads', standard: 'Unlimited', business: 'Unlimited' },
         { feature: 'E-Signatures', standard: 'Unlimited', business: 'Unlimited' },
-        { feature: 'File Size Limit', standard: '100MB', business: '200MB' },
+        { feature: 'File Size Limit', standard: '20MB', business: '20MB' },
         { feature: 'Storage Duration', standard: '1 Year', business: 'Unlimited' },
         { feature: 'Analytics', standard: 'Advanced', business: 'Deep Insights' },
         { feature: 'Dynamic Watermark', standard: true, business: true },

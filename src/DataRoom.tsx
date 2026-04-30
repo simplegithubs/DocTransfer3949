@@ -793,7 +793,7 @@ const DataRoom: React.FC = () => {
                                         </div>
                                         {selectedFiles.length === 0 && (
                                             <p style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '0.25rem' }}>
-                                                Maximum file size: {subscription?.plan_type === 'free' ? '10 MB' : 'Unlimited'} per file
+                                                Maximum file size: 20 MB per file
                                             </p>
                                         )}
                                         <input

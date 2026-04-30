@@ -249,7 +249,7 @@ export const useSubscription = () => {
      * Get max file size for user's plan (in bytes)
      */
     const getMaxFileSize = (): number => {
-        return 1024 * 1024 * 1024; // 1GB limit for everyone
+        return 20 * 1024 * 1024; // 20MB limit for everyone
     };
 
     /**

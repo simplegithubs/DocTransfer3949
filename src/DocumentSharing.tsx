@@ -98,11 +98,21 @@ const DocumentSharing: React.FC = () => {
         setIsDragging(true);
     };
 
+    const handleFileSelection = (file: File) => {
+        setUploadError(null);
+        if (file.size > 20 * 1024 * 1024) {
+            setUploadError('File too large. Maximum size is 20MB.');
+            setUploadedFile(null);
+            return;
+        }
+        setUploadedFile(file);
+    };
+
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragging(false);
         const files = Array.from(e.dataTransfer.files);
-        if (files.length > 0) setUploadedFile(files[0]);
+        if (files.length > 0) handleFileSelection(files[0]);
     };
 
     const handleUpload = async () => {
@@ -223,14 +233,14 @@ const DocumentSharing: React.FC = () => {
                                     <Upload size={48} />
                                 </div>
                                 <h3 style={{ fontSize: '1.5rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>Drag & Drop or Click to Upload</h3>
-                                <p style={{ color: '#64748b' }}>PDF, DOCX, PNG, JPG (Unlimited Size)</p>
+                                <p style={{ color: '#64748b' }}>PDF, DOCX, PNG, JPG (Max 20MB)</p>
                             </>
                         )}
                         <input
                             type="file"
                             id="file-upload"
                             style={{ display: 'none' }}
-                            onChange={(e) => e.target.files && setUploadedFile(e.target.files[0])}
+                            onChange={(e) => e.target.files && handleFileSelection(e.target.files[0])}
                         />
                     </div>
 
