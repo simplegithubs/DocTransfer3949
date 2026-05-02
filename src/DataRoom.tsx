@@ -39,6 +39,8 @@ import PremiumBadge from './components/PremiumBadge';
 import UpgradeModal from './components/UpgradeModal';
 import UsageLimitBanner from './components/UsageLimitBanner';
 import SelfDestructSettings from './components/SelfDestructSettings';
+import SEO from './components/SEO';
+import { BASE_URL } from './lib/seo';
 
 interface Document {
     id: string;
@@ -479,6 +481,11 @@ const DataRoom: React.FC = () => {
 
     return (
         <div style={{ background: '#f9fafb', minHeight: '100vh' }}>
+            <SEO 
+                title="Dashboard — Manage Your Secure Documents" 
+                description="Upload, manage, and track your secure documents. View real-time analytics and audit trails."
+                url={`${BASE_URL}/dataroom`}
+            />
             {/* Header */}
             <header style={{ background: 'white', borderBottom: '1px solid #e5e7eb', padding: '1.5rem 2rem' }}>
                 <div style={{ maxWidth: '1400px', margin: '0 auto' }}>

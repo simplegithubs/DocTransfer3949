@@ -86,9 +86,9 @@ const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
       <SEO
-        title="Secure Document Sharing with E2E Encryption & Analytics"
-        description="Share documents securely with end-to-end encryption, dynamic watermarking, real-time analytics & e-signatures. Free DocSend alternative. All premium features free forever."
-        keywords="secure document sharing, DocSend alternative, end-to-end encryption, dynamic watermarking, document analytics, pitch deck sharing"
+        title="DocTransfer - Free DocSend Alternative with E2E Encryption"
+        description="Stop paying for DocSend. Get professional document sharing, page-by-page analytics, and dynamic watermarking for free. Secure, encrypted, and legally binding."
+        keywords="DocSend alternatives, free DocSend alternative, secure document sharing, virtual data room, pitch deck tracking, document analytics"
       />
       <header className="header">
         <Logo size={32} />

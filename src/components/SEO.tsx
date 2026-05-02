@@ -16,9 +16,9 @@ interface SEOProps {
  * This component handles page-specific overrides and dynamic structured data
  */
 const SEO: React.FC<SEOProps> = ({
-    title = 'Secure Document Sharing with E2E Encryption & Analytics',
-    description = 'Share documents securely with end-to-end encryption, dynamic watermarking, real-time analytics & e-signatures. Free DocSend alternative.',
-    keywords = 'secure document sharing, document analytics, DocSend alternative, end-to-end encryption',
+    title = 'DocTransfer - Free DocSend Alternative with E2E Encryption',
+    description = 'The best free DocSend alternative. Share documents securely with end-to-end encryption, dynamic watermarking, and real-time analytics.',
+    keywords = 'DocSend alternatives, free DocSend alternative, secure document sharing, virtual data room',
     image = 'https://doctransfer.io/og-image.png',
     url = 'https://doctransfer.io',
     schema,

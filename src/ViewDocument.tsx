@@ -10,6 +10,8 @@ import { applyPdfWatermark, applyImageWatermark } from './lib/watermarkGenerator
 import WebcamGate from './components/WebcamGate';
 import { getPreviewType, getExtension } from './lib/fileTypes';
 import { decryptFile } from './lib/encryption';
+import SEO from './components/SEO';
+import { BASE_URL } from './lib/seo';
 
 interface DocumentData {
     id: string;
@@ -688,9 +690,17 @@ const ViewDocument: React.FC = () => {
         }
     };
 
+    // Determine targets
+    const targetData = isBundle ? bundleData : document;
+
     if (loading) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9fafb' }}>
+                <SEO 
+                    title={targetData ? `View: ${targetData.name}` : 'View Document'} 
+                    description="Securely view documents shared via DocTransfer."
+                    url={`${window.location.origin}/view/${shareLink}`}
+                />
                 <div className="animate-spin" style={{ width: '32px', height: '32px', border: '3px solid #e5e7eb', borderTopColor: '#4f46e5', borderRadius: '50%' }}></div>
             </div>
         );
@@ -710,8 +720,6 @@ const ViewDocument: React.FC = () => {
         );
     }
 
-    // Determine targets
-    const targetData = isBundle ? bundleData : document;
 
     // Auth Check (Password or Email)
     const requiresEmail = isBundle
@@ -806,6 +814,11 @@ const ViewDocument: React.FC = () => {
     if (isBundle && bundleData) {
         return (
             <div style={{ minHeight: '100vh', background: '#f3f4f6', padding: '2rem' }}>
+                <SEO 
+                    title={`Bundle: ${bundleData.name}`} 
+                    description="Securely view document bundles shared via DocTransfer."
+                    url={`${BASE_URL}/view/${shareLink}`}
+                />
                 <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                     {/* Bundle Header */}
                     <div style={{ background: 'white', padding: '2rem', borderRadius: '16px', marginBottom: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
@@ -909,6 +922,11 @@ const ViewDocument: React.FC = () => {
             display: 'flex',
             flexDirection: 'column'
         }}>
+            <SEO 
+                title={`View: ${document.name}`} 
+                description="Securely view documents shared via DocTransfer."
+                url={`${BASE_URL}/view/${shareLink}`}
+            />
             {/* Watermark Overlay */}
             {document.watermark_config && (
                 <WatermarkOverlay

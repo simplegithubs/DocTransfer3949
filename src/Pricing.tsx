@@ -111,9 +111,10 @@ const Pricing: React.FC = () => {
 
     return (
         <div style={{ background: '#f8fafc', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
-            <SEO 
-                title="Pricing - DocTransfer" 
-                description="Choose the plan that fits your needs. Now all premium plans are free for everyone." 
+            <SEO
+                title="Pricing — Professional Document Sharing for Free"
+                description="Get all enterprise-grade security features for free. Unlimited document sharing, page-by-page analytics, and E2E encryption without the premium price tag."
+                keywords="free DocSend alternative, free virtual data room, document sharing pricing, secure file sharing free"
             />
 
             {/* Navbar */}
