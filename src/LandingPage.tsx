@@ -54,32 +54,32 @@ const LandingPage: React.FC = () => {
 
   const faqs = [
     {
+      question: "Is DocTransfer really free?",
+      answer: "Yes, absolutely! We've made the strategic decision to unlock all our premium, professional, and enterprise features for everyone. No credit card, no subscriptions, just world-class security at no cost."
+    },
+    {
       question: "How does End-to-End (E2E) Encryption protect my files?",
       answer: "With our 'Vault Mode', your files are encrypted directly in your browser using AES-256 before they are uploaded. This means only you and your authorized recipients hold the decryption keys. Even DocTransfer cannot access the content of your encrypted files."
     },
     {
-      question: "Can I import documents directly from Google Drive?",
-      answer: "Yes! Our seamless Google Drive integration allows you to browse and import your cloud files directly into DocTransfer. Once imported, you can apply all our advanced security features like E2E encryption and dynamic watermarking to your Drive documents."
+      question: "What is 'Burn After Reading'?",
+      answer: "This feature allows you to set documents to automatically delete themselves after a single view or a specific number of views, ensuring your sensitive data doesn't persist longer than necessary."
+    },
+    {
+      question: "Is DocTransfer compliant with industry standards?",
+      answer: "Yes! We provide features like comprehensive Audit Trails, E2E encryption, and secure storage that help businesses maintain compliance with standards like HIPAA, GDPR, and NIST."
+    },
+    {
+      question: "Can I add my own branding to the documents?",
+      answer: "Absolutely. Our White-Labeling feature allows you to remove DocTransfer branding and add your own company logo and colors, providing a professional and seamless experience for your clients."
+    },
+    {
+      question: "Are E-Signatures legally binding?",
+      answer: "Yes, our E-Signature feature is designed to be legally binding and compliant with major electronic signature laws. Every signed document is accompanied by a detailed digital certificate and audit trail."
     },
     {
       question: "What makes file transfers on DocTransfer 'Secure'?",
       answer: "Beyond encryption, we provide granular access controls. You can set expiration dates, limit the number of views, password-protect links, and even restrict access to specific email domains or IP addresses, ensuring your files never fall into the wrong hands."
-    },
-    {
-      question: "How do Audit Trails help me track document activity?",
-      answer: "Our comprehensive Audit Trails record every single interaction with your documents. You'll see precise timestamps, IP addresses, geographic locations, and the specific actions taken (like viewing, downloading, or signing), providing a complete chain of custody."
-    },
-    {
-      question: "Are E-Signatures on DocTransfer legally binding?",
-      answer: "Yes, our E-Signature feature is designed to be legally binding and compliant with major electronic signature laws. Every signed document is accompanied by a detailed digital certificate and audit trail to verify the identity of the signer and the integrity of the document."
-    },
-    {
-      question: "What insights can I get from Page-by-Page Analytics?",
-      answer: "You get deep visibility into recipient engagement. See exactly how much time is spent on each page of your document. This helps you identify which parts of your pitch deck or contract are drawing the most interest and where recipients might be dropping off."
-    },
-    {
-      question: "How does Dynamic Watermarking deter unauthorized sharing?",
-      answer: "Dynamic Watermarking overlays the recipient's personal information (like email and IP address) directly onto the document in real-time. This makes any unauthorized screenshots or photos traceable back to the source, significantly reducing the risk of data leaks."
     }
   ];
 

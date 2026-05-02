@@ -277,10 +277,12 @@ const Pricing: React.FC = () => {
                     <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#0f172a', marginBottom: '4rem' }}>Frequently Asked Questions</h2>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '3rem', textAlign: 'left' }}>
                         {[
-                            { q: "Is it really free?", a: "Yes, completely. We've unlocked all our professional and enterprise features for everyone. No credit card required, no limits." },
-                            { q: "Do I need a credit card?", a: "No. You don't even need to enter payment information. Just sign up and start sharing securely." },
-                            { q: "What is included?", a: "Everything. From E2E encryption and e-signatures to deep analytics and audit trails. It's all free." },
-                            { q: "What is Vault Mode?", a: "Vault Mode is our most secure sharing option, using client-side encryption so that even we can't see your files." }
+                            { q: "Is DocTransfer really free?", a: "Yes, absolutely! We've made the strategic decision to unlock all our premium, professional, and enterprise features for everyone. No credit card required, no limits." },
+                            { q: "What is Vault Mode?", a: "Vault Mode is our most secure sharing option, using client-side E2E encryption so that even we can't see your files. You hold the keys." },
+                            { q: "What is 'Burn After Reading'?", a: "This feature allows you to set documents to automatically delete themselves after a single view, ensuring your sensitive data doesn't persist." },
+                            { q: "Is it compliant?", a: "Yes! With features like Audit Trails and E2E encryption, we help businesses maintain compliance with HIPAA, GDPR, and NIST standards." },
+                            { q: "Can I add my logo?", a: "Absolutely. Our White-Labeling feature allows you to add your own company logo and colors for a professional experience." },
+                            { q: "Are E-Signatures legal?", a: "Yes, our E-Signature feature is legally binding and compliant with major electronic signature laws worldwide." }
                         ].map((faq, i) => (
                             <div key={i}>
                                 <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.75rem' }}>{faq.q}</h4>
