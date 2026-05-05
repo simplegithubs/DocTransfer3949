@@ -18,6 +18,8 @@ Before running your application with Clerk authentication, you need to:
    - Add your Clerk Publishable Key:
      ```
      VITE_CLERK_PUBLISHABLE_KEY=pk_test_c2VsZWN0LWNpY2FkYS0zMC5jbGVyay5hY2NvdW50cy5kZXYk
+     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_c2VsZWN0LWNpY2FkYS0zMC5jbGVyay5hY2NvdW50cy5kZXYk
+     CLERK_SECRET_KEY=sk_test_dnsubBJdAx3A7jzCN0ZYmOOMkglKcINH9lA1cvdeeY
      ```
 
 4. **Apply Database Migration**
