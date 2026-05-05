@@ -17,7 +17,7 @@ Before running your application with Clerk authentication, you need to:
    - Copy `.env.example` to `.env` (if not already done)
    - Add your Clerk Publishable Key:
      ```
-     VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_actual_key_here
+     VITE_CLERK_PUBLISHABLE_KEY=pk_test_c2VsZWN0LWNpY2FkYS0zMC5jbGVyay5hY2NvdW50cy5kZXYk
      ```
 
 4. **Apply Database Migration**
