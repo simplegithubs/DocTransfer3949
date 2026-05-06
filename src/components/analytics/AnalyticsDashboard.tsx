@@ -235,14 +235,17 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
         }
     };
 
-    // Safe stats calculation
+    // Use enhanced stats from the database view
     const safeDailyStats = Array.isArray(dailyStats) ? dailyStats : [];
     const totalViews = safeDailyStats.reduce((acc, curr) => acc + (curr.total_views || 0), 0);
-    const uniqueViewers = safeDailyStats.reduce((acc, curr) => acc + (curr.unique_sessions || 0), 0);
+    const totalLinkOpens = safeDailyStats.reduce((acc, curr) => acc + (curr.total_link_opens || 0), 0);
+    const uniqueViewers = safeDailyStats.reduce((acc, curr) => acc + (curr.unique_viewers || 0), 0);
     const avgDuration = safeDailyStats.length > 0
         ? Math.round(safeDailyStats.reduce((acc, curr) => acc + (curr.avg_duration_seconds || 0), 0) / safeDailyStats.length)
         : 0;
-    const engagement = Math.min(100, Math.round(avgDuration / 6));
+    const engagement = safeDailyStats.length > 0
+        ? Math.round(safeDailyStats.reduce((acc, curr) => acc + (curr.engagement_score || 0), 0) / safeDailyStats.length)
+        : 0;
 
     // Prepare unified chart data
     const prepareUnifiedData = () => {
@@ -476,8 +479,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                         <Users size={18} className="opacity-80" />
                         <span className="text-white/80 text-sm font-medium">Link Opens</span>
                     </div>
-                    <div className="text-3xl font-bold">{totalViews}</div>
-                    <div className="text-white/60 text-xs mt-1">Total link views</div>
+                    <div className="text-3xl font-bold">{totalLinkOpens}</div>
+                    <div className="text-white/60 text-xs mt-1">Total link clicks</div>
                 </div>
 
                 <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">

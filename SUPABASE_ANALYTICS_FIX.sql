@@ -77,18 +77,35 @@ CREATE POLICY "Public can select downloads" ON document_downloads FOR SELECT USI
 -- 3. ANALYTICS VIEWS (The "Magic" that powers the charts)
 -----------------------------------------------------------------------
 
--- Daily Aggregated Stats
+-- Daily Aggregated Stats (Enhanced for more accuracy)
 DROP VIEW IF EXISTS daily_document_stats CASCADE;
 CREATE OR REPLACE VIEW daily_document_stats AS
+WITH session_durations AS (
+    -- First, sum up the total time spent in each session
+    SELECT 
+        document_id,
+        session_id,
+        DATE_TRUNC('day', view_timestamp) as stat_date,
+        SUM(duration_seconds) as total_session_duration
+    FROM document_view_tracking
+    GROUP BY document_id, session_id, DATE_TRUNC('day', view_timestamp)
+)
 SELECT
-    dvt.document_id,
-    DATE_TRUNC('day', dvt.view_timestamp) as stat_date,
-    COUNT(*) as total_views,
-    COUNT(DISTINCT dvt.session_id) as unique_sessions,
-    COUNT(DISTINCT dvt.ip_address) as unique_ips,
-    AVG(dvt.duration_seconds) as avg_duration_seconds
-FROM document_view_tracking dvt
-GROUP BY dvt.document_id, DATE_TRUNC('day', dvt.view_timestamp);
+    d.id as document_id,
+    COALESCE(s.stat_date, DATE_TRUNC('day', d.created_at)) as stat_date,
+    -- Total individual page views
+    (SELECT COUNT(*) FROM document_view_tracking dvt WHERE dvt.document_id = d.id AND DATE_TRUNC('day', dvt.view_timestamp) = COALESCE(s.stat_date, DATE_TRUNC('day', d.created_at))) as total_views,
+    -- Unique link opens (sessions)
+    COUNT(DISTINCT s.session_id) as total_link_opens,
+    -- Unique visitors (by IP)
+    (SELECT COUNT(DISTINCT ip_address) FROM document_access_sessions das WHERE das.document_id = d.id AND DATE_TRUNC('day', das.created_at) = COALESCE(s.stat_date, DATE_TRUNC('day', d.created_at))) as unique_viewers,
+    -- Average time spent per session
+    ROUND(AVG(s.total_session_duration)) as avg_duration_seconds,
+    -- Engagement Score (0-100 based on 60s target)
+    LEAST(100, ROUND(AVG(s.total_session_duration) / 60 * 100)) as engagement_score
+FROM documents d
+LEFT JOIN session_durations s ON d.id = s.document_id
+GROUP BY d.id, s.stat_date, d.created_at;
 
 -- Page Attention Heatmap
 DROP VIEW IF EXISTS page_attention_stats CASCADE;
