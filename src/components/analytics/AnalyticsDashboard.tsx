@@ -220,26 +220,27 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                 analyticsService.getDownloadCount(documentId)
             ]);
 
-            setDailyStats(daily);
-            setPageAttention(pages);
-            setGeoStats(geo);
-            setDeviceStats(devices);
-            setFunnelData(funnel);
-            setReceiverDownloads(downloads);
-            setDownloadCount(dlCount);
+            setDailyStats(Array.isArray(daily) ? daily : []);
+            setPageAttention(Array.isArray(pages) ? pages : []);
+            setGeoStats(Array.isArray(geo) ? geo : []);
+            setDeviceStats(Array.isArray(devices) ? devices : []);
+            setFunnelData(Array.isArray(funnel) ? funnel : []);
+            setReceiverDownloads(Array.isArray(downloads) ? downloads : []);
+            setDownloadCount(typeof dlCount === 'number' ? dlCount : (Array.isArray(downloads) ? downloads.length : 0));
         } catch (error: any) {
             console.error('Failed to fetch analytics:', error);
-            setError(error.message || 'Failed to load analytics data');
+            setError(error.message || 'Failed to load analytics data. Please ensure database views are created.');
         } finally {
             setLoading(false);
         }
     };
 
-    // Calculate high-level stats
-    const totalViews = dailyStats.reduce((acc, curr) => acc + curr.total_views, 0);
-    const uniqueViewers = dailyStats.reduce((acc, curr) => acc + curr.unique_sessions, 0);
-    const avgDuration = dailyStats.length > 0
-        ? Math.round(dailyStats.reduce((acc, curr) => acc + curr.avg_duration_seconds, 0) / dailyStats.length)
+    // Safe stats calculation
+    const safeDailyStats = Array.isArray(dailyStats) ? dailyStats : [];
+    const totalViews = safeDailyStats.reduce((acc, curr) => acc + (curr.total_views || 0), 0);
+    const uniqueViewers = safeDailyStats.reduce((acc, curr) => acc + (curr.unique_sessions || 0), 0);
+    const avgDuration = safeDailyStats.length > 0
+        ? Math.round(safeDailyStats.reduce((acc, curr) => acc + (curr.avg_duration_seconds || 0), 0) / safeDailyStats.length)
         : 0;
     const engagement = Math.min(100, Math.round(avgDuration / 6));
 
@@ -272,10 +273,10 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
         }));
 
         // Top Locations (limit to 5)
-        const locationsData = geoStats.slice(0, 5).map((geo) => ({
+        const locationsData = (Array.isArray(geoStats) ? geoStats : []).slice(0, 5).map((geo) => ({
             category: 'Locations',
             label: getCountryName(geo.country_code),
-            value: geo.session_count,
+            value: geo.session_count || 0,
             type: 'locations'
         }));
 
@@ -345,6 +346,38 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                         <ArrowLeft size={16} /> Back to Documents
                     </button>
                 )}
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="animate-fade-in p-8 bg-white rounded-3xl border border-red-100 shadow-sm text-center">
+                <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Lock size={32} className="text-red-400" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Analytics Missing</h3>
+                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                    The analytics database views are not yet set up or are missing permissions. 
+                    Please run the <strong>master_analytics_setup.sql</strong> script in your Supabase SQL Editor to fix this.
+                </p>
+                <div className="flex flex-col gap-3 max-w-sm mx-auto">
+                    <button 
+                        onClick={fetchData}
+                        className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors"
+                    >
+                        Retry Loading
+                    </button>
+                    <button 
+                        onClick={onBack}
+                        className="px-6 py-3 bg-gray-50 text-gray-600 rounded-xl font-bold hover:bg-gray-100 transition-colors"
+                    >
+                        Back to Documents
+                    </button>
+                </div>
+                <div className="mt-8 p-4 bg-gray-50 rounded-xl text-left font-mono text-xs text-gray-500 overflow-auto">
+                    <strong>Technical Error:</strong> {error}
+                </div>
             </div>
         );
     }
