@@ -2794,3 +2794,26 @@ input:focus+.toggle-slider {
 .dashboard-ui-mockup {
   animation: slideMainImage 7s ease-in-out infinite;
 }
+
+ / *   S k e l e t o n   L o a d i n g   S h i m m e r   * / 
+ @ k e y f r a m e s   s h i m m e r   { 
+     0 %   { 
+         b a c k g r o u n d - p o s i t i o n :   - 1 0 0 0 p x   0 ; 
+     } 
+     1 0 0 %   { 
+         b a c k g r o u n d - p o s i t i o n :   1 0 0 0 p x   0 ; 
+     } 
+ } 
+ 
+ . s k e l e t o n - s h i m m e r   { 
+     a n i m a t i o n :   s h i m m e r   2 s   i n f i n i t e   l i n e a r ; 
+     b a c k g r o u n d :   l i n e a r - g r a d i e n t ( t o   r i g h t ,   # f 1 f 5 f 9   4 % ,   # e 2 e 8 f 0   2 5 % ,   # f 1 f 5 f 9   3 6 % ) ; 
+     b a c k g r o u n d - s i z e :   1 0 0 0 p x   1 0 0 % ; 
+ } 
+ 
+ . d a r k   . s k e l e t o n - s h i m m e r   { 
+     b a c k g r o u n d :   l i n e a r - g r a d i e n t ( t o   r i g h t ,   # 1 e 2 9 3 b   4 % ,   # 3 3 4 1 5 5   2 5 % ,   # 1 e 2 9 3 b   3 6 % ) ; 
+     b a c k g r o u n d - s i z e :   1 0 0 0 p x   1 0 0 % ; 
+ } 
+  
+ 

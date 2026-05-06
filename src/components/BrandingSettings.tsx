@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useSubscription } from '../hooks/useSubscription';
 import { Upload, Globe, Layout, Palette, Save, Loader2, CheckCircle, AlertCircle, FileText, Download, Shield, Lock, ExternalLink, Smartphone, Monitor, Zap, Eraser, Crown } from 'lucide-react';
+import Skeleton from './ui/Skeleton';
 
 interface BrandingSettingsProps {
     userId: string;
@@ -149,12 +150,24 @@ const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center min-h-[400px]">
-                <div className="relative">
-                    <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <Palette size={24} className="text-indigo-600" />
+            <div className="p-8 space-y-8 animate-pulse">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <Skeleton width="180px" height="1.75rem" style={{ marginBottom: '0.5rem', display: 'block' }} />
+                        <Skeleton width="280px" height="1rem" />
                     </div>
+                    <Skeleton width="120px" height="2.5rem" borderRadius="10px" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="space-y-2">
+                                <Skeleton width="100px" height="0.875rem" />
+                                <Skeleton width="100%" height="2.75rem" borderRadius="10px" />
+                            </div>
+                        ))}
+                    </div>
+                    <Skeleton width="100%" height="400px" borderRadius="24px" />
                 </div>
             </div>
         );

@@ -25,6 +25,7 @@ import {
     Plus,
     Shield
 } from 'lucide-react';
+import Skeleton from './components/ui/Skeleton';
 import { supabase } from './lib/supabase';
 import { hashPassword } from './lib/security';
 import { encryptFile, generateEncryptionKey } from './lib/encryption';
@@ -85,6 +86,7 @@ const DataRoom: React.FC = () => {
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [showPreviewModal, setShowPreviewModal] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [isLoadingDocs, setIsLoadingDocs] = useState(true);
 
     // Settings State
     const [passwordProtection, setPasswordProtection] = useState(false);
@@ -140,6 +142,7 @@ const DataRoom: React.FC = () => {
     }, []);
 
     const fetchDocuments = async () => {
+        setIsLoadingDocs(true);
         try {
             let query = supabase
                 .from('documents')
@@ -168,13 +171,16 @@ const DataRoom: React.FC = () => {
                         password: doc.password || '',
                         expiresAt: doc.expires_at || '',
                         allowDownload: doc.allow_download,
-                        customDomain: doc.custom_domain || ''
-                    }
+                        customDomain: doc.custom_domain || '',
+                    },
+                    watermark_config: doc.watermark_config
                 }));
                 setDocuments(formattedDocs);
             }
         } catch (error) {
             console.error('Error fetching documents:', error);
+        } finally {
+            setIsLoadingDocs(false);
         }
     };
 
@@ -617,7 +623,25 @@ const DataRoom: React.FC = () => {
                             </div>
                         </div>
 
-                        {documents.length === 0 ? (
+                        {isLoadingDocs ? (
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                                {[1, 2, 3, 4, 5, 6].map(i => (
+                                    <div key={i} style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.25rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                                            <Skeleton width="40px" height="40px" borderRadius="8px" />
+                                            <div style={{ flex: 1 }}>
+                                                <Skeleton width="70%" height="1rem" style={{ marginBottom: '0.5rem', display: 'block' }} />
+                                                <Skeleton width="40%" height="0.75rem" />
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <Skeleton width="100%" height="2.25rem" borderRadius="8px" />
+                                            <Skeleton width="2.25rem" height="2.25rem" borderRadius="8px" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : documents.length === 0 ? (
                             <div style={{ textAlign: 'center', padding: '4rem', background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
                                 <FileText size={48} color="#9ca3af" style={{ marginBottom: '1rem' }} />
                                 <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem' }}>No documents found</h3>

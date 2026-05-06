@@ -16,6 +16,7 @@ import {
     Monitor
 } from 'lucide-react';
 import { fetchAuditLogs, exportAuditLogs } from '../lib/auditLogger';
+import Skeleton from './ui/Skeleton';
 
 interface AuditLog {
     id: string;
@@ -324,13 +325,15 @@ const AuditTrail: React.FC<AuditTrailProps> = ({ documentId }) => {
                             ))
                         )}
                         {loading && (
-                            <tr>
-                                <td colSpan={5} className="px-6 py-8 text-center text-gray-400">
-                                    <div className="flex items-center justify-center gap-2">
-                                        <RefreshCw size={16} className="animate-spin" /> Loading data...
-                                    </div>
-                                </td>
-                            </tr>
+                            [1, 2, 3, 4, 5].map((i) => (
+                                <tr key={`skeleton-${i}`}>
+                                    <td className="px-6 py-4"><Skeleton width="100px" height="1rem" /></td>
+                                    <td className="px-6 py-4"><Skeleton width="80px" height="1.5rem" borderRadius="9999px" /></td>
+                                    <td className="px-6 py-4"><Skeleton width="140px" height="1rem" /></td>
+                                    <td className="px-6 py-4"><Skeleton width="120px" height="1rem" /></td>
+                                    <td className="px-6 py-4"><Skeleton width="100%" height="1rem" /></td>
+                                </tr>
+                            ))
                         )}
                     </tbody>
                 </table>
