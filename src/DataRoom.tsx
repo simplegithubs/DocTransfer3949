@@ -570,7 +570,11 @@ const DataRoom: React.FC = () => {
             {/* Main Content */}
             <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
                 {activeTab === 'analytics' ?
-                    <AnalyticsDashboard documentId={selectedDocumentId} />
+                    <AnalyticsDashboard
+                        documentId={selectedDocumentId}
+                        documentName={documents.find(d => d.id === selectedDocumentId)?.name}
+                        onBack={() => { setActiveTab('documents'); setSelectedDocumentId(undefined); }}
+                    />
                 : activeTab === 'audit' ?
 
                     <div className="animate-fade-in">

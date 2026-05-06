@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Skeleton from '../ui/Skeleton';
 import {
     Activity,
     PieChart as PieChartIcon,
@@ -18,7 +19,8 @@ import {
     TrendingUp,
     Zap,
     Mail,
-    Download
+    Download,
+    ArrowLeft
 } from 'lucide-react';
 import {
     XAxis,
@@ -38,6 +40,8 @@ import type { ReceiverDownload } from '../../lib/analyticsService';
 
 interface AnalyticsDashboardProps {
     documentId?: string;
+    documentName?: string;
+    onBack?: () => void;
 }
 
 // Vibrant gradient colors for bars
@@ -127,7 +131,7 @@ const CustomBarTooltip = ({ active, payload, label }: any) => {
     return null;
 };
 
-const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) => {
+const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, documentName, onBack }) => {
     const [loading, setLoading] = useState(true);
     const [timeRange, setTimeRange] = useState<number>(30);
     const [activeMetric, setActiveMetric] = useState<'all' | 'views' | 'devices' | 'pages' | 'locations' | 'hours' | 'completion' | 'downloads'>('all');
@@ -309,18 +313,38 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Select a Document</h3>
                 <p className="text-gray-500 text-center max-w-md">Choose a document from your library to view comprehensive real-time analytics.</p>
+                {onBack && (
+                    <button onClick={onBack} className="mt-6 flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition-colors shadow-sm">
+                        <ArrowLeft size={16} /> Back to Documents
+                    </button>
+                )}
             </div>
         );
     }
 
     if (loading && !dailyStats.length) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[400px]">
-                <div className="relative">
-                    <div className="animate-spin rounded-full h-16 w-16 border-4 border-indigo-200"></div>
-                    <div className="animate-spin rounded-full h-16 w-16 border-4 border-indigo-600 border-t-transparent absolute top-0 left-0"></div>
+            <div className="space-y-6">
+                {/* Skeleton Header */}
+                <div className="flex items-center gap-3 mb-2">
+                    {onBack && <Skeleton width="36px" height="36px" borderRadius="10px" />}
+                    <Skeleton width="250px" height="1.75rem" />
                 </div>
-                <p className="mt-4 text-gray-500 font-medium">Loading real-time analytics...</p>
+                {/* Skeleton Stat Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[1, 2, 3, 4].map(i => (
+                        <div key={i} style={{ borderRadius: '16px', padding: '1.25rem', background: '#f3f4f6' }}>
+                            <Skeleton width="80px" height="0.875rem" style={{ marginBottom: '0.75rem', display: 'block' }} />
+                            <Skeleton width="60px" height="2rem" style={{ marginBottom: '0.5rem', display: 'block' }} />
+                            <Skeleton width="40px" height="0.75rem" />
+                        </div>
+                    ))}
+                </div>
+                {/* Skeleton Chart */}
+                <div style={{ borderRadius: '24px', padding: '2rem', background: 'white', border: '1px solid #f3f4f6' }}>
+                    <Skeleton width="200px" height="1.25rem" style={{ marginBottom: '1.5rem', display: 'block' }} />
+                    <Skeleton width="100%" height="350px" borderRadius="16px" />
+                </div>
             </div>
         );
     }
@@ -331,7 +355,17 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId }) =
             <div className="flex flex-wrap justify-between items-center gap-4">
                 <div>
                     <div className="flex items-center gap-3">
-                        <h2 className="text-2xl font-bold text-gray-900">Unified Analytics</h2>
+                        {onBack && (
+                            <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-xl transition-colors" title="Back to Documents">
+                                <ArrowLeft size={20} className="text-gray-500" />
+                            </button>
+                        )}
+                        <div>
+                            {documentName && (
+                                <p className="text-sm text-indigo-600 font-medium mb-0.5">Analytics for: {documentName}</p>
+                            )}
+                            <h2 className="text-2xl font-bold text-gray-900">Unified Analytics</h2>
+                        </div>
                         {isLive && (
                             <div className="flex items-center gap-2 px-3 py-1 bg-green-50 border border-green-200 rounded-full">
                                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
