@@ -266,7 +266,7 @@ const LandingPage: React.FC = () => {
             <div className="floating-orb orb-3"></div>
           </div>
 
-          <h1 className="hero-title-animated">The Best Free DocSend Alternative for Secure Document Sharing</h1>
+          <h1 className="hero-title-animated">Securely, sharing and Tracking and Manage all your Sensitive data</h1>
           <p className="hero-subtitle-animated">Securely share, track, and manage your documents with E2E encryption and real-time analytics. Professional document portal—completely free forever.</p>
           <div className="hero-actions">
             <Link to="/pricing">
