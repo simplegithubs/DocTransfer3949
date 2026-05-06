@@ -180,5 +180,17 @@ export const analyticsService = {
                 callback
             )
             .subscribe();
+    },
+
+    /**
+     * Get total download count for a document (efficient count-only query)
+     */
+    async getDownloadCount(documentId: string): Promise<number> {
+        const { count, error } = await supabase
+            .from('document_downloads')
+            .select('*', { count: 'exact', head: true })
+            .eq('document_id', documentId);
+        if (error) throw error;
+        return count || 0;
     }
 };

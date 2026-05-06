@@ -38,6 +38,30 @@ import {
 import { analyticsService } from '../../lib/analyticsService';
 import type { ReceiverDownload } from '../../lib/analyticsService';
 
+const exportToCSV = (data: ReceiverDownload[], docName?: string) => {
+    const headers = ['Email', 'Downloaded At', 'IP Address', 'Device'];
+    const rows = data.map(dl => {
+        const ua = dl.user_agent || '';
+        const isMobile = /mobile|android|iphone/i.test(ua);
+        const isTablet = /tablet|ipad/i.test(ua);
+        const deviceLabel = isTablet ? 'Tablet' : isMobile ? 'Mobile' : 'Desktop';
+        return [
+            dl.receiver_email,
+            new Date(dl.downloaded_at).toLocaleString(),
+            dl.ip_address || 'Unknown',
+            deviceLabel
+        ];
+    });
+    const csvContent = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${docName || 'document'}_downloads.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+};
+
 interface AnalyticsDashboardProps {
     documentId?: string;
     documentName?: string;
@@ -144,6 +168,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
     const [deviceStats, setDeviceStats] = useState<any[]>([]);
     const [funnelData, setFunnelData] = useState<any[]>([]);
     const [receiverDownloads, setReceiverDownloads] = useState<ReceiverDownload[]>([]);
+    const [downloadCount, setDownloadCount] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
     const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
@@ -185,13 +210,14 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
         setLoading(true);
         setError(null);
         try {
-            const [daily, pages, geo, devices, funnel, downloads] = await Promise.all([
+            const [daily, pages, geo, devices, funnel, downloads, dlCount] = await Promise.all([
                 analyticsService.getDailyStats(documentId, timeRange),
                 analyticsService.getPageAttention(documentId),
                 analyticsService.getGeoStats(documentId),
                 analyticsService.getDeviceStats(documentId),
                 analyticsService.getConversionFunnel(documentId),
-                analyticsService.getReceiverDownloads(documentId)
+                analyticsService.getReceiverDownloads(documentId),
+                analyticsService.getDownloadCount(documentId)
             ]);
 
             setDailyStats(daily);
@@ -200,6 +226,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
             setDeviceStats(devices);
             setFunnelData(funnel);
             setReceiverDownloads(downloads);
+            setDownloadCount(dlCount);
         } catch (error: any) {
             console.error('Failed to fetch analytics:', error);
             setError(error.message || 'Failed to load analytics data');
@@ -409,18 +436,15 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
                     <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
                     <div className="flex items-center gap-2 mb-2">
                         <Users size={18} className="opacity-80" />
-                        <span className="text-white/80 text-sm font-medium">Total Views</span>
+                        <span className="text-white/80 text-sm font-medium">Link Opens</span>
                     </div>
                     <div className="text-3xl font-bold">{totalViews}</div>
-                    <div className="flex items-center gap-1 mt-2 text-emerald-300 text-xs font-bold">
-                        <ArrowUp size={12} />
-                        <span>12%</span>
-                    </div>
+                    <div className="text-white/60 text-xs mt-1">Total link views</div>
                 </div>
 
                 <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
@@ -430,10 +454,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                         <span className="text-white/80 text-sm font-medium">Unique Viewers</span>
                     </div>
                     <div className="text-3xl font-bold">{uniqueViewers}</div>
-                    <div className="flex items-center gap-1 mt-2 text-emerald-200 text-xs font-bold">
-                        <ArrowUp size={12} />
-                        <span>5%</span>
-                    </div>
+                    <div className="text-emerald-200 text-xs mt-1">Unique sessions</div>
                 </div>
 
                 <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
@@ -443,10 +464,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                         <span className="text-white/80 text-sm font-medium">Avg. Time</span>
                     </div>
                     <div className="text-3xl font-bold">{avgDuration}s</div>
-                    <div className="flex items-center gap-1 mt-2 text-red-200 text-xs font-bold">
-                        <ArrowDown size={12} />
-                        <span>2%</span>
-                    </div>
+                    <div className="text-orange-200 text-xs mt-1">Per session</div>
                 </div>
 
                 <div className="bg-gradient-to-br from-violet-500 to-purple-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
@@ -456,9 +474,17 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                         <span className="text-white/80 text-sm font-medium">Engagement</span>
                     </div>
                     <div className="text-3xl font-bold">{engagement}%</div>
-                    <div className="flex items-center gap-1 mt-2 text-white/60 text-xs font-normal">
-                        Scroll & time based
+                    <div className="text-white/60 text-xs mt-1">Time-based score</div>
+                </div>
+
+                <div className="bg-gradient-to-br from-pink-500 to-rose-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                    <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+                    <div className="flex items-center gap-2 mb-2">
+                        <Download size={18} className="opacity-80" />
+                        <span className="text-white/80 text-sm font-medium">Downloads</span>
                     </div>
+                    <div className="text-3xl font-bold">{downloadCount}</div>
+                    <div className="text-pink-200 text-xs mt-1">With email captured</div>
                 </div>
             </div>
 
@@ -670,23 +696,40 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                         <div>
                             <h3 className="text-xl font-bold text-gray-900">Receiver Downloads</h3>
                             <p className="text-gray-500 text-sm mt-0.5">
-                                {receiverDownloads.length} {receiverDownloads.length === 1 ? 'person' : 'people'} downloaded this file
+                                {receiverDownloads.length} {receiverDownloads.length === 1 ? 'person has' : 'people have'} downloaded this file
                             </p>
                         </div>
                     </div>
-                    <div className="px-4 py-2 bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200 rounded-xl">
-                        <span className="text-pink-700 font-bold text-lg">{receiverDownloads.length}</span>
-                        <span className="text-pink-500 text-sm ml-1">total</span>
+                    <div className="flex items-center gap-3">
+                        {receiverDownloads.length > 0 && (
+                            <button
+                                onClick={() => exportToCSV(receiverDownloads, documentName)}
+                                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm"
+                            >
+                                <Download size={15} />
+                                Export CSV
+                            </button>
+                        )}
+                        <div className="px-4 py-2 bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200 rounded-xl">
+                            <span className="text-pink-700 font-bold text-lg">{receiverDownloads.length}</span>
+                            <span className="text-pink-500 text-sm ml-1">total</span>
+                        </div>
                     </div>
                 </div>
 
                 {receiverDownloads.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mb-4">
-                            <Download size={32} className="text-gray-300" />
+                        <div className="w-16 h-16 bg-gradient-to-br from-pink-50 to-rose-100 rounded-2xl flex items-center justify-center mb-4">
+                            <Mail size={32} className="text-pink-400" />
                         </div>
-                        <p className="text-gray-400 font-medium">No downloads yet</p>
-                        <p className="text-gray-300 text-sm mt-1">When someone downloads this file, their email will appear here</p>
+                        <p className="text-gray-700 font-semibold text-lg">No downloads yet</p>
+                        <p className="text-gray-400 text-sm mt-2 max-w-sm">
+                            When a receiver opens your share link and clicks <strong>Download</strong>, they'll be asked to enter their email address. Their email will then appear here automatically.
+                        </p>
+                        <div className="mt-4 flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600 text-xs font-medium">
+                            <TrendingUp size={14} />
+                            Share your document link to start tracking
+                        </div>
                     </div>
                 ) : (
                     <div className="overflow-hidden rounded-2xl border border-gray-100">
