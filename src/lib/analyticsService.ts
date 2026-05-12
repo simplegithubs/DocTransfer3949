@@ -3,8 +3,11 @@ import { supabase } from './supabase';
 export interface DailyStat {
     stat_date: string;
     total_views: number;
-    unique_sessions: number;
+    total_link_opens: number;
+    unique_viewers: number;
     avg_duration_seconds: number;
+    engagement_score: number;
+    total_downloads: number;
 }
 
 export interface PageAttention {

@@ -246,6 +246,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
     const engagement = safeDailyStats.length > 0
         ? Math.round(safeDailyStats.reduce((acc, curr) => acc + (curr.engagement_score || 0), 0) / safeDailyStats.length)
         : 0;
+    const totalDownloadsTrend = safeDailyStats.reduce((acc, curr) => acc + (curr.total_downloads || 0), 0);
 
     // Prepare unified chart data
     const prepareUnifiedData = () => {
@@ -317,6 +318,14 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
             data.push(...hoursData);
         } else if (activeMetric === 'completion') {
             data.push(...completionData);
+        } else if (activeMetric === 'downloads') {
+            const downloadsData = dailyStats.slice(-7).map((stat) => ({
+                category: 'Downloads',
+                label: new Date(stat.stat_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+                value: stat.total_downloads || 0,
+                type: 'downloads'
+            }));
+            data.push(...downloadsData);
         }
 
         return data;
@@ -330,6 +339,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
             case 'locations': return 'url(#gradLocations)';
             case 'hours': return 'url(#gradHours)';
             case 'completion': return 'url(#gradCompletion)';
+            case 'downloads': return 'url(#gradDownloads)';
             default: return 'url(#gradViews)';
         }
     };
@@ -623,6 +633,10 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                                 <linearGradient id="gradCompletion" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="0%" stopColor="#14b8a6" stopOpacity={1} />
                                     <stop offset="100%" stopColor="#0d9488" stopOpacity={0.8} />
+                                </linearGradient>
+                                <linearGradient id="gradDownloads" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="#ec4899" stopOpacity={1} />
+                                    <stop offset="100%" stopColor="#be185d" stopOpacity={0.8} />
                                 </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />

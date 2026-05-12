@@ -381,9 +381,10 @@ const ViewDocument: React.FC = () => {
                 .insert({
                     document_id: documentId,
                     user_agent: navigator.userAgent,
-                    // geolocation: geoData // Let supabase edge/triggers handle this if possible, or backend
+                    ip_address: viewerIp !== 'Unknown IP' ? viewerIp : null,
+                    geolocation: viewerIp !== 'Unknown IP' ? { country: 'Unknown', city: 'Unknown' } : null // Placeholder, actual geo can be added if needed
                 })
-                .select('session_id')
+                .select('id')
                 .single();
 
             if (sessionError) {
@@ -392,15 +393,17 @@ const ViewDocument: React.FC = () => {
             }
 
             if (sessionData) {
-                setCurrentSessionId(sessionData.session_id);
+                setCurrentSessionId(sessionData.id);
 
                 // 2. Track View (Initial Page 1)
                 const { data: viewData, error: viewError } = await supabase
                     .from('document_view_tracking')
                     .insert({
-                        session_id: sessionData.session_id,
+                        session_id: sessionData.id,
                         document_id: documentId,
-                        page_number: 1
+                        page_number: 1,
+                        ip_address: viewerIp !== 'Unknown IP' ? viewerIp : null,
+                        user_agent: navigator.userAgent
                     })
                     .select('id')
                     .single();
