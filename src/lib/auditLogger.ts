@@ -32,25 +32,25 @@ export async function getUserIP(): Promise<string> {
 
 /**
  * Get geolocation data from IP address
- * Uses ip-api.com (free, no key required, 45 req/min limit)
+ * Uses ipapi.co (HTTPS, free tier)
  */
 export async function getGeolocation(ip: string): Promise<Record<string, any> | null> {
     if (!ip || ip === 'unknown') return null;
 
     try {
-        const response = await fetch(`http://ip-api.com/json/${ip}`);
+        const response = await fetch(`https://ipapi.co/${ip}/json/`);
         const data = await response.json();
 
-        if (data.status === 'success') {
+        if (!data.error) {
             return {
-                country: data.country,
-                countryCode: data.countryCode,
-                region: data.regionName,
+                country: data.country_name,
+                countryCode: data.country_code,
+                region: data.region,
                 city: data.city,
-                latitude: data.lat,
-                longitude: data.lon,
+                latitude: data.latitude,
+                longitude: data.longitude,
                 timezone: data.timezone,
-                isp: data.isp
+                isp: data.org
             };
         }
         return null;

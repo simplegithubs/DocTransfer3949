@@ -11,7 +11,7 @@ import {
     PenTool,
     Loader2
 } from 'lucide-react';
-import { logAuditEvent } from './lib/auditLogger';
+import { logAuditEvent, getUserIP, getSessionId } from './lib/auditLogger';
 import SignatureCanvasComponent from './components/SignatureCanvas';
 
 // Set worker source
@@ -101,11 +101,15 @@ const SignDocument: React.FC = () => {
                         .eq('id', signerData.id);
 
                     // Log audit event for signer viewing
+                    const ip = await getUserIP();
                     logAuditEvent({
                         eventType: 'document_viewed',
                         documentId: doc.id,
                         signerId: signerData.id,
                         userEmail: signerData.signer_email,
+                        ipAddress: ip,
+                        sessionId: getSessionId(),
+                        userAgent: navigator.userAgent,
                         metadata: { source: 'signing_link' }
                     });
                 }
@@ -247,7 +251,7 @@ const SignDocument: React.FC = () => {
                         signer_id: signer.id,
                         signature_data: data,
                         signature_type: type,
-                        ip_address: 'unknown', // client-side, maybe fetch via API
+                        ip_address: await getUserIP(),
                         user_agent: navigator.userAgent
                     });
             }
@@ -276,7 +280,7 @@ const SignDocument: React.FC = () => {
                 .update({
                     status: 'signed',
                     signed_at: new Date().toISOString(),
-                    ip_address: 'client', // placeholder
+                    ip_address: await getUserIP(),
                     user_agent: navigator.userAgent
                 })
                 .eq('id', signer.id);
@@ -289,8 +293,10 @@ const SignDocument: React.FC = () => {
                 documentId: documentData.id,
                 signerId: signer.id,
                 userEmail: signer.signer_email,
+                ipAddress: await getUserIP(),
+                sessionId: getSessionId(),
+                userAgent: navigator.userAgent,
                 metadata: {
-                    ip_address: 'client', // Will be captured by logger
                     workflow_status: 'completed'
                 }
             });
