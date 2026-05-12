@@ -36,7 +36,7 @@ import {
     Line
 } from 'recharts';
 import { analyticsService } from '../../lib/analyticsService';
-import type { ReceiverDownload } from '../../lib/analyticsService';
+import type { ReceiverDownload, RealtimeStats } from '../../lib/analyticsService';
 
 const exportToCSV = (data: ReceiverDownload[], docName?: string) => {
     const headers = ['Email', 'Downloaded At', 'IP Address', 'Device'];
@@ -169,6 +169,12 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
     const [funnelData, setFunnelData] = useState<any[]>([]);
     const [receiverDownloads, setReceiverDownloads] = useState<ReceiverDownload[]>([]);
     const [downloadCount, setDownloadCount] = useState<number>(0);
+    const [realtimeStats, setRealtimeStats] = useState<RealtimeStats>({
+        link_opens: 0,
+        unique_viewers: 0,
+        avg_time_seconds: 0,
+        engagement_score: 0
+    });
     const [error, setError] = useState<string | null>(null);
     const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
@@ -210,14 +216,15 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
         setLoading(true);
         setError(null);
         try {
-            const [daily, pages, geo, devices, funnel, downloads, dlCount] = await Promise.all([
+            const [daily, pages, geo, devices, funnel, downloads, dlCount, rtStats] = await Promise.all([
                 analyticsService.getDailyStats(documentId, timeRange),
                 analyticsService.getPageAttention(documentId),
                 analyticsService.getGeoStats(documentId),
                 analyticsService.getDeviceStats(documentId),
                 analyticsService.getConversionFunnel(documentId),
                 analyticsService.getReceiverDownloads(documentId),
-                analyticsService.getDownloadCount(documentId)
+                analyticsService.getDownloadCount(documentId),
+                analyticsService.getRealtimeStats(documentId)
             ]);
 
             setDailyStats(Array.isArray(daily) ? daily : []);
@@ -227,6 +234,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
             setFunnelData(Array.isArray(funnel) ? funnel : []);
             setReceiverDownloads(Array.isArray(downloads) ? downloads : []);
             setDownloadCount(typeof dlCount === 'number' ? dlCount : (Array.isArray(downloads) ? downloads.length : 0));
+            setRealtimeStats(rtStats);
         } catch (error: any) {
             console.error('Failed to fetch analytics:', error);
             setError(error.message || 'Failed to load analytics data. Please ensure database views are created.');
@@ -238,14 +246,10 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
     // Use enhanced stats from the database view
     const safeDailyStats = Array.isArray(dailyStats) ? dailyStats : [];
     const totalViews = safeDailyStats.reduce((acc, curr) => acc + (curr.total_views || 0), 0);
-    const totalLinkOpens = safeDailyStats.reduce((acc, curr) => acc + (curr.total_link_opens || 0), 0);
-    const uniqueViewers = safeDailyStats.reduce((acc, curr) => acc + (curr.unique_viewers || 0), 0);
-    const avgDuration = safeDailyStats.length > 0
-        ? Math.round(safeDailyStats.reduce((acc, curr) => acc + (curr.avg_duration_seconds || 0), 0) / safeDailyStats.length)
-        : 0;
-    const engagement = safeDailyStats.length > 0
-        ? Math.round(safeDailyStats.reduce((acc, curr) => acc + (curr.engagement_score || 0), 0) / safeDailyStats.length)
-        : 0;
+    const totalLinkOpens = realtimeStats.link_opens;
+    const uniqueViewers = realtimeStats.unique_viewers;
+    const avgDuration = Math.round(realtimeStats.avg_time_seconds);
+    const engagement = Math.round(realtimeStats.engagement_score);
     const totalDownloadsTrend = safeDailyStats.reduce((acc, curr) => acc + (curr.total_downloads || 0), 0);
 
     // Prepare unified chart data

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '@clerk/clerk-react';
+import { useUser, useAuth } from '@clerk/clerk-react';
+import { supabase, createSupabaseClient, getSafeSupabaseToken } from './lib/supabase';
 import {
     ArrowLeft,
     Upload,
@@ -26,7 +27,6 @@ import {
     Shield
 } from 'lucide-react';
 import Skeleton from './components/ui/Skeleton';
-import { supabase } from './lib/supabase';
 import { hashPassword } from './lib/security';
 import { encryptFile, generateEncryptionKey } from './lib/encryption';
 import AnalyticsDashboard from './components/analytics/AnalyticsDashboard';
@@ -71,6 +71,7 @@ interface WatermarkConfig {
 
 const DataRoom: React.FC = () => {
     const { user } = useUser();
+    const { getToken } = useAuth();
     const [documents, setDocuments] = useState<Document[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [activeTab, setActiveTab] = useState<'upload' | 'documents' | 'analytics' | 'audit' | 'esignature'>('upload');
@@ -144,7 +145,10 @@ const DataRoom: React.FC = () => {
     const fetchDocuments = async () => {
         setIsLoadingDocs(true);
         try {
-            let query = supabase
+            const token = await getSafeSupabaseToken(getToken);
+            const authenticatedSupabase = createSupabaseClient(token || undefined);
+
+            let query = authenticatedSupabase
                 .from('documents')
                 .select('*')
                 .order('created_at', { ascending: false });
@@ -197,12 +201,22 @@ const DataRoom: React.FC = () => {
         e.preventDefault();
         setIsDragging(false);
         const files = Array.from(e.dataTransfer.files);
-        if (files.length > 0) handleFileSelection(files);
+        
+        if (files.length > 0) {
+            const remaining = getRemainingUploads();
+            if (remaining <= 0 && subscription?.plan_type === 'free') {
+                setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
+                handleLockedFeatureClick('Unlimited Uploads');
+                return;
+            }
+            handleFileSelection(files);
+        }
     };
 
     const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             handleFileSelection(Array.from(e.target.files));
+            e.target.value = ''; // Reset to allow re-selection
         }
     };
 
@@ -217,6 +231,14 @@ const DataRoom: React.FC = () => {
 
     const handleUpload = async () => {
         if (selectedFiles.length === 0) return;
+
+        // Check overall limits first
+        const remainingUploads = getRemainingUploads();
+        if (subscription?.plan_type === 'free' && remainingUploads <= 0) {
+            setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
+            handleLockedFeatureClick('Unlimited Uploads');
+            return;
+        }
 
         // Check file sizes
         const maxSizeBytes = getMaxFileSize();
@@ -238,6 +260,9 @@ const DataRoom: React.FC = () => {
         const encryptionKey = aesEncryptionEnabled ? generateEncryptionKey() : null;
 
         try {
+            const token = await getSafeSupabaseToken(getToken);
+            const authenticatedSupabase = createSupabaseClient(token || undefined);
+
             console.log('=== UPLOAD DEBUG START ===');
             console.log(`Selected ${selectedFiles.length} files`);
 
@@ -251,7 +276,7 @@ const DataRoom: React.FC = () => {
                 const bundleName = `${selectedFiles[0].name} and ${selectedFiles.length - 1} others`;
                 bundleShareLink = Math.random().toString(36).substring(2, 12);
 
-                const { data: bundleData, error: bundleError } = await supabase
+                const { data: bundleData, error: bundleError } = await authenticatedSupabase
                     .from('document_bundles')
                     .insert({
                         name: bundleName,
@@ -299,7 +324,7 @@ const DataRoom: React.FC = () => {
                 }
 
                 // 4. Upload to Supabase storage
-                const { error: uploadError } = await supabase.storage
+                const { error: uploadError } = await authenticatedSupabase.storage
                     .from('documents')
                     .upload(sanitizedFilePath, fileToUpload, {
                         cacheControl: '3600',
@@ -320,7 +345,7 @@ const DataRoom: React.FC = () => {
                 const docShareLink = Math.random().toString(36).substring(2, 12);
 
                 // 4. Save document metadata to database
-                const { data: docData, error: dbError } = await supabase
+                const { data: docData, error: dbError } = await authenticatedSupabase
                     .from('documents')
                     .insert({
                         name: file.name,
@@ -413,7 +438,7 @@ const DataRoom: React.FC = () => {
                 const currentMonth = new Date().toISOString().slice(0, 7) + '-01';
                 const totalSizeBytes = selectedFiles.reduce((acc, file) => acc + file.size, 0);
 
-                const { data: currentUsage } = await supabase
+                const { data: currentUsage } = await authenticatedSupabase
                     .from('subscription_usage')
                     .select('*')
                     .eq('user_id', user.id)
@@ -421,7 +446,7 @@ const DataRoom: React.FC = () => {
                     .single();
 
                 if (currentUsage) {
-                    await supabase
+                    await authenticatedSupabase
                         .from('subscription_usage')
                         .update({
                             documents_uploaded: currentUsage.documents_uploaded + uploadedDocs.length,
@@ -429,7 +454,7 @@ const DataRoom: React.FC = () => {
                         })
                         .eq('id', currentUsage.id);
                 } else {
-                    await supabase
+                    await authenticatedSupabase
                         .from('subscription_usage')
                         .insert({
                             user_id: user.id,
@@ -466,8 +491,11 @@ const DataRoom: React.FC = () => {
         if (!uploadedDoc) return;
 
         try {
+            const token = await getSafeSupabaseToken(getToken);
+            const authenticatedSupabase = createSupabaseClient(token || undefined);
+
             // Get public URL from Supabase storage
-            const { data } = supabase.storage
+            const { data } = authenticatedSupabase.storage
                 .from('documents')
                 .getPublicUrl(uploadedDoc.file_path);
 
@@ -766,20 +794,18 @@ const DataRoom: React.FC = () => {
                                         onDragLeave={handleDragLeave}
                                         onDrop={handleDrop}
                                         onClick={() => {
-                                            if (getRemainingUploads() > 0) {
-                                                document.getElementById('file-upload')?.click();
-                                            }
+                                            document.getElementById('file-upload')?.click();
                                         }}
                                         style={{
                                             padding: '3rem 2rem',
                                             border: isDragging ? '2px dashed #4f46e5' : selectedFiles.length > 0 ? '2px dashed #10b981' : '2px dashed #e5e7eb',
                                             borderRadius: '12px',
                                             textAlign: 'center',
-                                            cursor: getRemainingUploads() > 0 ? 'pointer' : 'not-allowed',
+                                            cursor: 'pointer',
                                             marginBottom: '1.5rem',
-                                            background: isDragging ? '#f0f4ff' : selectedFiles.length > 0 ? '#f0fdf4' : (getRemainingUploads() > 0 ? '#fafbfc' : '#f3f4f6'),
+                                            background: isDragging ? '#f0f4ff' : selectedFiles.length > 0 ? '#f0fdf4' : '#fafbfc',
                                             transition: 'all 0.2s',
-                                            opacity: getRemainingUploads() > 0 ? 1 : 0.6
+                                            opacity: 1
                                         }}
                                     >
                                         {/* Icon with checkmark when file selected */}
@@ -836,7 +862,7 @@ const DataRoom: React.FC = () => {
                                             onChange={handleFileInput}
                                             id="file-upload"
                                             accept=".pdf,.doc,.docx,.pptx,.ppt,.key,.odp,.xlsx,.xls,.csv,.tsv,.ods,.png,.jpg,.jpeg,.mp4,.mov,.avi,.webm,.ogg,.m4a,.mp3,.zip,.kml,.kmz"
-                                            disabled={isUploading || getRemainingUploads() <= 0}
+                                            disabled={isUploading}
                                             multiple // Enable multiple selection
                                             style={{ display: 'none' }}
                                         />
@@ -1182,23 +1208,6 @@ const DataRoom: React.FC = () => {
 
                                     <button
                                         onClick={() => {
-                                            // Check if user has reached upload limit
-                                            const remainingUploads = getRemainingUploads?.() || Infinity;
-                                            if (subscription?.plan_type === 'free' && remainingUploads <= 0) {
-                                                handleLockedFeatureClick('Unlimited Uploads');
-                                                return;
-                                            }
-
-                                            // Check file size for free users
-                                            if (subscription?.plan_type === 'free' && selectedFiles.length > 0) {
-                                                const maxSize = getMaxFileSize?.() || 10 * 1024 * 1024;
-                                                const oversizedFiles = selectedFiles.filter(f => f.size > maxSize);
-                                                if (oversizedFiles.length > 0) {
-                                                    setUploadError(`File size limit (${(maxSize / 1024 / 1024).toFixed(0)}MB) exceeded: ${oversizedFiles[0].name} is ${(oversizedFiles[0].size / 1024 / 1024).toFixed(2)}MB. Upgrade to Standard for 500MB limit.`);
-                                                    return;
-                                                }
-                                            }
-
                                             handleUpload();
                                         }}
                                         disabled={selectedFiles.length === 0 || isUploading}

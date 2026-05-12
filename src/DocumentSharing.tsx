@@ -106,6 +106,7 @@ const DocumentSharing: React.FC = () => {
             return;
         }
         setUploadedFile(file);
+        setGeneratedLink(null);
     };
 
     const handleDrop = (e: React.DragEvent) => {
@@ -240,7 +241,12 @@ const DocumentSharing: React.FC = () => {
                             type="file"
                             id="file-upload"
                             style={{ display: 'none' }}
-                            onChange={(e) => e.target.files && handleFileSelection(e.target.files[0])}
+                            onChange={(e) => {
+                                if (e.target.files && e.target.files.length > 0) {
+                                    handleFileSelection(e.target.files[0]);
+                                    e.target.value = ''; // Reset to allow re-selection of same file
+                                }
+                            }}
                         />
                     </div>
 

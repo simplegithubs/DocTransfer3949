@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useUser } from '@clerk/clerk-react';
-import { supabase } from '../lib/supabase';
+import { useUser, useAuth } from '@clerk/clerk-react';
+import { supabase, createSupabaseClient, getSafeSupabaseToken } from '../lib/supabase';
 
 export interface Subscription {
     id: string;
@@ -26,6 +26,7 @@ export interface SubscriptionUsage {
  */
 export const useSubscription = () => {
     const { user } = useUser();
+    const { getToken } = useAuth();
     const [subscription, setSubscription] = useState<Subscription | null>(null);
     const [usage, setUsage] = useState<SubscriptionUsage | null>(null);
     const [dailyUploadCount, setDailyUploadCount] = useState<number>(0);
@@ -50,8 +51,12 @@ export const useSubscription = () => {
             try {
                 setIsLoading(true);
 
+                // Get Clerk token for Supabase
+                const token = await getSafeSupabaseToken(getToken);
+                const authenticatedSupabase = createSupabaseClient(token || undefined);
+
                 // Fetch subscription
-                const { data: subData, error: subError } = await supabase
+                const { data: subData, error: subError } = await authenticatedSupabase
                     .from('subscriptions')
                     .select('*')
                     .eq('user_id', user.id)
@@ -66,7 +71,7 @@ export const useSubscription = () => {
                 // If no subscription found, try to create one, or just use default
                 if (!subData) {
                     try {
-                        const { data: newSub, error: createError } = await supabase
+                        const { data: newSub, error: createError } = await authenticatedSupabase
                             .from('subscriptions')
                             .insert({
                                 user_id: user.id,
@@ -270,6 +275,7 @@ export const useSubscription = () => {
      * Get remaining uploads for the current period (Today for Free, Unlimited for Paid)
      */
     const getRemainingUploads = (): number => {
+        if (!user || isLoading) return Infinity; // Don't block while loading or if not logged in
         if (!subscription || subscription.plan_type !== 'free') return Infinity; // Unlimited for paid plans
 
         return Math.max(0, 10 - dailyUploadCount);

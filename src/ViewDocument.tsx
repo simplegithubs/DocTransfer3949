@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { supabase } from './lib/supabase';
@@ -98,6 +98,7 @@ const ViewDocument: React.FC = () => {
     const [watermarkedUrl, setWatermarkedUrl] = useState<string | null>(null);
     const [viewerIp, setViewerIp] = useState<string>('Unknown IP');
     const [isWatermarking, setIsWatermarking] = useState(false);
+    const hasTracked = useRef(false);
 
 
     const [branding, setBranding] = useState<{
@@ -365,6 +366,9 @@ const ViewDocument: React.FC = () => {
 
     // Track View Logic
     const trackView = async (documentId: string) => {
+        if (hasTracked.current) return;
+        hasTracked.current = true;
+        
         try {
             // 1. Get/Create Session Logic
             let geoData = null;

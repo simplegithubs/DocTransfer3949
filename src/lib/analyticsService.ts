@@ -22,6 +22,13 @@ export interface GeoStat {
     session_count: number;
 }
 
+export interface RealtimeStats {
+    link_opens: number;
+    unique_viewers: number;
+    avg_time_seconds: number;
+    engagement_score: number;
+}
+
 export interface DeviceStat {
     device_type: string;
     browser_name: string;
@@ -195,5 +202,21 @@ export const analyticsService = {
             .eq('document_id', documentId);
         if (error) throw error;
         return count || 0;
+    },
+
+    /**
+     * Get absolute real-time summary stats for a document
+     */
+    async getRealtimeStats(documentId: string): Promise<RealtimeStats> {
+        const { data, error } = await supabase
+            .rpc('get_realtime_document_stats', { p_document_id: documentId });
+
+        if (error) throw error;
+        return data && data[0] ? data[0] : {
+            link_opens: 0,
+            unique_viewers: 0,
+            avg_time_seconds: 0,
+            engagement_score: 0
+        };
     }
 };
