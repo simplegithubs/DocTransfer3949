@@ -34,7 +34,7 @@ const BlogLayout: React.FC<BlogLayoutProps> = ({
                 title={title}
                 description={description}
                 keywords={keywords}
-                url={`https://doctransfer.io/blog/${slug}`}
+                url={`https://doctransfer.app/blog/${slug}`}
                 schema={schema}
             />
 

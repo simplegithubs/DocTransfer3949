@@ -19,8 +19,8 @@ const SEO: React.FC<SEOProps> = ({
     title = 'DocTransfer | Best Free DocSend Alternative',
     description = 'Stop paying for DocSend. Share documents securely with E2E encryption, page-by-page tracking, and e-signatures for free.',
     keywords = 'DocSend alternatives, free DocSend alternative, secure document sharing, virtual data room free, pitch deck tracking',
-    image = 'https://doctransfer.io/og-image.png',
-    url = 'https://doctransfer.io',
+    image = 'https://doctransfer.app/og-image.png',
+    url = 'https://doctransfer.app',
     schema,
 }) => {
     const fullTitle = title.includes('DocTransfer') ? title : `${title} | DocTransfer`;

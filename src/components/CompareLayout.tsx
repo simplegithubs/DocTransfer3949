@@ -55,7 +55,7 @@ const CompareLayout: React.FC<CompareLayoutProps> = ({
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
-            <SEO title={title} description={description} keywords={keywords} url={`https://doctransfer.io/compare/${slug}`} schema={schema} />
+            <SEO title={title} description={description} keywords={keywords} url={`https://doctransfer.app/compare/${slug}`} schema={schema} />
 
             {/* Header */}
             <header style={{

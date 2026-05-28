@@ -2,7 +2,7 @@
  * SEO Helpers for DocTransfer
  */
 
-export const BASE_URL = 'https://doctransfer.io';
+export const BASE_URL = 'https://doctransfer.app';
 
 export interface BlogPostSchema {
     title: string;

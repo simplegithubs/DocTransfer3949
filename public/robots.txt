@@ -11,4 +11,4 @@ Disallow: /audit
 Disallow: /preview/
 Disallow: /api/
 
-Sitemap: https://doctransfer.io/sitemap.xml
+Sitemap: https://doctransfer.app/sitemap.xml
