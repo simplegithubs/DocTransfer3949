@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { Check, Sparkles, ArrowRight, Loader2 } from 'lucide-react';
+import { Check, Sparkles, ArrowRight, Loader2, Globe, CreditCard } from 'lucide-react';
 import { useUser } from '@clerk/clerk-react';
 import { createClient } from '@supabase/supabase-js';
 
@@ -11,19 +11,42 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const PaymentSuccess: React.FC = () => {
     const [searchParams] = useSearchParams();
     const sessionId = searchParams.get('session_id');
+    const gatewayParam = searchParams.get('gateway');
+    const planParam = searchParams.get('plan');
     const { user } = useUser();
     const [isVerified, setIsVerified] = useState(false);
     const [verifying, setVerifying] = useState(true);
     const [redirectCountdown, setRedirectCountdown] = useState<number | null>(null);
     const navigate = useNavigate();
 
+    const isPayPal = gatewayParam === 'paypal';
+    const payPalToken = searchParams.get('token') || searchParams.get('PayerID') || searchParams.get('paymentId');
+
     useEffect(() => {
+        const verifyPayPal = async (token: string) => {
+            try {
+                const { data, error } = await supabase.functions.invoke('verify-paypal-subscription', {
+                    body: {
+                        userId: user!.id,
+                        planType: planParam || 'standard',
+                        paypalToken: token
+                    }
+                });
+                if (error) {
+                    throw error;
+                }
+                console.log("PayPal activation response:", data);
+            } catch (err) {
+                console.error("PayPal verification error:", err);
+            }
+        };
+
         const checkSubscription = async () => {
             if (!user) return; // Wait for user to be loaded
 
             // Polling logic to wait for webhook to update DB
             let attempts = 0;
-            const maxAttempts = 10;
+            const maxAttempts = 15; // Increased for PayPal which may take longer
 
             const poll = async () => {
                 try {
@@ -36,6 +59,8 @@ const PaymentSuccess: React.FC = () => {
                     if (data && (data.status === 'active' || data.status === 'trialing')) {
                         setIsVerified(true);
                         setVerifying(false);
+                        // Clean up PayPal pending data
+                        localStorage.removeItem('paypal_pending');
                         return;
                     }
                 } catch (err) {
@@ -53,12 +78,22 @@ const PaymentSuccess: React.FC = () => {
             poll();
         };
 
-        if (sessionId && user) {
-            checkSubscription();
-        } else if (!sessionId) {
-            setVerifying(false);
+        if (user) {
+            if (isPayPal) {
+                if (payPalToken) {
+                    // For PayPal, call verification edge function with token then check
+                    verifyPayPal(payPalToken).then(() => checkSubscription());
+                } else {
+                    // Block activation if no PayPal token is present
+                    setVerifying(false);
+                }
+            } else if (sessionId) {
+                checkSubscription();
+            } else {
+                setVerifying(false);
+            }
         }
-    }, [sessionId, user]);
+    }, [sessionId, user, isPayPal, planParam, payPalToken]);
 
     // Automatic redirection effect
     useEffect(() => {
@@ -75,6 +110,11 @@ const PaymentSuccess: React.FC = () => {
             return () => clearInterval(timer);
         }
     }, [isVerified, navigate]);
+
+    const gatewayColor = isPayPal ? '#0070ba' : '#667eea';
+    const gatewayGradient = isPayPal
+        ? 'linear-gradient(135deg, #0070ba 0%, #003087 100%)'
+        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
 
     return (
         <div style={{
@@ -95,6 +135,26 @@ const PaymentSuccess: React.FC = () => {
                 boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
                 textAlign: 'center'
             }}>
+                {/* Gateway Badge */}
+                {(isPayPal || gatewayParam === 'razorpay') && (
+                    <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        background: isPayPal ? '#e0f0ff' : '#ede9fe',
+                        color: isPayPal ? '#003087' : '#5b21b6',
+                        padding: '0.35rem 1rem',
+                        borderRadius: '100px',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        marginBottom: '1.5rem',
+                        letterSpacing: '0.02em'
+                    }}>
+                        {isPayPal ? <Globe size={14} /> : <CreditCard size={14} />}
+                        {isPayPal ? 'PayPal Payment' : 'Razorpay Payment'}
+                    </div>
+                )}
+
                 {/* Success Icon */}
                 <div style={{
                     width: '100px',
@@ -120,7 +180,7 @@ const PaymentSuccess: React.FC = () => {
                 <h1 style={{
                     fontSize: '2.5rem',
                     fontWeight: '800',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: gatewayGradient,
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     marginBottom: '1rem'
@@ -135,7 +195,11 @@ const PaymentSuccess: React.FC = () => {
                     marginBottom: '2rem'
                 }}>
                     {verifying ? (
-                        <>We're confirming your subscription details from the bank.</>
+                        isPayPal ? (
+                            <>We're confirming your PayPal subscription. This may take a moment — please ensure you completed the payment in the PayPal window.</>
+                        ) : (
+                            <>We're confirming your subscription details from the bank.</>
+                        )
                     ) : isVerified ? (
                         <>
                             Your subscription has been activated successfully. You now have access to all premium features!
@@ -147,18 +211,45 @@ const PaymentSuccess: React.FC = () => {
                         </>
                     ) : (
                         <>
-                            Your payment was processed, but we're still setting up your account. If this takes longer than a minute, please contact support.
+                            {isPayPal ? (
+                                payPalToken ? (
+                                    <>Your PayPal payment is being processed. If you completed the subscription on PayPal, your account will be upgraded shortly. Please check back in a few minutes or contact support if needed.</>
+                                ) : (
+                                    <span style={{ color: '#dc2626', fontWeight: 700 }}>
+                                        Verification failed: No valid PayPal transaction token found. Please complete the subscription process on PayPal to activate your plan.
+                                    </span>
+                                )
+                            ) : (
+                                <>Your payment was processed, but we're still setting up your account. If this takes longer than a minute, please contact support.</>
+                            )}
                         </>
                     )}
                 </p>
 
+                {/* PayPal specific helper */}
+                {isPayPal && verifying && (
+                    <div style={{
+                        background: 'linear-gradient(135deg, rgba(0, 112, 186, 0.06) 0%, rgba(0, 48, 135, 0.06) 100%)',
+                        borderRadius: '12px',
+                        padding: '1.25rem',
+                        marginBottom: '1.5rem',
+                        border: '1px solid rgba(0, 112, 186, 0.15)',
+                        textAlign: 'left'
+                    }}>
+                        <p style={{ margin: 0, fontSize: '0.85rem', color: '#475569', lineHeight: 1.6 }}>
+                            <strong>Didn't complete PayPal checkout?</strong><br />
+                            If the PayPal window closed without completing payment, you can try again from the <Link to="/pricing" style={{ color: '#0070ba', fontWeight: 600 }}>pricing page</Link>.
+                        </p>
+                    </div>
+                )}
+
                 {/* Features badge */}
                 <div style={{
-                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                    background: `linear-gradient(135deg, ${isPayPal ? 'rgba(0, 112, 186, 0.08)' : 'rgba(102, 126, 234, 0.1)'} 0%, ${isPayPal ? 'rgba(0, 48, 135, 0.08)' : 'rgba(118, 75, 162, 0.1)'} 100%)`,
                     borderRadius: '12px',
                     padding: '1.5rem',
                     marginBottom: '2rem',
-                    border: '1px solid rgba(102, 126, 234, 0.2)'
+                    border: `1px solid ${isPayPal ? 'rgba(0, 112, 186, 0.15)' : 'rgba(102, 126, 234, 0.2)'}`
                 }}>
                     <div style={{
                         display: 'flex',
@@ -199,13 +290,13 @@ const PaymentSuccess: React.FC = () => {
                             padding: '1rem 1.5rem',
                             borderRadius: '12px',
                             border: 'none',
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            background: gatewayGradient,
                             color: 'white',
                             fontSize: '1rem',
                             fontWeight: '700',
                             cursor: 'pointer',
                             transition: 'all 0.3s ease',
-                            boxShadow: '0 8px 20px rgba(102, 126, 234, 0.3)',
+                            boxShadow: `0 8px 20px ${isPayPal ? 'rgba(0, 112, 186, 0.3)' : 'rgba(102, 126, 234, 0.3)'}`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -215,11 +306,11 @@ const PaymentSuccess: React.FC = () => {
                         }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 12px 28px rgba(102, 126, 234, 0.4)';
+                                e.currentTarget.style.boxShadow = `0 12px 28px ${isPayPal ? 'rgba(0, 112, 186, 0.4)' : 'rgba(102, 126, 234, 0.4)'}`;
                             }}
                             onMouseLeave={(e) => {
                                 e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.3)';
+                                e.currentTarget.style.boxShadow = `0 8px 20px ${isPayPal ? 'rgba(0, 112, 186, 0.3)' : 'rgba(102, 126, 234, 0.3)'}`;
                             }}>
                             Go to Dashboard
                             <ArrowRight size={20} />
@@ -253,13 +344,16 @@ const PaymentSuccess: React.FC = () => {
                 </div>
 
                 {/* Session ID (for debugging) */}
-                {sessionId && (
+                {(sessionId || planParam) && (
                     <p style={{
                         marginTop: '2rem',
                         fontSize: '0.75rem',
                         color: '#94a3b8'
                     }}>
-                        Session: {sessionId.substring(0, 20)}...
+                        {sessionId
+                            ? `Session: ${sessionId.substring(0, 20)}...`
+                            : `Plan: ${planParam} (via ${gatewayParam})`
+                        }
                     </p>
                 )}
             </div>

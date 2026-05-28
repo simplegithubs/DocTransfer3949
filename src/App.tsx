@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import LandingPage from './LandingPage'
 import Pricing from './Pricing'
+import Checkout from './Checkout'
 import PaymentSuccess from './PaymentSuccess'
 import DataRoom from './DataRoom'
 import DocumentSharing from './DocumentSharing'
@@ -36,6 +37,14 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/payment-success" element={<PaymentSuccess />} />
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <Checkout />
+          </ProtectedRoute>
+        }
+      />
 
       {/* SEO Content Routes */}
       <Route path="/blog" element={<BlogIndex />} />

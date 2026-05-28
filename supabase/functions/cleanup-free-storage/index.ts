@@ -7,7 +7,7 @@ const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request) => {
     try {
         console.log("Starting cleanup-free-storage job...");
 

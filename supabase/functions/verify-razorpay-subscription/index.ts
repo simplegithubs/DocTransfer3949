@@ -7,26 +7,33 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve(async (req: Request) => {
     if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders });
     }
 
     try {
         const {
-            razorpay_order_id,
+            razorpay_subscription_id,
             razorpay_payment_id,
             razorpay_signature,
             userId,
             planType
         } = await req.json();
 
+        if (!razorpay_subscription_id || !razorpay_payment_id || !razorpay_signature || !userId || !planType) {
+            throw new Error('Missing verification parameters');
+        }
+
         const secret = Deno.env.get('RAZORPAY_KEY_SECRET') ?? '';
-        const generated_signature = await hmacSha256(razorpay_order_id + "|" + razorpay_payment_id, secret);
+        
+        // Subscription payment signature formula: razorpay_subscription_id + "|" + razorpay_payment_id
+        const generated_signature = await hmacSha256(razorpay_subscription_id + "|" + razorpay_payment_id, secret);
+
+        console.log(`Verifying subscription payment for user ${userId}. SubId: ${razorpay_subscription_id}, Signature Match: ${generated_signature === razorpay_signature}`);
 
         if (generated_signature === razorpay_signature) {
             // Signature is valid, update database
-
             const supabase = createClient(
                 Deno.env.get('SUPABASE_URL') ?? '',
                 Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -38,8 +45,7 @@ serve(async (req) => {
             const periodEndISO = subscriptionEndDate.toISOString();
             const periodStartISO = new Date().toISOString();
 
-            // 1. Update/Insert into subscriptions table (Source of Truth for features)
-            // Check if subscription exists
+            // 1. Update/Insert into subscriptions table
             const { data: existingSub } = await supabase
                 .from('subscriptions')
                 .select('id')
@@ -84,10 +90,10 @@ serve(async (req) => {
                 })
                 .eq('id', userId);
 
-            if (profileError) console.error('Error updating profile:', profileError); // Non-blocking
+            if (profileError) console.error('Error updating profile:', profileError);
 
             return new Response(
-                JSON.stringify({ success: true, message: "Payment verified and subscription updated" }),
+                JSON.stringify({ success: true, message: "Subscription verified and recorded successfully" }),
                 {
                     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
                     status: 200,
@@ -98,7 +104,7 @@ serve(async (req) => {
         }
 
     } catch (error: any) {
-        console.error('Error in verify-razorpay-payment:', error);
+        console.error('Error in verify-razorpay-subscription:', error);
         return new Response(
             JSON.stringify({
                 error: error.message || 'Verification failed',

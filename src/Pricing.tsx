@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from '@clerk/clerk-react';
 import Logo from './components/Logo';
 import SEO from './components/SEO';
 import {
@@ -31,14 +31,15 @@ import {
     Twitter,
     Instagram,
     Youtube,
-    Linkedin
+    Linkedin,
+    Globe,
+    CreditCard
 } from 'lucide-react';
-import { supabase } from './lib/supabase';
+import { supabase, createSupabaseClient, getSafeSupabaseToken } from './lib/supabase';
 
 const Pricing: React.FC = () => {
     const { user } = useUser();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState<string | null>(null);
     const [currentPlan, setCurrentPlan] = useState<string | null>(null);
 
     useEffect(() => {
@@ -61,52 +62,95 @@ const Pricing: React.FC = () => {
             return;
         }
 
-        // Since everything is free and unlocked in the code, we don't strictly need to hit the DB
-        // especially if the user hasn't set up the tables yet in their new Supabase project.
-        setLoading(planType);
-        setTimeout(() => {
-            setLoading(null);
+        if (planType === 'free') {
             navigate('/dataroom');
-        }, 500);
+            return;
+        }
+
+        navigate(`/checkout?plan=${planType}`);
     };
 
     const plans = [
         {
-            name: 'Free Forever',
+            name: 'Free',
             planType: 'free',
             icon: Rocket,
             price: '$0',
-            period: '/forever',
-            description: 'All premium features are now free for everyone.',
+            period: '/month',
+            description: 'Perfect for individuals getting started with secure sharing.',
             features: [
-                'Unlimited document uploads',
-                'Unlimited E-signatures',
-                '20MB File size limit',
-                'Vault Mode (E2E Encryption)',
-                'Advanced Analytics',
-                'Dynamic Watermarking',
-                'Audit Trails',
-                'SSO Integration',
-                'Custom Branding'
+                { text: '30 Links Sent Per Year', enabled: true },
+                { text: '30 Document Uploads Per Year', enabled: true },
+                { text: '10MB File Size Limit', enabled: true },
+                { text: 'Unlimited Visitors', enabled: true },
+                { text: 'Page-by-Page Analytics', enabled: true },
+                { text: 'Password Protection', enabled: true },
+                { text: 'Allow / Block Downloads', enabled: true }
             ],
-            cta: 'Get Started Now',
+            cta: 'Get Started',
+            popular: false,
+            color: '#64748b',
+            gradient: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
+        },
+        {
+            name: 'Standard',
+            planType: 'standard',
+            icon: Zap,
+            price: '$25',
+            period: '/month',
+            description: 'Advanced security and analytics for growing teams.',
+            features: [
+                { text: 'Unlimited transfers', enabled: true },
+                { text: '50MB File size limit', enabled: true },
+                { text: 'Password Protection', enabled: true },
+                { text: 'AES-256 Encryption', enabled: true },
+                { text: 'Self-Destruct (Time/Views)', enabled: true },
+                { text: 'Email Verification', enabled: true },
+                { text: 'Dynamic Watermarking', enabled: true },
+                { text: 'Allow Downloads', enabled: true },
+                { text: 'Page-by-Page Analytics', enabled: true },
+                { text: 'Audit Trail', enabled: true },
+                { text: 'Unlimited E-Signature', enabled: true }
+            ],
+            cta: 'Upgrade to Standard',
             popular: true,
-            color: '#4f46e5'
+            color: '#3b82f6',
+            gradient: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)'
+        },
+        {
+            name: 'Business',
+            planType: 'business',
+            icon: Briefcase,
+            price: '$39',
+            period: '/month',
+            description: 'Full enterprise suite with maximum security controls.',
+            features: [
+                { text: 'Everything in Standard', enabled: true },
+                { text: '500MB File size limit', enabled: true },
+                { text: 'Vault Mode (E2E)', enabled: true },
+                { text: 'Audit Trails & Compliance', enabled: true },
+                { text: 'SSO Integration', enabled: true },
+                { text: 'Custom Branding', enabled: true },
+                { text: 'View & Print Limits', enabled: true },
+                { text: 'Dedicated Support', enabled: true }
+            ],
+            cta: 'Upgrade to Business',
+            popular: false,
+            color: '#8b5cf6',
+            gradient: 'linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%)'
         }
     ];
 
     const comparisons = [
-        { feature: 'Daily Uploads', standard: 'Unlimited', business: 'Unlimited' },
-        { feature: 'E-Signatures', standard: 'Unlimited', business: 'Unlimited' },
-        { feature: 'File Size Limit', standard: '20MB', business: '20MB' },
-        { feature: 'Storage Duration', standard: '1 Year', business: 'Unlimited' },
-        { feature: 'Analytics', standard: 'Advanced', business: 'Deep Insights' },
-        { feature: 'Dynamic Watermark', standard: true, business: true },
-        { feature: 'Vault Mode (E2E)', standard: false, business: true },
-        { feature: 'Biometric Auth', standard: false, business: true },
-        { feature: 'Custom Branding', standard: true, business: true },
-        { feature: 'Audit Trails', standard: true, business: true },
-        { feature: 'SSO Integration', standard: false, business: true },
+        { feature: 'Document Uploads', free: '30/year', standard: 'Unlimited', business: 'Unlimited' },
+        { feature: 'E-Signatures', free: '-', standard: 'Unlimited', business: 'Unlimited' },
+        { feature: 'File Size Limit', free: '10MB', standard: '50MB', business: '500MB' },
+        { feature: 'Password Protection', free: false, standard: true, business: true },
+        { feature: 'Vault Mode (E2E)', free: false, standard: false, business: true },
+        { feature: 'Audit Trails', free: false, standard: true, business: true },
+        { feature: 'Custom Branding', free: false, standard: false, business: true },
+        { feature: 'View & Print Limits', free: false, standard: false, business: true },
+        { feature: 'SSO Integration', free: false, standard: false, business: true },
     ];
 
     return (
@@ -155,118 +199,227 @@ const Pricing: React.FC = () => {
 
             <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 2rem' }}>
                 {/* Hero */}
-                <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                     <div style={{
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        background: '#dcfce7',
-                        color: '#166534',
+                        background: '#dbeafe',
+                        color: '#1e40af',
                         padding: '0.4rem 1rem',
                         borderRadius: '100px',
                         fontSize: '0.875rem',
                         fontWeight: 600,
                         marginBottom: '1.5rem'
                     }}>
-                        <Sparkles size={16} /> All Premium Plans Now Free
+                        <Sparkles size={16} /> Scalable Security for Every Need
                     </div>
                     <h1 style={{ fontSize: '3.5rem', fontWeight: 800, color: '#0f172a', marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
-                        The Future of Secure Sharing is <span style={{ color: '#3b82f6' }}>Free</span>
+                        Simple, <span style={{ color: '#3b82f6' }}>Transparent</span> Pricing
                     </h1>
-                    <p style={{ fontSize: '1.25rem', color: '#64748b', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6 }}>
-                        We've unlocked all our professional and enterprise features for everyone. 
-                        No credit card required, no hidden fees. Just secure document sharing.
+                    <p style={{ fontSize: '1.25rem', color: '#64748b', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6, marginBottom: '2rem' }}>
+                        Choose the perfect plan for your document sharing needs. 
+                        Start for free and upgrade as you grow.
                     </p>
                 </div>
+
+
 
                 {/* Plan Cards */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                    gap: '2rem',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+                    gap: '2.5rem',
                     marginBottom: '8rem',
                     justifyContent: 'center'
                 }}>
                     {plans.map((plan) => (
                         <div key={plan.name} style={{
                             background: 'white',
-                            borderRadius: '24px',
-                            padding: '2.5rem',
+                            borderRadius: '32px',
+                            padding: '3rem',
                             border: plan.popular ? `2px solid ${plan.color}` : '1px solid #e2e8f0',
-                            boxShadow: plan.popular ? `0 20px 40px -10px ${plan.color}20` : '0 10px 30px -10px rgba(0,0,0,0.05)',
+                            boxShadow: plan.popular ? `0 30px 60px -15px ${plan.color}25` : '0 15px 45px -15px rgba(0,0,0,0.08)',
                             position: 'relative',
-                            transition: 'transform 0.3s ease',
+                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                             display: 'flex',
-                            flexDirection: 'column'
+                            flexDirection: 'column',
+                            overflow: 'hidden'
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-8px)'}
-                        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-12px) scale(1.02)';
+                            e.currentTarget.style.boxShadow = plan.popular ? `0 40px 80px -20px ${plan.color}35` : '0 25px 60px -20px rgba(0,0,0,0.12)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                            e.currentTarget.style.boxShadow = plan.popular ? `0 30px 60px -15px ${plan.color}25` : '0 15px 45px -15px rgba(0,0,0,0.08)';
+                        }}
                         >
                             {plan.popular && (
                                 <div style={{
                                     position: 'absolute',
-                                    top: '-12px',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
+                                    top: '24px',
+                                    right: '-35px',
+                                    transform: 'rotate(45deg)',
                                     background: plan.color,
                                     color: 'white',
-                                    padding: '0.25rem 1rem',
-                                    borderRadius: '100px',
+                                    padding: '0.4rem 3rem',
                                     fontSize: '0.75rem',
-                                    fontWeight: 700,
-                                    textTransform: 'uppercase'
-                                }}>Most Popular</div>
+                                    fontWeight: 800,
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.05em',
+                                    zIndex: 1
+                                }}>Popular</div>
                             )}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '2rem' }}>
                                 <div style={{ 
-                                    padding: '0.75rem', 
-                                    background: `${plan.color}10`, 
-                                    borderRadius: '12px',
+                                    width: '56px',
+                                    height: '56px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: plan.gradient || `${plan.color}10`, 
+                                    borderRadius: '16px',
                                     color: plan.color 
                                 }}>
-                                    <plan.icon size={24} />
+                                    <plan.icon size={28} />
                                 </div>
-                                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0f172a' }}>{plan.name}</h3>
+                                <div>
+                                    <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.25rem' }}>{plan.name}</h3>
+                                    <p style={{ color: '#64748b', fontSize: '0.875rem' }}>Best for {plan.name === 'Free' ? 'Personal' : (plan.name === 'Standard' ? 'Growth' : 'Scale')}</p>
+                                </div>
                             </div>
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <span style={{ fontSize: '3rem', fontWeight: 800, color: '#0f172a' }}>{plan.price}</span>
-                                <span style={{ color: '#64748b', fontSize: '1rem' }}>{plan.period}</span>
+
+                            <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'baseline', gap: '0.25rem' }}>
+                                <span style={{ fontSize: '3.5rem', fontWeight: 800, color: '#0f172a' }}>{plan.price}</span>
+                                <span style={{ color: '#64748b', fontSize: '1.125rem', fontWeight: 500 }}>{plan.period}</span>
                             </div>
-                            <p style={{ color: '#64748b', marginBottom: '2rem', fontSize: '1rem', lineHeight: 1.5 }}>{plan.description}</p>
                             
-                            <div style={{ flex: 1, marginBottom: '2.5rem' }}>
-                                {plan.features.map((feature, i) => (
-                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', color: '#475569' }}>
-                                        <div style={{ background: '#dcfce7', borderRadius: '50%', padding: '2px' }}>
-                                            <Check size={14} color="#166534" strokeWidth={3} />
+                            <p style={{ color: '#64748b', marginBottom: '2.5rem', fontSize: '1rem', lineHeight: 1.6, minHeight: '3em' }}>{plan.description}</p>
+                            
+                            <div style={{ flex: 1, marginBottom: '3rem' }}>
+                                {plan.features.map((feature: any, i) => (
+                                    <div key={i} style={{ 
+                                        display: 'flex', 
+                                        alignItems: 'flex-start', 
+                                        gap: '1rem', 
+                                        marginBottom: '1rem', 
+                                        color: feature.enabled ? '#334155' : '#94a3b8',
+                                        opacity: feature.enabled ? 1 : 0.6
+                                    }}>
+                                        <div style={{ 
+                                            marginTop: '4px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            width: '20px',
+                                            height: '20px',
+                                            background: feature.enabled ? '#dcfce7' : '#f1f5f9', 
+                                            borderRadius: '50%' 
+                                        }}>
+                                            {feature.enabled ? (
+                                                <Check size={12} color="#166534" strokeWidth={4} />
+                                            ) : (
+                                                <Lock size={10} color="#94a3b8" />
+                                            )}
                                         </div>
-                                        <span style={{ fontSize: '0.925rem' }}>{feature}</span>
+                                        <span style={{ 
+                                            fontSize: '0.95rem', 
+                                            fontWeight: 500,
+                                            textDecoration: feature.enabled ? 'none' : 'line-through' 
+                                        }}>{feature.text}</span>
                                     </div>
                                 ))}
                             </div>
 
                             <button 
                                 onClick={() => handleUpgrade(plan.planType as any)}
-                                disabled={currentPlan === plan.planType || loading === plan.planType}
+                                disabled={currentPlan === plan.planType}
                                 style={{
                                     width: '100%',
-                                    padding: '1rem',
-                                    borderRadius: '12px',
+                                    padding: '1.25rem',
+                                    borderRadius: '16px',
                                     border: 'none',
-                                    background: currentPlan === plan.planType ? '#f1f5f9' : (plan.popular ? plan.color : '#0f172a'),
-                                    color: currentPlan === plan.planType ? '#94a3b8' : 'white',
-                                    fontWeight: 700,
-                                    fontSize: '1rem',
+                                    background: currentPlan === plan.planType 
+                                        ? '#f1f5f9' 
+                                        : plan.planType === 'free'
+                                            ? '#3b82f6'
+                                            : plan.color,
+                                    color: currentPlan === plan.planType 
+                                        ? '#94a3b8' 
+                                        : 'white',
+                                    fontWeight: 800,
+                                    fontSize: '1.1rem',
                                     cursor: currentPlan === plan.planType ? 'default' : 'pointer',
-                                    transition: 'all 0.2s',
+                                    transition: 'all 0.3s',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    gap: '0.5rem'
-                                }}>
-                                {loading === plan.planType ? <Loader2 size={20} className="animate-spin" /> : (currentPlan === plan.planType ? 'Active Plan' : plan.cta)}
-                                {currentPlan !== plan.planType && <Zap size={18} fill="currentColor" />}
+                                    gap: '0.75rem',
+                                    boxShadow: currentPlan === plan.planType 
+                                        ? 'none' 
+                                        : `0 10px 20px -5px ${plan.color}50`
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (currentPlan !== plan.planType) {
+                                        e.currentTarget.style.filter = 'brightness(1.08)';
+                                        e.currentTarget.style.transform = 'scale(1.01)';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (currentPlan !== plan.planType) {
+                                        e.currentTarget.style.filter = 'brightness(1)';
+                                        e.currentTarget.style.transform = 'scale(1)';
+                                    }
+                                }}
+                                >
+                                {currentPlan === plan.planType ? 'Current Plan' : plan.cta}
+                                {currentPlan !== plan.planType && (
+                                    <Zap size={20} fill="currentColor" />
+                                )}
                             </button>
+
+                            {plan.planType !== 'free' && (
+                                <div style={{
+                                    marginTop: '1.25rem',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    opacity: 0.95
+                                }}>
+                                    <div style={{
+                                        fontSize: '0.78rem',
+                                        color: '#64748b',
+                                        fontWeight: 600,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem'
+                                    }}>
+                                        🔒 Secure Checkout
+                                    </div>
+                                    <div style={{
+                                        display: 'flex',
+                                        gap: '0.4rem',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        background: '#f8fafc',
+                                        padding: '0.4rem 0.8rem',
+                                        borderRadius: '8px',
+                                        border: '1px solid #e2e8f0',
+                                        flexWrap: 'wrap',
+                                        width: '100%',
+                                        boxSizing: 'border-box'
+                                    }}>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#16a34a', background: '#dcfce7', padding: '2px 6px', borderRadius: '4px' }}>UPI</span>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0070ba', background: '#e0f0ff', padding: '2px 6px', borderRadius: '4px' }}>PayPal</span>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#2563eb', background: '#dbeafe', padding: '2px 6px', borderRadius: '4px' }}>Cards</span>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#dc2626', background: '#fee2e2', padding: '2px 6px', borderRadius: '4px' }}>Visa/MC</span>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#475569', background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>Netbanking</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -283,7 +436,7 @@ const Pricing: React.FC = () => {
                             { q: "What is 'Burn After Reading'?", a: "This feature allows you to set documents to automatically delete themselves after a single view, ensuring your sensitive data doesn't persist." },
                             { q: "Is it compliant?", a: "Yes! With features like Audit Trails and E2E encryption, we help businesses maintain compliance with HIPAA, GDPR, and NIST standards." },
                             { q: "Can I add my logo?", a: "Absolutely. Our White-Labeling feature allows you to add your own company logo and colors for a professional experience." },
-                            { q: "Are E-Signatures legal?", a: "Yes, our E-Signature feature is legally binding and compliant with major electronic signature laws worldwide." }
+                            { q: "What payment methods are supported?", a: "We support both Razorpay (UPI, cards, netbanking for Indian users) and PayPal (credit/debit cards, PayPal balance for international users). Choose your preferred gateway on the pricing page." }
                         ].map((faq, i) => (
                             <div key={i}>
                                 <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.75rem' }}>{faq.q}</h4>
@@ -327,6 +480,18 @@ const Pricing: React.FC = () => {
                     </div>
                 </div>
             </footer>
+
+            <style>
+                {`
+                    @keyframes spin {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                    .animate-spin {
+                        animation: spin 1s linear infinite;
+                    }
+                `}
+            </style>
         </div>
     );
 };

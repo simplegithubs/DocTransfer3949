@@ -19,6 +19,9 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from './lib/supabase';
+import useSubscription from './hooks/useSubscription';
+import UpgradeModal from './components/UpgradeModal';
+import PremiumBadge from './components/PremiumBadge';
 
 interface Document {
     id: string;
@@ -59,9 +62,20 @@ const DocumentSharing: React.FC = () => {
     const [emailVerification, setEmailVerification] = useState(false);
     const [allowedEmail, setAllowedEmail] = useState('');
 
+    // Subscription & Paywall
+    const { subscription, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
+    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+    const [lockedFeatureName, setLockedFeatureName] = useState<string | undefined>();
+
+    const handleLockedFeatureClick = (featureName: string) => {
+        setLockedFeatureName(featureName);
+        setShowUpgradeModal(true);
+    };
+
     // Fetch documents
     useEffect(() => {
         fetchDocuments();
+        refreshSubscription?.();
     }, []);
 
     const fetchDocuments = async () => {
@@ -100,8 +114,10 @@ const DocumentSharing: React.FC = () => {
 
     const handleFileSelection = (file: File) => {
         setUploadError(null);
-        if (file.size > 20 * 1024 * 1024) {
-            setUploadError('File too large. Maximum size is 20MB.');
+        const maxSizeBytes = getMaxFileSize();
+        if (file.size > maxSizeBytes) {
+            const formatSize = (bytes: number) => (bytes / (1024 * 1024)).toFixed(0);
+            setUploadError(`File too large. Maximum size is ${formatSize(maxSizeBytes)}MB.`);
             setUploadedFile(null);
             return;
         }
@@ -113,11 +129,25 @@ const DocumentSharing: React.FC = () => {
         e.preventDefault();
         setIsDragging(false);
         const files = Array.from(e.dataTransfer.files);
-        if (files.length > 0) handleFileSelection(files[0]);
+        if (files.length > 0) {
+            if (files.length > 1 && subscription?.plan_type === 'free') {
+                setUploadError("Premium plan feature. You cannot upload multiple files at one time. Please upgrade to unlock document bundling.");
+                handleLockedFeatureClick('Document Bundles');
+                return;
+            }
+            handleFileSelection(files[0]);
+        }
     };
 
     const handleUpload = async () => {
         if (!uploadedFile) return;
+
+        const remaining = getRemainingUploads();
+        if (subscription?.plan_type === 'free' && remaining <= 0) {
+            setUploadError("Yearly link upload limit reached (30 documents per year). Please upgrade for unlimited uploads.");
+            handleLockedFeatureClick('30 Documents Upload Limit');
+            return;
+        }
 
         setIsUploading(true);
         setUploadError(null);
@@ -150,7 +180,7 @@ const DocumentSharing: React.FC = () => {
                     screenshot_protection: screenshotProtection,
                     email_verification: emailVerification,
                     allowed_email: emailVerification && allowedEmail ? allowedEmail : null,
-                    user_id: null
+                    user_id: (await supabase.auth.getUser())?.data?.user?.id || null
                 })
                 .select()
                 .single();
@@ -162,6 +192,7 @@ const DocumentSharing: React.FC = () => {
 
             // Refresh list
             fetchDocuments();
+            refreshSubscription?.();
             setUploadedFile(null); // Reset upload
 
         } catch (error: any) {
@@ -258,16 +289,26 @@ const DocumentSharing: React.FC = () => {
                                 <div className="feature-icon-box" style={{ background: '#ef4444' }}>
                                     <Lock size={20} />
                                 </div>
-                                <div className="feature-content">
+                                <div className="feature-content" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                     <h4>Password Protection</h4>
-                                    <p>Secure link with password</p>
+                                    {isFeatureLocked('password_protection') && <PremiumBadge size={12} />}
                                 </div>
                                 <label className="toggle-switch" style={{ marginLeft: 'auto' }}>
-                                    <input type="checkbox" checked={passwordProtection} onChange={(e) => setPasswordProtection(e.target.checked)} />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={passwordProtection} 
+                                        onChange={(e) => {
+                                            if (isFeatureLocked('password_protection')) {
+                                                handleLockedFeatureClick('Password Protection');
+                                                return;
+                                            }
+                                            setPasswordProtection(e.target.checked);
+                                        }} 
+                                    />
                                     <span className="toggle-slider"></span>
                                 </label>
                             </div>
-                            {passwordProtection && (
+                            {passwordProtection && !isFeatureLocked('password_protection') && (
                                 <div style={{ marginTop: '1rem', paddingLeft: '3.5rem' }}>
                                     <input
                                         type="text"
@@ -293,16 +334,26 @@ const DocumentSharing: React.FC = () => {
                                 <div className="feature-icon-box" style={{ background: '#f59e0b' }}>
                                     <Calendar size={20} />
                                 </div>
-                                <div className="feature-content">
+                                <div className="feature-content" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                     <h4>Link Expiration</h4>
-                                    <p>Set temporary access</p>
+                                    {isFeatureLocked('link_expiration') && <PremiumBadge size={12} />}
                                 </div>
                                 <label className="toggle-switch" style={{ marginLeft: 'auto' }}>
-                                    <input type="checkbox" checked={linkExpiration} onChange={(e) => setLinkExpiration(e.target.checked)} />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={linkExpiration} 
+                                        onChange={(e) => {
+                                            if (isFeatureLocked('link_expiration')) {
+                                                handleLockedFeatureClick('Link Expiration');
+                                                return;
+                                            }
+                                            setLinkExpiration(e.target.checked);
+                                        }} 
+                                    />
                                     <span className="toggle-slider"></span>
                                 </label>
                             </div>
-                            {linkExpiration && (
+                            {linkExpiration && !isFeatureLocked('link_expiration') && (
                                 <div style={{ marginTop: '1rem', paddingLeft: '3.5rem' }}>
                                     <input
                                         type="date"
@@ -329,12 +380,22 @@ const DocumentSharing: React.FC = () => {
                                 <div className="feature-icon-box" style={{ background: '#3b82f6' }}>
                                     <Globe size={20} />
                                 </div>
-                                <div className="feature-content">
+                                <div className="feature-content" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                     <h4>Custom Branding</h4>
-                                    <p>Use your own domain</p>
+                                    {isFeatureLocked('white_label') && <PremiumBadge size={12} />}
                                 </div>
                                 <label className="toggle-switch" style={{ marginLeft: 'auto' }}>
-                                    <input type="checkbox" checked={customDomain} onChange={(e) => setCustomDomain(e.target.checked)} />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={customDomain} 
+                                        onChange={(e) => {
+                                            if (isFeatureLocked('white_label')) {
+                                                handleLockedFeatureClick('Custom Branding');
+                                                return;
+                                            }
+                                            setCustomDomain(e.target.checked);
+                                        }} 
+                                    />
                                     <span className="toggle-slider"></span>
                                 </label>
                             </div>
@@ -346,12 +407,22 @@ const DocumentSharing: React.FC = () => {
                                 <div className="feature-icon-box" style={{ background: '#10b981' }}>
                                     <Download size={20} />
                                 </div>
-                                <div className="feature-content">
+                                <div className="feature-content" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                     <h4>Download Control</h4>
-                                    <p>Allow file downloads</p>
+                                    {isFeatureLocked('allow_downloads') && <PremiumBadge size={12} />}
                                 </div>
                                 <label className="toggle-switch" style={{ marginLeft: 'auto' }}>
-                                    <input type="checkbox" checked={allowDownloads} onChange={(e) => setAllowDownloads(e.target.checked)} />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={allowDownloads} 
+                                        onChange={(e) => {
+                                            if (isFeatureLocked('allow_downloads')) {
+                                                handleLockedFeatureClick('Download Control');
+                                                return;
+                                            }
+                                            setAllowDownloads(e.target.checked);
+                                        }} 
+                                    />
                                     <span className="toggle-slider"></span>
                                 </label>
                             </div>
@@ -363,33 +434,53 @@ const DocumentSharing: React.FC = () => {
                                 <div className="feature-icon-box" style={{ background: '#6366f1' }}>
                                     <Shield size={20} />
                                 </div>
-                                <div className="feature-content">
+                                <div className="feature-content" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                     <h4>Screenshot Protection</h4>
-                                    <p>Prevent capture & copy</p>
+                                    {isFeatureLocked('screenshot_protection') && <PremiumBadge size={12} />}
                                 </div>
                                 <label className="toggle-switch" style={{ marginLeft: 'auto' }}>
-                                    <input type="checkbox" checked={screenshotProtection} onChange={(e) => setScreenshotProtection(e.target.checked)} />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={screenshotProtection} 
+                                        onChange={(e) => {
+                                            if (isFeatureLocked('screenshot_protection')) {
+                                                handleLockedFeatureClick('Screenshot Protection');
+                                                return;
+                                            }
+                                            setScreenshotProtection(e.target.checked);
+                                        }} 
+                                    />
                                     <span className="toggle-slider"></span>
                                 </label>
                             </div>
                         </div>
 
                         {/* Email Verification */}
-                        <div className="feature-item">
+                        <div className="feature-item" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
                             <div className="feature-header">
                                 <div className="feature-icon-box" style={{ background: '#ec4899' }}>
                                     <Mail size={20} />
                                 </div>
-                                <div className="feature-content">
+                                <div className="feature-content" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                     <h4>Require Email Verification</h4>
-                                    <p>Verify recipient identity</p>
+                                    {isFeatureLocked('email_verification') && <PremiumBadge size={12} />}
                                 </div>
                                 <label className="toggle-switch" style={{ marginLeft: 'auto' }}>
-                                    <input type="checkbox" checked={emailVerification} onChange={(e) => setEmailVerification(e.target.checked)} />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={emailVerification} 
+                                        onChange={(e) => {
+                                            if (isFeatureLocked('email_verification')) {
+                                                handleLockedFeatureClick('Email Verification');
+                                                return;
+                                            }
+                                            setEmailVerification(e.target.checked);
+                                        }} 
+                                    />
                                     <span className="toggle-slider"></span>
                                 </label>
                             </div>
-                            {emailVerification && (
+                            {emailVerification && !isFeatureLocked('email_verification') && (
                                 <div style={{ marginTop: '1rem', paddingLeft: '3.5rem' }}>
                                     <input
                                         type="email"
@@ -497,6 +588,12 @@ const DocumentSharing: React.FC = () => {
                     </div>
                 </div>
             </div>
+            {/* Upgrade Modal */}
+            <UpgradeModal
+                isOpen={showUpgradeModal}
+                onClose={() => setShowUpgradeModal(false)}
+                featureName={lockedFeatureName}
+            />
         </div>
     );
 };

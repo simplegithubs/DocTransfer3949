@@ -116,7 +116,7 @@ const DataRoom: React.FC = () => {
     const [aesEncryptionEnabled, setAesEncryptionEnabled] = useState(false);
 
     // Subscription and premium features
-    const { subscription, usage, dailyUploadCount, isLoading: subLoading, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
+    const { subscription, usage, dailyUploadCount, yearlyUploadCount, isLoading: subLoading, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
     const [lockedFeatureName, setLockedFeatureName] = useState<string | undefined>();
 
@@ -221,6 +221,12 @@ const DataRoom: React.FC = () => {
     };
 
     const handleFileSelection = (files: File[]) => {
+        if (files.length > 1 && subscription?.plan_type === 'free') {
+            setSelectedFiles([files[0]]);
+            setUploadError("Premium plan feature. You cannot upload multiple files at one time. Please upgrade to unlock document bundling.");
+            handleLockedFeatureClick('Document Bundles');
+            return;
+        }
         setSelectedFiles(files);
         setUploadedDoc(null);
         setUploadedBundleLink(null);
@@ -257,7 +263,8 @@ const DataRoom: React.FC = () => {
         setIsUploading(true);
         setUploadError(null);
 
-        const encryptionKey = aesEncryptionEnabled ? generateEncryptionKey() : null;
+        const isEncrypted = aesEncryptionEnabled;
+        const encryptionKey = isEncrypted ? generateEncryptionKey() : null;
 
         try {
             const token = await getSafeSupabaseToken(getToken);
@@ -316,7 +323,7 @@ const DataRoom: React.FC = () => {
                 let fileToUpload: File | Blob = file;
                 let encryptionIv: string | null = null;
 
-                if (aesEncryptionEnabled && encryptionKey) {
+                if (isEncrypted && encryptionKey) {
                     console.log('Encrypting file...');
                     const { encryptedBlob, iv } = await encryptFile(file, encryptionKey);
                     fileToUpload = encryptedBlob;
@@ -371,7 +378,7 @@ const DataRoom: React.FC = () => {
 
                         // Encryption / Vault Fields
                         is_vault_file: false,
-                        is_encrypted: aesEncryptionEnabled,
+                        is_encrypted: isEncrypted,
                         encryption_key: null, // Stored in URL hash only
                         encryption_iv: encryptionIv,
 
@@ -387,7 +394,7 @@ const DataRoom: React.FC = () => {
 
                 // Construct Link for this doc
                 let finalLink = `${window.location.origin}/view/${docShareLink}`;
-                if (aesEncryptionEnabled && encryptionKey) {
+                if (isEncrypted && encryptionKey) {
                     finalLink += `#key=${encryptionKey}`;
                 }
 
@@ -421,7 +428,7 @@ const DataRoom: React.FC = () => {
             // Set state based on Single vs Bundle
             if (bundleId && bundleShareLink) {
                 let finalBundleLink = `${window.location.origin}/view/${bundleShareLink}`;
-                if (aesEncryptionEnabled && encryptionKey) {
+                if (isEncrypted && encryptionKey) {
                     finalBundleLink += `#key=${encryptionKey}`;
                 }
                 setUploadedBundleLink(finalBundleLink);
@@ -588,8 +595,15 @@ const DataRoom: React.FC = () => {
                             <Shield size={16} /> Audit Trail
                             {isFeatureLocked('audit_trails') && <Lock size={14} />}
                         </button>
-                        <button onClick={() => setActiveTab('esignature')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'esignature' ? '#8b5cf6' : 'transparent', color: activeTab === 'esignature' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
+                        <button onClick={() => {
+                            if (isFeatureLocked('esignature')) {
+                                handleLockedFeatureClick('E-Signature');
+                            } else {
+                                setActiveTab('esignature');
+                            }
+                        }} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'esignature' ? '#8b5cf6' : 'transparent', color: activeTab === 'esignature' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <PenTool size={16} /> E-Signature
+                            {isFeatureLocked('esignature') && <Lock size={14} />}
                         </button>
                     </div>
                 </div>
@@ -782,8 +796,8 @@ const DataRoom: React.FC = () => {
                                     {/* Usage Limit Banner for Free Plan */}
                                     {subscription && (
                                         <UsageLimitBanner
-                                            currentUploads={subscription.plan_type === 'free' ? dailyUploadCount : (usage?.documents_uploaded || 0)}
-                                            maxUploads={subscription.plan_type === 'free' ? 10 : 300} // daily vs monthly
+                                            currentUploads={subscription.plan_type === 'free' ? yearlyUploadCount : (usage?.documents_uploaded || 0)}
+                                            maxUploads={subscription.plan_type === 'free' ? 30 : 300} // yearly vs monthly
                                             planType={subscription.plan_type}
                                         />
                                     )}

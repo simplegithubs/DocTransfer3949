@@ -8,7 +8,7 @@ interface EmailRequest {
     html: string;
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
     if (req.method === "OPTIONS") {
         return new Response("ok", { headers: { "Access-Control-Allow-Origin": "*" } });
     }
@@ -55,7 +55,7 @@ serve(async (req) => {
                 "Access-Control-Allow-Origin": "*",
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         return new Response(JSON.stringify({ error: error.message }), {
             status: 500,
             headers: { "Content-Type": "application/json" },

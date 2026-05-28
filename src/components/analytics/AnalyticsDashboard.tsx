@@ -20,7 +20,8 @@ import {
     Zap,
     Mail,
     Download,
-    ArrowLeft
+    ArrowLeft,
+    Lock
 } from 'lucide-react';
 import {
     XAxis,

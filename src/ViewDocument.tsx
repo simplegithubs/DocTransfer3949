@@ -30,6 +30,7 @@ interface DocumentData {
     apply_watermark?: boolean;
     // Encryption fields
     is_encrypted?: boolean;
+    is_vault_file?: boolean;
     encryption_key?: string;
     encryption_iv?: string;
     original_file_type?: string;
@@ -991,10 +992,13 @@ const ViewDocument: React.FC = () => {
                                 </div>
                             )}
                             <div>
-                                <h2 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#111827' }}>
-                                    {document.name}
-                                </h2>
-                                <p style={{ fontSize: '0.8rem', color: '#6b7280' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <h2 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#111827', margin: 0 }}>
+                                        {document.name}
+                                    </h2>
+
+                                </div>
+                                <p style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '0.25rem' }}>
                                     {(document.file_size / 1024 / 1024).toFixed(2)} MB • {document.file_type}
                                 </p>
                             </div>

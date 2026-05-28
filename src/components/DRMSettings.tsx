@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSubscription } from '../hooks/useSubscription';
 import { Shield, Eye, Monitor, Copy, Printer, Camera, Globe, Clock, Calendar } from 'lucide-react';
 import type { DRMSettings as DRMSettingsType } from '../lib/drmController';
 
@@ -8,6 +10,10 @@ interface DRMSettingsProps {
 }
 
 const DRMSettings: React.FC<DRMSettingsProps> = ({ initialSettings, onChange }) => {
+    const navigate = useNavigate();
+    const { isFeatureLocked } = useSubscription();
+    const isLocked = isFeatureLocked('view_print_limits');
+
     const [settings, setSettings] = useState<DRMSettingsType>({
         maxViews: initialSettings?.maxViews ?? null,
         maxUniqueDevices: initialSettings?.maxUniqueDevices ?? null,
@@ -28,13 +34,50 @@ const DRMSettings: React.FC<DRMSettingsProps> = ({ initialSettings, onChange }) 
     });
 
     const updateSetting = <K extends keyof DRMSettingsType>(key: K, value: DRMSettingsType[K]) => {
+        if (isLocked) return;
         const newSettings = { ...settings, [key]: value };
         setSettings(newSettings);
         onChange?.(newSettings);
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', opacity: isLocked ? 0.7 : 1, pointerEvents: isLocked ? 'none' : 'auto' }}>
+            {isLocked && (
+                <div style={{
+                    padding: '1rem',
+                    background: '#fef2f2',
+                    border: '1px solid #fee2e2',
+                    borderRadius: '12px',
+                    color: '#991b1b',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '1rem',
+                    pointerEvents: 'auto' // Allow clicking upgrade even if container is disabled
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Shield size={18} color="#dc2626" />
+                        <span><strong>View & Print Limits</strong> is a Business plan feature. Upgrade to unlock device limits, print blocks, screenshot blocks, and location limits.</span>
+                    </div>
+                    <button
+                        onClick={() => navigate('/pricing')}
+                        style={{
+                            padding: '0.5rem 1rem',
+                            background: '#dc2626',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem',
+                            whiteSpace: 'nowrap'
+                        }}
+                    >
+                        Upgrade Now
+                    </button>
+                </div>
+            )}
             {/* View & Device Limits */}
             <div style={{ padding: '1.5rem', background: '#f9fafb', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
                 <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#111827', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
