@@ -412,11 +412,9 @@ const Pricing: React.FC = () => {
                                         width: '100%',
                                         boxSizing: 'border-box'
                                     }}>
-                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#16a34a', background: '#dcfce7', padding: '2px 6px', borderRadius: '4px' }}>UPI</span>
                                         <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0070ba', background: '#e0f0ff', padding: '2px 6px', borderRadius: '4px' }}>PayPal</span>
-                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#2563eb', background: '#dbeafe', padding: '2px 6px', borderRadius: '4px' }}>Cards</span>
-                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#dc2626', background: '#fee2e2', padding: '2px 6px', borderRadius: '4px' }}>Visa/MC</span>
-                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#475569', background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>Netbanking</span>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#2563eb', background: '#dbeafe', padding: '2px 6px', borderRadius: '4px' }}>Credit/Debit Cards</span>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#dc2626', background: '#fee2e2', padding: '2px 6px', borderRadius: '4px' }}>Visa/MC/Amex</span>
                                     </div>
                                 </div>
                             )}
@@ -436,7 +434,7 @@ const Pricing: React.FC = () => {
                             { q: "What is 'Burn After Reading'?", a: "This feature allows you to set documents to automatically delete themselves after a single view, ensuring your sensitive data doesn't persist." },
                             { q: "Is it compliant?", a: "Yes! With features like Audit Trails and E2E encryption, we help businesses maintain compliance with HIPAA, GDPR, and NIST standards." },
                             { q: "Can I add my logo?", a: "Absolutely. Our White-Labeling feature allows you to add your own company logo and colors for a professional experience." },
-                            { q: "What payment methods are supported?", a: "We support both Razorpay (UPI, cards, netbanking for Indian users) and PayPal (credit/debit cards, PayPal balance for international users). Choose your preferred gateway on the pricing page." }
+                            { q: "What payment methods are supported?", a: "We support payments via PayPal, which accepts all major international credit & debit cards (Visa, MasterCard, American Express, Discover) as well as PayPal accounts." }
                         ].map((faq, i) => (
                             <div key={i}>
                                 <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.75rem' }}>{faq.q}</h4>

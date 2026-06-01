@@ -136,13 +136,13 @@ const PaymentSuccess: React.FC = () => {
                 textAlign: 'center'
             }}>
                 {/* Gateway Badge */}
-                {(isPayPal || gatewayParam === 'razorpay') && (
+                {isPayPal && (
                     <div style={{
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        background: isPayPal ? '#e0f0ff' : '#ede9fe',
-                        color: isPayPal ? '#003087' : '#5b21b6',
+                        background: '#e0f0ff',
+                        color: '#003087',
                         padding: '0.35rem 1rem',
                         borderRadius: '100px',
                         fontSize: '0.8rem',
@@ -150,8 +150,8 @@ const PaymentSuccess: React.FC = () => {
                         marginBottom: '1.5rem',
                         letterSpacing: '0.02em'
                     }}>
-                        {isPayPal ? <Globe size={14} /> : <CreditCard size={14} />}
-                        {isPayPal ? 'PayPal Payment' : 'Razorpay Payment'}
+                        <Globe size={14} />
+                        PayPal Payment
                     </div>
                 )}
 

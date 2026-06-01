@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { supabase, createSupabaseClient, getSafeSupabaseToken } from './lib/supabase';
 
-type PaymentGateway = 'razorpay' | 'paypal';
+type PaymentGateway = 'paypal';
 
 const PAYPAL_PLAN_URLS: Record<string, string> = {
     standard: `https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=${import.meta.env.VITE_PAYPAL_STANDARD_PLAN_ID || 'P-0FL71448PL026300WNIIUAVQ'}`,
@@ -80,26 +80,6 @@ const PLAN_DETAILS: Record<string, {
     }
 };
 
-const RazorpayMonogram: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        {...props}
-    >
-        <path
-            d="M22.436 0l-11.91 7.773-1.174 4.276 6.625-4.297L11.65 24h4.391l6.395-24z"
-            fill="#3397F2"
-        />
-        <path
-            d="M14.26 10.098L3.389 17.166 1.564 24h9.008l3.688-13.902Z"
-            fill="#0A2540"
-        />
-    </svg>
-);
-
 const PayPalMonogram: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     <svg
         width="26"
@@ -134,20 +114,11 @@ const Checkout: React.FC = () => {
     const { user } = useUser();
     const { getToken } = useAuth();
     const navigate = useNavigate();
-    const [selectedGateway, setSelectedGateway] = useState<PaymentGateway | null>(null);
+    const [selectedGateway, setSelectedGateway] = useState<PaymentGateway>('paypal');
     const [loading, setLoading] = useState(false);
     const [hoveredGateway, setHoveredGateway] = useState<string | null>(null);
 
-    // Contact details for Razorpay — user fills these in themselves
-    const [contactEmail, setContactEmail] = useState('');
-    const [contactPhone, setContactPhone] = useState('');
-    const [contactErrors, setContactErrors] = useState<{ email?: string; phone?: string }>({});
-
-    const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    const isValidPhone = (phone: string) => /^\+?[\d\s\-()]{7,15}$/.test(phone.trim());
-    const isContactFormValid = selectedGateway === 'razorpay'
-        ? isValidEmail(contactEmail) && isValidPhone(contactPhone)
-        : true;
+    const isContactFormValid = true;
 
     const plan = PLAN_DETAILS[planType] || PLAN_DETAILS.standard;
     const PlanIcon = plan.icon;
@@ -238,19 +209,7 @@ const Checkout: React.FC = () => {
     }, [selectedGateway, paypalScriptLoaded, planType, user, navigate]);
 
 
-    const loadRazorpay = (): Promise<boolean> => {
-        return new Promise((resolve) => {
-            if ((window as any).Razorpay) {
-                resolve(true);
-                return;
-            }
-            const script = document.createElement('script');
-            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-            script.onload = () => resolve(true);
-            script.onerror = () => resolve(false);
-            document.body.appendChild(script);
-        });
-    };
+
 
     const handlePayment = async () => {
         if (!selectedGateway || !user) return;
@@ -271,115 +230,6 @@ const Checkout: React.FC = () => {
                 // Redirect in the same tab to ensure checkout completion before redirection back
                 window.location.href = url;
             }
-        } else if (selectedGateway === 'razorpay') {
-            await handleRazorpayPayment();
-        }
-    };
-
-    const handleRazorpayPayment = async () => {
-        if (!user) return;
-
-        // Validate contact details before proceeding
-        const errors: { email?: string; phone?: string } = {};
-        if (!contactEmail.trim() || !isValidEmail(contactEmail)) {
-            errors.email = 'Please enter a valid email address';
-        }
-        if (!contactPhone.trim() || !isValidPhone(contactPhone)) {
-            errors.phone = 'Please enter a valid phone number';
-        }
-        if (Object.keys(errors).length > 0) {
-            setContactErrors(errors);
-            return;
-        }
-        setContactErrors({});
-
-        try {
-            setLoading(true);
-
-            const isLoaded = await loadRazorpay();
-            if (!isLoaded) {
-                alert('Failed to load Razorpay SDK. Please check your internet connection.');
-                setLoading(false);
-                return;
-            }
-
-            const token = await getSafeSupabaseToken(getToken);
-            const authenticatedSupabase = createSupabaseClient(token || undefined);
-
-            const headers: Record<string, string> = {
-                'Content-Type': 'application/json',
-                'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY || ''
-            };
-            if (token) {
-                headers['Authorization'] = `Bearer ${token}`;
-            }
-
-            const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-razorpay-subscription`, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({ planType, userId: user.id })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to initiate payment');
-            }
-
-            if (!data || !data.id) {
-                throw new Error('Payment creation returned empty response');
-            }
-
-            const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_Sqmswzj0yq1x8N';
-
-            const options: any = {
-                key: keyId,
-                name: 'DocTransfer',
-                description: `${plan.name} Monthly Subscription`,
-                prefill: {
-                    name: user.fullName || '',
-                    email: contactEmail.trim(),
-                    contact: contactPhone.trim()
-                },
-                theme: { color: plan.color },
-                modal: {
-                    ondismiss: () => setLoading(false)
-                },
-                subscription_id: data.id,
-                handler: async (response: any) => {
-                    try {
-                        setLoading(true);
-
-                        const { error: verifyError } = await supabase.functions.invoke('verify-razorpay-subscription', {
-                            body: {
-                                razorpay_subscription_id: response.razorpay_subscription_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                                userId: user.id,
-                                planType: planType
-                            }
-                        });
-
-                        if (verifyError) {
-                            throw new Error(verifyError.message || 'Verification failed');
-                        }
-
-                        navigate(`/payment-success?session_id=${response.razorpay_subscription_id}&gateway=razorpay`);
-                    } catch (err: any) {
-                        alert(`Payment verification failed: ${err.message}`);
-                    } finally {
-                        setLoading(false);
-                    }
-                }
-            };
-
-            const rzp = new (window as any).Razorpay(options);
-            rzp.open();
-
-        } catch (err: any) {
-            console.error('Checkout error:', err);
-            alert(`Checkout failed: ${err.message}`);
-            setLoading(false);
         }
     };
 
@@ -391,7 +241,7 @@ const Checkout: React.FC = () => {
         }}>
             <SEO
                 title={`Checkout — ${plan.name} Plan | DocTransfer`}
-                description={`Subscribe to DocTransfer ${plan.name} plan for ${plan.price}/month. Secure payment via Razorpay or PayPal.`}
+                description={`Subscribe to DocTransfer ${plan.name} plan for ${plan.price}/month. Secure payment via PayPal.`}
                 keywords="DocTransfer checkout, secure payment, subscription"
             />
 
@@ -538,154 +388,14 @@ const Checkout: React.FC = () => {
 
                     {/* Payment Gateway Cards */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
-                        {/* Razorpay Option */}
-                        <div
-                            onClick={() => setSelectedGateway('razorpay')}
-                            onMouseEnter={() => setHoveredGateway('razorpay')}
-                            onMouseLeave={() => setHoveredGateway(null)}
-                            style={{
-                                border: selectedGateway === 'razorpay'
-                                    ? '2px solid #3397F2'
-                                    : hoveredGateway === 'razorpay'
-                                        ? '2px solid #93c5fd'
-                                        : '2px solid #e2e8f0',
-                                borderRadius: '20px',
-                                padding: '1.75rem',
-                                cursor: 'pointer',
-                                transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-                                background: selectedGateway === 'razorpay'
-                                    ? 'linear-gradient(135deg, rgba(51, 151, 242, 0.04) 0%, rgba(51, 151, 242, 0.08) 100%)'
-                                    : 'white',
-                                boxShadow: selectedGateway === 'razorpay'
-                                    ? '0 12px 30px rgba(51, 151, 242, 0.15), 0 0 0 1px rgba(51, 151, 242, 0.05)'
-                                    : hoveredGateway === 'razorpay'
-                                        ? '0 8px 20px rgba(0,0,0,0.06)'
-                                        : '0 2px 8px rgba(0,0,0,0.02)',
-                                transform: selectedGateway === 'razorpay'
-                                    ? 'translateY(-2px) scale(1.005)'
-                                    : hoveredGateway === 'razorpay'
-                                        ? 'translateY(-2px) scale(1.005)'
-                                        : 'translateY(0) scale(1)',
-                                position: 'relative',
-                                overflow: 'hidden'
-                            }}
-                        >
-                            {/* Selection indicator */}
-                            <div style={{
-                                position: 'absolute',
-                                top: '1.75rem',
-                                right: '1.75rem',
-                                width: '26px',
-                                height: '26px',
-                                borderRadius: '50%',
-                                border: selectedGateway === 'razorpay' ? 'none' : '2px solid #cbd5e1',
-                                background: selectedGateway === 'razorpay'
-                                    ? 'linear-gradient(135deg, #3397F2 0%, #0052FF 100%)'
-                                    : 'white',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-                            }}>
-                                {selectedGateway === 'razorpay' && <Check size={15} color="white" strokeWidth={3.5} />}
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1.25rem' }}>
-                                <div style={{
-                                    width: '56px',
-                                    height: '56px',
-                                    borderRadius: '14px',
-                                    background: '#ffffff',
-                                    border: '1px solid #e2e8f0',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
-                                    flexShrink: 0,
-                                    padding: '10px'
-                                }}>
-                                    <RazorpayMonogram style={{ width: '32px', height: '32px' }} />
-                                </div>
-                                <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                        <h3 style={{
-                                            fontSize: '1.2rem',
-                                            fontWeight: 800,
-                                            color: '#0f172a',
-                                            margin: 0,
-                                            letterSpacing: '-0.01em'
-                                        }}>Razorpay</h3>
-                                        <span style={{
-                                            fontSize: '0.65rem',
-                                            fontWeight: 800,
-                                            background: '#dbeafe',
-                                            color: '#1d4ed8',
-                                            padding: '3px 8px',
-                                            borderRadius: '6px',
-                                            letterSpacing: '0.05em'
-                                        }}>🇮🇳 DOMESTIC (INDIA)</span>
-                                    </div>
-                                    <p style={{ color: '#64748b', fontSize: '0.88rem', margin: '0.25rem 0 0', lineHeight: 1.4 }}>
-                                        Best for Indian accounts — UPI, Credit/Debit Cards, Netbanking & Wallets
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div style={{
-                                display: 'flex',
-                                gap: '0.5rem',
-                                flexWrap: 'wrap',
-                                paddingLeft: '72px'
-                            }}>
-                                {[
-                                    { label: 'UPI (GPay/PhonePe)', color: '#16a34a', bg: '#dcfce7' },
-                                    { label: 'Visa', color: '#1e40af', bg: '#dbeafe' },
-                                    { label: 'Mastercard', color: '#dc2626', bg: '#fee2e2' },
-                                    { label: 'RuPay', color: '#7c3aed', bg: '#ede9fe' },
-                                    { label: 'Netbanking', color: '#475569', bg: '#f1f5f9' },
-                                    { label: 'Wallets', color: '#0891b2', bg: '#cffafe' }
-                                ].map(m => (
-                                    <span key={m.label} style={{
-                                        fontSize: '0.72rem',
-                                        fontWeight: 700,
-                                        color: m.color,
-                                        background: m.bg,
-                                        padding: '4px 10px',
-                                        borderRadius: '8px',
-                                        letterSpacing: '0.01em'
-                                    }}>{m.label}</span>
-                                ))}
-                            </div>
-                        </div>
-
                         {/* PayPal Option */}
                         <div
-                            onClick={() => setSelectedGateway('paypal')}
-                            onMouseEnter={() => setHoveredGateway('paypal')}
-                            onMouseLeave={() => setHoveredGateway(null)}
                             style={{
-                                border: selectedGateway === 'paypal'
-                                    ? '2px solid #0070ba'
-                                    : hoveredGateway === 'paypal'
-                                        ? '2px solid #7dc5ed'
-                                        : '2px solid #e2e8f0',
+                                border: '2px solid #0070ba',
                                 borderRadius: '20px',
                                 padding: '1.75rem',
-                                cursor: 'pointer',
-                                transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-                                background: selectedGateway === 'paypal'
-                                    ? 'linear-gradient(135deg, rgba(0, 112, 186, 0.04) 0%, rgba(0, 48, 135, 0.08) 100%)'
-                                    : 'white',
-                                boxShadow: selectedGateway === 'paypal'
-                                    ? '0 12px 30px rgba(0, 112, 186, 0.15), 0 0 0 1px rgba(0, 112, 186, 0.05)'
-                                    : hoveredGateway === 'paypal'
-                                        ? '0 8px 20px rgba(0,0,0,0.06)'
-                                        : '0 2px 8px rgba(0,0,0,0.02)',
-                                transform: selectedGateway === 'paypal'
-                                    ? 'translateY(-2px) scale(1.005)'
-                                    : hoveredGateway === 'paypal'
-                                        ? 'translateY(-2px) scale(1.005)'
-                                        : 'translateY(0) scale(1)',
+                                background: 'linear-gradient(135deg, rgba(0, 112, 186, 0.04) 0%, rgba(0, 48, 135, 0.08) 100%)',
+                                boxShadow: '0 12px 30px rgba(0, 112, 186, 0.15), 0 0 0 1px rgba(0, 112, 186, 0.05)',
                                 position: 'relative',
                                 overflow: 'hidden'
                             }}
@@ -698,16 +408,12 @@ const Checkout: React.FC = () => {
                                 width: '26px',
                                 height: '26px',
                                 borderRadius: '50%',
-                                border: selectedGateway === 'paypal' ? 'none' : '2px solid #cbd5e1',
-                                background: selectedGateway === 'paypal'
-                                    ? 'linear-gradient(135deg, #0079C1 0%, #003087 100%)'
-                                    : 'white',
+                                background: 'linear-gradient(135deg, #0079C1 0%, #003087 100%)',
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center',
-                                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                                justifyContent: 'center'
                             }}>
-                                {selectedGateway === 'paypal' && <Check size={15} color="white" strokeWidth={3.5} />}
+                                <Check size={15} color="white" strokeWidth={3.5} />
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1.25rem' }}>
@@ -743,10 +449,10 @@ const Checkout: React.FC = () => {
                                             padding: '3px 8px',
                                             borderRadius: '6px',
                                             letterSpacing: '0.05em'
-                                        }}>🌍 INTERNATIONAL</span>
+                                        }}>🌍 SECURE PAYMENT</span>
                                     </div>
                                     <p style={{ color: '#64748b', fontSize: '0.88rem', margin: '0.25rem 0 0', lineHeight: 1.4 }}>
-                                        Best for international clients — PayPal account, Credit/Debit Cards worldwide
+                                        Pay securely with credit/debit card or your PayPal account
                                     </p>
                                 </div>
                             </div>
@@ -778,145 +484,7 @@ const Checkout: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Razorpay Contact Details Form */}
-                    {selectedGateway === 'razorpay' && (
-                        <div style={{
-                            background: 'white',
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '16px',
-                            padding: '1.5rem 1.75rem',
-                            marginBottom: '1.5rem',
-                            boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
-                            animation: 'fadeSlideIn 0.35s ease-out'
-                        }}>
-                            <h3 style={{
-                                fontSize: '0.95rem',
-                                fontWeight: 700,
-                                color: '#0f172a',
-                                margin: '0 0 0.25rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem'
-                            }}>
-                                <CreditCard size={18} color={plan.color} />
-                                Contact Details for Payment
-                            </h3>
-                            <p style={{
-                                color: '#64748b',
-                                fontSize: '0.82rem',
-                                margin: '0 0 1.25rem',
-                                lineHeight: 1.5
-                            }}>
-                                Enter the email and phone number for payment receipts & notifications.
-                            </p>
 
-                            {/* Email Field */}
-                            <div style={{ marginBottom: '1rem' }}>
-                                <label style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.4rem',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 600,
-                                    color: '#334155',
-                                    marginBottom: '0.4rem'
-                                }}>
-                                    <Mail size={14} color="#64748b" />
-                                    Email Address
-                                </label>
-                                <input
-                                    type="email"
-                                    value={contactEmail}
-                                    onChange={(e) => {
-                                        setContactEmail(e.target.value);
-                                        if (contactErrors.email) setContactErrors(prev => ({ ...prev, email: undefined }));
-                                    }}
-                                    placeholder="you@example.com"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem 1rem',
-                                        borderRadius: '10px',
-                                        border: contactErrors.email ? '1.5px solid #ef4444' : '1.5px solid #e2e8f0',
-                                        fontSize: '0.9rem',
-                                        fontWeight: 500,
-                                        color: '#0f172a',
-                                        outline: 'none',
-                                        transition: 'border-color 0.2s, box-shadow 0.2s',
-                                        background: '#fafbfc',
-                                        boxSizing: 'border-box'
-                                    }}
-                                    onFocus={(e) => {
-                                        e.currentTarget.style.borderColor = plan.color;
-                                        e.currentTarget.style.boxShadow = `0 0 0 3px ${plan.color}18`;
-                                        e.currentTarget.style.background = '#fff';
-                                    }}
-                                    onBlur={(e) => {
-                                        e.currentTarget.style.borderColor = contactErrors.email ? '#ef4444' : '#e2e8f0';
-                                        e.currentTarget.style.boxShadow = 'none';
-                                        e.currentTarget.style.background = '#fafbfc';
-                                    }}
-                                />
-                                {contactErrors.email && (
-                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', fontWeight: 500, margin: '0.3rem 0 0' }}>
-                                        {contactErrors.email}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Phone Field */}
-                            <div>
-                                <label style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.4rem',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 600,
-                                    color: '#334155',
-                                    marginBottom: '0.4rem'
-                                }}>
-                                    <Phone size={14} color="#64748b" />
-                                    Phone Number
-                                </label>
-                                <input
-                                    type="tel"
-                                    value={contactPhone}
-                                    onChange={(e) => {
-                                        setContactPhone(e.target.value);
-                                        if (contactErrors.phone) setContactErrors(prev => ({ ...prev, phone: undefined }));
-                                    }}
-                                    placeholder="+91 98765 43210"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem 1rem',
-                                        borderRadius: '10px',
-                                        border: contactErrors.phone ? '1.5px solid #ef4444' : '1.5px solid #e2e8f0',
-                                        fontSize: '0.9rem',
-                                        fontWeight: 500,
-                                        color: '#0f172a',
-                                        outline: 'none',
-                                        transition: 'border-color 0.2s, box-shadow 0.2s',
-                                        background: '#fafbfc',
-                                        boxSizing: 'border-box'
-                                    }}
-                                    onFocus={(e) => {
-                                        e.currentTarget.style.borderColor = plan.color;
-                                        e.currentTarget.style.boxShadow = `0 0 0 3px ${plan.color}18`;
-                                        e.currentTarget.style.background = '#fff';
-                                    }}
-                                    onBlur={(e) => {
-                                        e.currentTarget.style.borderColor = contactErrors.phone ? '#ef4444' : '#e2e8f0';
-                                        e.currentTarget.style.boxShadow = 'none';
-                                        e.currentTarget.style.background = '#fafbfc';
-                                    }}
-                                />
-                                {contactErrors.phone && (
-                                    <p style={{ color: '#ef4444', fontSize: '0.75rem', fontWeight: 500, margin: '0.3rem 0 0' }}>
-                                        {contactErrors.phone}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                    )}
 
                     {/* Subscribe Button / PayPal Buttons Container */}
                     {selectedGateway === 'paypal' && (planType !== 'standard' && planType !== 'business') ? (
@@ -944,35 +512,27 @@ const Checkout: React.FC = () => {
                     ) : (
                         <button
                             onClick={handlePayment}
-                            disabled={!selectedGateway || loading || !isContactFormValid}
+                            disabled={loading}
                             style={{
                                 width: '100%',
                                 padding: '1.25rem 2rem',
                                 borderRadius: '14px',
                                 border: 'none',
-                                background: !selectedGateway
-                                    ? '#e2e8f0'
-                                    : selectedGateway === 'paypal'
-                                        ? 'linear-gradient(135deg, #0070ba 0%, #003087 100%)'
-                                        : 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                                color: !selectedGateway ? '#94a3b8' : 'white',
+                                background: 'linear-gradient(135deg, #0070ba 0%, #003087 100%)',
+                                color: 'white',
                                 fontWeight: 800,
                                 fontSize: '1.05rem',
-                                cursor: !selectedGateway ? 'not-allowed' : 'pointer',
+                                cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '0.75rem',
                                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                boxShadow: !selectedGateway
-                                    ? 'none'
-                                    : selectedGateway === 'paypal'
-                                        ? '0 8px 24px rgba(0, 112, 186, 0.35)'
-                                        : '0 8px 24px rgba(37, 99, 235, 0.35)',
+                                boxShadow: '0 8px 24px rgba(0, 112, 186, 0.35)',
                                 letterSpacing: '0.01em'
                             }}
                             onMouseEnter={(e) => {
-                                if (selectedGateway && !loading) {
+                                if (!loading) {
                                     e.currentTarget.style.transform = 'translateY(-2px)';
                                     e.currentTarget.style.filter = 'brightness(1.06)';
                                 }
@@ -987,8 +547,6 @@ const Checkout: React.FC = () => {
                                     <Loader2 size={22} className="checkout-spin" />
                                     Processing...
                                 </>
-                            ) : !selectedGateway ? (
-                                <>Select a payment method to continue</>
                             ) : (
                                 <>
                                     <Lock size={18} />
