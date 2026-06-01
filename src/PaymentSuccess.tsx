@@ -20,7 +20,12 @@ const PaymentSuccess: React.FC = () => {
     const navigate = useNavigate();
 
     const isPayPal = gatewayParam === 'paypal';
-    const payPalToken = searchParams.get('token') || searchParams.get('PayerID') || searchParams.get('paymentId');
+    const payPalToken = searchParams.get('token') || 
+                        searchParams.get('PayerID') || 
+                        searchParams.get('paymentId') || 
+                        searchParams.get('payment_id') || 
+                        searchParams.get('payer_id') || 
+                        searchParams.get('subscription_id');
 
     useEffect(() => {
         const verifyPayPal = async (token: string) => {
@@ -84,8 +89,9 @@ const PaymentSuccess: React.FC = () => {
                     // For PayPal, call verification edge function with token then check
                     verifyPayPal(payPalToken).then(() => checkSubscription());
                 } else {
-                    // Block activation if no PayPal token is present
-                    setVerifying(false);
+                    // Tweak: Add fallback subscription polling if token is missing (handles seamless webhook flow)
+                    console.log("No PayPal token in URL. Trying subscription check fallback...");
+                    checkSubscription();
                 }
             } else if (sessionId) {
                 checkSubscription();
