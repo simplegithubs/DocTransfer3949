@@ -41,16 +41,24 @@ const Pricing: React.FC = () => {
     const { user } = useUser();
     const navigate = useNavigate();
     const [currentPlan, setCurrentPlan] = useState<string | null>(null);
+    const [hasUsedTrial, setHasUsedTrial] = useState<boolean>(false);
+    const [isTrialing, setIsTrialing] = useState<boolean>(false);
+    const { getToken } = useAuth();
+    const [startingTrial, setStartingTrial] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchCurrentPlan = async () => {
             if (user) {
                 const { data } = await supabase
                     .from('subscriptions')
-                    .select('plan_type')
+                    .select('plan_type, status, trial_end')
                     .eq('user_id', user.id)
                     .single();
-                if (data) setCurrentPlan(data.plan_type);
+                if (data) {
+                    setCurrentPlan(data.plan_type);
+                    setHasUsedTrial(!!data.trial_end);
+                    setIsTrialing(data.status === 'trialing');
+                }
             }
         };
         fetchCurrentPlan();
@@ -64,6 +72,36 @@ const Pricing: React.FC = () => {
 
         if (planType === 'free') {
             navigate('/dataroom');
+            return;
+        }
+
+        if (!hasUsedTrial) {
+            try {
+                setStartingTrial(planType);
+                const token = await getToken({ template: 'supabase' });
+                const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+                
+                const response = await fetch(`${supabaseUrl}/functions/v1/start-free-trial`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ userId: user.id, planType })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || 'Failed to start trial');
+                }
+                
+                navigate('/dataroom?trial_started=true');
+            } catch (err: any) {
+                console.error(err);
+                alert(`Error starting free trial: ${err.message || 'Please try again'}`);
+            } finally {
+                setStartingTrial(null);
+            }
             return;
         }
 
@@ -374,8 +412,16 @@ const Pricing: React.FC = () => {
                                     }
                                 }}
                                 >
-                                {currentPlan === plan.planType ? 'Current Plan' : plan.cta}
-                                {currentPlan !== plan.planType && (
+                                {startingTrial === plan.planType ? (
+                                    <><Loader2 size={20} className="animate-spin" /> Starting Trial...</>
+                                ) : currentPlan === plan.planType ? (
+                                    'Current Plan'
+                                ) : plan.planType !== 'free' && !hasUsedTrial ? (
+                                    'Start 14-Day Free Trial'
+                                ) : (
+                                    plan.cta
+                                )}
+                                {currentPlan !== plan.planType && startingTrial !== plan.planType && (
                                     <Zap size={20} fill="currentColor" />
                                 )}
                             </button>

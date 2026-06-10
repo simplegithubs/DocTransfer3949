@@ -39,6 +39,7 @@ import useSubscription from './hooks/useSubscription';
 import PremiumBadge from './components/PremiumBadge';
 import UpgradeModal from './components/UpgradeModal';
 import UsageLimitBanner from './components/UsageLimitBanner';
+import TrialTrackingBar from './components/TrialTrackingBar';
 import SelfDestructSettings from './components/SelfDestructSettings';
 import SEO from './components/SEO';
 import { BASE_URL } from './lib/seo';
@@ -204,8 +205,18 @@ const DataRoom: React.FC = () => {
         
         if (files.length > 0) {
             const remaining = getRemainingUploads();
-            if (remaining <= 0 && subscription?.plan_type === 'free') {
-                setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
+            const isTrial = subscription?.status === 'trialing';
+            const isFree = subscription?.plan_type === 'free';
+            if ((isFree || isTrial) && (remaining <= 0 || files.length > remaining)) {
+                if (isTrial) {
+                    if (remaining <= 0) {
+                        setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
+                    } else {
+                        setUploadError(`Daily upload limit of 10 files reached. You only have ${remaining} uploads remaining today, but selected ${files.length} files.`);
+                    }
+                } else {
+                    setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
+                }
                 handleLockedFeatureClick('Unlimited Uploads');
                 return;
             }
@@ -227,6 +238,24 @@ const DataRoom: React.FC = () => {
             handleLockedFeatureClick('Document Bundles');
             return;
         }
+
+        const remaining = getRemainingUploads();
+        const isTrial = subscription?.status === 'trialing';
+        const isFree = subscription?.plan_type === 'free';
+        if ((isFree || isTrial) && (remaining <= 0 || files.length > remaining)) {
+            if (isTrial) {
+                if (remaining <= 0) {
+                    setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
+                } else {
+                    setUploadError(`Daily upload limit of 10 files reached. You only have ${remaining} uploads remaining today, but selected ${files.length} files.`);
+                }
+            } else {
+                setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
+            }
+            handleLockedFeatureClick('Unlimited Uploads');
+            return;
+        }
+
         setSelectedFiles(files);
         setUploadedDoc(null);
         setUploadedBundleLink(null);
@@ -240,8 +269,18 @@ const DataRoom: React.FC = () => {
 
         // Check overall limits first
         const remainingUploads = getRemainingUploads();
-        if (subscription?.plan_type === 'free' && remainingUploads <= 0) {
-            setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
+        const isTrial = subscription?.status === 'trialing';
+        const isFree = subscription?.plan_type === 'free';
+        if ((isFree || isTrial) && (remainingUploads <= 0 || selectedFiles.length > remainingUploads)) {
+            if (isTrial) {
+                if (remainingUploads <= 0) {
+                    setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
+                } else {
+                    setUploadError(`Daily upload limit of 10 files reached. You only have ${remainingUploads} uploads remaining today, but selected ${selectedFiles.length} files.`);
+                }
+            } else {
+                setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
+            }
             handleLockedFeatureClick('Unlimited Uploads');
             return;
         }
@@ -561,6 +600,47 @@ const DataRoom: React.FC = () => {
 
                     </div>
 
+                    {/* Trial Banner */}
+                    {subscription?.trial_end && subscription?.status !== 'active' && (
+                        <div style={{ marginBottom: '2rem' }}>
+                            {new Date(subscription.trial_end) > new Date() ? (
+                                <div style={{ background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)', border: '1px solid #bae6fd', borderRadius: '12px', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div style={{ background: '#3b82f6', color: 'white', padding: '0.5rem', borderRadius: '50%' }}>
+                                            <Clock size={20} />
+                                        </div>
+                                        <div>
+                                            <h4 style={{ margin: 0, color: '#0369a1', fontSize: '1rem', fontWeight: 600 }}>Your Free Trial is Active</h4>
+                                            <p style={{ margin: 0, color: '#0284c7', fontSize: '0.875rem' }}>
+                                                You have {Math.ceil((new Date(subscription.trial_end).getTime() - new Date().getTime()) / (1000 * 3600 * 24))} days remaining in your trial.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => navigate('/pricing')} style={{ padding: '0.5rem 1rem', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
+                                        Upgrade Now
+                                    </button>
+                                </div>
+                            ) : (
+                                <div style={{ background: 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)', border: '1px solid #fecaca', borderRadius: '12px', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div style={{ background: '#ef4444', color: 'white', padding: '0.5rem', borderRadius: '50%' }}>
+                                            <Flame size={20} />
+                                        </div>
+                                        <div>
+                                            <h4 style={{ margin: 0, color: '#991b1b', fontSize: '1rem', fontWeight: 600 }}>Your Free Trial has Expired</h4>
+                                            <p style={{ margin: 0, color: '#b91c1c', fontSize: '0.875rem' }}>
+                                                Your account has been downgraded to the Free plan. Upgrade to regain access to premium features.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => navigate('/pricing')} style={{ padding: '0.5rem 1rem', background: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
+                                        View Plans
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/* Stats Grid / Animation */}
                     <div style={{ marginBottom: '2rem' }}>
                         <DashboardAnimation />
@@ -793,14 +873,13 @@ const DataRoom: React.FC = () => {
                                         </div>
                                     )}
 
-                                    {/* Usage Limit Banner for Free Plan */}
-                                    {subscription && (
-                                        <UsageLimitBanner
-                                            currentUploads={subscription.plan_type === 'free' ? yearlyUploadCount : (usage?.documents_uploaded || 0)}
-                                            maxUploads={subscription.plan_type === 'free' ? 30 : 300} // yearly vs monthly
-                                            planType={subscription.plan_type}
+                                    {/* Usage Limit Banner / Trial Tracking */}
+                                    {subscription && (subscription.status === 'trialing' || subscription.plan_type === 'free') ? (
+                                        <TrialTrackingBar
+                                            currentUploads={dailyUploadCount}
+                                            maxUploads={10}
                                         />
-                                    )}
+                                    ) : null}
 
                                     {/* Upload Area */}
                                     <div

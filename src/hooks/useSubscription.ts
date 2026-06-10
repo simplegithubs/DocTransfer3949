@@ -280,8 +280,11 @@ export const useSubscription = () => {
      */
     const canUpload = (): boolean => {
         if (!user) return true;
-        if (!subscription || subscription.plan_type !== 'free') return true;
-        return yearlyUploadCount < 30;
+        if (!subscription) return true;
+        if (subscription.status === 'trialing' || subscription.plan_type === 'free') {
+            return dailyUploadCount < 10;
+        }
+        return true;
     };
 
     /**
@@ -352,9 +355,13 @@ export const useSubscription = () => {
      */
     const getRemainingUploads = (): number => {
         if (!user || isLoading) return Infinity; // Don't block while loading or if not logged in
-        if (!subscription || subscription.plan_type !== 'free') return Infinity; // Unlimited for paid plans
+        if (!subscription) return Infinity;
 
-        return Math.max(0, 30 - yearlyUploadCount);
+        if (subscription.status === 'trialing' || subscription.plan_type === 'free') {
+            return Math.max(0, 10 - dailyUploadCount);
+        }
+
+        return Infinity; // Unlimited for active paid plans
     };
 
     /**

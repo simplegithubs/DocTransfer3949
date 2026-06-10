@@ -22,6 +22,8 @@ import { supabase } from './lib/supabase';
 import useSubscription from './hooks/useSubscription';
 import UpgradeModal from './components/UpgradeModal';
 import PremiumBadge from './components/PremiumBadge';
+import TrialTrackingBar from './components/TrialTrackingBar';
+import UsageLimitBanner from './components/UsageLimitBanner';
 
 interface Document {
     id: string;
@@ -63,7 +65,7 @@ const DocumentSharing: React.FC = () => {
     const [allowedEmail, setAllowedEmail] = useState('');
 
     // Subscription & Paywall
-    const { subscription, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
+    const { subscription, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription, dailyUploadCount, yearlyUploadCount } = useSubscription();
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
     const [lockedFeatureName, setLockedFeatureName] = useState<string | undefined>();
 
@@ -114,6 +116,19 @@ const DocumentSharing: React.FC = () => {
 
     const handleFileSelection = (file: File) => {
         setUploadError(null);
+        const remaining = getRemainingUploads();
+        const isTrial = subscription?.status === 'trialing';
+        const isFree = subscription?.plan_type === 'free';
+        if ((isFree || isTrial) && remaining <= 0) {
+            if (isTrial) {
+                setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
+            } else {
+                setUploadError("Yearly link upload limit reached (30 documents per year). Please upgrade for unlimited uploads.");
+            }
+            handleLockedFeatureClick('Unlimited Uploads');
+            return;
+        }
+
         const maxSizeBytes = getMaxFileSize();
         if (file.size > maxSizeBytes) {
             const formatSize = (bytes: number) => (bytes / (1024 * 1024)).toFixed(0);
@@ -143,9 +158,15 @@ const DocumentSharing: React.FC = () => {
         if (!uploadedFile) return;
 
         const remaining = getRemainingUploads();
-        if (subscription?.plan_type === 'free' && remaining <= 0) {
-            setUploadError("Yearly link upload limit reached (30 documents per year). Please upgrade for unlimited uploads.");
-            handleLockedFeatureClick('30 Documents Upload Limit');
+        const isTrial = subscription?.status === 'trialing';
+        const isFree = subscription?.plan_type === 'free';
+        if ((isFree || isTrial) && remaining <= 0) {
+            if (isTrial) {
+                setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
+            } else {
+                setUploadError("Yearly link upload limit reached (30 documents per year). Please upgrade for unlimited uploads.");
+            }
+            handleLockedFeatureClick('Unlimited Uploads');
             return;
         }
 
@@ -236,6 +257,14 @@ const DocumentSharing: React.FC = () => {
                         <h2>Document Sharing</h2>
                         <p>Securely upload, manage, and share your documents with advanced control.</p>
                     </div>
+
+                    {/* Usage Limit Banner / Trial Tracking */}
+                    {subscription && (subscription.status === 'trialing' || subscription.plan_type === 'free') ? (
+                        <TrialTrackingBar
+                            currentUploads={dailyUploadCount}
+                            maxUploads={10}
+                        />
+                    ) : null}
 
                     {/* Upload Zone */}
                     <div
