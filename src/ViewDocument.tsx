@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { comparePassword, rateLimiter } from './lib/security';
 import { FileText, Download, AlertCircle, Lock as LockIcon, Package, ArrowRight, ExternalLink, Flame, ShieldCheck, Video, Music, Image as ImageIcon, Table, Archive, Mail } from 'lucide-react';
-import { logDocumentView, logDocumentDownload, logPasswordVerification, logEmailVerification } from './lib/auditLogger';
+import { logDocumentView, logDocumentDownload, logPasswordVerification, logEmailVerification, getGeolocation } from './lib/auditLogger';
 import WatermarkOverlay from './components/WatermarkOverlay';
 import { applyPdfWatermark, applyImageWatermark } from './lib/watermarkGenerator';
 import WebcamGate from './components/WebcamGate';
@@ -100,6 +100,7 @@ const ViewDocument: React.FC = () => {
     const [viewerIp, setViewerIp] = useState<string>('Unknown IP');
     const [isWatermarking, setIsWatermarking] = useState(false);
     const hasTracked = useRef(false);
+    const trackingCleanupRef = useRef<(() => void) | null>(null);
 
 
     const [branding, setBranding] = useState<{
@@ -115,6 +116,9 @@ const ViewDocument: React.FC = () => {
     const [isDecrypting, setIsDecrypting] = useState(false);
 
     useEffect(() => {
+        // Reset tracking state when loading a new shareLink
+        hasTracked.current = false;
+        
         fetchDocument();
         fetchViewerIp();
         
@@ -122,6 +126,13 @@ const ViewDocument: React.FC = () => {
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const key = hashParams.get('key');
         if (key) setDecryptionKey(key);
+
+        return () => {
+            if (trackingCleanupRef.current) {
+                trackingCleanupRef.current();
+                trackingCleanupRef.current = null;
+            }
+        };
     }, [shareLink]);
 
     useEffect(() => {
@@ -371,23 +382,41 @@ const ViewDocument: React.FC = () => {
         hasTracked.current = true;
         
         try {
-            // 1. Get/Create Session Logic
-            let geoData = null;
+            // Await IP address fetch synchronously to guarantee availability before session creation
+            let ip = null;
             try {
-                // Try a privacy-friendly IP/location service if available, or just send null to let backend/edge handle it
-                // For this demo we'll skip external fetch to avoid CORS blocks on localhost, backend will handle IP
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                if (data.ip) {
+                    ip = data.ip;
+                    setViewerIp(data.ip); // Sync state for watermark etc.
+                }
             } catch (e) {
-                console.warn('Failed to fetch geolocation', e);
+                console.warn('Failed to fetch viewer IP inside trackView:', e);
             }
+
+            // Retrieve geolocation from IP address using the imported getGeolocation
+            let geoData = null;
+            if (ip) {
+                try {
+                    geoData = await getGeolocation(ip);
+                } catch (e) {
+                    console.warn('Failed to fetch geolocation in trackView:', e);
+                }
+            }
+
+            // Create unique session token (since table requires non-null, unique session_token)
+            const sessionToken = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
 
             // Create Session
             const { data: sessionData, error: sessionError } = await supabase
                 .from('document_access_sessions')
                 .insert({
                     document_id: documentId,
+                    session_token: sessionToken,
                     user_agent: navigator.userAgent,
-                    ip_address: viewerIp !== 'Unknown IP' ? viewerIp : null,
-                    geolocation: viewerIp !== 'Unknown IP' ? { country: 'Unknown', city: 'Unknown' } : null // Placeholder, actual geo can be added if needed
+                    ip_address: ip,
+                    geolocation: geoData
                 })
                 .select('id')
                 .single();
@@ -407,7 +436,7 @@ const ViewDocument: React.FC = () => {
                         session_id: sessionData.id,
                         document_id: documentId,
                         page_number: 1,
-                        ip_address: viewerIp !== 'Unknown IP' ? viewerIp : null,
+                        ip_address: ip,
                         user_agent: navigator.userAgent
                     })
                     .select('id')
@@ -435,10 +464,11 @@ const ViewDocument: React.FC = () => {
                             .update({ duration_seconds: finalDuration })
                             .eq('id', viewData.id)
                             .then(() => { });
+                        window.removeEventListener('beforeunload', cleanup);
                     };
 
                     window.addEventListener('beforeunload', cleanup);
-                    return cleanup;
+                    trackingCleanupRef.current = cleanup;
                 }
             }
         } catch (err) {

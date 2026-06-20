@@ -506,7 +506,6 @@ const Pricing: React.FC = () => {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                 <Link to="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>Home</Link>
                                 <Link to="/pricing" style={{ color: '#94a3b8', textDecoration: 'none' }}>Pricing</Link>
-                                <Link to="/blog" style={{ color: '#94a3b8', textDecoration: 'none' }}>Blog</Link>
                             </div>
                         </div>
                         <div>

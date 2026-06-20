@@ -8,7 +8,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.j
 
 export interface SignatureField {
     id: string;
-    type: 'signature' | 'initials' | 'text' | 'date' | 'checkbox';
+    type: 'signature' | 'initials' | 'text' | 'date' | 'checkbox' | 'email' | 'company' | 'title' | 'stamp';
     page: number;
     x: number; // Percentage 0-100
     y: number; // Percentage 0-100
@@ -16,6 +16,8 @@ export interface SignatureField {
     height: number; // Percentage
     signerId: string;
     required: boolean;
+    value?: string;
+    stampType?: string;
 }
 
 interface SignatureFieldEditorProps {

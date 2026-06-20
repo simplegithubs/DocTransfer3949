@@ -69,13 +69,78 @@ export const createSignatureFields = async (
             is_required: field.required
         }));
 
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('signature_fields')
-            .insert(fieldsToInsert);
+            .insert(fieldsToInsert)
+            .select();
 
         if (error) {
             console.error('Error creating signature fields:', error);
             return { success: false, error: error.message };
+        }
+
+        // Handle prefilled/pre-signed fields
+        if (data && data.length > 0) {
+            const recordsToInsert = [];
+            const signersToUpdate = new Set<string>();
+
+            for (let i = 0; i < fields.length; i++) {
+                const field = fields[i];
+                const insertedField = data[i];
+
+                if (insertedField && (field.value || field.stampType)) {
+                    const dbSignerId = signerIdMap[field.signerId];
+                    let signatureData = field.value || '';
+                    let signatureType: 'drawn' | 'typed' | 'uploaded' | 'value' = 'value';
+
+                    if (field.type === 'signature' || field.type === 'initials') {
+                        signatureType = 'drawn';
+                    } else if (field.type === 'stamp') {
+                        signatureType = 'uploaded';
+                        if (!signatureData || signatureData === 'STAMPED') {
+                            signatureData = field.stampType || 'biohazard';
+                        }
+                    }
+
+                    recordsToInsert.push({
+                        signature_field_id: insertedField.id,
+                        signer_id: dbSignerId,
+                        signature_data: signatureData,
+                        signature_type: signatureType,
+                        ip_address: '127.0.0.1',
+                        user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Server'
+                    });
+
+                    signersToUpdate.add(dbSignerId);
+                }
+            }
+
+            if (recordsToInsert.length > 0) {
+                const { error: recordError } = await supabase
+                    .from('signature_records')
+                    .insert(recordsToInsert);
+
+                if (recordError) {
+                    console.error('Error saving prefilled signature records:', recordError);
+                } else {
+                    // Update signer status for those who have completed all their assigned fields
+                    for (const dbSignerId of signersToUpdate) {
+                        const signerFields = fields.filter(f => signerIdMap[f.signerId] === dbSignerId);
+                        const allSigned = signerFields.every(f => f.value || f.stampType);
+                        if (allSigned) {
+                            await supabase
+                                .from('document_signers')
+                                .update({
+                                    status: 'signed',
+                                    signed_at: new Date().toISOString(),
+                                    ip_address: '127.0.0.1',
+                                    user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : 'Server'
+                                })
+                                .eq('id', dbSignerId);
+                        }
+                    }
+                }
+            }
         }
 
         return { success: true };

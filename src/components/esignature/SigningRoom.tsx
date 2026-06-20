@@ -13,13 +13,14 @@ import {
     Briefcase,
     Stamp as StampIcon
 } from 'lucide-react';
-import { STAMPS } from './StampSelector';
+import StampSelector, { STAMPS } from './StampSelector';
 import type { StampType } from './StampSelector';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import SignatureCanvasComponent from '../SignatureCanvas';
 import { generateCertificateOfCompletion } from '../../lib/certificateGenerator';
 import { fetchAuditLogs } from '../../lib/auditLogger';
+import { supabase } from '../../lib/supabase';
 
 // Reuse worker setup from DocumentEditor or set globally
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -38,8 +39,38 @@ const SigningRoom: React.FC<SigningRoomProps> = ({ fileUrl, fields, onComplete, 
     const [fieldValues, setFieldValues] = useState<Record<string, string | null>>({});
     const [activeField, setActiveField] = useState<string | null>(null); // ID of field being edited
     const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
+    const [isStampSelectorOpen, setIsStampSelectorOpen] = useState(false);
     const [completed, setCompleted] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
+
+    useEffect(() => {
+        const loadSignatureRecords = async () => {
+            if (!documentId || !fields || fields.length === 0) return;
+            try {
+                const { data: records, error } = await supabase
+                    .from('signature_records')
+                    .select('signature_field_id, signature_data')
+                    .in('signature_field_id', fields.map(f => f.id));
+
+                if (error) {
+                    console.error('Error loading signature records:', error);
+                    return;
+                }
+
+                if (records && records.length > 0) {
+                    const loadedValues: Record<string, string | null> = {};
+                    records.forEach(rec => {
+                        loadedValues[rec.signature_field_id] = rec.signature_data;
+                    });
+                    setFieldValues(prev => ({ ...prev, ...loadedValues }));
+                }
+            } catch (err) {
+                console.error('Failed to load signature records:', err);
+            }
+        };
+
+        loadSignatureRecords();
+    }, [documentId, fields]);
 
     // Calculate progress
     const completedFields = Object.keys(fieldValues).filter(k => fieldValues[k]).length;
@@ -68,9 +99,16 @@ const SigningRoom: React.FC<SigningRoomProps> = ({ fileUrl, fields, onComplete, 
                 setFieldValues(prev => ({ ...prev, [field.id]: text }));
             }
         } else if (field.type === 'stamp') {
-            // For stamp, we might want an image uploader or just a standard "STAMPED" text for now.
-            // Let's simluate a stamp action
-            setFieldValues(prev => ({ ...prev, [field.id]: 'STAMPED' }));
+            setActiveField(field.id);
+            setIsStampSelectorOpen(true);
+        }
+    };
+
+    const handleStampSelect = (stampType: StampType) => {
+        if (activeField) {
+            setFieldValues(prev => ({ ...prev, [activeField]: stampType }));
+            setIsStampSelectorOpen(false);
+            setActiveField(null);
         }
     };
 
@@ -201,9 +239,10 @@ const SigningRoom: React.FC<SigningRoomProps> = ({ fileUrl, fields, onComplete, 
                             color: rgb(0, 0, 0),
                         });
                     } else if (field.type === 'stamp') {
-                        if (field.stampType && STAMPS[field.stampType as StampType]) {
+                        const stampKey = value || field.stampType;
+                        if (stampKey && STAMPS[stampKey as StampType]) {
                             try {
-                                const stampDef = STAMPS[field.stampType as StampType];
+                                const stampDef = STAMPS[stampKey as StampType];
                                 const svgString = stampDef.svgString;
 
                                 // Create a blob from the SVG string
@@ -563,6 +602,15 @@ const SigningRoom: React.FC<SigningRoomProps> = ({ fileUrl, fields, onComplete, 
                     />
                 )
             }
+
+            {/* Stamp Selector Modal */}
+            {isStampSelectorOpen && (
+                <StampSelector
+                    isOpen={isStampSelectorOpen}
+                    onClose={() => setIsStampSelectorOpen(false)}
+                    onSelect={handleStampSelect}
+                />
+            )}
         </div >
     );
 };

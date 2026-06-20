@@ -10,5 +10,7 @@ Disallow: /settings
 Disallow: /audit
 Disallow: /preview/
 Disallow: /api/
+Disallow: /view/
+Disallow: /sign/
 
 Sitemap: https://doctransfer.app/sitemap.xml

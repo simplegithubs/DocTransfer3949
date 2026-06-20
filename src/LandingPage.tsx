@@ -24,7 +24,6 @@ import {
   Bell,
   Flame,
   Fingerprint,
-  Camera,
   PenTool,
   Clock,
   Filter,
@@ -45,6 +44,7 @@ import {
 const LandingPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showProductMenu, setShowProductMenu] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'esignature' | 'google-drive'>('upload');
 
 
@@ -167,8 +167,6 @@ const LandingPage: React.FC = () => {
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                       {[
                         { name: 'Dynamic Watermarking', icon: Droplets, desc: 'Traceable document overlays' },
-                        { name: 'Biometric Lock', icon: Fingerprint, desc: 'Fingerprint & Face ID access' },
-                        { name: 'Webcam Snapshot', icon: Camera, desc: 'Photo verification on view' },
                         { name: 'E-Signature', icon: PenTool, desc: 'Legally binding signatures' },
                         { name: 'Deep Analytics', icon: BarChart3, desc: 'Page-level engagement tracking' },
                         { name: 'Audit Trails', icon: FileCheck, desc: 'Complete activity logs' },
@@ -191,8 +189,69 @@ const LandingPage: React.FC = () => {
               )}
             </div>
 
-            <Link to="/blog" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Blog</Link>
             <Link to="/pricing" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Pricing</Link>
+            <Link to="/comparisons" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Comparisons</Link>
+            <Link to="/blog" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Blog</Link>
+            <div
+              className="nav-item-dropdown"
+              style={{ position: 'relative', display: 'inline-block', marginRight: '1.5rem' }}
+              onMouseEnter={() => setShowMoreMenu(true)}
+              onMouseLeave={() => setShowMoreMenu(false)}
+            >
+              <button
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#4b5563',
+                  fontWeight: 500,
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0'
+                }}
+              >
+                More <ChevronDown size={16} />
+              </button>
+
+              {showMoreMenu && (
+                <div
+                  className="more-dropdown"
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: '0',
+                    width: '180px',
+                    background: 'white',
+                    borderRadius: '12px',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                    padding: '0.75rem',
+                    zIndex: 1000,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem',
+                    border: '1px solid #f3f4f6'
+                  }}
+                >
+                  <Link 
+                    to="/alternatives" 
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: '#1f2937', 
+                      fontWeight: 500,
+                      padding: '0.5rem',
+                      borderRadius: '6px',
+                      display: 'block'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    Alternatives
+                  </Link>
+                </div>
+              )}
+            </div>
             <a href="#security" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Security</a>
           </div>
           <SignedOut>
@@ -1347,6 +1406,41 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
+        {/* Popular Document Templates Section */}
+        <section className="popular-templates-section">
+          <div className="container">
+            <div className="section-header">
+              <span className="badge">Document Hub</span>
+              <h2>Popular Document Templates</h2>
+              <p>Free, legally compliant templates for startups, freelancers, and growing businesses. Open, customize, and sign securely.</p>
+            </div>
+            
+            <div className="templates-grid">
+              {[
+                { name: 'Offer Letter Template', slug: 'offer-letter', desc: 'Professional employee job offer letter with standard terms.', category: 'HR' },
+                { name: 'Non-Disclosure Agreement', slug: 'nda', desc: 'Secure unilateral confidentiality agreement to protect trade secrets.', category: 'Legal' },
+                { name: 'W-4 Form', slug: 'w4-form', desc: 'IRS Employee withholding certificate helper and signing.', category: 'Finance' },
+                { name: 'I-9 Form', slug: 'i9-form', desc: 'Employment eligibility verification helper and signature.', category: 'HR' },
+                { name: 'LLC Operating Agreement', slug: 'llc-operating', desc: 'Comprehensive multi-member or single-member LLC agreement.', category: 'Corporate' },
+                { name: 'Sublease Agreement', slug: 'sublease', desc: 'Standard sublease contract for residential or office spaces.', category: 'Real Estate' },
+                { name: 'Liability Release', slug: 'liability-release', desc: 'Standard waiver of liability and hold harmless agreement.', category: 'Legal' },
+                { name: 'Statement of Work (SOW)', slug: 'sow', desc: 'Detailed scope of work template for contractors and clients.', category: 'Operations' },
+                { name: 'Purchase Order', slug: 'purchase-order', desc: 'Standard commercial purchase order template with terms.', category: 'Finance' },
+                { name: 'Sales Contract', slug: 'sales-contract', desc: 'Goods and services sales agreement with payment clauses.', category: 'Corporate' }
+              ].map((template) => (
+                <Link to={`/templates/${template.slug}`} key={template.slug} className="template-card">
+                  <div className="template-card-header">
+                    <span className="template-category">{template.category}</span>
+                    <span className="template-arrow">→</span>
+                  </div>
+                  <h3>{template.name}</h3>
+                  <p>{template.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="cta-section">
           <div className="cta-card">
@@ -1417,11 +1511,25 @@ const LandingPage: React.FC = () => {
             </ul>
           </div>
           <div className="footer-col">
+            <h4>Popular Templates</h4>
+            <ul>
+              <li><Link to="/templates/nda">NDA Template</Link></li>
+              <li><Link to="/templates/llc-operating">LLC Agreement</Link></li>
+              <li><Link to="/templates/sublease">Sublease Agreement</Link></li>
+              <li><Link to="/templates/sow">SOW Template</Link></li>
+              <li><Link to="/templates/sales-contract">Sales Contract</Link></li>
+              <li><Link to="/templates/offer-letter">Offer Letter</Link></li>
+              <li><Link to="/templates/contractor-agreement">Contractor Agreement</Link></li>
+              <li><Link to="/templates/w4-form">W-4 Form</Link></li>
+              <li><Link to="/templates/i9-form">I-9 Form</Link></li>
+              <li><Link to="/templates/purchase-order">Purchase Order</Link></li>
+            </ul>
+          </div>
+          <div className="footer-col">
             <h4>Company</h4>
             <ul>
               <li><a href="#">About Us</a></li>
               <li><a href="#">Careers</a></li>
-              <li><a href="/blog">Blog</a></li>
               <li><a href="#">Contact</a></li>
             </ul>
           </div>

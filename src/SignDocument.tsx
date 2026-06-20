@@ -9,10 +9,18 @@ import {
     Calendar,
     Type,
     PenTool,
-    Loader2
+    Loader2,
+    Mail,
+    Building,
+    Briefcase,
+    Stamp as StampIcon,
+    ArrowRight,
+    Sparkles
 } from 'lucide-react';
 import { logAuditEvent, getUserIP, getSessionId } from './lib/auditLogger';
 import SignatureCanvasComponent from './components/SignatureCanvas';
+import StampSelector, { STAMPS } from './components/esignature/StampSelector';
+import type { StampType } from './components/esignature/StampSelector';
 
 // Set worker source
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -38,7 +46,7 @@ interface DocumentData {
 
 interface SignatureField {
     id: string;
-    field_type: 'signature' | 'initials' | 'text' | 'date' | 'checkbox';
+    field_type: 'signature' | 'initials' | 'text' | 'date' | 'checkbox' | 'email' | 'company' | 'title' | 'stamp';
     page_number: number;
     position_x: number;
     position_y: number;
@@ -46,7 +54,8 @@ interface SignatureField {
     height: number;
     assigned_signer_id: string;
     is_required: boolean;
-    value?: string; // For text/date/checkbox
+    value?: string;
+    stampType?: string;
 }
 
 const SignDocument: React.FC = () => {
@@ -60,6 +69,7 @@ const SignDocument: React.FC = () => {
     const [pdfPages, setPdfPages] = useState<string[]>([]);
     const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
     const [showSignatureCanvas, setShowSignatureCanvas] = useState(false);
+    const [isStampSelectorOpen, setIsStampSelectorOpen] = useState(false);
     const [signatureRecords, setSignatureRecords] = useState<Record<string, string>>({}); // fieldId -> signatureData (base64)
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -120,7 +130,26 @@ const SignDocument: React.FC = () => {
                     .select('*')
                     .eq('document_id', doc.id);
 
-                if (fieldsData) setFields(fieldsData);
+                if (fieldsData) {
+                    setFields(fieldsData);
+                    if (fieldsData.length > 0) {
+                        const fieldIds = fieldsData.map(f => f.id);
+                        const { data: recordsData, error: recordsError } = await supabase
+                            .from('signature_records')
+                            .select('signature_field_id, signature_data')
+                            .in('signature_field_id', fieldIds);
+
+                        if (recordsError) {
+                            console.error('Error fetching signature records:', recordsError);
+                        } else if (recordsData) {
+                            const recordsMap: Record<string, string> = {};
+                            recordsData.forEach(rec => {
+                                recordsMap[rec.signature_field_id] = rec.signature_data;
+                            });
+                            setSignatureRecords(recordsMap);
+                        }
+                    }
+                }
 
                 // 4. Download & Render Document
                 await renderDocument(doc);
@@ -188,19 +217,23 @@ const SignDocument: React.FC = () => {
             const currentVal = signatureRecords[field.id];
             const newVal = currentVal === 'checked' ? '' : 'checked';
             handleSignatureSave(newVal, 'value');
-        }
-        // Text field handling
-        if (field.field_type === 'text') {
+        } else if (['text', 'email', 'company', 'title'].includes(field.field_type)) {
             const currentVal = signatureRecords[field.id] || '';
-            const val = window.prompt('Enter text:', currentVal);
+            const val = window.prompt(`Enter ${field.field_type}:`, currentVal);
             if (val !== null) {
                 handleSignatureSave(val, 'value');
             }
-        }
-
-        if (field.field_type === 'date') {
+        } else if (field.field_type === 'date') {
             handleSignatureSave(new Date().toLocaleDateString(), 'value');
+        } else if (field.field_type === 'stamp') {
+            setIsStampSelectorOpen(true);
         }
+    };
+
+    const handleStampSelect = async (stampType: StampType) => {
+        if (!activeFieldId || !signer) return;
+        setIsStampSelectorOpen(false);
+        await handleSignatureSave(stampType, 'uploaded');
     };
 
     const handleSignatureSave = async (data: string, type: 'drawn' | 'typed' | 'uploaded' | 'value') => {
@@ -335,23 +368,299 @@ const SignDocument: React.FC = () => {
 
     if (success) {
         return (
-            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0fdf4' }}>
-                <div style={{ textAlign: 'center', padding: '3rem', background: 'white', borderRadius: '24px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', maxWidth: '500px' }}>
-                    <div style={{ width: '80px', height: '80px', background: '#dcfce7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                        <Check size={40} color="#16a34a" strokeWidth={3} />
+            <>
+                {/* Keyframe animations for the success screen */}
+                <style>{`
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+                    
+                    @keyframes dt-fadeInUp {
+                        from { opacity: 0; transform: translateY(24px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                    @keyframes dt-scalePulse {
+                        0%, 100% { transform: scale(1); }
+                        50% { transform: scale(1.08); }
+                    }
+                    @keyframes dt-shimmer {
+                        0% { background-position: -200% center; }
+                        100% { background-position: 200% center; }
+                    }
+                    @keyframes dt-float {
+                        0%, 100% { transform: translateY(0px); }
+                        50% { transform: translateY(-6px); }
+                    }
+                    @keyframes dt-checkDraw {
+                        from { stroke-dashoffset: 36; }
+                        to { stroke-dashoffset: 0; }
+                    }
+                    @keyframes dt-ringExpand {
+                        0% { transform: scale(0.6); opacity: 0; }
+                        50% { transform: scale(1.15); opacity: 0.4; }
+                        100% { transform: scale(1); opacity: 1; }
+                    }
+                    .dt-cta-btn:hover {
+                        transform: translateY(-2px) !important;
+                        box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4) !important;
+                    }
+                    .dt-cta-btn:active {
+                        transform: translateY(0px) !important;
+                    }
+                    .dt-secondary-link:hover {
+                        color: #4f46e5 !important;
+                    }
+                    .dt-feature-row:hover {
+                        background: rgba(79, 70, 229, 0.04);
+                    }
+                `}</style>
+                
+                <div style={{
+                    minHeight: '100vh',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(145deg, #0f172a 0%, #1e1b4b 40%, #312e81 70%, #1e1b4b 100%)',
+                    fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
+                    padding: '1.5rem',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}>
+                    {/* Ambient background orbs */}
+                    <div style={{ position: 'absolute', top: '-120px', right: '-80px', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', bottom: '-100px', left: '-60px', width: '350px', height: '350px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', top: '30%', left: '10%', width: '200px', height: '200px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+                    {/* Main glassmorphic card */}
+                    <div style={{
+                        background: 'rgba(255, 255, 255, 0.06)',
+                        backdropFilter: 'blur(24px)',
+                        WebkitBackdropFilter: 'blur(24px)',
+                        borderRadius: '28px',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        padding: '2.5rem 2rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        maxWidth: '480px',
+                        width: '100%',
+                        boxShadow: '0 32px 64px -12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.08)',
+                        animation: 'dt-fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                    }}>
+                        
+                        {/* Animated Success Badge */}
+                        <div style={{
+                            position: 'relative',
+                            marginBottom: '1.75rem',
+                            animation: 'dt-ringExpand 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both'
+                        }}>
+                            {/* Outer pulse ring */}
+                            <div style={{
+                                position: 'absolute',
+                                inset: '-8px',
+                                borderRadius: '50%',
+                                border: '2px solid rgba(74, 222, 128, 0.25)',
+                                animation: 'dt-scalePulse 2.5s ease-in-out infinite'
+                            }} />
+                            <div style={{
+                                width: '76px',
+                                height: '76px',
+                                background: 'linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 0 32px rgba(16, 185, 129, 0.3), 0 0 0 6px rgba(16, 185, 129, 0.08)'
+                            }}>
+                                <Check size={38} color="#ffffff" strokeWidth={3} />
+                            </div>
+                        </div>
+
+                        <h1 style={{
+                            fontSize: '1.85rem',
+                            fontWeight: '900',
+                            background: 'linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text',
+                            marginBottom: '0.6rem',
+                            letterSpacing: '-0.03em',
+                            lineHeight: '1.2'
+                        }}>
+                            Document Signed Successfully
+                        </h1>
+                        <p style={{
+                            color: 'rgba(203, 213, 225, 0.85)',
+                            fontSize: '0.9rem',
+                            lineHeight: '1.65',
+                            marginBottom: '1.75rem',
+                            maxWidth: '380px'
+                        }}>
+                            A confirmation will be sent to <span style={{ color: '#a5b4fc', fontWeight: '600' }}>{signer?.signer_email}</span> once all parties have completed signing.
+                        </p>
+
+                        {/* Divider */}
+                        <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', marginBottom: '1.75rem' }} />
+
+                        {/* PLG Growth Loop Banner */}
+                        <div style={{
+                            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.08) 100%)',
+                            border: '1px solid rgba(129, 140, 248, 0.15)',
+                            borderRadius: '20px',
+                            padding: '1.5rem',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            marginBottom: '1.5rem',
+                            textAlign: 'left',
+                            animation: 'dt-fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both'
+                        }}>
+                            {/* Pro badge */}
+                            <div style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.35rem',
+                                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)',
+                                color: '#a5b4fc',
+                                padding: '0.3rem 0.85rem',
+                                borderRadius: '9999px',
+                                fontSize: '0.7rem',
+                                fontWeight: '700',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.08em',
+                                marginBottom: '0.85rem',
+                                border: '1px solid rgba(129, 140, 248, 0.15)'
+                            }}>
+                                <Sparkles size={11} style={{ animation: 'dt-float 3s ease-in-out infinite' }} /> DocTransfer
+                            </div>
+                            
+                            <h2 style={{
+                                fontSize: '1.15rem',
+                                fontWeight: '800',
+                                color: '#f1f5f9',
+                                margin: '0 0 0.45rem 0',
+                                letterSpacing: '-0.01em',
+                                lineHeight: '1.3'
+                            }}>
+                                Need to send or track your own documents?
+                            </h2>
+                            <p style={{
+                                fontSize: '0.82rem',
+                                color: 'rgba(148, 163, 184, 0.9)',
+                                lineHeight: '1.55',
+                                margin: '0 0 1.25rem 0'
+                            }}>
+                                Create contracts, send legally-binding signature requests, and track views with military-grade security.
+                            </p>
+
+                            {/* Feature checklist */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '1.35rem' }}>
+                                {[
+                                    'Send 3 free document requests/month',
+                                    'Compliant with ESIGN & eIDAS',
+                                    'Real-time access & download analytics'
+                                ].map((feature, i) => (
+                                    <div
+                                        key={i}
+                                        className="dt-feature-row"
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.6rem',
+                                            fontSize: '0.8rem',
+                                            color: 'rgba(203, 213, 225, 0.9)',
+                                            fontWeight: '500',
+                                            padding: '0.3rem 0.4rem',
+                                            borderRadius: '8px',
+                                            transition: 'background 0.2s ease'
+                                        }}
+                                    >
+                                        <div style={{
+                                            width: '18px',
+                                            height: '18px',
+                                            borderRadius: '50%',
+                                            background: 'rgba(16, 185, 129, 0.15)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flexShrink: 0
+                                        }}>
+                                            <Check size={11} color="#34d399" strokeWidth={3} />
+                                        </div>
+                                        {feature}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Primary CTA button */}
+                            <button
+                                className="dt-cta-btn"
+                                onClick={() => window.location.href = '/checkout?utm_source=signature_success'}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.85rem 1rem',
+                                    border: 'none',
+                                    borderRadius: '14px',
+                                    background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #6366f1 100%)',
+                                    backgroundSize: '200% auto',
+                                    color: 'white',
+                                    fontWeight: '700',
+                                    fontSize: '0.92rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem',
+                                    boxShadow: '0 4px 20px rgba(79, 70, 229, 0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
+                                    transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    letterSpacing: '-0.01em',
+                                    fontFamily: "'Inter', system-ui, sans-serif"
+                                }}
+                            >
+                                Send 3 Free Documents
+                                <ArrowRight size={16} style={{ transition: 'transform 0.2s' }} />
+                            </button>
+                        </div>
+
+                        {/* Secondary link */}
+                        <button
+                            className="dt-secondary-link"
+                            onClick={() => window.location.href = '/'}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                color: 'rgba(148, 163, 184, 0.7)',
+                                fontSize: '0.85rem',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.35rem',
+                                transition: 'color 0.2s ease',
+                                fontFamily: "'Inter', system-ui, sans-serif"
+                            }}
+                        >
+                            Learn More About DocTransfer
+                        </button>
+
+                        {/* Powered by footer */}
+                        <div style={{
+                            marginTop: '1.5rem',
+                            paddingTop: '1rem',
+                            borderTop: '1px solid rgba(255,255,255,0.06)',
+                            width: '100%',
+                            textAlign: 'center'
+                        }}>
+                            <span style={{
+                                fontSize: '0.7rem',
+                                color: 'rgba(100, 116, 139, 0.6)',
+                                fontWeight: '500',
+                                letterSpacing: '0.03em'
+                            }}>
+                                Secured & powered by DocTransfer
+                            </span>
+                        </div>
                     </div>
-                    <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#166534', marginBottom: '1rem' }}>You're All Set!</h1>
-                    <p style={{ color: '#4b5563', fontSize: '1.1rem', marginBottom: '2rem' }}>
-                        The document has been successfully signed. A copy will be sent to your email once all parties have signed.
-                    </p>
-                    <button
-                        onClick={() => window.location.href = '/'}
-                        style={{ padding: '0.875rem 2rem', background: '#16a34a', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '1rem', cursor: 'pointer' }}
-                    >
-                        Return Home
-                    </button>
                 </div>
-            </div>
+            </>
         );
     }
 
@@ -431,18 +740,29 @@ const SignDocument: React.FC = () => {
                                     }}
                                 >
                                     {isSigned ? (
-                                        field.field_type === 'signature' || field.field_type === 'initials' || field.field_type === 'checkbox' ? (
-                                            signatureRecords[field.id] === 'checked' ? <Check color="#16a34a" /> :
-                                                <img src={signatureRecords[field.id]} alt="Signature" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                                        field.field_type === 'signature' || field.field_type === 'initials' ? (
+                                            <img src={signatureRecords[field.id]} alt="Signature" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                                        ) : field.field_type === 'checkbox' ? (
+                                            signatureRecords[field.id] === 'checked' || signatureRecords[field.id] === 'true' ? <Check color="#16a34a" /> : null
+                                        ) : field.field_type === 'stamp' ? (
+                                            STAMPS[signatureRecords[field.id] as StampType]?.component || (
+                                                <span style={{ fontSize: '0.9rem', color: '#dc2626', fontWeight: 'bold' }}>STAMPED</span>
+                                            )
                                         ) : (
                                             <span style={{ fontSize: '0.9rem', color: '#166534', fontWeight: '500' }}>{signatureRecords[field.id]}</span>
                                         )
                                     ) : (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: isMyField ? '#4f46e5' : '#9ca3af', fontSize: '0.8rem', fontWeight: '600' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: isMyField ? '#4f46e5' : '#9ca3af', fontSize: '0.8rem', fontWeight: '600', width: '100%', justifyContent: 'center', overflow: 'hidden', whiteSpace: 'nowrap', textTransform: 'capitalize' }}>
                                             {field.field_type === 'signature' && <PenTool size={14} />}
                                             {field.field_type === 'initials' && <Type size={14} />}
                                             {field.field_type === 'date' && <Calendar size={14} />}
-                                            {isMyField ? 'Sign Here' : 'Other Signer'}
+                                            {field.field_type === 'email' && <Mail size={14} />}
+                                            {field.field_type === 'company' && <Building size={14} />}
+                                            {field.field_type === 'title' && <Briefcase size={14} />}
+                                            {field.field_type === 'stamp' && <StampIcon size={14} />}
+                                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                {isMyField ? (field.field_type === 'signature' ? 'Sign Here' : field.field_type === 'initials' ? 'Initials' : field.field_type) : 'Other Signer'}
+                                            </span>
                                             {field.is_required && <span style={{ color: '#dc2626' }}>*</span>}
                                         </div>
                                     )}
@@ -461,6 +781,15 @@ const SignDocument: React.FC = () => {
                     isInitials={fields.find(f => f.id === activeFieldId)?.field_type === 'initials'}
                     title={fields.find(f => f.id === activeFieldId)?.field_type === 'initials' ? 'Adopt Your Initials' : 'Adopt Your Signature'}
                     defaultValue={signer?.signer_name || ''}
+                />
+            )}
+
+            {/* Stamp Selector Modal */}
+            {isStampSelectorOpen && (
+                <StampSelector
+                    isOpen={isStampSelectorOpen}
+                    onClose={() => setIsStampSelectorOpen(false)}
+                    onSelect={handleStampSelect}
                 />
             )}
         </div>

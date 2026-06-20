@@ -73,7 +73,6 @@ const CompareLayout: React.FC<CompareLayoutProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
                     <Link to="/" style={{ textDecoration: 'none' }}><Logo size={28} /></Link>
                     <nav style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                        <Link to="/blog" style={{ color: '#6b7280', fontWeight: 500, textDecoration: 'none', fontSize: '0.95rem' }}>Blog</Link>
                         <Link to="/pricing" style={{ color: '#6b7280', fontWeight: 500, textDecoration: 'none', fontSize: '0.95rem' }}>Pricing</Link>
                     </nav>
                 </div>
@@ -219,7 +218,6 @@ const CompareLayout: React.FC<CompareLayoutProps> = ({
                 <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
                         <Link to="/" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem' }}>Home</Link>
-                        <Link to="/blog" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem' }}>Blog</Link>
                         <Link to="/pricing" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem' }}>Pricing</Link>
                         <a href="https://x.com/Roushan71262" target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }} title="Twitter">
                             <Twitter size={14} />

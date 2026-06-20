@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useUser, useAuth } from '@clerk/clerk-react';
 import { supabase, createSupabaseClient, getSafeSupabaseToken } from './lib/supabase';
 import {
@@ -24,7 +24,8 @@ import {
     Clock,
     Minus,
     Plus,
-    Shield
+    Shield,
+    Sparkles
 } from 'lucide-react';
 import Skeleton from './components/ui/Skeleton';
 import { hashPassword } from './lib/security';
@@ -33,6 +34,7 @@ import AnalyticsDashboard from './components/analytics/AnalyticsDashboard';
 import DashboardAnimation from './components/DashboardAnimation';
 import AuditTrail from './components/AuditTrail';
 import ESignatureDashboard from './components/esignature/ESignatureDashboard';
+import TemplatesDashboard from './components/templates/TemplatesDashboard';
 
 import { logDocumentUpload } from './lib/auditLogger';
 import useSubscription from './hooks/useSubscription';
@@ -75,9 +77,18 @@ const DataRoom: React.FC = () => {
     const { getToken } = useAuth();
     const [documents, setDocuments] = useState<Document[]>([]);
     const [isDragging, setIsDragging] = useState(false);
-    const [activeTab, setActiveTab] = useState<'upload' | 'documents' | 'analytics' | 'audit' | 'esignature'>('upload');
+    const [activeTab, setActiveTab] = useState<'upload' | 'documents' | 'analytics' | 'audit' | 'esignature' | 'templates'>('upload');
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        const useTemplate = searchParams.get('useTemplate');
+        if (useTemplate) {
+            setActiveTab('templates');
+        }
+    }, [searchParams]);
+
 
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // Changed to array
     const [uploadedDoc, setUploadedDoc] = useState<Document | null>(null);
@@ -685,13 +696,22 @@ const DataRoom: React.FC = () => {
                             <PenTool size={16} /> E-Signature
                             {isFeatureLocked('esignature') && <Lock size={14} />}
                         </button>
+
+                        <button onClick={() => setActiveTab('templates')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'templates' ? '#8b5cf6' : 'transparent', color: activeTab === 'templates' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
+                            <Sparkles size={16} /> Templates
+                        </button>
                     </div>
                 </div>
             </header>
 
             {/* Main Content */}
             <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem' }}>
-                {activeTab === 'analytics' ?
+                {activeTab === 'templates' ?
+                    <TemplatesDashboard 
+                        initialTemplateId={searchParams.get('useTemplate') || undefined}
+                        onBackToDocuments={() => { setActiveTab('documents'); fetchDocuments(); }} 
+                    />
+                : activeTab === 'analytics' ?
                     <AnalyticsDashboard
                         documentId={selectedDocumentId}
                         documentName={documents.find(d => d.id === selectedDocumentId)?.name}
