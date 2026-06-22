@@ -7,15 +7,11 @@ import {
     Users,
     Calendar,
     BarChart2,
-    ArrowUp,
-    ArrowDown,
     Globe,
     Monitor,
     Smartphone,
     Tablet,
     CheckCircle,
-    AlertCircle,
-    XCircle,
     TrendingUp,
     Zap,
     Mail,
@@ -31,13 +27,16 @@ import {
     ResponsiveContainer,
     BarChart,
     Bar,
-    Cell,
-    Legend,
-    ComposedChart,
-    Line
+    Cell
 } from 'recharts';
+import { motion, AnimatePresence } from 'framer-motion';
 import { analyticsService } from '../../lib/analyticsService';
 import type { ReceiverDownload, RealtimeStats } from '../../lib/analyticsService';
+import DeviceStats from './DeviceStats';
+import PageAttentionHeatmap from './PageAttentionHeatmap';
+import ViewerGeoMap from './ViewerGeoMap';
+import ConversionFunnel from './ConversionFunnel';
+import './Analytics.css';
 
 const exportToCSV = (data: ReceiverDownload[], docName?: string) => {
     const headers = ['Email', 'Downloaded At', 'IP Address', 'Device'];
@@ -69,66 +68,20 @@ interface AnalyticsDashboardProps {
     onBack?: () => void;
 }
 
-// Vibrant gradient colors for bars
-const CHART_COLORS = {
-    views: ['#6366f1', '#818cf8'],
-    devices: ['#10b981', '#34d399'],
-    pages: ['#8b5cf6', '#a78bfa'],
-    locations: ['#f97316', '#fb923c'],
-    hours: ['#3b82f6', '#60a5fa'],
-    completion: ['#14b8a6', '#2dd4bf']
-};
-
 // Country code to name mapping
 const countryNames: Record<string, string> = {
-    'IN': 'India',
-    'US': 'United States',
-    'JP': 'Japan',
-    'GB': 'United Kingdom',
-    'UK': 'United Kingdom',
-    'DE': 'Germany',
-    'CA': 'Canada',
-    'AU': 'Australia',
-    'FR': 'France',
-    'BR': 'Brazil',
-    'CN': 'China',
-    'RU': 'Russia',
-    'ES': 'Spain',
-    'IT': 'Italy',
-    'NL': 'Netherlands',
-    'KR': 'South Korea',
-    'MX': 'Mexico',
-    'SG': 'Singapore',
-    'AE': 'UAE',
-    'SA': 'Saudi Arabia',
-    'ZA': 'South Africa',
-    'SE': 'Sweden',
-    'CH': 'Switzerland',
-    'PL': 'Poland',
-    'AT': 'Austria',
-    'BE': 'Belgium',
-    'NO': 'Norway',
-    'DK': 'Denmark',
-    'FI': 'Finland',
-    'IE': 'Ireland',
-    'NZ': 'New Zealand',
-    'PT': 'Portugal',
-    'HK': 'Hong Kong',
-    'TW': 'Taiwan',
-    'TH': 'Thailand',
-    'ID': 'Indonesia',
-    'MY': 'Malaysia',
-    'PH': 'Philippines',
-    'VN': 'Vietnam',
-    'PK': 'Pakistan',
-    'BD': 'Bangladesh',
-    'NG': 'Nigeria',
-    'EG': 'Egypt',
-    'TR': 'Turkey',
-    'AR': 'Argentina',
-    'CL': 'Chile',
-    'CO': 'Colombia',
-    'PE': 'Peru'
+    'IN': 'India', 'US': 'United States', 'JP': 'Japan', 'GB': 'United Kingdom',
+    'UK': 'United Kingdom', 'DE': 'Germany', 'CA': 'Canada', 'AU': 'Australia',
+    'FR': 'France', 'BR': 'Brazil', 'CN': 'China', 'RU': 'Russia', 'ES': 'Spain',
+    'IT': 'Italy', 'NL': 'Netherlands', 'KR': 'South Korea', 'MX': 'Mexico',
+    'SG': 'Singapore', 'AE': 'UAE', 'SA': 'Saudi Arabia', 'ZA': 'South Africa',
+    'SE': 'Sweden', 'CH': 'Switzerland', 'PL': 'Poland', 'AT': 'Austria',
+    'BE': 'Belgium', 'NO': 'Norway', 'DK': 'Denmark', 'FI': 'Finland',
+    'IE': 'Ireland', 'NZ': 'New Zealand', 'PT': 'Portugal', 'HK': 'Hong Kong',
+    'TW': 'Taiwan', 'TH': 'Thailand', 'ID': 'Indonesia', 'MY': 'Malaysia',
+    'PH': 'Philippines', 'VN': 'Vietnam', 'PK': 'Pakistan', 'BD': 'Bangladesh',
+    'NG': 'Nigeria', 'EG': 'Egypt', 'TR': 'Turkey', 'AR': 'Argentina',
+    'CL': 'Chile', 'CO': 'Colombia', 'PE': 'Peru'
 };
 
 const getCountryName = (code: string | null | undefined): string => {
@@ -141,7 +94,7 @@ const getCountryName = (code: string | null | undefined): string => {
 const CustomBarTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-white/95 backdrop-blur-sm px-4 py-3 rounded-xl shadow-xl border border-gray-100">
+            <div className="bg-white/95 backdrop-blur-md px-4 py-3 rounded-xl shadow-xl border border-gray-100/50">
                 <p className="font-bold text-gray-900 mb-2">{label}</p>
                 {payload.map((entry: any, index: number) => (
                     <div key={index} className="flex items-center gap-2 text-sm">
@@ -154,6 +107,16 @@ const CustomBarTooltip = ({ active, payload, label }: any) => {
         );
     }
     return null;
+};
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.05 } }
+};
+
+const itemVariants: any = {
+    hidden: { opacity: 0, y: 15 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
 };
 
 const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, documentName, onBack }) => {
@@ -181,41 +144,23 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
 
     useEffect(() => {
         if (!documentId) return;
-
         fetchData();
 
-        // Real-time subscriptions
-        const sessionSub = analyticsService.subscribeToSessions(documentId, () => {
-            fetchData();
-            setLastUpdated(new Date());
-        });
-        const viewSub = analyticsService.subscribeToViews(documentId, () => {
-            fetchData();
-            setLastUpdated(new Date());
-        });
-        const downloadSub = analyticsService.subscribeToDownloads(documentId, () => {
-            fetchData();
-            setLastUpdated(new Date());
-        });
+        const sessionSub = analyticsService.subscribeToSessions(documentId, () => { fetchData(); setLastUpdated(new Date()); });
+        const viewSub = analyticsService.subscribeToViews(documentId, () => { fetchData(); setLastUpdated(new Date()); });
+        const downloadSub = analyticsService.subscribeToDownloads(documentId, () => { fetchData(); setLastUpdated(new Date()); });
 
-        // Auto-refresh every 30 seconds if live mode is on
-        const interval = isLive ? setInterval(() => {
-            fetchData();
-            setLastUpdated(new Date());
-        }, 30000) : null;
+        const interval = isLive ? setInterval(() => { fetchData(); setLastUpdated(new Date()); }, 30000) : null;
 
         return () => {
-            sessionSub.unsubscribe();
-            viewSub.unsubscribe();
-            downloadSub.unsubscribe();
+            sessionSub.unsubscribe(); viewSub.unsubscribe(); downloadSub.unsubscribe();
             if (interval) clearInterval(interval);
         };
     }, [documentId, timeRange, isLive]);
 
     const fetchData = async () => {
         if (!documentId) return;
-        setLoading(true);
-        setError(null);
+        setLoading(true); setError(null);
         try {
             const [daily, pages, geo, devices, funnel, downloads, dlCount, rtStats] = await Promise.all([
                 analyticsService.getDailyStats(documentId, timeRange),
@@ -244,52 +189,19 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
         }
     };
 
-    // Use enhanced stats from the database view
     const safeDailyStats = Array.isArray(dailyStats) ? dailyStats : [];
     const totalViews = safeDailyStats.reduce((acc, curr) => acc + (curr.total_views || 0), 0);
     const totalLinkOpens = realtimeStats.link_opens;
     const uniqueViewers = realtimeStats.unique_viewers;
     const avgDuration = Math.round(realtimeStats.avg_time_seconds);
     const engagement = Math.round(realtimeStats.engagement_score);
-    const totalDownloadsTrend = safeDailyStats.reduce((acc, curr) => acc + (curr.total_downloads || 0), 0);
 
-    // Prepare unified chart data
     const prepareUnifiedData = () => {
         const data: any[] = [];
-
-        // Views Over Time (limit to last 7 entries)
-        const viewsData = dailyStats.slice(-7).map((stat) => ({
-            category: 'Views',
-            label: new Date(stat.stat_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
-            value: stat.total_views,
-            type: 'views'
-        }));
-
-        // Device Distribution
-        const devicesData = deviceStats.map((device) => ({
-            category: 'Devices',
-            label: device.device_type ? device.device_type.charAt(0).toUpperCase() + device.device_type.slice(1) : 'Unknown',
-            value: device.session_count,
-            type: 'devices'
-        }));
-
-        // Page Attention (limit to 5)
-        const pagesData = pageAttention.slice(0, 5).map((page) => ({
-            category: 'Pages',
-            label: `Page ${page.page_number}`,
-            value: Math.round(page.avg_duration_seconds),
-            type: 'pages'
-        }));
-
-        // Top Locations (limit to 5)
-        const locationsData = (Array.isArray(geoStats) ? geoStats : []).slice(0, 5).map((geo) => ({
-            category: 'Locations',
-            label: getCountryName(geo.country_code),
-            value: geo.session_count || 0,
-            type: 'locations'
-        }));
-
-        // Views by Hour (sample data if no real data)
+        const viewsData = dailyStats.slice(-7).map((stat) => ({ category: 'Views', label: new Date(stat.stat_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }), value: stat.total_views, type: 'views' }));
+        const devicesData = deviceStats.map((device) => ({ category: 'Devices', label: device.device_type ? device.device_type.charAt(0).toUpperCase() + device.device_type.slice(1) : 'Unknown', value: device.session_count, type: 'devices' }));
+        const pagesData = pageAttention.slice(0, 5).map((page) => ({ category: 'Pages', label: `Page ${page.page_number}`, value: Math.round(page.avg_duration_seconds), type: 'pages' }));
+        const locationsData = (Array.isArray(geoStats) ? geoStats : []).slice(0, 5).map((geo) => ({ category: 'Locations', label: getCountryName(geo.country_code), value: geo.session_count || 0, type: 'locations' }));
         const hoursData = [
             { category: 'Hours', label: '00:00', value: Math.round(totalViews * 0.04), type: 'hours' },
             { category: 'Hours', label: '06:00', value: Math.round(totalViews * 0.08), type: 'hours' },
@@ -297,8 +209,6 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
             { category: 'Hours', label: '18:00', value: Math.round(totalViews * 0.28), type: 'hours' },
             { category: 'Hours', label: '21:00', value: Math.round(totalViews * 0.15), type: 'hours' }
         ];
-
-        // Completion Status
         const completedCount = Math.round(totalViews * 0.65);
         const pendingCount = Math.round(totalViews * 0.25);
         const droppedCount = Math.round(totalViews * 0.10);
@@ -308,31 +218,17 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
             { category: 'Status', label: 'Dropped', value: droppedCount || 10, type: 'completion' }
         ];
 
-        // Filter based on active metric
-        if (activeMetric === 'all') {
-            data.push(...viewsData, ...devicesData, ...pagesData, ...locationsData, ...hoursData, ...completionData);
-        } else if (activeMetric === 'views') {
-            data.push(...viewsData);
-        } else if (activeMetric === 'devices') {
-            data.push(...devicesData);
-        } else if (activeMetric === 'pages') {
-            data.push(...pagesData);
-        } else if (activeMetric === 'locations') {
-            data.push(...locationsData);
-        } else if (activeMetric === 'hours') {
-            data.push(...hoursData);
-        } else if (activeMetric === 'completion') {
-            data.push(...completionData);
-        } else if (activeMetric === 'downloads') {
-            const downloadsData = dailyStats.slice(-7).map((stat) => ({
-                category: 'Downloads',
-                label: new Date(stat.stat_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
-                value: stat.total_downloads || 0,
-                type: 'downloads'
-            }));
+        if (activeMetric === 'all') { data.push(...viewsData, ...devicesData, ...pagesData, ...locationsData, ...hoursData, ...completionData); }
+        else if (activeMetric === 'views') { data.push(...viewsData); }
+        else if (activeMetric === 'devices') { data.push(...devicesData); }
+        else if (activeMetric === 'pages') { data.push(...pagesData); }
+        else if (activeMetric === 'locations') { data.push(...locationsData); }
+        else if (activeMetric === 'hours') { data.push(...hoursData); }
+        else if (activeMetric === 'completion') { data.push(...completionData); }
+        else if (activeMetric === 'downloads') {
+            const downloadsData = dailyStats.slice(-7).map((stat) => ({ category: 'Downloads', label: new Date(stat.stat_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }), value: stat.total_downloads || 0, type: 'downloads' }));
             data.push(...downloadsData);
         }
-
         return data;
     };
 
@@ -353,125 +249,111 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
 
     if (!documentId) {
         return (
-            <div className="flex flex-col items-center justify-center p-12 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl border border-gray-100 min-h-[400px]">
-                <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                    <BarChart2 size={40} className="text-indigo-500" />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center justify-center p-12 bg-white/60 backdrop-blur-xl rounded-3xl border border-white/40 shadow-xl min-h-[400px]">
+                <div className="w-24 h-24 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-[2rem] flex items-center justify-center mb-8 shadow-2xl shadow-indigo-500/30">
+                    <BarChart2 size={48} className="text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Select a Document</h3>
-                <p className="text-gray-500 text-center max-w-md">Choose a document from your library to view comprehensive real-time analytics.</p>
+                <h3 className="text-3xl font-black text-gray-900 mb-3 tracking-tight">Select a Document</h3>
+                <p className="text-gray-500 text-center max-w-md text-lg">Choose a document from your library to view comprehensive real-time analytics.</p>
                 {onBack && (
-                    <button onClick={onBack} className="mt-6 flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition-colors shadow-sm">
-                        <ArrowLeft size={16} /> Back to Documents
+                    <button onClick={onBack} className="mt-8 flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-2xl text-gray-700 font-bold hover:bg-gray-50 hover:scale-105 transition-all shadow-sm">
+                        <ArrowLeft size={18} /> Back to Documents
                     </button>
                 )}
-            </div>
+            </motion.div>
         );
     }
 
     if (error) {
         return (
-            <div className="animate-fade-in p-8 bg-white rounded-3xl border border-red-100 shadow-sm text-center">
-                <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Lock size={32} className="text-red-400" />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-8 bg-white/80 backdrop-blur-lg rounded-3xl border border-red-100 shadow-xl text-center">
+                <div className="w-20 h-20 bg-red-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
+                    <Lock size={40} className="text-red-500" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Analytics Missing</h3>
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                <h3 className="text-2xl font-black text-gray-900 mb-3 tracking-tight">Analytics Missing</h3>
+                <p className="text-gray-600 mb-8 max-w-md mx-auto text-lg">
                     The analytics database views are not yet set up or are missing permissions. 
                     Please run the <strong>master_analytics_setup.sql</strong> script in your Supabase SQL Editor to fix this.
                 </p>
-                <div className="flex flex-col gap-3 max-w-sm mx-auto">
-                    <button 
-                        onClick={fetchData}
-                        className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors"
-                    >
+                <div className="flex flex-col gap-4 max-w-sm mx-auto">
+                    <button onClick={fetchData} className="px-6 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl font-bold hover:shadow-lg hover:scale-105 transition-all">
                         Retry Loading
                     </button>
-                    <button 
-                        onClick={onBack}
-                        className="px-6 py-3 bg-gray-50 text-gray-600 rounded-xl font-bold hover:bg-gray-100 transition-colors"
-                    >
+                    <button onClick={onBack} className="px-6 py-4 bg-gray-50 text-gray-600 rounded-2xl font-bold hover:bg-gray-100 transition-colors">
                         Back to Documents
                     </button>
                 </div>
-                <div className="mt-8 p-4 bg-gray-50 rounded-xl text-left font-mono text-xs text-gray-500 overflow-auto">
+                <div className="mt-8 p-4 bg-red-50/50 rounded-2xl text-left font-mono text-xs text-red-600 overflow-auto border border-red-100">
                     <strong>Technical Error:</strong> {error}
                 </div>
-            </div>
+            </motion.div>
         );
     }
 
     if (loading && !dailyStats.length) {
         return (
             <div className="space-y-6">
-                {/* Skeleton Header */}
                 <div className="flex items-center gap-3 mb-2">
-                    {onBack && <Skeleton width="36px" height="36px" borderRadius="10px" />}
-                    <Skeleton width="250px" height="1.75rem" />
+                    {onBack && <Skeleton width="48px" height="48px" borderRadius="16px" />}
+                    <Skeleton width="300px" height="2rem" />
                 </div>
-                {/* Skeleton Stat Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {[1, 2, 3, 4].map(i => (
-                        <div key={i} style={{ borderRadius: '16px', padding: '1.25rem', background: '#f3f4f6' }}>
-                            <Skeleton width="80px" height="0.875rem" style={{ marginBottom: '0.75rem', display: 'block' }} />
-                            <Skeleton width="60px" height="2rem" style={{ marginBottom: '0.5rem', display: 'block' }} />
-                            <Skeleton width="40px" height="0.75rem" />
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    {[1, 2, 3, 4, 5].map(i => (
+                        <div key={i} className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 border border-gray-100/50">
+                            <Skeleton width="80px" height="1rem" style={{ marginBottom: '1rem', display: 'block' }} />
+                            <Skeleton width="80px" height="2.5rem" style={{ marginBottom: '0.5rem', display: 'block' }} />
+                            <Skeleton width="60px" height="0.75rem" />
                         </div>
                     ))}
                 </div>
-                {/* Skeleton Chart */}
-                <div style={{ borderRadius: '24px', padding: '2rem', background: 'white', border: '1px solid #f3f4f6' }}>
-                    <Skeleton width="200px" height="1.25rem" style={{ marginBottom: '1.5rem', display: 'block' }} />
-                    <Skeleton width="100%" height="350px" borderRadius="16px" />
+                <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-100/50">
+                    <Skeleton width="250px" height="1.5rem" style={{ marginBottom: '2rem', display: 'block' }} />
+                    <Skeleton width="100%" height="400px" borderRadius="24px" />
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6 animate-fade-in">
-            {/* Header with Live Indicator */}
-            <div className="flex flex-wrap justify-between items-center gap-4">
+        <motion.div initial="hidden" animate="show" variants={containerVariants} className="analytics-dashboard-theme">
+            {/* Header */}
+            <motion.div variants={itemVariants} className="flex flex-wrap justify-between items-center gap-4 bg-white/60 backdrop-blur-xl p-4 rounded-3xl border border-white/40 shadow-sm">
                 <div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                         {onBack && (
-                            <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-xl transition-colors" title="Back to Documents">
-                                <ArrowLeft size={20} className="text-gray-500" />
+                            <button onClick={onBack} className="p-3 bg-white hover:bg-gray-50 rounded-2xl transition-all shadow-sm border border-gray-100 group" title="Back to Documents">
+                                <ArrowLeft size={20} className="text-gray-500 group-hover:text-gray-900 transition-colors" />
                             </button>
                         )}
                         <div>
                             {documentName && (
-                                <p className="text-sm text-indigo-600 font-medium mb-0.5">Analytics for: {documentName}</p>
+                                <p className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 mb-0.5 tracking-wide uppercase">Analytics for: {documentName}</p>
                             )}
-                            <h2 className="text-2xl font-bold text-gray-900">Unified Analytics</h2>
+                            <h2 className="text-2xl font-black text-gray-900 tracking-tight">Unified Analytics</h2>
                         </div>
                         {isLive && (
-                            <div className="flex items-center gap-2 px-3 py-1 bg-green-50 border border-green-200 rounded-full">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-green-700 text-xs font-bold uppercase">Live</span>
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full ml-2">
+                                <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+                                <span className="text-emerald-700 text-xs font-bold uppercase tracking-wider">Live</span>
                             </div>
                         )}
                     </div>
-                    <p className="text-gray-500 text-sm mt-1">
-                        Last updated: {lastUpdated.toLocaleTimeString()}
-                    </p>
                 </div>
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => setIsLive(!isLive)}
-                        className={`px-4 py-2 rounded-xl font-medium transition-all ${isLive
-                            ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        className={`px-5 py-3 rounded-2xl font-bold transition-all flex items-center gap-2 ${isLive
+                            ? 'bg-gradient-to-r from-emerald-400 to-teal-500 text-white shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/40 hover:scale-105'
+                            : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
                             }`}
                     >
-                        <div className="flex items-center gap-2">
-                            <Zap size={16} />
-                            {isLive ? 'Live Mode' : 'Paused'}
-                        </div>
+                        <Zap size={18} className={isLive ? "fill-white" : ""} />
+                        {isLive ? 'Live Mode' : 'Paused'}
                     </button>
                     <select
                         value={timeRange}
                         onChange={(e) => setTimeRange(Number(e.target.value))}
-                        className="px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow"
+                        className="px-5 py-3 rounded-2xl border border-gray-200 bg-white text-gray-700 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow appearance-none cursor-pointer"
                     >
                         <option value={7}>Last 7 Days</option>
                         <option value={30}>Last 30 Days</option>
@@ -479,278 +361,272 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                     </select>
                     <button
                         onClick={() => fetchData()}
-                        className="p-2 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition-colors shadow-lg shadow-indigo-500/30"
+                        className="p-3 bg-white border border-gray-200 text-gray-700 rounded-2xl hover:bg-gray-50 transition-colors shadow-sm"
                     >
                         <Calendar size={20} />
                     </button>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
-                    <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Users size={18} className="opacity-80" />
-                        <span className="text-white/80 text-sm font-medium">Link Opens</span>
+            <motion.div variants={containerVariants} className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <motion.div variants={itemVariants} className="bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-3xl text-white relative overflow-hidden group shadow-xl shadow-indigo-500/20">
+                    <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors duration-500"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-white/10 rounded-xl backdrop-blur-md">
+                            <Users size={20} className="text-indigo-100" />
+                        </div>
+                        <span className="text-indigo-100 text-sm font-bold tracking-wide uppercase">Link Opens</span>
                     </div>
-                    <div className="text-3xl font-bold">{totalLinkOpens}</div>
-                    <div className="text-white/60 text-xs mt-1">Total link clicks</div>
-                </div>
+                    <div className="text-4xl font-black tracking-tight">{totalLinkOpens}</div>
+                    <div className="text-indigo-200 text-xs mt-2 font-medium">Total link clicks</div>
+                </motion.div>
 
-                <div className="bg-gradient-to-br from-emerald-500 to-teal-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
-                    <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <PieChartIcon size={18} className="opacity-80" />
-                        <span className="text-white/80 text-sm font-medium">Unique Viewers</span>
+                <motion.div variants={itemVariants} className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 rounded-3xl text-white relative overflow-hidden group shadow-xl shadow-emerald-500/20">
+                    <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors duration-500"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-white/10 rounded-xl backdrop-blur-md">
+                            <PieChartIcon size={20} className="text-emerald-100" />
+                        </div>
+                        <span className="text-emerald-100 text-sm font-bold tracking-wide uppercase">Unique Viewers</span>
                     </div>
-                    <div className="text-3xl font-bold">{uniqueViewers}</div>
-                    <div className="text-emerald-200 text-xs mt-1">Unique sessions</div>
-                </div>
+                    <div className="text-4xl font-black tracking-tight">{uniqueViewers}</div>
+                    <div className="text-emerald-200 text-xs mt-2 font-medium">Unique sessions</div>
+                </motion.div>
 
-                <div className="bg-gradient-to-br from-amber-500 to-orange-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
-                    <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Clock size={18} className="opacity-80" />
-                        <span className="text-white/80 text-sm font-medium">Avg. Time</span>
+                <motion.div variants={itemVariants} className="bg-gradient-to-br from-amber-500 to-orange-500 p-6 rounded-3xl text-white relative overflow-hidden group shadow-xl shadow-orange-500/20">
+                    <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors duration-500"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-white/10 rounded-xl backdrop-blur-md">
+                            <Clock size={20} className="text-orange-100" />
+                        </div>
+                        <span className="text-orange-100 text-sm font-bold tracking-wide uppercase">Avg. Time</span>
                     </div>
-                    <div className="text-3xl font-bold">{avgDuration}s</div>
-                    <div className="text-orange-200 text-xs mt-1">Per session</div>
-                </div>
+                    <div className="text-4xl font-black tracking-tight">{avgDuration}s</div>
+                    <div className="text-orange-200 text-xs mt-2 font-medium">Per session</div>
+                </motion.div>
 
-                <div className="bg-gradient-to-br from-violet-500 to-purple-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
-                    <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Activity size={18} className="opacity-80" />
-                        <span className="text-white/80 text-sm font-medium">Engagement</span>
+                <motion.div variants={itemVariants} className="bg-gradient-to-br from-violet-500 to-purple-600 p-6 rounded-3xl text-white relative overflow-hidden group shadow-xl shadow-purple-500/20">
+                    <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors duration-500"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-white/10 rounded-xl backdrop-blur-md">
+                            <Activity size={20} className="text-purple-100" />
+                        </div>
+                        <span className="text-purple-100 text-sm font-bold tracking-wide uppercase">Engagement</span>
                     </div>
-                    <div className="text-3xl font-bold">{engagement}%</div>
-                    <div className="text-white/60 text-xs mt-1">Time-based score</div>
-                </div>
+                    <div className="text-4xl font-black tracking-tight">{engagement}%</div>
+                    <div className="text-purple-200 text-xs mt-2 font-medium">Time-based score</div>
+                </motion.div>
 
-                <div className="bg-gradient-to-br from-pink-500 to-rose-600 p-5 rounded-2xl text-white relative overflow-hidden group hover:scale-[1.02] transition-transform">
-                    <div className="absolute -right-4 -top-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Download size={18} className="opacity-80" />
-                        <span className="text-white/80 text-sm font-medium">Downloads</span>
+                <motion.div variants={itemVariants} className="bg-gradient-to-br from-pink-500 to-rose-500 p-6 rounded-3xl text-white relative overflow-hidden group shadow-xl shadow-pink-500/20">
+                    <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors duration-500"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-white/10 rounded-xl backdrop-blur-md">
+                            <Download size={20} className="text-pink-100" />
+                        </div>
+                        <span className="text-pink-100 text-sm font-bold tracking-wide uppercase">Downloads</span>
                     </div>
-                    <div className="text-3xl font-bold">{downloadCount}</div>
-                    <div className="text-pink-200 text-xs mt-1">With email captured</div>
-                </div>
-            </div>
+                    <div className="text-4xl font-black tracking-tight">{downloadCount}</div>
+                    <div className="text-pink-200 text-xs mt-2 font-medium">With email captured</div>
+                </motion.div>
+            </motion.div>
 
             {/* Metric Filter Pills */}
-            <div className="flex flex-wrap gap-2">
+            <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
                 {[
-                    { key: 'all', label: 'All Metrics', icon: BarChart2, color: 'indigo' },
-                    { key: 'views', label: 'Views', icon: TrendingUp, color: 'indigo' },
-                    { key: 'devices', label: 'Devices', icon: Monitor, color: 'emerald' },
-                    { key: 'pages', label: 'Pages', icon: Activity, color: 'violet' },
-                    { key: 'locations', label: 'Locations', icon: Globe, color: 'orange' },
-                    { key: 'hours', label: 'By Hour', icon: Clock, color: 'blue' },
-                    { key: 'completion', label: 'Status', icon: CheckCircle, color: 'teal' },
-                    { key: 'downloads', label: 'Downloads', icon: Download, color: 'pink' }
-                ].map((filter) => (
-                    <button
-                        key={filter.key}
-                        onClick={() => setActiveMetric(filter.key as any)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-all ${activeMetric === filter.key
-                            ? `bg-${filter.color}-500 text-white shadow-lg shadow-${filter.color}-500/30`
-                            : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
-                            }`}
-                        style={{
-                            backgroundColor: activeMetric === filter.key ?
-                                filter.color === 'indigo' ? '#6366f1' :
-                                    filter.color === 'emerald' ? '#10b981' :
-                                        filter.color === 'violet' ? '#8b5cf6' :
-                                            filter.color === 'orange' ? '#f97316' :
-                                                filter.color === 'blue' ? '#3b82f6' :
-                                                    filter.color === 'teal' ? '#14b8a6' : '#6366f1'
-                                : undefined,
-                            color: activeMetric === filter.key ? 'white' : undefined
-                        }}
-                    >
-                        <filter.icon size={16} />
-                        {filter.label}
-                    </button>
-                ))}
-            </div>
+                    { key: 'all', label: 'All Metrics', icon: BarChart2, colorClass: 'bg-indigo-500 shadow-indigo-500/30' },
+                    { key: 'views', label: 'Views', icon: TrendingUp, colorClass: 'bg-indigo-500 shadow-indigo-500/30' },
+                    { key: 'devices', label: 'Devices', icon: Monitor, colorClass: 'bg-emerald-500 shadow-emerald-500/30' },
+                    { key: 'pages', label: 'Pages', icon: Activity, colorClass: 'bg-violet-500 shadow-violet-500/30' },
+                    { key: 'locations', label: 'Locations', icon: Globe, colorClass: 'bg-orange-500 shadow-orange-500/30' },
+                    { key: 'hours', label: 'By Hour', icon: Clock, colorClass: 'bg-blue-500 shadow-blue-500/30' },
+                    { key: 'completion', label: 'Status', icon: CheckCircle, colorClass: 'bg-teal-500 shadow-teal-500/30' },
+                    { key: 'downloads', label: 'Downloads', icon: Download, colorClass: 'bg-pink-500 shadow-pink-500/30' }
+                ].map((filter) => {
+                    const isActive = activeMetric === filter.key;
+                    return (
+                        <button
+                            key={filter.key}
+                            onClick={() => setActiveMetric(filter.key as any)}
+                            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-sm transition-all relative overflow-hidden group ${isActive
+                                ? `${filter.colorClass} text-white shadow-lg scale-105`
+                                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'
+                                }`}
+                        >
+                            {isActive && <div className="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors pointer-events-none"></div>}
+                            <filter.icon size={16} className="relative z-10" />
+                            <span className="relative z-10">{filter.label}</span>
+                        </button>
+                    )
+                })}
+            </motion.div>
 
-            {/* Unified Chart */}
-            <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-                <div className="flex justify-between items-center mb-6">
+            {/* Unified Chart / Sub-Component Views */}
+            <motion.div variants={itemVariants} style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(24px)', padding: '2rem', borderRadius: '1.5rem', border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', gap: '1rem' }}>
                     <div>
-                        <h3 className="text-xl font-bold text-gray-900">
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.025rem' }}>
                             {activeMetric === 'all' ? 'Complete Analytics Overview' :
                                 activeMetric === 'views' ? 'Views Over Time' :
                                     activeMetric === 'devices' ? 'Device Distribution' :
                                         activeMetric === 'pages' ? 'Page Attention (seconds)' :
                                             activeMetric === 'locations' ? 'Top Locations' :
                                                 activeMetric === 'hours' ? 'Views by Hour' :
-                                                    'Document Completion Status'}
+                                                    activeMetric === 'completion' ? 'Conversion Funnel' :
+                                                        activeMetric === 'downloads' ? 'Downloads Over Time' :
+                                                            'Document Completion Status'}
                         </h3>
-                        <p className="text-gray-500 text-sm mt-1">Real-time data visualization</p>
+                        <p style={{ color: '#6b7280', fontWeight: 500, marginTop: '0.25rem' }}>Real-time data visualization</p>
                     </div>
-                    <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"></div>
-                            <span className="text-gray-600">Views</span>
+                    {(activeMetric === 'all' || activeMetric === 'views' || activeMetric === 'hours' || activeMetric === 'downloads') && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem', background: 'rgba(249,250,251,0.5)', padding: '0.5rem 1rem', borderRadius: '1rem', border: '1px solid rgba(243,244,246,0.5)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <div style={{ width: '0.75rem', height: '0.75rem', borderRadius: '9999px', background: 'linear-gradient(90deg, #6366f1, #a855f7)' }}></div>
+                                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#4b5563' }}>Views</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <div style={{ width: '0.75rem', height: '0.75rem', borderRadius: '9999px', background: 'linear-gradient(90deg, #10b981, #14b8a6)' }}></div>
+                                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#4b5563' }}>Devices</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <div style={{ width: '0.75rem', height: '0.75rem', borderRadius: '9999px', background: 'linear-gradient(90deg, #f97316, #f59e0b)' }}></div>
+                                <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#4b5563' }}>Locations</span>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500"></div>
-                            <span className="text-gray-600">Devices</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-orange-500 to-amber-500"></div>
-                            <span className="text-gray-600">Locations</span>
-                        </div>
-                    </div>
+                    )}
                 </div>
 
-                <div className="h-[450px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                            data={chartData}
-                            margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-                            barCategoryGap="15%"
-                        >
-                            <defs>
-                                <linearGradient id="gradViews" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#6366f1" stopOpacity={1} />
-                                    <stop offset="100%" stopColor="#4f46e5" stopOpacity={0.8} />
-                                </linearGradient>
-                                <linearGradient id="gradDevices" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#10b981" stopOpacity={1} />
-                                    <stop offset="100%" stopColor="#059669" stopOpacity={0.8} />
-                                </linearGradient>
-                                <linearGradient id="gradPages" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity={1} />
-                                    <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.8} />
-                                </linearGradient>
-                                <linearGradient id="gradLocations" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#f97316" stopOpacity={1} />
-                                    <stop offset="100%" stopColor="#ea580c" stopOpacity={0.8} />
-                                </linearGradient>
-                                <linearGradient id="gradHours" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
-                                    <stop offset="100%" stopColor="#2563eb" stopOpacity={0.8} />
-                                </linearGradient>
-                                <linearGradient id="gradCompletion" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#14b8a6" stopOpacity={1} />
-                                    <stop offset="100%" stopColor="#0d9488" stopOpacity={0.8} />
-                                </linearGradient>
-                                <linearGradient id="gradDownloads" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#ec4899" stopOpacity={1} />
-                                    <stop offset="100%" stopColor="#be185d" stopOpacity={0.8} />
-                                </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                            <XAxis
-                                dataKey="label"
-                                stroke="#9ca3af"
-                                tick={{ fontSize: 11, fill: '#6b7280' }}
-                                axisLine={false}
-                                tickLine={false}
-                                angle={-45}
-                                textAnchor="end"
-                                height={80}
-                                interval={0}
-                            />
-                            <YAxis
-                                stroke="#9ca3af"
-                                tick={{ fontSize: 12, fill: '#6b7280' }}
-                                axisLine={false}
-                                tickLine={false}
-                            />
-                            <Tooltip content={<CustomBarTooltip />} cursor={{ fill: 'rgba(99, 102, 241, 0.08)' }} />
-                            <Bar
-                                dataKey="value"
-                                name="Value"
-                                radius={[8, 8, 0, 0]}
-                                maxBarSize={50}
+                {/* Conditionally render sub-components or bar chart */}
+                {activeMetric === 'devices' ? (
+                    <DeviceStats data={deviceStats} />
+                ) : activeMetric === 'pages' ? (
+                    <PageAttentionHeatmap data={pageAttention} />
+                ) : activeMetric === 'locations' ? (
+                    <ViewerGeoMap data={geoStats} />
+                ) : activeMetric === 'completion' ? (
+                    <ConversionFunnel data={funnelData} />
+                ) : (
+                    <div style={{ height: '450px', width: '100%' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                                data={chartData}
+                                margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                                barCategoryGap="15%"
                             >
-                                {chartData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={getBarColor(entry.type)} />
-                                ))}
-                            </Bar>
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
-
-                {/* Category Legend */}
-                {activeMetric === 'all' && (
-                    <div className="mt-6 pt-6 border-t border-gray-100">
-                        <div className="flex flex-wrap justify-center gap-6 text-sm">
-                            <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 rounded bg-gradient-to-r from-indigo-500 to-purple-500"></div>
-                                <span className="text-gray-600 font-medium">Views Over Time</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 rounded bg-gradient-to-r from-emerald-500 to-teal-500"></div>
-                                <span className="text-gray-600 font-medium">Device Distribution</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 rounded bg-gradient-to-r from-violet-500 to-purple-500"></div>
-                                <span className="text-gray-600 font-medium">Page Attention</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 rounded bg-gradient-to-r from-orange-500 to-amber-500"></div>
-                                <span className="text-gray-600 font-medium">Top Locations</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 rounded bg-gradient-to-r from-blue-500 to-cyan-500"></div>
-                                <span className="text-gray-600 font-medium">Views by Hour</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-4 h-4 rounded bg-gradient-to-r from-teal-500 to-emerald-500"></div>
-                                <span className="text-gray-600 font-medium">Completion Status</span>
-                            </div>
-                        </div>
+                                <defs>
+                                    <linearGradient id="gradViews" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#6366f1" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#818cf8" stopOpacity={0.5} />
+                                    </linearGradient>
+                                    <linearGradient id="gradDevices" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#10b981" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#34d399" stopOpacity={0.5} />
+                                    </linearGradient>
+                                    <linearGradient id="gradPages" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#8b5cf6" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#a78bfa" stopOpacity={0.5} />
+                                    </linearGradient>
+                                    <linearGradient id="gradLocations" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#f97316" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#fb923c" stopOpacity={0.5} />
+                                    </linearGradient>
+                                    <linearGradient id="gradHours" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#3b82f6" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#60a5fa" stopOpacity={0.5} />
+                                    </linearGradient>
+                                    <linearGradient id="gradCompletion" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#14b8a6" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#2dd4bf" stopOpacity={0.5} />
+                                    </linearGradient>
+                                    <linearGradient id="gradDownloads" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#ec4899" stopOpacity={1} />
+                                        <stop offset="100%" stopColor="#f472b6" stopOpacity={0.5} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                                <XAxis
+                                    dataKey="label"
+                                    stroke="#9ca3af"
+                                    tick={{ fontSize: 12, fill: '#6b7280', fontWeight: 600 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    angle={-45}
+                                    textAnchor="end"
+                                    height={80}
+                                    interval={0}
+                                    dy={10}
+                                />
+                                <YAxis
+                                    stroke="#9ca3af"
+                                    tick={{ fontSize: 12, fill: '#6b7280', fontWeight: 600 }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip content={<CustomBarTooltip />} cursor={{ fill: 'rgba(99, 102, 241, 0.05)', radius: 8 }} />
+                                <Bar
+                                    dataKey="value"
+                                    name="Value"
+                                    radius={[8, 8, 0, 0]}
+                                    maxBarSize={50}
+                                    animationDuration={1500}
+                                >
+                                    {chartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={getBarColor(entry.type)} className="hover:opacity-80 transition-opacity" />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
                     </div>
                 )}
-            </div>
+            </motion.div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <motion.div variants={containerVariants} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {/* Device Icons */}
                 {deviceStats.slice(0, 3).map((device, index) => (
-                    <div key={index} className="bg-white p-4 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-3">
-                            {device.device_type === 'desktop' ? <Monitor size={24} className="text-emerald-500" /> :
-                                device.device_type === 'mobile' ? <Smartphone size={24} className="text-blue-500" /> :
-                                    <Tablet size={24} className="text-violet-500" />}
+                    <motion.div variants={itemVariants} key={`dev-${index}`} className="bg-white/80 backdrop-blur-lg p-5 rounded-3xl border border-gray-100 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-500/10 transition-all group">
+                        <div className="flex flex-col items-center text-center gap-3">
+                            <div className="p-3 bg-gray-50 group-hover:bg-indigo-50 rounded-2xl transition-colors">
+                                {device.device_type === 'desktop' ? <Monitor size={28} className="text-emerald-500" /> :
+                                    device.device_type === 'mobile' ? <Smartphone size={28} className="text-blue-500" /> :
+                                        <Tablet size={28} className="text-violet-500" />}
+                            </div>
                             <div>
-                                <div className="text-lg font-bold text-gray-900">{device.session_count}</div>
-                                <div className="text-xs text-gray-500 capitalize">{device.device_type || 'Unknown'}</div>
+                                <div className="text-2xl font-black text-gray-900 tracking-tight">{device.session_count}</div>
+                                <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1">{device.device_type || 'Unknown'}</div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
 
                 {/* Top Countries */}
                 {geoStats.slice(0, 3).map((geo, index) => (
-                    <div key={index} className="bg-white p-4 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-3">
-                            <Globe size={24} className="text-orange-500" />
+                    <motion.div variants={itemVariants} key={`geo-${index}`} className="bg-white/80 backdrop-blur-lg p-5 rounded-3xl border border-gray-100 hover:border-orange-100 hover:shadow-xl hover:shadow-orange-500/10 transition-all group">
+                        <div className="flex flex-col items-center text-center gap-3">
+                            <div className="p-3 bg-gray-50 group-hover:bg-orange-50 rounded-2xl transition-colors">
+                                <Globe size={28} className="text-orange-500" />
+                            </div>
                             <div>
-                                <div className="text-lg font-bold text-gray-900">{geo.session_count}</div>
-                                <div className="text-xs text-gray-500 truncate">{getCountryName(geo.country_code)}</div>
+                                <div className="text-2xl font-black text-gray-900 tracking-tight">{geo.session_count}</div>
+                                <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1 truncate max-w-[80px]" title={getCountryName(geo.country_code)}>
+                                    {getCountryName(geo.country_code)}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
-            </div>
+            </motion.div>
 
             {/* Receiver Downloads Section */}
-            <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-                <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center">
-                            <Mail size={20} className="text-white" />
+            <motion.div variants={itemVariants} className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-white/40 shadow-xl shadow-gray-200/50">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                    <div className="flex items-center gap-4">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-lg shadow-pink-500/30">
+                            <Mail size={24} className="text-white" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-gray-900">Receiver Downloads</h3>
-                            <p className="text-gray-500 text-sm mt-0.5">
+                            <h3 className="text-2xl font-black text-gray-900 tracking-tight">Receiver Downloads</h3>
+                            <p className="text-gray-500 font-medium mt-1">
                                 {receiverDownloads.length} {receiverDownloads.length === 1 ? 'person has' : 'people have'} downloaded this file
                             </p>
                         </div>
@@ -759,110 +635,93 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                         {receiverDownloads.length > 0 && (
                             <button
                                 onClick={() => exportToCSV(receiverDownloads, documentName)}
-                                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm"
+                                className="flex items-center gap-2 px-5 py-3 bg-white border border-gray-200 rounded-2xl text-gray-700 font-bold hover:bg-gray-50 hover:scale-105 transition-all shadow-sm"
                             >
-                                <Download size={15} />
+                                <Download size={18} />
                                 Export CSV
                             </button>
                         )}
-                        <div className="px-4 py-2 bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200 rounded-xl">
-                            <span className="text-pink-700 font-bold text-lg">{receiverDownloads.length}</span>
-                            <span className="text-pink-500 text-sm ml-1">total</span>
+                        <div className="px-5 py-3 bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-100 rounded-2xl flex items-center gap-2">
+                            <span className="text-pink-600 font-black text-xl">{receiverDownloads.length}</span>
+                            <span className="text-pink-500 text-sm font-bold uppercase tracking-wider">total</span>
                         </div>
                     </div>
                 </div>
 
                 {receiverDownloads.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="w-16 h-16 bg-gradient-to-br from-pink-50 to-rose-100 rounded-2xl flex items-center justify-center mb-4">
-                            <Mail size={32} className="text-pink-400" />
+                    <div className="flex flex-col items-center justify-center py-16 text-center bg-gray-50/50 rounded-3xl border border-dashed border-gray-200">
+                        <div className="w-20 h-20 bg-gradient-to-br from-pink-100 to-rose-100 rounded-[2rem] flex items-center justify-center mb-6">
+                            <Mail size={40} className="text-pink-400" />
                         </div>
-                        <p className="text-gray-700 font-semibold text-lg">No downloads yet</p>
-                        <p className="text-gray-400 text-sm mt-2 max-w-sm">
-                            When a receiver opens your share link and clicks <strong>Download</strong>, they'll be asked to enter their email address. Their email will then appear here automatically.
+                        <p className="text-gray-900 font-black text-xl mb-2 tracking-tight">No downloads yet</p>
+                        <p className="text-gray-500 text-lg max-w-md">
+                            When a receiver opens your share link and clicks <strong>Download</strong>, their email will appear here.
                         </p>
-                        <div className="mt-4 flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600 text-xs font-medium">
-                            <TrendingUp size={14} />
-                            Share your document link to start tracking
+                        <div className="mt-6 flex items-center gap-2 px-5 py-3 bg-indigo-50 border border-indigo-100 rounded-2xl text-indigo-600 text-sm font-bold">
+                            <TrendingUp size={16} />
+                            Share your link to start tracking
                         </div>
                     </div>
                 ) : (
-                    <div className="overflow-hidden rounded-2xl border border-gray-100">
-                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <div className="overflow-x-auto rounded-3xl border border-gray-100 shadow-sm">
+                        <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr style={{ background: 'linear-gradient(135deg, #fdf2f8, #fce7f3)' }}>
-                                    <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#9d174d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</th>
-                                    <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#9d174d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Downloaded At</th>
-                                    <th style={{ padding: '0.875rem 1.25rem', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#9d174d', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Device</th>
+                                <tr className="bg-gradient-to-r from-pink-50/50 to-rose-50/50 border-b border-pink-100/50">
+                                    <th className="py-5 px-6 text-xs font-black text-pink-800 uppercase tracking-widest w-1/3">Email</th>
+                                    <th className="py-5 px-6 text-xs font-black text-pink-800 uppercase tracking-widest w-1/3">Downloaded At</th>
+                                    <th className="py-5 px-6 text-xs font-black text-pink-800 uppercase tracking-widest w-1/3">Device</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {receiverDownloads.map((dl, index) => {
-                                    const ua = dl.user_agent || '';
-                                    const isMobile = /mobile|android|iphone/i.test(ua);
-                                    const isTablet = /tablet|ipad/i.test(ua);
-                                    const deviceLabel = isTablet ? 'Tablet' : isMobile ? 'Mobile' : 'Desktop';
-                                    const browserMatch = ua.match(/(Chrome|Firefox|Safari|Edge|Opera|OPR)/i);
-                                    const browserName = browserMatch ? browserMatch[1].replace('OPR', 'Opera') : 'Unknown';
+                            <tbody className="divide-y divide-gray-100 bg-white">
+                                <AnimatePresence>
+                                    {receiverDownloads.map((dl, index) => {
+                                        const ua = dl.user_agent || '';
+                                        const isMobile = /mobile|android|iphone/i.test(ua);
+                                        const isTablet = /tablet|ipad/i.test(ua);
+                                        const deviceLabel = isTablet ? 'Tablet' : isMobile ? 'Mobile' : 'Desktop';
+                                        const browserMatch = ua.match(/(Chrome|Firefox|Safari|Edge|Opera|OPR)/i);
+                                        const browserName = browserMatch ? browserMatch[1].replace('OPR', 'Opera') : 'Unknown';
 
-                                    return (
-                                        <tr
-                                            key={dl.id}
-                                            style={{
-                                                borderBottom: index < receiverDownloads.length - 1 ? '1px solid #f3f4f6' : 'none',
-                                                transition: 'background 0.15s'
-                                            }}
-                                            onMouseEnter={(e) => e.currentTarget.style.background = '#fdf2f8'}
-                                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                                        >
-                                            <td style={{ padding: '1rem 1.25rem' }}>
-                                                <div className="flex items-center gap-2">
-                                                    <div style={{
-                                                        width: '32px',
-                                                        height: '32px',
-                                                        borderRadius: '50%',
-                                                        background: 'linear-gradient(135deg, #ec4899, #f43f5e)',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        color: 'white',
-                                                        fontSize: '0.75rem',
-                                                        fontWeight: '700'
-                                                    }}>
-                                                        {dl.receiver_email.charAt(0).toUpperCase()}
+                                        return (
+                                            <motion.tr
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: index * 0.05 }}
+                                                key={dl.id}
+                                                className="hover:bg-pink-50/30 transition-colors group"
+                                            >
+                                                <td className="py-4 px-6">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-black text-lg shadow-sm group-hover:scale-110 transition-transform">
+                                                            {dl.receiver_email.charAt(0).toUpperCase()}
+                                                        </div>
+                                                        <span className="font-bold text-gray-900 group-hover:text-pink-700 transition-colors">
+                                                            {dl.receiver_email}
+                                                        </span>
                                                     </div>
-                                                    <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#1f2937' }}>
-                                                        {dl.receiver_email}
+                                                </td>
+                                                <td className="py-4 px-6 text-sm font-medium text-gray-500">
+                                                    {new Date(dl.downloaded_at).toLocaleString()}
+                                                </td>
+                                                <td className="py-4 px-6">
+                                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wide ${
+                                                        isMobile ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20' : 
+                                                        isTablet ? 'bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-600/20' : 
+                                                        'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20'
+                                                    }`}>
+                                                        {deviceLabel} <span className="opacity-50">•</span> {browserName}
                                                     </span>
-                                                </div>
-                                            </td>
-                                            <td style={{ padding: '1rem 1.25rem', fontSize: '0.875rem', color: '#6b7280' }}>
-                                                {new Date(dl.downloaded_at).toLocaleString()}
-                                            </td>
-                                            <td style={{ padding: '1rem 1.25rem' }}>
-                                                <span style={{
-                                                    display: 'inline-flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.35rem',
-                                                    padding: '0.25rem 0.75rem',
-                                                    borderRadius: '20px',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '600',
-                                                    background: isMobile ? '#dbeafe' : isTablet ? '#ede9fe' : '#dcfce7',
-                                                    color: isMobile ? '#1e40af' : isTablet ? '#5b21b6' : '#166534'
-                                                }}>
-                                                    {deviceLabel} • {browserName}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                                                </td>
+                                            </motion.tr>
+                                        );
+                                    })}
+                                </AnimatePresence>
                             </tbody>
                         </table>
                     </div>
                 )}
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 

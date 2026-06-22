@@ -9,18 +9,34 @@ import {
     ResponsiveContainer
 } from 'recharts';
 import { ArrowDown } from 'lucide-react';
+import { motion } from 'framer-motion';
 import type { FunnelStep } from '../../lib/analyticsService';
 
 interface ConversionFunnelProps {
     data: FunnelStep[];
 }
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 }
+    }
+};
+
+const itemVariants: any = {
+    hidden: { opacity: 0, y: 15 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+};
+
+const COLORS = ['#3b82f6', '#8b5cf6', '#f59e0b', '#10b981'];
+
 const ConversionFunnel: React.FC<ConversionFunnelProps> = ({ data }) => {
     // Add conversion rate to data
     const processedData = data.map((step, index) => {
         const prevCount = index > 0 ? data[index - 1].count : step.count;
         const conversionRate = prevCount > 0 ? (step.count / prevCount) * 100 : 0;
-        const totalRate = data[0].count > 0 ? (step.count / data[0].count) * 100 : 0;
+        const totalRate = data[0]?.count > 0 ? (step.count / data[0].count) * 100 : 0;
 
         return {
             ...step,
@@ -31,110 +47,109 @@ const ConversionFunnel: React.FC<ConversionFunnelProps> = ({ data }) => {
 
     if (data.length === 0) {
         return (
-            <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af' }}>
+            <div className="h-[300px] flex items-center justify-center text-gray-400">
                 No funnel data available
             </div>
         );
     }
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
             {/* Steps List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', justifyContent: 'center' }}>
+            <motion.div 
+                className="flex flex-col gap-4 justify-center"
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+            >
                 {processedData.map((step, index) => (
-                    <div key={step.step_name} style={{ position: 'relative' }}>
+                    <motion.div key={step.step_name} variants={itemVariants} className="relative">
                         {index > 0 && (
-                            <div style={{
-                                position: 'absolute',
-                                top: '-15px',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                zIndex: 1,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                background: 'white',
-                                borderRadius: '50%',
-                                width: '24px',
-                                height: '24px',
-                                border: '1px solid #e5e7eb'
-                            }}>
-                                <ArrowDown size={14} color="#9ca3af" />
+                            <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10 flex items-center justify-center bg-white rounded-full w-8 h-8 border border-gray-100 shadow-sm">
+                                <ArrowDown size={16} className="text-gray-400" />
                             </div>
                         )}
 
-                        <div style={{
-                            padding: '1.25rem',
-                            background: '#f9fafb',
-                            border: '1px solid #e5e7eb',
-                            borderRadius: '12px',
-                            borderLeft: `4px solid ${['#3b82f6', '#8b5cf6', '#f59e0b', '#10b981'][index % 4]}`,
-                            position: 'relative'
-                        }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                                <span style={{ fontWeight: '600', color: '#111827' }}>{step.step_name}</span>
-                                <span style={{ fontWeight: '700', fontSize: '1.125rem', color: '#1f2937' }}>{step.count}</span>
+                        <div 
+                            className="p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group"
+                            style={{ borderLeftColor: COLORS[index % 4], borderLeftWidth: '4px' }}
+                        >
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                            
+                            <div className="flex justify-between items-center mb-1 relative z-10">
+                                <span className="font-bold text-gray-900">{step.step_name}</span>
+                                <span className="font-black text-xl text-indigo-900">{step.count}</span>
                             </div>
-                            <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>
+                            <div className="text-xs text-gray-500 relative z-10">
                                 {step.description}
                             </div>
 
                             {index > 0 && (
-                                <div style={{
-                                    marginTop: '0.5rem',
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    padding: '2px 8px',
-                                    background: step.conversionRate > 50 ? '#d1fae5' : '#fee2e2',
-                                    color: step.conversionRate > 50 ? '#065f46' : '#991b1b',
-                                    borderRadius: '99px',
-                                    fontSize: '0.75rem',
-                                    fontWeight: '600'
-                                }}>
-                                    {step.conversionRate}% Conversion
+                                <div className={`mt-3 inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                    step.conversionRate > 50 
+                                        ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20' 
+                                        : 'bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/20'
+                                } relative z-10`}>
+                                    {step.conversionRate}% Conv.
                                 </div>
                             )}
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
-            </div>
+            </motion.div>
 
             {/* Visual Chart */}
-            <div style={{ height: 350 }}>
-                <ResponsiveContainer>
+            <div className="h-[350px] lg:col-span-2">
+                <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                         data={processedData}
-                        margin={{
-                            top: 10,
-                            right: 30,
-                            left: 0,
-                            bottom: 0,
-                        }}
+                        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                     >
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="step_name" />
-                        <YAxis />
+                        <defs>
+                            <linearGradient id="colorFunnel" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
+                            </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                        <XAxis 
+                            dataKey="step_name" 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fontSize: 12, fill: '#6b7280' }} 
+                            dy={10}
+                        />
+                        <YAxis 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fontSize: 12, fill: '#6b7280' }} 
+                        />
                         <Tooltip
-                            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
+                            contentStyle={{ 
+                                borderRadius: '16px', 
+                                border: 'none', 
+                                boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)',
+                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                backdropFilter: 'blur(8px)'
+                            }}
+                            itemStyle={{ color: '#1f2937', fontWeight: 600 }}
                             formatter={(value: any, name: any) => [value, name === 'count' ? 'Users' : name]}
                         />
                         <Area
                             type="monotone"
                             dataKey="count"
-                            stroke="#4f46e5"
-                            fill="url(#colorTotal)"
+                            stroke="#6366f1"
                             strokeWidth={3}
+                            fillOpacity={1}
+                            fill="url(#colorFunnel)"
+                            activeDot={{ r: 6, fill: '#6366f1', stroke: '#fff', strokeWidth: 2 }}
                         />
-                        <defs>
-                            <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#4f46e5" stopOpacity={0.1} />
-                            </linearGradient>
-                        </defs>
                     </AreaChart>
                 </ResponsiveContainer>
-                <div style={{ textAlign: 'center', marginTop: '1rem', color: '#6b7280', fontSize: '0.875rem' }}>
-                    Overall Conversion Rate: <strong>{processedData[processedData.length - 1]?.totalRate}%</strong>
+                <div className="text-center mt-6 p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50 backdrop-blur-sm">
+                    <p className="text-sm text-gray-600 font-medium">
+                        Overall Conversion Rate: <span className="text-indigo-600 font-bold ml-2 text-lg">{processedData[processedData.length - 1]?.totalRate}%</span>
+                    </p>
                 </div>
             </div>
         </div>

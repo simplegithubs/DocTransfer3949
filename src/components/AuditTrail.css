@@ -1,0 +1,374 @@
+/* AuditTrail.css - Premium Glassmorphic Design */
+
+.audit-trail-theme {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05),
+                0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transition: all 0.3s ease;
+}
+
+/* Header & Controls */
+.audit-header {
+    padding: 1.75rem 2rem;
+    background: linear-gradient(180deg, rgba(249, 250, 251, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.audit-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    letter-spacing: -0.02em;
+}
+
+.audit-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 0.375rem;
+    font-weight: 500;
+}
+
+.audit-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.audit-btn {
+    padding: 0.625rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.audit-btn-outline {
+    background: rgba(255, 255, 255, 0.9);
+    color: #4b5563;
+    border-color: rgba(229, 231, 235, 0.8);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.audit-btn-outline:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.audit-btn-active {
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+    border-color: rgba(79, 70, 229, 0.2);
+}
+
+.audit-btn-primary {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.audit-btn-primary:hover {
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+    transform: translateY(-1px);
+}
+
+.audit-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.audit-btn-icon {
+    padding: 0.625rem;
+    border-radius: 0.75rem;
+    color: #6b7280;
+    background: transparent;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.audit-btn-icon:hover {
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+}
+
+/* Filters Panel */
+.audit-filters-panel {
+    background: rgba(255, 255, 255, 0.6);
+    padding: 1.25rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.audit-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.audit-filter-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.audit-input {
+    width: 100%;
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(209, 213, 219, 0.6);
+    background: rgba(255, 255, 255, 0.9);
+    color: #111827;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.audit-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.audit-input-icon {
+    padding-left: 2.25rem;
+}
+
+.audit-input-wrapper {
+    position: relative;
+}
+
+.audit-input-wrapper-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+/* Error Banner */
+.audit-error {
+    padding: 1rem 2rem;
+    background: rgba(254, 242, 242, 0.8);
+    color: #b91c1c;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid rgba(254, 226, 226, 1);
+}
+
+/* Table Area */
+.audit-table-container {
+    overflow-x: auto;
+    min-height: 300px;
+}
+
+.audit-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+}
+
+.audit-table th {
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(249, 250, 251, 0.8);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+}
+
+.audit-table td {
+    padding: 1.25rem 1.5rem;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(243, 244, 246, 0.5);
+    transition: background 0.2s ease;
+}
+
+.audit-table-row {
+    transition: all 0.2s ease;
+}
+
+.audit-table-row:hover td {
+    background: rgba(249, 250, 251, 0.6);
+}
+
+/* Event Types and Badges */
+.audit-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.audit-badge-view {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(96, 165, 250, 0.1) 100%);
+    color: #1d4ed8;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.audit-badge-download {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(52, 211, 153, 0.1) 100%);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.audit-badge-upload {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+    color: #6d28d9;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.audit-badge-signature {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%);
+    color: #b45309;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.audit-badge-security {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(248, 113, 113, 0.1) 100%);
+    color: #b91c1c;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.audit-badge-default {
+    background: linear-gradient(135deg, rgba(107, 114, 128, 0.1) 0%, rgba(156, 163, 175, 0.1) 100%);
+    color: #4b5563;
+    border: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+/* Typography Helpers inside Table */
+.audit-text-primary {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.audit-text-secondary {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+}
+
+.audit-flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.audit-flex-row {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.audit-metadata-box {
+    font-size: 0.7rem;
+    background: rgba(243, 244, 246, 0.6);
+    padding: 0.375rem 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(229, 231, 235, 0.8);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: #6b7280;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 0.375rem;
+}
+
+/* Empty State */
+.audit-empty-state {
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #6b7280;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.audit-empty-icon {
+    width: 4rem;
+    height: 4rem;
+    background: rgba(243, 244, 246, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    color: #9ca3af;
+}
+
+/* Footer */
+.audit-footer {
+    padding: 1rem 2rem;
+    background: rgba(249, 250, 251, 0.8);
+    border-top: 1px solid rgba(229, 231, 235, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.audit-compliance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
