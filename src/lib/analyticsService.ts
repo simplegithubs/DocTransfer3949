@@ -51,6 +51,22 @@ export interface ReceiverDownload {
     user_agent: string;
 }
 
+/** Returns true if the error is a "table/view/function not found" (42P01) or a generic 404 */
+const isMissingResource = (error: any): boolean => {
+    if (!error) return false;
+    const code = error.code ?? '';
+    const message = (error.message ?? '').toLowerCase();
+    return (
+        code === 'PGRST116' ||   // no rows — treat as empty
+        code === '42P01'   ||   // undefined table/view in PostgREST
+        code === 'PGRST200' ||  // foreign key / schema cache miss
+        message.includes('not found') ||
+        message.includes('does not exist') ||
+        message.includes('relation') ||
+        (error.status === 404)
+    );
+};
+
 export const analyticsService = {
     /**
      * Get daily statistics for a document
@@ -66,7 +82,13 @@ export const analyticsService = {
             .gte('stat_date', startDate.toISOString())
             .order('stat_date', { ascending: true });
 
-        if (error) throw error;
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] daily_document_stats view not found — run the SQL migration. Returning empty data.');
+                return [];
+            }
+            throw error;
+        }
         return data || [];
     },
 
@@ -80,7 +102,13 @@ export const analyticsService = {
             .eq('document_id', documentId)
             .order('page_number', { ascending: true });
 
-        if (error) throw error;
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] page_attention_stats view not found — run the SQL migration. Returning empty data.');
+                return [];
+            }
+            throw error;
+        }
         return data || [];
     },
 
@@ -93,7 +121,13 @@ export const analyticsService = {
             .select('*')
             .eq('document_id', documentId);
 
-        if (error) throw error;
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] viewer_geo_stats view not found — run the SQL migration. Returning empty data.');
+                return [];
+            }
+            throw error;
+        }
         return data || [];
     },
 
@@ -106,7 +140,13 @@ export const analyticsService = {
             .select('*')
             .eq('document_id', documentId);
 
-        if (error) throw error;
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] device_analytics_stats view not found — run the SQL migration. Returning empty data.');
+                return [];
+            }
+            throw error;
+        }
         return data || [];
     },
 
@@ -117,7 +157,13 @@ export const analyticsService = {
         const { data, error } = await supabase
             .rpc('get_document_conversion_funnel', { p_document_id: documentId });
 
-        if (error) throw error;
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] get_document_conversion_funnel RPC not found — run the SQL migration. Returning empty data.');
+                return [];
+            }
+            throw error;
+        }
         return data || [];
     },
 
@@ -169,7 +215,13 @@ export const analyticsService = {
             .eq('document_id', documentId)
             .order('downloaded_at', { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] document_downloads table not found — run the SQL migration. Returning empty data.');
+                return [];
+            }
+            throw error;
+        }
         return data || [];
     },
 
@@ -200,7 +252,14 @@ export const analyticsService = {
             .from('document_downloads')
             .select('*', { count: 'exact', head: true })
             .eq('document_id', documentId);
-        if (error) throw error;
+
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] document_downloads table not found — returning 0.');
+                return 0;
+            }
+            throw error;
+        }
         return count || 0;
     },
 
@@ -208,16 +267,24 @@ export const analyticsService = {
      * Get absolute real-time summary stats for a document
      */
     async getRealtimeStats(documentId: string): Promise<RealtimeStats> {
-        const { data, error } = await supabase
-            .rpc('get_realtime_document_stats', { p_document_id: documentId });
-
-        if (error) throw error;
-        return data && data[0] ? data[0] : {
+        const defaultStats: RealtimeStats = {
             link_opens: 0,
             unique_viewers: 0,
             avg_time_seconds: 0,
             engagement_score: 0
         };
+
+        const { data, error } = await supabase
+            .rpc('get_realtime_document_stats', { p_document_id: documentId });
+
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] get_realtime_document_stats RPC not found — run the SQL migration. Returning defaults.');
+                return defaultStats;
+            }
+            throw error;
+        }
+        return data && data[0] ? data[0] : defaultStats;
     },
 
     /**
@@ -230,7 +297,13 @@ export const analyticsService = {
             .eq('document_id', documentId)
             .order('hour_label', { ascending: true });
 
-        if (error) throw error;
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] document_hourly_stats view not found — run the SQL migration. Returning empty data.');
+                return [];
+            }
+            throw error;
+        }
         return data || [];
     },
 
@@ -243,8 +316,13 @@ export const analyticsService = {
             .select('*')
             .eq('document_id', documentId);
 
-        if (error) throw error;
+        if (error) {
+            if (isMissingResource(error)) {
+                console.warn('[Analytics] document_completion_summary view not found — run the SQL migration. Returning empty data.');
+                return [];
+            }
+            throw error;
+        }
         return data || [];
     }
 };
-
