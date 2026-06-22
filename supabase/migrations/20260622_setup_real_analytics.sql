@@ -1,6 +1,6 @@
--- ============================================
--- Setup Real Analytics Stats Views
--- ============================================
+-- Drop views first to avoid datatype change errors
+DROP VIEW IF EXISTS document_hourly_stats CASCADE;
+DROP VIEW IF EXISTS document_completion_summary CASCADE;
 
 -- Create document_hourly_stats view to aggregate page views by hour label
 CREATE OR REPLACE VIEW document_hourly_stats AS

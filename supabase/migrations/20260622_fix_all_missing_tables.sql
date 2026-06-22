@@ -140,6 +140,12 @@ END $$;
 -- SECTION 5: ANALYTICS VIEWS
 -- ============================================================
 
+-- Drop views first to avoid datatype change errors
+DROP VIEW IF EXISTS daily_document_stats CASCADE;
+DROP VIEW IF EXISTS page_attention_stats CASCADE;
+DROP VIEW IF EXISTS viewer_geo_stats CASCADE;
+DROP VIEW IF EXISTS device_analytics_stats CASCADE;
+
 -- 5a. daily_document_stats
 --     Aggregates session data into daily statistics per document
 CREATE OR REPLACE VIEW daily_document_stats AS
