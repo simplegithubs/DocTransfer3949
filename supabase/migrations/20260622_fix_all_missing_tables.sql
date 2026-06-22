@@ -232,6 +232,11 @@ GROUP  BY das.document_id,
 -- SECTION 6: RPC FUNCTIONS
 -- ============================================================
 
+-- Drop functions first to avoid return type change errors
+DROP FUNCTION IF EXISTS increment_view_count(UUID);
+DROP FUNCTION IF EXISTS get_realtime_document_stats(UUID);
+DROP FUNCTION IF EXISTS get_document_conversion_funnel(UUID);
+
 -- 6a. increment_view_count
 --     Safely increments the view_count column on documents
 CREATE OR REPLACE FUNCTION increment_view_count(doc_id UUID)
