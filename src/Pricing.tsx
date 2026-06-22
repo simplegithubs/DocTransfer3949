@@ -511,15 +511,15 @@ const Pricing: React.FC = () => {
                         <div>
                             <h5 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.5rem' }}>Connect</h5>
                             <div style={{ display: 'flex', gap: '1rem' }}>
-                                <a href="https://x.com/Roushan71262" target="_blank" style={{ color: '#94a3b8' }}><Twitter size={20} /></a>
-                                <a href="https://www.instagram.com/doctransfer2227/" target="_blank" style={{ color: '#94a3b8' }}><Instagram size={20} /></a>
-                                <a href="https://www.youtube.com/@doctransfer144" target="_blank" style={{ color: '#94a3b8' }}><Youtube size={20} /></a>
-                                <a href="https://www.linkedin.com/in/doctransfer-0a2291314/" target="_blank" style={{ color: '#94a3b8' }}><Linkedin size={20} /></a>
+                                <a href="https://x.com/Roushan71262" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8' }}><Twitter size={20} /></a>
+                                <a href="https://www.instagram.com/doctransfer2227/" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8' }}><Instagram size={20} /></a>
+                                <a href="https://www.youtube.com/@doctransfer144" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8' }}><Youtube size={20} /></a>
+                                <a href="https://www.linkedin.com/in/doctransfer-0a2291314/" target="_blank" rel="noopener noreferrer" style={{ color: '#94a3b8' }}><Linkedin size={20} /></a>
                             </div>
                         </div>
                     </div>
                     <div style={{ borderTop: '1px solid #1e293b', paddingTop: '2rem', textAlign: 'center', color: '#64748b', fontSize: '0.875rem' }}>
-                        © 2025 DocTransfer. All rights reserved.
+                        © {new Date().getFullYear()} DocTransfer. All rights reserved.
                     </div>
                 </div>
             </footer>

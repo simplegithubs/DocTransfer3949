@@ -69,14 +69,42 @@ const SEOCategoryPage: React.FC<SEOCategoryPageProps> = ({ category }) => {
         "@type": "Offer",
         "price": "0.00",
         "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "128"
       }
     });
   }
+
+  // 2.5. BreadcrumbList Schema
+  const categoryLabel = {
+    'alternatives': 'Alternatives',
+    'comparisons': 'Comparisons',
+    'templates': 'Templates',
+    'how-to': 'How-To Guides',
+    'industry': 'Industry',
+    'gen-z': 'Gen-Z'
+  }[category] || category;
+
+  schemas.push({
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://doctransfer.app"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": categoryLabel,
+        "item": `https://doctransfer.app/${category}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": pageData.title
+      }
+    ]
+  });
 
   // 3. FAQPage Schema
   if (pageData.faqs && pageData.faqs.length > 0) {

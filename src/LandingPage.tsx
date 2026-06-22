@@ -328,7 +328,7 @@ const LandingPage: React.FC = () => {
           <h1 className="hero-title-animated">Securely Share, Track, and Manage Sensitive Files with DocTransfer</h1>
           <p className="hero-subtitle-animated">The best free DocSend alternative. Securely share files with end-to-end encryption, real-time page-by-page analytics, dynamic watermarks, and e-signatures—completely free forever.</p>
           <div className="hero-actions">
-            <Link to="/pricing">
+            <Link to="/dataroom">
               <button className="hero-btn-primary">Get Started Free</button>
             </Link>
             <Link to="/pricing">

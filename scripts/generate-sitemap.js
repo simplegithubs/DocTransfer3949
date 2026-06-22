@@ -199,8 +199,11 @@ async function generateSitemap() {
             if (error) {
                 console.error("Warning: Failed to fetch database templates:", error.message);
             } else if (templates) {
-                console.log(`Fetched ${templates.length} custom templates from database.`);
-                templates.forEach(t => {
+                // Filter out UUID-based IDs — only include human-readable slugs
+                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                const slugTemplates = templates.filter(t => !uuidRegex.test(t.id));
+                console.log(`Fetched ${templates.length} custom templates from database (${templates.length - slugTemplates.length} UUID-based entries filtered out).`);
+                slugTemplates.forEach(t => {
                     entries.push({
                         loc: `${BASE_URL}/templates/${t.id}`,
                         priority: '0.8',

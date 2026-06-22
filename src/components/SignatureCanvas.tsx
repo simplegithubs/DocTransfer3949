@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 import { X, RotateCcw, Upload as UploadIcon, PenTool } from 'lucide-react';
+import SignatureFontLoader from './SignatureFontLoader';
 
 interface SignatureCanvasComponentProps {
     onSave: (signatureData: string, type: 'drawn' | 'typed' | 'uploaded') => void;
@@ -241,6 +242,8 @@ const SignatureCanvasComponent: React.FC<SignatureCanvasComponentProps> = ({
             }}
             onClick={onClose}
         >
+            {/* Lazy-load signature fonts only when this modal opens */}
+            <SignatureFontLoader />
             <div
                 style={{
                     background: 'white',
