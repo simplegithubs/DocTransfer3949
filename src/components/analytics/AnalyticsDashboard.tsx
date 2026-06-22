@@ -139,6 +139,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
         avg_time_seconds: 0,
         engagement_score: 0
     });
+    const [hourlyStats, setHourlyStats] = useState<any[]>([]);
+    const [completionStats, setCompletionStats] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
@@ -162,7 +164,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
         if (!documentId) return;
         setLoading(true); setError(null);
         try {
-            const [daily, pages, geo, devices, funnel, downloads, dlCount, rtStats] = await Promise.all([
+            const [daily, pages, geo, devices, funnel, downloads, dlCount, rtStats, hourly, completion] = await Promise.all([
                 analyticsService.getDailyStats(documentId, timeRange),
                 analyticsService.getPageAttention(documentId),
                 analyticsService.getGeoStats(documentId),
@@ -170,7 +172,9 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
                 analyticsService.getConversionFunnel(documentId),
                 analyticsService.getReceiverDownloads(documentId),
                 analyticsService.getDownloadCount(documentId),
-                analyticsService.getRealtimeStats(documentId)
+                analyticsService.getRealtimeStats(documentId),
+                analyticsService.getHourlyStats(documentId),
+                analyticsService.getCompletionStats(documentId)
             ]);
 
             setDailyStats(Array.isArray(daily) ? daily : []);
@@ -181,6 +185,8 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
             setReceiverDownloads(Array.isArray(downloads) ? downloads : []);
             setDownloadCount(typeof dlCount === 'number' ? dlCount : (Array.isArray(downloads) ? downloads.length : 0));
             setRealtimeStats(rtStats);
+            setHourlyStats(Array.isArray(hourly) ? hourly : []);
+            setCompletionStats(Array.isArray(completion) ? completion : []);
         } catch (error: any) {
             console.error('Failed to fetch analytics:', error);
             setError(error.message || 'Failed to load analytics data. Please ensure database views are created.');
@@ -202,21 +208,42 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ documentId, doc
         const devicesData = deviceStats.map((device) => ({ category: 'Devices', label: device.device_type ? device.device_type.charAt(0).toUpperCase() + device.device_type.slice(1) : 'Unknown', value: device.session_count, type: 'devices' }));
         const pagesData = pageAttention.slice(0, 5).map((page) => ({ category: 'Pages', label: `Page ${page.page_number}`, value: Math.round(page.avg_duration_seconds), type: 'pages' }));
         const locationsData = (Array.isArray(geoStats) ? geoStats : []).slice(0, 5).map((geo) => ({ category: 'Locations', label: getCountryName(geo.country_code), value: geo.session_count || 0, type: 'locations' }));
-        const hoursData = [
-            { category: 'Hours', label: '00:00', value: Math.round(totalViews * 0.04), type: 'hours' },
-            { category: 'Hours', label: '06:00', value: Math.round(totalViews * 0.08), type: 'hours' },
-            { category: 'Hours', label: '12:00', value: Math.round(totalViews * 0.35), type: 'hours' },
-            { category: 'Hours', label: '18:00', value: Math.round(totalViews * 0.28), type: 'hours' },
-            { category: 'Hours', label: '21:00', value: Math.round(totalViews * 0.15), type: 'hours' }
-        ];
-        const completedCount = Math.round(totalViews * 0.65);
-        const pendingCount = Math.round(totalViews * 0.25);
-        const droppedCount = Math.round(totalViews * 0.10);
+        
+        // Real Hourly Views mapping
+        const hoursMap: Record<string, number> = {};
+        for (let i = 0; i < 24; i++) {
+            const h = i.toString().padStart(2, '0') + ':00';
+            hoursMap[h] = 0;
+        }
+        hourlyStats.forEach(stat => {
+            if (stat.hour_label in hoursMap) {
+                hoursMap[stat.hour_label] = stat.view_count;
+            }
+        });
+        const hoursData = Object.entries(hoursMap).map(([hour, count]) => ({
+            category: 'Hours',
+            label: hour,
+            value: count,
+            type: 'hours'
+        }));
+
+        // Real Completion Status mapping
+        const completionMap: Record<string, number> = {
+            'Completed': 0,
+            'Pending': 0,
+            'Dropped': 0
+        };
+        completionStats.forEach(stat => {
+            if (stat.completion_status in completionMap) {
+                completionMap[stat.completion_status] = stat.status_count;
+            }
+        });
         const completionData = [
-            { category: 'Status', label: 'Completed', value: completedCount || 65, type: 'completion' },
-            { category: 'Status', label: 'Pending', value: pendingCount || 25, type: 'completion' },
-            { category: 'Status', label: 'Dropped', value: droppedCount || 10, type: 'completion' }
+            { category: 'Status', label: 'Completed', value: completionMap['Completed'], type: 'completion' },
+            { category: 'Status', label: 'Pending', value: completionMap['Pending'], type: 'completion' },
+            { category: 'Status', label: 'Dropped', value: completionMap['Dropped'], type: 'completion' }
         ];
+
 
         if (activeMetric === 'all') { data.push(...viewsData, ...devicesData, ...pagesData, ...locationsData, ...hoursData, ...completionData); }
         else if (activeMetric === 'views') { data.push(...viewsData); }

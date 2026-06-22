@@ -218,5 +218,33 @@ export const analyticsService = {
             avg_time_seconds: 0,
             engagement_score: 0
         };
+    },
+
+    /**
+     * Get hourly views statistics for a document
+     */
+    async getHourlyStats(documentId: string): Promise<{ hour_label: string; view_count: number }[]> {
+        const { data, error } = await supabase
+            .from('document_hourly_stats')
+            .select('*')
+            .eq('document_id', documentId)
+            .order('hour_label', { ascending: true });
+
+        if (error) throw error;
+        return data || [];
+    },
+
+    /**
+     * Get completion status stats for a document
+     */
+    async getCompletionStats(documentId: string): Promise<{ completion_status: string; status_count: number }[]> {
+        const { data, error } = await supabase
+            .from('document_completion_summary')
+            .select('*')
+            .eq('document_id', documentId);
+
+        if (error) throw error;
+        return data || [];
     }
 };
+
