@@ -1,8 +1,35 @@
 
+import fs from 'fs';
+import path from 'path';
+
 // Removed require since Node 22 has global fetch
 async function run() {
-    const url = "https://myrthifravcxvcqlptcp.supabase.co/functions/v1/create-checkout-session";
-    const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15cnRoaWZyYXZjeHZjcWxwdGNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzMjA2MDQsImV4cCI6MjA3OTg5NjYwNH0.IO3AawigN1Vm3U842gTiiIw9oMMBNl3z9XDYuUaPMEI";
+    // Parse .env manually from workspace
+    const envPath = path.resolve('.env');
+    const env = {};
+    if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, 'utf-8');
+        envContent.split(/\r?\n/).forEach(line => {
+            const parts = line.split('=');
+            if (parts.length >= 2) {
+                const key = parts[0].trim();
+                const val = parts.slice(1).join('=').trim().replace(/^['"]|['"]$/g, '');
+                if (key && val) {
+                    env[key] = val;
+                }
+            }
+        });
+    }
+
+    const supabaseUrl = env.VITE_SUPABASE_URL;
+    const anonKey = env.VITE_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !anonKey) {
+        console.error("Error: Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in .env!");
+        process.exit(1);
+    }
+
+    const url = `${supabaseUrl}/functions/v1/create-checkout-session`;
 
     try {
         const response = await fetch(url, {

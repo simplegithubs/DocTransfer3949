@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, BookOpen, Clock, User, Calendar } from 'lucide-react';
+import { ArrowRight, Sparkles, BookOpen, Clock, Calendar } from 'lucide-react';
 import SEO from '../components/SEO';
 import { blogArticles } from '../data/blogData';
 

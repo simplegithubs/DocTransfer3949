@@ -12,9 +12,8 @@ import {
     ArrowRight, 
     ArrowLeft, 
     CheckCircle, 
-    HelpCircle,
     UserCheck,
-    Lock
+    HelpCircle
 } from 'lucide-react';
 
 const PublicTemplateDetail: React.FC = () => {

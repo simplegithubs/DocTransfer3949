@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useUser } from '@clerk/clerk-react';
 import { Check, Sparkles } from 'lucide-react';
 
 const PaymentSuccess: React.FC = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { user } = useUser();
     const [loading, setLoading] = useState(true);
     const sessionId = searchParams.get('session_id');
 
