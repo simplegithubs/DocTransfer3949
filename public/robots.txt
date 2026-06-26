@@ -3,6 +3,17 @@ Allow: /
 Allow: /pricing
 Allow: /login
 Allow: /signup
+Allow: /alternatives
+Allow: /alternatives/
+Allow: /comparisons
+Allow: /comparisons/
+Allow: /how-to/
+Allow: /industry/
+Allow: /gen-z/
+Allow: /templates
+Allow: /templates/
+Allow: /blog
+Allow: /blog/
 
 # Protect private dashboard and user settings
 Disallow: /dataroom
@@ -12,5 +23,8 @@ Disallow: /preview/
 Disallow: /api/
 Disallow: /view/
 Disallow: /sign/
+Disallow: /checkout
+Disallow: /payment-success
+Disallow: /document-sharing
 
 Sitemap: https://doctransfer.app/sitemap.xml
