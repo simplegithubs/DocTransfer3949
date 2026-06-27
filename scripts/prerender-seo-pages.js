@@ -548,13 +548,14 @@ function generateStaticHTML(template, route) {
     html = html.replace('</head>', `  ${structuredDataHtml}\n</head>`);
   }
   
-  // CRITICAL: Replace the root div (empty or with old hidden h1) with actual visible SEO content.
-  // React will hydrate over this content when JS loads, replacing it seamlessly.
-  // This ensures Googlebot sees real text on the first HTML response.
-  // Match both clean template and old prerendered pattern
+  // CRITICAL: Inject SEO content inside #root for Googlebot, but HIDDEN from users.
+  // The content is wrapped in a display:none container so it won't flash before React mounts.
+  // Googlebot still crawls display:none content, and the site's JSON-LD structured data
+  // in <head> provides the primary SEO signals.
+  // Match clean template, old visible article pattern, or previously hidden pattern
   html = html.replace(
-    /<div id="root">(?:<h1[^>]*>[^<]*<\/h1>)?<\/div>/,
-    `<div id="root">${seoBodyHtml}</div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://doctransfer.app">Visit DocTransfer</a></p></noscript>`
+    /<div id="root">(?:<div class="seo-fallback"[^>]*>)?(?:<article>[\s\S]*?<\/article>)?(?:<\/div>)?(?:<h1[^>]*>[^<]*<\/h1>)?<\/div>/,
+    `<div id="root"><div class="seo-fallback" style="display:none">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://doctransfer.app">Visit DocTransfer</a></p></noscript>`
   );
   
   return html;
