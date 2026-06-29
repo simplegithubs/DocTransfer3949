@@ -27,4 +27,4 @@ Disallow: /checkout
 Disallow: /payment-success
 Disallow: /document-sharing
 
-Sitemap: https://doctransfer.app/sitemap.xml
+Sitemap: https://www.doctransfer.app/sitemap.xml

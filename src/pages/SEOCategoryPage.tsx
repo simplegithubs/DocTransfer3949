@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import SEO from '../components/SEO';
-import { getPageBySlug, type SEOCategory } from '../data/seoPages';
+import { getPageBySlug, type SEOCategory, type HowToPageData } from '../data/seoPages';
 
 // Layout Imports
 import AlternativeLayout from '../components/seo-layouts/AlternativeLayout';
@@ -30,28 +30,28 @@ const SEOCategoryPage: React.FC<SEOCategoryPageProps> = ({ category }) => {
   }
 
   // Set up dynamic canonical URL and structure
-  const url = `https://doctransfer.app/${category}/${slug}`;
+  const url = `https://www.doctransfer.app/${category}/${slug}`;
 
   // Construct dynamic schema markup (JSON-LD @graph)
-  const schemas: any[] = [];
+  const schemas: Record<string, unknown>[] = [];
 
   // 1. Article Schema
   schemas.push({
     "@type": "Article",
     "headline": pageData.title,
     "description": pageData.description,
-    "image": pageData.imageUrl || 'https://doctransfer.app/og-image.png',
+    "image": pageData.imageUrl || 'https://www.doctransfer.app/og-image.png',
     "author": {
       "@type": "Organization",
       "name": "DocTransfer Team",
-      "url": "https://doctransfer.app"
+      "url": "https://www.doctransfer.app"
     },
     "publisher": {
       "@type": "Organization",
       "name": "DocTransfer",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://doctransfer.app/logo.png"
+        "url": "https://www.doctransfer.app/logo.png"
       }
     },
     "datePublished": "2026-06-20",
@@ -90,13 +90,13 @@ const SEOCategoryPage: React.FC<SEOCategoryPageProps> = ({ category }) => {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://doctransfer.app"
+        "item": "https://www.doctransfer.app"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": categoryLabel,
-        "item": `https://doctransfer.app/${category}`
+        "item": `https://www.doctransfer.app/${category}`
       },
       {
         "@type": "ListItem",
@@ -122,13 +122,13 @@ const SEOCategoryPage: React.FC<SEOCategoryPageProps> = ({ category }) => {
   }
 
   // 4. HowTo Schema
-  if (category === 'how-to' && (pageData as any).steps) {
-    const howToData = pageData as any;
+  if (category === 'how-to' && (pageData as HowToPageData).steps) {
+    const howToData = pageData as HowToPageData;
     schemas.push({
       "@type": "HowTo",
       "name": howToData.howToTitle || pageData.title,
       "description": pageData.description,
-      "step": howToData.steps.map((s: any) => ({
+      "step": howToData.steps.map((s: { title: string; description: string }) => ({
         "@type": "HowToStep",
         "name": s.title,
         "text": s.description

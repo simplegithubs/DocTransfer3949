@@ -26,7 +26,7 @@ try {
     console.warn("Failed to load .env manually:", envErr.message);
 }
 
-const BASE_URL = 'https://doctransfer.app';
+const BASE_URL = 'https://www.doctransfer.app';
 
 // Predefined static template IDs (the ones in the application routes)
 const systemTemplates = [

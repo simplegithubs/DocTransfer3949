@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Shield, HeartHandshake, Award, Scale, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, Shield, HeartHandshake, Award, Scale, Zap, type LucideIcon } from 'lucide-react';
 import SEO from '../components/SEO';
 
 interface AlternativeSummary {
   slug: string;
   title: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: LucideIcon;
   badge: string;
   verdict: string;
 }
@@ -62,7 +62,7 @@ const AlternativesDirectory: React.FC = () => {
         title="DocTransfer Alternatives - Build Alternative Pages (20 pages)"
         description="Compare DocTransfer with top e-signature alternatives including DocuSign, PandaDoc, Adobe Sign, and more. Built for startups, creators, and legal teams."
         keywords="docusign alternatives, pandadoc alternatives, free e-signature alternatives, startup pitch deck sharing, legal e-sign"
-        url="https://doctransfer.app/alternatives"
+        url="https://www.doctransfer.app/alternatives"
       />
 
       {/* Header / Navbar */}

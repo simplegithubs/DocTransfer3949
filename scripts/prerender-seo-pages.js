@@ -18,7 +18,7 @@ import fs from 'fs';
 import path from 'path';
 
 const DIST_DIR = path.resolve('dist');
-const BASE_URL = 'https://doctransfer.app';
+const BASE_URL = 'https://www.doctransfer.app';
 
 // ============================================================
 // 1. Collect all SEO route slugs from the data files
@@ -440,7 +440,7 @@ function buildStructuredData(route) {
     'publisher': {
       '@type': 'Organization',
       'name': 'DocTransfer',
-      'url': 'https://doctransfer.app'
+      'url': 'https://www.doctransfer.app'
     }
   });
   

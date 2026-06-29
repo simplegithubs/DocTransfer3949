@@ -33,14 +33,14 @@ const BlogPostDetail: React.FC = () => {
         "author": {
           "@type": "Organization",
           "name": article.author,
-          "url": "https://doctransfer.app"
+          "url": "https://www.doctransfer.app"
         },
         "publisher": {
           "@type": "Organization",
           "name": "DocTransfer",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://doctransfer.app/logo.png"
+            "url": "https://www.doctransfer.app/logo.png"
           }
         },
         "datePublished": article.publishedDate,
@@ -69,7 +69,7 @@ const BlogPostDetail: React.FC = () => {
         title={article.metaTitle}
         description={article.metaDescription}
         keywords={article.keywords}
-        url={`https://doctransfer.app/blog/${article.slug}`}
+        url={`https://www.doctransfer.app/blog/${article.slug}`}
         schema={schemaGraph}
       />
 

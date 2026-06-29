@@ -46,14 +46,14 @@ const PublicTemplateSEO: React.FC = () => {
     setIsDownloading(true);
     try {
       // Generate content using empty or default parameters
-      const defaultVals: Record<string, any> = {};
+      const defaultVals: Record<string, string> = {};
       systemTemplate.fields.forEach(f => {
-        defaultVals[f.id] = f.defaultValue || `[${f.label}]`;
+        defaultVals[f.id] = String(f.defaultValue || '') || `[${f.label}]`;
       });
       const sections = systemTemplate.generateContent(defaultVals);
       const { pdfBytes } = await generatePdfFromTemplate(systemTemplate.name, sections);
 
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = `${systemTemplate.name} - Sample.pdf`;
@@ -97,7 +97,7 @@ const PublicTemplateSEO: React.FC = () => {
   };
 
   // Structured Schema data for SEO (JSON-LD @graph)
-  const schemas: any[] = [
+  const schemas: Record<string, unknown>[] = [
     {
       "@type": "HowTo",
       "name": `How to edit and sign a ${data.templateName}`,
@@ -148,7 +148,7 @@ const PublicTemplateSEO: React.FC = () => {
         title={data.pageTitle}
         description={data.metaDescription}
         keywords={`${data.templateName.toLowerCase()}, free ${data.templateName.toLowerCase()} template, download ${data.templateName.toLowerCase()}, e-sign ${data.templateName.toLowerCase()}`}
-        url={`https://doctransfer.app/templates/${data.slug}`}
+        url={`https://www.doctransfer.app/templates/${data.slug}`}
         schema={schemaGraph}
       />
 

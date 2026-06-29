@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, Scale, HeartHandshake, Zap, ShieldAlert, Award } from 'lucide-react';
+import { ArrowRight, Sparkles, Scale, HeartHandshake, Zap, ShieldAlert, Award, type LucideIcon } from 'lucide-react';
 import SEO from '../components/SEO';
 
 interface ComparisonSummary {
@@ -8,7 +8,7 @@ interface ComparisonSummary {
   competitor: string;
   title: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: LucideIcon;
   badge: string;
   verdict: string;
 }
@@ -68,7 +68,7 @@ const ComparisonsDirectory: React.FC = () => {
         title="Comparisons - Build Comparison Pages (30 pages)"
         description="Compare DocTransfer with top e-signature and document sharing competitors: DocuSign, PandaDoc, Adobe Sign, airSlate, and Zoho Sign."
         keywords="e-signature comparisons, DocSend alternatives, DocuSign vs DocTransfer, PandaDoc vs DocTransfer, free e-sign comparison"
-        url="https://doctransfer.app/comparisons"
+        url="https://www.doctransfer.app/comparisons"
       />
 
       {/* Header / Navbar */}

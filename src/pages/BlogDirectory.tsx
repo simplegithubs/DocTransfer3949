@@ -11,7 +11,7 @@ const BlogDirectory: React.FC = () => {
         title="Blog - Document Security, E-Signatures & Legal Guides | DocTransfer"
         description="Expert articles on document security, electronic signatures, IP protection, NDAs, and contract management. Free templates and actionable legal guides."
         keywords="document security blog, e-signature guides, NDA guide, freelance contract tips, subcontractor agreement guide"
-        url="https://doctransfer.app/blog"
+        url="https://www.doctransfer.app/blog"
       />
 
       {/* Header / Navbar */}

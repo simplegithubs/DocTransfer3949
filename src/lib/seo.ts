@@ -2,7 +2,7 @@
  * SEO Helpers for DocTransfer
  */
 
-export const BASE_URL = 'https://doctransfer.app';
+export const BASE_URL = 'https://www.doctransfer.app';
 
 export const generateComparisonSchema = (competitor: string, url: string) => {
     return {
