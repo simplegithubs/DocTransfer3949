@@ -15,6 +15,7 @@ import ComparisonsDirectory from './pages/ComparisonsDirectory'
 import AlternativesDirectory from './pages/AlternativesDirectory'
 import BlogDirectory from './pages/BlogDirectory'
 import BlogPostDetail from './pages/BlogPostDetail'
+import NotFound from './pages/NotFound'
 
 function App() {
   return (
@@ -75,6 +76,8 @@ function App() {
         }
       />
 
+      {/* Catch-all 404 */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
