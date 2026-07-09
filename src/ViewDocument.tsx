@@ -177,11 +177,22 @@ const ViewDocument: React.FC = () => {
     const fetchDocument = async () => {
         try {
             // 1. Try to find Single Document
-            const { data: docData } = await supabase
+            const { data: docData, error: docError } = await supabase
                 .from('documents')
                 .select('*')
                 .eq('share_link', shareLink)
                 .maybeSingle();
+
+            // Log any Supabase error (e.g. RLS policy blocking anon access)
+            if (docError) {
+                console.error('[ViewDocument] Supabase error fetching document:', docError);
+                // PGRST116 = no rows, which is fine for maybeSingle
+                // Other codes indicate permission/RLS issues
+                if (docError.code !== 'PGRST116') {
+                    setError('Unable to load document. This may be a permissions issue. Please try again or contact support.');
+                    return;
+                }
+            }
 
             if (docData) {
                 setDocument(docData);
@@ -190,11 +201,19 @@ const ViewDocument: React.FC = () => {
             }
 
             // 2. If not found, try to find Bundle
-            const { data: bundle } = await supabase
+            const { data: bundle, error: bundleError } = await supabase
                 .from('document_bundles')
                 .select('*')
                 .eq('share_link', shareLink)
                 .maybeSingle();
+
+            if (bundleError) {
+                console.error('[ViewDocument] Supabase error fetching bundle:', bundleError);
+                if (bundleError.code !== 'PGRST116') {
+                    setError('Unable to load document bundle. This may be a permissions issue. Please try again or contact support.');
+                    return;
+                }
+            }
 
             if (bundle) {
                 setIsBundle(true);
@@ -222,6 +241,7 @@ const ViewDocument: React.FC = () => {
             setLoading(false);
         }
     };
+
 
     const handleDocLoaded = (data: DocumentData) => {
         // Fetch branding settings

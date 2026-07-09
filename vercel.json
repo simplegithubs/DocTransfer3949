@@ -41,6 +41,18 @@
         { "source": "/checkout", "destination": "/index.html" },
         { "source": "/checkout/:path*", "destination": "/index.html" },
         { "source": "/payment-success", "destination": "/index.html" },
-        { "source": "/payment-success/:path*", "destination": "/index.html" }
+        { "source": "/payment-success/:path*", "destination": "/index.html" },
+        { "source": "/pricing", "destination": "/index.html" },
+        { "source": "/blog", "destination": "/index.html" },
+        { "source": "/blog/:path*", "destination": "/index.html" },
+        { "source": "/templates/:path*", "destination": "/index.html" },
+        { "source": "/comparisons", "destination": "/index.html" },
+        { "source": "/comparisons/:path*", "destination": "/index.html" },
+        { "source": "/alternatives", "destination": "/index.html" },
+        { "source": "/alternatives/:path*", "destination": "/index.html" },
+        { "source": "/how-to/:path*", "destination": "/index.html" },
+        { "source": "/industry/:path*", "destination": "/index.html" },
+        { "source": "/gen-z/:path*", "destination": "/index.html" },
+        { "source": "/(.*)", "destination": "/index.html" }
     ]
 }
