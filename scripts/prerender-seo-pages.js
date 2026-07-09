@@ -572,15 +572,14 @@ function generateStaticHTML(template, route) {
     html = html.replace('</head>', `  ${structuredDataHtml}\n</head>`);
   }
   
-  // CRITICAL FIX: Inject SEO content inside #root as VISIBLE content for Googlebot.
-  // Google may ignore display:none content as potentially cloaked/deceptive.
-  // The content is styled with minimal readable CSS. React will completely replace
-  // the #root innerHTML when it mounts, so JS-enabled users see the full SPA.
-  // A small inline script immediately hides the fallback to prevent FOUC.
+  // CRITICAL FIX: Inject SEO content inside #root as VISUALLY HIDDEN (sr-only) content.
+  // Googlebot/screen readers read and index visually hidden content perfectly,
+  // but it is completely invisible to human users, preventing the Flash of Unstyled Content (FOUC).
+  // React will completely replace the #root innerHTML when it mounts.
   // Match clean template, old visible article pattern, or previously hidden pattern
   html = html.replace(
     /<div id="root">(?:<div class="seo-fallback"[^>]*>)?(?:<article>[\s\S]*?<\/article>)?(?:<\/div>)?(?:<h1[^>]*>[^<]*<\/h1>)?<\/div>/,
-    `<div id="root"><div class="seo-fallback" style="font-family:system-ui,sans-serif;max-width:800px;margin:0 auto;padding:2rem;color:#1e293b;line-height:1.7">${seoBodyHtml}</div></div>\n  <script>!function(){var e=document.querySelector('.seo-fallback');if(e){var o=new MutationObserver(function(){e.parentElement&&e.parentElement.children.length>1&&(e.style.display='none',o.disconnect())});o.observe(document.getElementById('root'),{childList:true})}}()</script>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://doctransfer.app">Visit DocTransfer</a></p></noscript>`
+    `<div id="root"><div class="seo-fallback" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://doctransfer.app">Visit DocTransfer</a></p></noscript>`
   );
   
   return html;
