@@ -1,8 +1,6 @@
 User-agent: *
 Allow: /
 Allow: /pricing
-Allow: /login
-Allow: /signup
 Allow: /alternatives
 Allow: /alternatives/
 Allow: /comparisons
@@ -15,7 +13,7 @@ Allow: /templates/
 Allow: /blog
 Allow: /blog/
 
-# Protect private dashboard and user settings
+# Protect private dashboard, user data, and internal pages
 Disallow: /dataroom
 Disallow: /settings
 Disallow: /audit
@@ -26,5 +24,8 @@ Disallow: /sign/
 Disallow: /checkout
 Disallow: /payment-success
 Disallow: /document-sharing
+
+# Crawl rate
+Crawl-delay: 1
 
 Sitemap: https://www.doctransfer.app/sitemap.xml

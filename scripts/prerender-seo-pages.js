@@ -479,7 +479,7 @@ function buildStructuredData(route) {
 // ============================================================
 
 function generateStaticHTML(template, route) {
-  const { path: routePath, title, description } = route;
+  const { path: routePath, title, description, pageData } = route;
   const canonicalUrl = `${BASE_URL}${routePath === '/' ? '' : routePath}`;
   
   let html = template;
@@ -501,6 +501,15 @@ function generateStaticHTML(template, route) {
     /<meta name="description"[\s\S]*?\/>/,
     `<meta name="description" content="${escapeHtml(description)}" />`
   );
+  
+  // Replace meta keywords with page-specific keywords
+  const pageKeywords = pageData?.keywords || route.keywords || '';
+  if (pageKeywords) {
+    html = html.replace(
+      /<meta name="keywords"[\s\S]*?\/>/,
+      `<meta name="keywords" content="${escapeHtml(pageKeywords)}" />`
+    );
+  }
   
   // Replace canonical
   html = html.replace(
@@ -536,6 +545,21 @@ function generateStaticHTML(template, route) {
     `<meta name="twitter:description" content="${escapeHtml(description)}" />`
   );
   
+  // CRITICAL FIX: Strip homepage-specific JSON-LD schemas from non-homepage pages.
+  // These cause duplicate/conflicting structured data across all 91+ pages.
+  if (routePath !== '/') {
+    // Remove the homepage SoftwareApplication schema block
+    html = html.replace(
+      /\s*<!-- Structured Data - Organization & Software \(Homepage only\) -->\s*<script id="homepage-software-schema" type="application\/ld\+json">[\s\S]*?<\/script>/,
+      ''
+    );
+    // Remove the homepage FAQ schema block
+    html = html.replace(
+      /\s*<!-- Structured Data - FAQ \(Homepage only\) -->\s*<script id="homepage-faq-schema" type="application\/ld\+json">[\s\S]*?<\/script>/,
+      ''
+    );
+  }
+  
   // Build the SEO body content
   const seoBodyHtml = buildSEOBodyContent(route);
   
@@ -548,14 +572,15 @@ function generateStaticHTML(template, route) {
     html = html.replace('</head>', `  ${structuredDataHtml}\n</head>`);
   }
   
-  // CRITICAL: Inject SEO content inside #root for Googlebot, but HIDDEN from users.
-  // The content is wrapped in a display:none container so it won't flash before React mounts.
-  // Googlebot still crawls display:none content, and the site's JSON-LD structured data
-  // in <head> provides the primary SEO signals.
+  // CRITICAL FIX: Inject SEO content inside #root as VISIBLE content for Googlebot.
+  // Google may ignore display:none content as potentially cloaked/deceptive.
+  // The content is styled with minimal readable CSS. React will completely replace
+  // the #root innerHTML when it mounts, so JS-enabled users see the full SPA.
+  // A small inline script immediately hides the fallback to prevent FOUC.
   // Match clean template, old visible article pattern, or previously hidden pattern
   html = html.replace(
     /<div id="root">(?:<div class="seo-fallback"[^>]*>)?(?:<article>[\s\S]*?<\/article>)?(?:<\/div>)?(?:<h1[^>]*>[^<]*<\/h1>)?<\/div>/,
-    `<div id="root"><div class="seo-fallback" style="display:none">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://doctransfer.app">Visit DocTransfer</a></p></noscript>`
+    `<div id="root"><div class="seo-fallback" style="font-family:system-ui,sans-serif;max-width:800px;margin:0 auto;padding:2rem;color:#1e293b;line-height:1.7">${seoBodyHtml}</div></div>\n  <script>!function(){var e=document.querySelector('.seo-fallback');if(e){var o=new MutationObserver(function(){e.parentElement&&e.parentElement.children.length>1&&(e.style.display='none',o.disconnect())});o.observe(document.getElementById('root'),{childList:true})}}()</script>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://doctransfer.app">Visit DocTransfer</a></p></noscript>`
   );
   
   return html;
