@@ -30,9 +30,17 @@
     "cleanUrls": true,
     "trailingSlash": false,
     "rewrites": [
-        {
-            "source": "/((?!assets/|alternatives/|comparisons/|templates/|blog/|how-to/|industry/|gen-z/|pricing|favicon\\.png|apple-touch-icon\\.png|og-image\\.png|sitemap\\.xml|robots\\.txt|index\\.html).*).*",
-            "destination": "/index.html"
-        }
+        { "source": "/view/:path*", "destination": "/index.html" },
+        { "source": "/sign/:path*", "destination": "/index.html" },
+        { "source": "/dataroom", "destination": "/index.html" },
+        { "source": "/dataroom/:path*", "destination": "/index.html" },
+        { "source": "/document-sharing", "destination": "/index.html" },
+        { "source": "/document-sharing/:path*", "destination": "/index.html" },
+        { "source": "/settings", "destination": "/index.html" },
+        { "source": "/settings/:path*", "destination": "/index.html" },
+        { "source": "/checkout", "destination": "/index.html" },
+        { "source": "/checkout/:path*", "destination": "/index.html" },
+        { "source": "/payment-success", "destination": "/index.html" },
+        { "source": "/payment-success/:path*", "destination": "/index.html" }
     ]
 }
