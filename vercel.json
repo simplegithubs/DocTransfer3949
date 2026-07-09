@@ -29,8 +29,10 @@
     ],
     "cleanUrls": true,
     "trailingSlash": false,
-    "routes": [
-        { "handle": "filesystem" },
-        { "src": "/(.*)", "dest": "/index.html" }
+    "rewrites": [
+        {
+            "source": "/((?!assets/|alternatives/|comparisons/|templates/|blog/|how-to/|industry/|gen-z/|pricing|favicon\\.png|apple-touch-icon\\.png|og-image\\.png|sitemap\\.xml|robots\\.txt|index\\.html).*).*",
+            "destination": "/index.html"
+        }
     ]
 }
