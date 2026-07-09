@@ -28,7 +28,7 @@ import {
     Sparkles
 } from 'lucide-react';
 import Skeleton from './components/ui/Skeleton';
-import { hashPassword } from './lib/security';
+import { hashPassword, generateSecureToken } from './lib/security';
 import { encryptFile, generateEncryptionKey } from './lib/encryption';
 import AnalyticsDashboard from './components/analytics/AnalyticsDashboard';
 import DashboardAnimation from './components/DashboardAnimation';
@@ -331,7 +331,7 @@ const DataRoom: React.FC = () => {
             if (selectedFiles.length > 1) {
                 // Generates friendly name e.g. "Contract.pdf and 2 others"
                 const bundleName = `${selectedFiles[0].name} and ${selectedFiles.length - 1} others`;
-                bundleShareLink = Math.random().toString(36).substring(2, 12);
+                bundleShareLink = generateSecureToken(12);
 
                 const { data: bundleData, error: bundleError } = await authenticatedSupabase
                     .from('document_bundles')
@@ -399,7 +399,7 @@ const DataRoom: React.FC = () => {
                     throw new Error(`Storage upload failed for ${file.name}: ${uploadError.message}`);
                 }
 
-                const docShareLink = Math.random().toString(36).substring(2, 12);
+                const docShareLink = generateSecureToken(12);
 
                 // 4. Save document metadata to database
                 const { data: docData, error: dbError } = await authenticatedSupabase
@@ -455,7 +455,7 @@ const DataRoom: React.FC = () => {
                     type: file.type,
                     uploadedAt: new Date().toLocaleDateString(),
                     link: finalLink,
-                    file_path: filePath,
+                    file_path: sanitizedFilePath,
                     settings: {
                         password: passwordProtection ? 'protected' : '',
                         expiresAt: linkExpiration ? expiresAt : '',
@@ -532,7 +532,6 @@ const DataRoom: React.FC = () => {
             console.error('Upload error:', error);
             const errorMessage = error.message || 'Upload failed';
             setUploadError(errorMessage);
-            window.alert(`Upload Error: ${errorMessage}`);
         }
 
         setIsUploading(false);

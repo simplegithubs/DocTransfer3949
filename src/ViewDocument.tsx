@@ -563,7 +563,7 @@ const ViewDocument: React.FC = () => {
             await supabase
                 .from('document_access_sessions')
                 .update({ snapshot_url: url })
-                .eq('session_id', currentSessionId);
+                .eq('id', currentSessionId);
         }
     };
 

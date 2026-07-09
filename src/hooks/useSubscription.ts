@@ -232,7 +232,7 @@ export const useSubscription = () => {
 
         // Set up real-time subscription to subscription changes
         const channel = supabase
-            .channel('subscription-changes')
+            .channel(`subscription-changes-${user.id}`)
             .on(
                 'postgres_changes',
                 {
@@ -249,7 +249,7 @@ export const useSubscription = () => {
 
         // Subscribe to usage changes
         const usageChannel = supabase
-            .channel('usage-changes')
+            .channel(`usage-changes-${user.id}`)
             .on(
                 'postgres_changes',
                 {

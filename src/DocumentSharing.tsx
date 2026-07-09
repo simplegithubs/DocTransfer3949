@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from './lib/supabase';
+import { hashPassword, generateSecureToken } from './lib/security';
 import useSubscription from './hooks/useSubscription';
 import UpgradeModal from './components/UpgradeModal';
 import PremiumBadge from './components/PremiumBadge';
@@ -81,10 +82,18 @@ const DocumentSharing: React.FC = () => {
     }, []);
 
     const fetchDocuments = async () => {
-        const { data } = await supabase
+        const { data: { user } } = await supabase.auth.getUser();
+        let query = supabase
             .from('documents')
             .select('*')
             .order('created_at', { ascending: false });
+
+        // Only show the current user's documents
+        if (user?.id) {
+            query = query.eq('user_id', user.id);
+        }
+
+        const { data } = await query;
 
         if (data) {
             const formattedDocs: Document[] = data.map(doc => ({
@@ -184,7 +193,7 @@ const DocumentSharing: React.FC = () => {
 
             if (uploadError) throw uploadError;
 
-            const shareLink = Math.random().toString(36).substring(2, 12);
+            const shareLink = generateSecureToken(12);
 
             const { error: dbError } = await supabase
                 .from('documents')
@@ -195,7 +204,7 @@ const DocumentSharing: React.FC = () => {
                     file_type: uploadedFile.type,
                     share_link: shareLink,
                     allow_download: allowDownloads,
-                    password: passwordProtection ? password : null,
+                    password: passwordProtection ? await hashPassword(password) : null,
                     expires_at: linkExpiration ? expiresAt : null,
                     custom_domain: customDomain ? 'docs.company.com' : null,
                     screenshot_protection: screenshotProtection,
