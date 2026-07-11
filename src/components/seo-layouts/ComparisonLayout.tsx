@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, X, Shield, Sparkles, HelpCircle, CheckCircle, AlertCircle } from 'lucide-react';
 import type { ComparisonPageData } from '../../data/seoPages';
+import ComparisonAnimation from './ComparisonAnimation';
 
 interface ComparisonLayoutProps {
   data: ComparisonPageData;
@@ -56,11 +57,7 @@ const ComparisonLayout: React.FC<ComparisonLayoutProps> = ({ data }) => {
 
       {/* Main Content Container */}
       <main className="seo-container">
-        {data.imageUrl && (
-          <div className="seo-hero-image-wrapper" style={{ marginBottom: '3rem', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
-            <img src={data.imageUrl} alt={data.imageAlt} style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
-          </div>
-        )}
+        <ComparisonAnimation slug={data.slug} competitorName={data.competitorName} />
         {/* Section 1: Overview */}
         <section style={{ marginBottom: '4rem' }}>
           <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '1.5rem', textAlign: 'center' }}>

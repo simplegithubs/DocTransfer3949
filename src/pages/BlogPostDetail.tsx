@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Sparkles, ArrowLeft, Clock, Calendar, User, ArrowRight, BookOpen } from 'lucide-react';
 import SEO from '../components/SEO';
 import { getBlogArticleBySlug, blogArticles } from '../data/blogData';
+import BlogAnimation from '../components/BlogAnimation';
 
 const BlogPostDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -126,10 +127,8 @@ const BlogPostDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Hero Image */}
-        <div style={{ borderRadius: '20px', overflow: 'hidden', marginBottom: '3rem', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
-          <img src={article.heroImageUrl} alt={article.heroImageAlt} style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
-        </div>
+        {/* Blog Animation */}
+        <BlogAnimation slug={article.slug} />
 
         {/* Article Body */}
         <div style={{ lineHeight: 1.8 }}>

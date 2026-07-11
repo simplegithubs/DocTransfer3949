@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, X, Shield, Sparkles, CheckCircle, AlertCircle } from 'lucide-react';
 import type { AlternativePageData } from '../../data/seoPages';
+import AlternativeAnimation from './AlternativeAnimation';
 
 interface AlternativeLayoutProps {
   data: AlternativePageData;
@@ -34,11 +35,7 @@ const AlternativeLayout: React.FC<AlternativeLayoutProps> = ({ data }) => {
 
       {/* Main Content Container */}
       <main className="seo-container">
-        {data.imageUrl && (
-          <div className="seo-hero-image-wrapper" style={{ marginBottom: '3rem', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
-            <img src={data.imageUrl} alt={data.imageAlt} style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
-          </div>
-        )}
+        <AlternativeAnimation slug={data.slug} />
         {/* Section 1: Introduction */}
         <section style={{ marginBottom: '4rem', textAlign: 'center' }}>
           <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '1rem' }}>

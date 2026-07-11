@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Zap } from 'lucide-react';
 import type { GenZPageData } from '../../data/seoPages';
+import GenZAnimation from './GenZAnimation';
 
 interface GenZLayoutProps {
   data: GenZPageData;
@@ -39,11 +40,7 @@ const GenZLayout: React.FC<GenZLayoutProps> = ({ data }) => {
 
       {/* Main Container */}
       <main className="seo-container" style={{ padding: '5rem 1.5rem' }}>
-        {data.imageUrl && (
-          <div className="seo-hero-image-wrapper" style={{ marginBottom: '3rem', borderRadius: '24px', overflow: 'hidden', border: '1px solid #23153c', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}>
-            <img src={data.imageUrl} alt={data.imageAlt} style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
-          </div>
-        )}
+        <GenZAnimation slug={data.slug} />
         {/* Benefit Cards Grid */}
         <section style={{ marginBottom: '5rem' }}>
           <div className="seo-benefit-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>

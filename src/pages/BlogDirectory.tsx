@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, BookOpen, Clock, Calendar } from 'lucide-react';
 import SEO from '../components/SEO';
 import { blogArticles } from '../data/blogData';
+import BlogAnimation from '../components/BlogAnimation';
 
 const BlogDirectory: React.FC = () => {
   return (
@@ -59,14 +60,8 @@ const BlogDirectory: React.FC = () => {
               }}
               onClick={() => window.location.href = `/blog/${article.slug}`}
             >
-              {/* Image */}
-              <div style={{ height: '200px', overflow: 'hidden' }}>
-                <img
-                  src={article.heroImageUrl}
-                  alt={article.heroImageAlt}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
-                />
-              </div>
+              {/* Blog Card Animation */}
+              <BlogAnimation slug={article.slug} isCompact={true} />
 
               {/* Content */}
               <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Clock, ShieldCheck, UserCheck, CheckCircle, FileText } from 'lucide-react';
 import type { TemplatePageData } from '../../data/seoPages';
+import TemplateAnimation from './TemplateAnimation';
 
 interface TemplateLayoutProps {
   data: TemplatePageData;
@@ -46,6 +47,7 @@ const TemplateLayout: React.FC<TemplateLayoutProps> = ({ data }) => {
         >
           {/* Left Column: Details & Preview */}
           <div>
+            <TemplateAnimation slug={data.slug} />
             {/* Quick Stats Grid */}
             <div
               style={{

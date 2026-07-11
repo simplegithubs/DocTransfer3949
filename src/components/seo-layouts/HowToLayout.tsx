@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, HelpCircle, CheckCircle, Sparkles } from 'lucide-react';
 import type { HowToPageData } from '../../data/seoPages';
+import HowToAnimation from './HowToAnimation';
 
 interface HowToLayoutProps {
   data: HowToPageData;
@@ -34,11 +35,7 @@ const HowToLayout: React.FC<HowToLayoutProps> = ({ data }) => {
 
       {/* Main Container */}
       <main className="seo-container">
-        {data.imageUrl && (
-          <div className="seo-hero-image-wrapper" style={{ marginBottom: '3rem', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
-            <img src={data.imageUrl} alt={data.imageAlt} style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
-          </div>
-        )}
+        <HowToAnimation slug={data.slug} />
         {/* Section 1: Numbered Steps */}
         <section style={{ marginBottom: '5rem' }}>
           <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '2.5rem', textAlign: 'center' }}>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, AlertCircle, Shield, Award, Sparkles } from 'lucide-react';
 import type { IndustryPageData } from '../../data/seoPages';
+import IndustryAnimation from './IndustryAnimation';
 
 interface IndustryLayoutProps {
   data: IndustryPageData;
@@ -34,11 +35,7 @@ const IndustryLayout: React.FC<IndustryLayoutProps> = ({ data }) => {
 
       {/* Main Container */}
       <main className="seo-container">
-        {data.imageUrl && (
-          <div className="seo-hero-image-wrapper" style={{ marginBottom: '3rem', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}>
-            <img src={data.imageUrl} alt={data.imageAlt} style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }} />
-          </div>
-        )}
+        <IndustryAnimation slug={data.slug} />
         {/* Stats Grid */}
         <section
           style={{
