@@ -616,6 +616,7 @@ import { comparisonsGroup } from './seo-pages/comparisonsGroup';
 import { industryGroup } from './seo-pages/industryGroup';
 import { howtoGroup } from './seo-pages/howtoGroup';
 import { genzGroup } from './seo-pages/genzGroup';
+import { csvGroup } from './seo-pages/csvGroup';
 
 export const allSEOPages: SEOPageData[] = [
   ...baseSEOPages.map(page => {
@@ -636,7 +637,8 @@ export const allSEOPages: SEOPageData[] = [
   ...comparisonsGroup,
   ...industryGroup,
   ...howtoGroup,
-  ...genzGroup
+  ...genzGroup,
+  ...csvGroup
 ];
 
 export function getPageBySlug(category: SEOCategory, slug: string): SEOPageData | undefined {
