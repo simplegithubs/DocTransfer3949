@@ -469,6 +469,7 @@ templatesData.forEach(item => {
     templatesOutput += `    templateName: ${JSON.stringify(item.name)},\n`;
     templatesOutput += `    pageTitle: ${JSON.stringify('Free ' + item.name + ' Template - Download & Edit Online | DocTransfer')},\n`;
     templatesOutput += `    metaDescription: ${JSON.stringify('Download free ' + item.name + ' template with compliant clauses. Target keyword: ' + item.keyword + '. Sign online instantly with DocTransfer.')},\n`;
+    templatesOutput += `    keywords: ${JSON.stringify(item.keyword + ', ' + item.sec.join(', '))},\n`;
     templatesOutput += `    benefits: 'compliant clauses, easy formatting, secure signatures',\n`;
     templatesOutput += `    introduction: ${JSON.stringify(intro)},\n`;
     templatesOutput += `    instructions: ${JSON.stringify(instructions)},\n`;

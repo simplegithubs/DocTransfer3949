@@ -147,7 +147,7 @@ const PublicTemplateSEO: React.FC = () => {
       <SEO
         title={data.pageTitle}
         description={data.metaDescription}
-        keywords={`${data.templateName.toLowerCase()}, free ${data.templateName.toLowerCase()} template, download ${data.templateName.toLowerCase()}, e-sign ${data.templateName.toLowerCase()}`}
+        keywords={data.keywords}
         url={`https://www.doctransfer.app/templates/${data.slug}`}
         schema={schemaGraph}
       />
