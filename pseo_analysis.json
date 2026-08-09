@@ -1,0 +1,2001 @@
+[
+  {
+    "file": "seoPages.ts (base)",
+    "pages": 16,
+    "details": [
+      {
+        "slug": "docusign-alternative",
+        "keywords": [
+          "DocuSign alternative",
+          "free e-signature",
+          "secure document signing",
+          "online signatures",
+          "sign documents free"
+        ]
+      },
+      {
+        "slug": "pandadoc-alternative",
+        "keywords": [
+          "PandaDoc alternative",
+          "free proposal creator",
+          "document tracking",
+          "sign contracts online",
+          "contract management"
+        ]
+      },
+      {
+        "slug": "docusign-vs-doctransfer",
+        "keywords": [
+          "DocuSign vs DocTransfer",
+          "contract signature comparison",
+          "secure document sharing",
+          "e-signature pricing comparison"
+        ]
+      },
+      {
+        "slug": "pandadoc-vs-doctransfer",
+        "keywords": [
+          "PandaDoc vs DocTransfer",
+          "proposal builder alternative",
+          "document analytics comparison",
+          "e-sign proposal pricing"
+        ]
+      },
+      {
+        "slug": "adobe-sign-vs-doctransfer",
+        "keywords": [
+          "Adobe Sign vs DocTransfer",
+          "e-signature comparison",
+          "secure document signing",
+          "Adobe Sign alternative"
+        ]
+      },
+      {
+        "slug": "airslate-vs-doctransfer",
+        "keywords": [
+          "airSlate vs DocTransfer",
+          "document transfer tools",
+          "workflow automation alternative",
+          "secure e-signatures"
+        ]
+      },
+      {
+        "slug": "zoho-sign-vs-doctransfer",
+        "keywords": [
+          "Zoho Sign vs DocTransfer",
+          "small business e-sign",
+          "free Zoho Sign alternative",
+          "secure document tracking"
+        ]
+      },
+      {
+        "slug": "sign-contract-online",
+        "keywords": [
+          "sign contract online",
+          "how to e-sign document",
+          "digital contract signature",
+          "secure online contract signing"
+        ]
+      },
+      {
+        "slug": "real-estate-contracts",
+        "keywords": [
+          "real estate contracts",
+          "sign leases online",
+          "close property deals",
+          "real estate document share",
+          "secure disclosures tracking"
+        ]
+      },
+      {
+        "slug": "legal-document-transfer",
+        "keywords": [
+          "legal document transfer",
+          "secure attorney files",
+          "sign retainer online",
+          "legal E2EE sharing",
+          "compliance file transfer"
+        ]
+      },
+      {
+        "slug": "document-transfer-startups",
+        "keywords": [
+          "startups pitch deck tracking",
+          "secure file transfer founders",
+          "raise capital e-sign",
+          "mobile first document share"
+        ]
+      },
+      {
+        "slug": "docusign-alternatives-legal",
+        "keywords": [
+          "docusign alternatives legal",
+          "law firm e-sign",
+          "legal document signing",
+          "attorney client privilege e-signature"
+        ]
+      },
+      {
+        "slug": "pandadoc-alternatives-startups",
+        "keywords": [
+          "pandadoc alternatives startups",
+          "pitch deck tracking free",
+          "startup founder agreement",
+          "seed round sign online"
+        ]
+      },
+      {
+        "slug": "free-docusign-alternatives",
+        "keywords": [
+          "free docusign alternatives",
+          "e-sign free no credit card",
+          "unlimited free signatures",
+          "sign pdf free online"
+        ]
+      },
+      {
+        "slug": "enterprise-docusign-alternatives",
+        "keywords": [
+          "enterprise docusign alternatives",
+          "fortune 500 e-sign",
+          "secure virtual data room",
+          "enterprise document analytics"
+        ]
+      },
+      {
+        "slug": "docusign-alternatives-gen-z",
+        "keywords": [
+          "docusign alternatives gen z",
+          "easy cheap e-sign",
+          "creator contract sign online",
+          "mobile first file transfer"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "seoExpandedContent.ts",
+    "pages": 16,
+    "details": [
+      {
+        "slug": "docusign-alternative",
+        "keywords": []
+      },
+      {
+        "slug": "pandadoc-alternative",
+        "keywords": []
+      },
+      {
+        "slug": "docusign-vs-doctransfer",
+        "keywords": []
+      },
+      {
+        "slug": "pandadoc-vs-doctransfer",
+        "keywords": []
+      },
+      {
+        "slug": "adobe-sign-vs-doctransfer",
+        "keywords": []
+      },
+      {
+        "slug": "airslate-vs-doctransfer",
+        "keywords": []
+      },
+      {
+        "slug": "zoho-sign-vs-doctransfer",
+        "keywords": []
+      },
+      {
+        "slug": "sign-contract-online",
+        "keywords": []
+      },
+      {
+        "slug": "real-estate-contracts",
+        "keywords": []
+      },
+      {
+        "slug": "legal-document-transfer",
+        "keywords": []
+      },
+      {
+        "slug": "document-transfer-startups",
+        "keywords": []
+      },
+      {
+        "slug": "docusign-alternatives-legal",
+        "keywords": []
+      },
+      {
+        "slug": "pandadoc-alternatives-startups",
+        "keywords": []
+      },
+      {
+        "slug": "free-docusign-alternatives",
+        "keywords": []
+      },
+      {
+        "slug": "enterprise-docusign-alternatives",
+        "keywords": []
+      },
+      {
+        "slug": "docusign-alternatives-gen-z",
+        "keywords": []
+      }
+    ]
+  },
+  {
+    "file": "templateSeoData.ts",
+    "pages": 32,
+    "details": [
+      {
+        "slug": "rofr-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "lease-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "service-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "employment-contract-template",
+        "keywords": []
+      },
+      {
+        "slug": "freelance-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "partnership-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "lease-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "partnership-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "service-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "employment-contract-template",
+        "keywords": []
+      },
+      {
+        "slug": "rofr-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "partnership-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "freelance-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "freelance-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "service-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "service-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "freelance-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "service-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "lease-agreement-template",
+        "keywords": []
+      }
+    ]
+  },
+  {
+    "file": "blogData.ts",
+    "pages": 27,
+    "details": [
+      {
+        "slug": "protect-ip-freelance-consulting-agreements",
+        "keywords": [
+          "freelance IP protection",
+          "consulting agreement IP clause",
+          "intellectual property assignment",
+          "freelancer contract tips"
+        ]
+      },
+      {
+        "slug": "ip-assignment-template",
+        "keywords": [
+          "mutual NDA vs unilateral NDA",
+          "non-disclosure agreement types",
+          "when to use mutual NDA",
+          "NDA for startups"
+        ]
+      },
+      {
+        "slug": "freelance-agreement-template",
+        "keywords": [
+          "subcontracting guide",
+          "subcontractor agreement template",
+          "startup subcontracting",
+          "agency subcontractor management"
+        ]
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "ip-assignment-template",
+        "keywords": []
+      },
+      {
+        "slug": "freelance-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "non-compete-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "mutual-vs-unilateral-nda-guide",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "mutual-nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "mutual-nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "non-compete-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "partnership-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "complete-guide-subcontracting-startups",
+        "keywords": []
+      },
+      {
+        "slug": "subcontractor-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "service-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "subcontractor-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "service-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "ip-assignment-template",
+        "keywords": []
+      },
+      {
+        "slug": "freelance-agreement-template",
+        "keywords": []
+      }
+    ]
+  },
+  {
+    "file": "alternativesGroup.ts",
+    "pages": 5,
+    "details": [
+      {
+        "slug": "docsend-alternative-startups",
+        "keywords": [
+          "free docsend alternative for startups",
+          "secure pitch deck sharing",
+          "pitch deck analytics free",
+          "investor document tracking"
+        ]
+      },
+      {
+        "slug": "free-virtual-data-room",
+        "keywords": [
+          "best secure virtual data room free",
+          "secure document sharing analytics",
+          "secure file sharing",
+          "data room for startups"
+        ]
+      },
+      {
+        "slug": "docusign-alternative-small-business",
+        "keywords": [
+          "docusign alternative for small business",
+          "free e-signature",
+          "small business e-sign",
+          "sign pdf online free"
+        ]
+      },
+      {
+        "slug": "free-proposal-creator-tracking",
+        "keywords": [
+          "free proposal creator with tracking",
+          "proposal builder alternative",
+          "track proposal opens",
+          "sales proposal e-sign"
+        ]
+      },
+      {
+        "slug": "client-side-encrypted-sharing",
+        "keywords": [
+          "client side encrypted document sharing",
+          "secure file transfer",
+          "E2EE document vault",
+          "zero knowledge sharing"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "comparisonsGroup.ts",
+    "pages": 5,
+    "details": [
+      {
+        "slug": "docsend-vs-doctransfer",
+        "keywords": [
+          "docsend vs doctransfer comparison",
+          "free docsend alternative",
+          "secure pitch deck tracking",
+          "investor deck analytics"
+        ]
+      },
+      {
+        "slug": "digisigner-vs-doctransfer",
+        "keywords": [
+          "digisigner vs doctransfer features",
+          "free online signature",
+          "e-sign software features",
+          "secure document signing"
+        ]
+      },
+      {
+        "slug": "signwell-vs-doctransfer",
+        "keywords": [
+          "signwell vs doctransfer pricing",
+          "free e-signatures",
+          "unlimited templates free",
+          "esign software costs"
+        ]
+      },
+      {
+        "slug": "hellosign-vs-docusign-vs-doctransfer",
+        "keywords": [
+          "hellosign vs docusign vs doctransfer",
+          "free e-sign alternatives",
+          "secure document signing software",
+          "contract signer online"
+        ]
+      },
+      {
+        "slug": "secure-document-sharing-vs-email",
+        "keywords": [
+          "secure document sharing vs standard email",
+          "secure file transfer",
+          "email attachment security risks",
+          "encrypted contract sending"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "csvGroup.ts",
+    "pages": 110,
+    "details": [
+      {
+        "slug": "how-to-sign-pdf-online",
+        "keywords": [
+          "sign pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-add-signature-to-pdf",
+        "keywords": [
+          "add signature to pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-online",
+        "keywords": [
+          "digital signature online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-file-sharing",
+        "keywords": [
+          "file sharing",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-files",
+        "keywords": [
+          "share files",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-pdf",
+        "keywords": [
+          "digital signature pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-online-signature-pdf",
+        "keywords": [
+          "online signature pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-files-online",
+        "keywords": [
+          "share files online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-signature-on-pdf",
+        "keywords": [
+          "signature on pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-pdf-documents",
+        "keywords": [
+          "sign pdf documents",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-pdf-document-online",
+        "keywords": [
+          "sign pdf document online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-a-file",
+        "keywords": [
+          "share a file",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-file-share-service",
+        "keywords": [
+          "file share service",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-add-signature-to-pdf-document",
+        "keywords": [
+          "add signature to pdf document",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-the-pdf-online",
+        "keywords": [
+          "sign the pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-pdf-doc",
+        "keywords": [
+          "sign pdf doc",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-on-pdf-document",
+        "keywords": [
+          "digital signature on pdf document",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-sign-pdf-document",
+        "keywords": [
+          "digital sign pdf document",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signing-online",
+        "keywords": [
+          "digital signing online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-online-sign-on-pdf",
+        "keywords": [
+          "online sign on pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-signing-on-a-pdf-document",
+        "keywords": [
+          "signing on a pdf document",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-signing-on-pdf-online",
+        "keywords": [
+          "signing on pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-pdf-on-line",
+        "keywords": [
+          "sign pdf on line",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-add-signature-into-pdf",
+        "keywords": [
+          "add signature into pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-on-a-pdf-online",
+        "keywords": [
+          "sign on a pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-add-pdf-signature-to-pdf-file",
+        "keywords": [
+          "add pdf signature to pdf file",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-into-pdf",
+        "keywords": [
+          "sign into pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-file-sharing-and",
+        "keywords": [
+          "file sharing and",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-file-sharing-share",
+        "keywords": [
+          "file sharing share",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-documents-online",
+        "keywords": [
+          "sign documents online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-electronic-signature",
+        "keywords": [
+          "electronic signature",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-online-signature",
+        "keywords": [
+          "online signature",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-electronic-signature-free",
+        "keywords": [
+          "electronic signature free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-pdf-online-free",
+        "keywords": [
+          "sign pdf online free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-documents-online-free",
+        "keywords": [
+          "sign documents online free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-e-signature-free",
+        "keywords": [
+          "e signature free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-esign-documents",
+        "keywords": [
+          "esign documents",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-free",
+        "keywords": [
+          "digital signature free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-free-pdf-signature",
+        "keywords": [
+          "free pdf signature",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-e-signature-online",
+        "keywords": [
+          "e signature online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-electronic-signature-pdf",
+        "keywords": [
+          "electronic signature pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-add-signature-to-pdf-free",
+        "keywords": [
+          "add signature to pdf free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-large-files",
+        "keywords": [
+          "share large files",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-e-signature-pdf",
+        "keywords": [
+          "e signature pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-electronic-signature-online",
+        "keywords": [
+          "electronic signature online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-online-free",
+        "keywords": [
+          "digital signature online free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-pdf-signature-online-free",
+        "keywords": [
+          "pdf signature online free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-add-digital-signature-to-pdf",
+        "keywords": [
+          "add digital signature to pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-big-files",
+        "keywords": [
+          "share big files",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-doc-online",
+        "keywords": [
+          "sign doc online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-large-files-free",
+        "keywords": [
+          "share large files free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-online-document-signature",
+        "keywords": [
+          "online document signature",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-digital-documents",
+        "keywords": [
+          "sign digital documents",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-large-files-online",
+        "keywords": [
+          "share large files online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-esign-pdf-online",
+        "keywords": [
+          "esign pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-e-sign-online",
+        "keywords": [
+          "e sign online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-pdf-documents-free",
+        "keywords": [
+          "sign pdf documents free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-files-online-free",
+        "keywords": [
+          "share files online free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-doc-online-free",
+        "keywords": [
+          "sign doc online free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-big-files-free",
+        "keywords": [
+          "share big files free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-sign-pdf-document-online-free",
+        "keywords": [
+          "sign pdf document online free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-esign-free-online",
+        "keywords": [
+          "esign free online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-free-online-document-signature",
+        "keywords": [
+          "free online document signature",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-scan-signature-online",
+        "keywords": [
+          "scan signature online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digitally-sign-pdf-online",
+        "keywords": [
+          "digitally sign pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-add-signature-to-pdf-for-free",
+        "keywords": [
+          "add signature to pdf for free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-creating-online-signature",
+        "keywords": [
+          "creating online signature",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-signature-add-in-pdf",
+        "keywords": [
+          "signature add in pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-e-sign-a-pdf-document",
+        "keywords": [
+          "e sign a pdf document",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-big-files-online",
+        "keywords": [
+          "share big files online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-application",
+        "keywords": [
+          "digital signature application",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-secure-file-sharing-services",
+        "keywords": [
+          "secure file sharing services",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-on-pdf-online",
+        "keywords": [
+          "digital signature on pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-online-doc-signing",
+        "keywords": [
+          "online doc signing",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-esigning-documents",
+        "keywords": [
+          "esigning documents",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-verification-online",
+        "keywords": [
+          "digital signature verification online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-putting-signature-on-pdf",
+        "keywords": [
+          "putting signature on pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-file-share-large-files",
+        "keywords": [
+          "file share large files",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-signature-online-pdf-free",
+        "keywords": [
+          "signature online pdf free",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-large-documents",
+        "keywords": [
+          "share large documents",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-e-signature-pdf-online",
+        "keywords": [
+          "e signature pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-free-pdf-signing-online",
+        "keywords": [
+          "free pdf signing online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-free-online-pdf-signing",
+        "keywords": [
+          "free online pdf signing",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-electronic-signature-on-pdf-document",
+        "keywords": [
+          "electronic signature on pdf document",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-making-online-signature",
+        "keywords": [
+          "making online signature",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-electronically-sign-pdf-online",
+        "keywords": [
+          "electronically sign pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-free-file-share-service",
+        "keywords": [
+          "free file share service",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-electronic-signature-pdf-online",
+        "keywords": [
+          "electronic signature pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-creating-digital-signature-online",
+        "keywords": [
+          "creating digital signature online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-share-huge-files",
+        "keywords": [
+          "share huge files",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-online-signature-online",
+        "keywords": [
+          "online signature online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-sign-on-pdf-online",
+        "keywords": [
+          "digital sign on pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-verification-in-pdf",
+        "keywords": [
+          "digital signature verification in pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-we-transfer-file-share",
+        "keywords": [
+          "we transfer file share",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-add-digital-signature-on-pdf",
+        "keywords": [
+          "add digital signature on pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-file-share-google-drive",
+        "keywords": [
+          "file share google drive",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-pdf-digital-sign-online",
+        "keywords": [
+          "pdf digital sign online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-file-share-application",
+        "keywords": [
+          "file share application",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-making-digital-signature-online",
+        "keywords": [
+          "making digital signature online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-aadhaar-e-sign",
+        "keywords": [
+          "aadhaar e sign",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-adding-a-digital-signature-to-a-pdf-document",
+        "keywords": [
+          "adding a digital signature to a pdf document",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-sign-online-pdf",
+        "keywords": [
+          "digital sign online pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-digital-signature-verified-online",
+        "keywords": [
+          "digital signature verified online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-file-share-with-google-drive",
+        "keywords": [
+          "file share with google drive",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-removing-a-signature-from-a-pdf",
+        "keywords": [
+          "removing a signature from a pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-removing-signature-from-pdf",
+        "keywords": [
+          "removing signature from pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-validating-digital-signature-online",
+        "keywords": [
+          "validating digital signature online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-validating-signature-in-pdf",
+        "keywords": [
+          "validating signature in pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-validating-signature-in-pdf-online",
+        "keywords": [
+          "validating signature in pdf online",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      },
+      {
+        "slug": "how-to-verifying-signature-in-pdf",
+        "keywords": [
+          "verifying signature in pdf",
+          "sign pdf",
+          "electronic signature free",
+          "online e-signature"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "genzGroup.ts",
+    "pages": 10,
+    "details": [
+      {
+        "slug": "freelance-contract-tool-free",
+        "keywords": [
+          "freelance contract signature tool free",
+          "gig worker agreement builder",
+          "freelancer client contracts",
+          "easy contract signer"
+        ]
+      },
+      {
+        "slug": "creator-contract-signer",
+        "keywords": [
+          "easy online contract signer for creators",
+          "influencer agreement tool",
+          "brand deal contract mobile",
+          "creator nda tool"
+        ]
+      },
+      {
+        "slug": "ditch-print-and-scan",
+        "keywords": [
+          "ditch print and scan for e-signature",
+          "easy cheap e-sign",
+          "mobile first file transfer",
+          "sign pdf online free"
+        ]
+      },
+      {
+        "slug": "sign-brand-deals-mobile",
+        "keywords": [
+          "sign brand deals online mobile first",
+          "influencer brand contract",
+          "sign agreements mobile free",
+          "creator sponsor contracts"
+        ]
+      },
+      {
+        "slug": "creator-nda-tool",
+        "keywords": [
+          "secure nda tool for content creators",
+          "creator non disclosure agreement",
+          "confidential script sharing",
+          "secure creator files"
+        ]
+      },
+      {
+        "slug": "sponsor-contracts-phone",
+        "keywords": [
+          "send sponsor contracts securely on phone",
+          "brand contract e-sign mobile",
+          "sponsor pdf tracking",
+          "creator contract templates"
+        ]
+      },
+      {
+        "slug": "influencer-agreement-tool",
+        "keywords": [
+          "influencer agreement signing tool free",
+          "influencer contract creator",
+          "agencies influencer agreements",
+          "sign creator deals"
+        ]
+      },
+      {
+        "slug": "no-account-pdf-signer",
+        "keywords": [
+          "no account required pdf signer tool",
+          "sign pdf free no login",
+          "guest contract signature online",
+          "simple digital signature client"
+        ]
+      },
+      {
+        "slug": "gig-worker-agreement-builder",
+        "keywords": [
+          "gig worker online agreement builder",
+          "freelance gig contract template",
+          "contractor agreement free",
+          "gig worker signature online"
+        ]
+      },
+      {
+        "slug": "easy-secure-link-sharing",
+        "keywords": [
+          "easy secure link file sharing",
+          "secure file link transfer",
+          "track document link opens",
+          "encrypted file sharing link"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "howtoGroup.ts",
+    "pages": 10,
+    "details": [
+      {
+        "slug": "how-to-sign-contract-online",
+        "keywords": [
+          "how to sign a contract online legally",
+          "esign contract online free",
+          "legally binding online signature",
+          "sign pdf online mobile"
+        ]
+      },
+      {
+        "slug": "how-to-track-pdf-opens",
+        "keywords": [
+          "how to track if someone opened your pdf",
+          "track pdf views duration",
+          "pdf open notifications free",
+          "pitch deck viewing analytics"
+        ]
+      },
+      {
+        "slug": "how-to-restrict-pdf-downloads",
+        "keywords": [
+          "how to restrict pdf download from link",
+          "prevent pdf downloads online",
+          "view only pdf link share",
+          "secure file share restricted download"
+        ]
+      },
+      {
+        "slug": "how-to-add-pdf-watermark",
+        "keywords": [
+          "how to add dynamic watermark to pdf online",
+          "watermark pdf online free",
+          "recipient email pdf watermark",
+          "prevent document screenshot leaks"
+        ]
+      },
+      {
+        "slug": "how-to-send-pitch-deck",
+        "keywords": [
+          "how to send pitch deck to investors securely",
+          "secure pitch deck sharing",
+          "investor deck views analytics",
+          "vc data room configuration"
+        ]
+      },
+      {
+        "slug": "how-to-create-data-room",
+        "keywords": [
+          "how to create a virtual data room free",
+          "free secure virtual data room",
+          "mergers and acquisitions data room",
+          "investor document upload portal"
+        ]
+      },
+      {
+        "slug": "how-to-verify-signer-sms",
+        "keywords": [
+          "how to verify signer identity with sms otp",
+          "multi factor e-signatures",
+          "sms otp signature verification",
+          "legally binding audit logs authentication"
+        ]
+      },
+      {
+        "slug": "how-to-password-protect-pdf",
+        "keywords": [
+          "how to password protect pdf link",
+          "password protect document share",
+          "secure files links password",
+          "encrypted pdf link share"
+        ]
+      },
+      {
+        "slug": "how-to-sign-lease-phone",
+        "keywords": [
+          "how to sign lease agreement on phone",
+          "mobile lease agreement signing",
+          "rent contract mobile e-sign",
+          "sign landlord documents mobile"
+        ]
+      },
+      {
+        "slug": "how-to-track-page-read-time",
+        "keywords": [
+          "how to track reading time per page of pdf",
+          "page level document analytics",
+          "pdf read duration tracking",
+          "second by second pitch deck tracking"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "industryGroup.ts",
+    "pages": 10,
+    "details": [
+      {
+        "slug": "real-estate-document-transfer",
+        "keywords": [
+          "secure document transfer for real estate agents",
+          "sign leases online",
+          "disclosures tracking",
+          "real estate contracts"
+        ]
+      },
+      {
+        "slug": "law-firm-file-sharing",
+        "keywords": [
+          "confidential file sharing for law firms",
+          "attorney client privilege files",
+          "secure retainer signing",
+          "legal document vaults"
+        ]
+      },
+      {
+        "slug": "agency-client-onboarding",
+        "keywords": [
+          "secure client onboarding portal for agencies",
+          "sign proposals online",
+          "track creative proposals",
+          "agency client agreements"
+        ]
+      },
+      {
+        "slug": "hipaa-compliant-sharing",
+        "keywords": [
+          "hipaa compliant document sharing alternative",
+          "secure patient records",
+          "medical disclosure e-sign",
+          "healthcare file protection"
+        ]
+      },
+      {
+        "slug": "pitch-deck-sharing-founders",
+        "keywords": [
+          "secure pitch deck sharing for founders",
+          "track investor pitch opens",
+          "pitch deck analytics free",
+          "startup venture rounds"
+        ]
+      },
+      {
+        "slug": "gdpr-compliant-signature",
+        "keywords": [
+          "gdpr compliant document signature tool",
+          "eidas compliant signing",
+          "eu data protection file share",
+          "gdpr audit trails"
+        ]
+      },
+      {
+        "slug": "investor-relations-portal",
+        "keywords": [
+          "investor relations secure document portal",
+          "secure cap table sharing",
+          "lp agreement signatures",
+          "vc deal data rooms"
+        ]
+      },
+      {
+        "slug": "hr-confidential-sharing",
+        "keywords": [
+          "confidential document sharing for human resources",
+          "secure employee records",
+          "esign onboarding packages",
+          "hr policy sign-off"
+        ]
+      },
+      {
+        "slug": "financial-advisor-file-transfer",
+        "keywords": [
+          "secure file transfer for financial advisors",
+          "client wealth statement sharing",
+          "investor risk profile signing",
+          "finance zero knowledge vaults"
+        ]
+      },
+      {
+        "slug": "remote-team-agreement-signing",
+        "keywords": [
+          "collaborative agreement signing for remote teams",
+          "remote work policies e-sign",
+          "global contractor agreements",
+          "distributed workforce tools"
+        ]
+      }
+    ]
+  },
+  {
+    "file": "templatesGroup.ts",
+    "pages": 30,
+    "details": [
+      {
+        "slug": "subcontractor-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "non-compete-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "board-resolution-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "ip-assignment-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "referral-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "marketing-services-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "web-design-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "vehicle-lease-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "mutual-nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "software-development-agreement-template",
+        "keywords": []
+      },
+      {
+        "slug": "nda-template",
+        "keywords": []
+      },
+      {
+        "slug": "consulting-agreement-template",
+        "keywords": []
+      }
+    ]
+  }
+]
