@@ -151,11 +151,21 @@ const TemplateWizard: React.FC<TemplateWizardProps> = ({ template, onClose, onSu
     // Initialize form values
     const [formValues, setFormValues] = useState<Record<string, any>>(() => {
         const initialValues: Record<string, any> = {};
+        let savedValues: Record<string, any> = {};
+        try {
+            const rawSaved = localStorage.getItem('pendingTemplateValues');
+            if (rawSaved) {
+                savedValues = JSON.parse(rawSaved);
+            }
+        } catch (e) {
+            console.error('Failed to parse pendingTemplateValues in Wizard:', e);
+        }
+
         if (template.isCustom) {
             // Handled dynamically
         } else {
             template.fields.forEach((field: any) => {
-                initialValues[field.id] = field.defaultValue;
+                initialValues[field.id] = savedValues[field.id] !== undefined ? savedValues[field.id] : field.defaultValue;
             });
         }
         return initialValues;

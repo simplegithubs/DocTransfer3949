@@ -166,8 +166,6 @@ try {
         tsContent += `    keywords: ${JSON.stringify(`${item.keyword}, sign pdf, electronic signature free, online e-signature`)},\n`;
         tsContent += `    howToTitle: 'How to ${formattedKw}',\n`;
         tsContent += `    relatedSlugs: ['how-to-sign-contract-online', 'how-to-track-pdf-opens', 'how-to-add-pdf-watermark'],\n`;
-        tsContent += `    imageUrl: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',\n`;
-        tsContent += `    imageAlt: 'Step-by-step tutorial guide for document signature and security',\n`;
         tsContent += `    benefits: [\n`;
         tsContent += `      'Zero-knowledge AES-256 local client encryption',\n`;
         tsContent += `      'Real-time second-by-second page duration logs',\n`;

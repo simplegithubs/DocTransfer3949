@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, X, Shield, Sparkles, CheckCircle, AlertCircle } from 'lucide-react';
-import type { AlternativePageData } from '../../data/seoPages';
+import { getSeoPageRoute, type AlternativePageData } from '../../data/seoPages';
 import AlternativeAnimation from './AlternativeAnimation';
 
 interface AlternativeLayoutProps {
@@ -296,7 +296,7 @@ const AlternativeLayout: React.FC<AlternativeLayoutProps> = ({ data }) => {
             {data.relatedSlugs.map((rSlug) => (
               <Link
                 key={rSlug}
-                to={rSlug.includes('vs') ? `/comparisons/${rSlug}` : rSlug.includes('template') ? `/templates/${rSlug}` : rSlug.includes('sign') ? `/how-to/${rSlug}` : `/alternatives/${rSlug}`}
+                to={getSeoPageRoute(rSlug)}
                 style={{
                   background: 'white',
                   border: '1px solid #e2e8f0',

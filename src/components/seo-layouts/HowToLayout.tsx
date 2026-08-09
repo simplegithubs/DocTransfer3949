@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, HelpCircle, CheckCircle, Sparkles } from 'lucide-react';
-import type { HowToPageData } from '../../data/seoPages';
+import { getSeoPageRoute, type HowToPageData } from '../../data/seoPages';
 import HowToAnimation from './HowToAnimation';
 
 interface HowToLayoutProps {
@@ -146,7 +146,7 @@ const HowToLayout: React.FC<HowToLayoutProps> = ({ data }) => {
             {data.relatedSlugs.map((rSlug) => (
               <Link
                 key={rSlug}
-                to={rSlug.includes('vs') ? `/comparisons/${rSlug}` : rSlug.includes('template') ? `/templates/${rSlug}` : rSlug.includes('sign') ? `/how-to/${rSlug}` : `/alternatives/${rSlug}`}
+                to={getSeoPageRoute(rSlug)}
                 style={{
                   background: 'white',
                   border: '1px solid #e2e8f0',

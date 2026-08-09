@@ -617,6 +617,10 @@ import { industryGroup } from './seo-pages/industryGroup';
 import { howtoGroup } from './seo-pages/howtoGroup';
 import { genzGroup } from './seo-pages/genzGroup';
 import { csvGroup } from './seo-pages/csvGroup';
+import { verticalIndustryGroup } from './seo-pages/verticalIndustryGroup';
+import { verticalHowtoGroup } from './seo-pages/verticalHowtoGroup';
+import { verticalComparisonsGroup } from './seo-pages/verticalComparisonsGroup';
+import { verticalAlternativesGroup } from './seo-pages/verticalAlternativesGroup';
 
 export const allSEOPages: SEOPageData[] = [
   ...baseSEOPages.map(page => {
@@ -638,7 +642,11 @@ export const allSEOPages: SEOPageData[] = [
   ...industryGroup,
   ...howtoGroup,
   ...genzGroup,
-  ...csvGroup
+  ...csvGroup,
+  ...verticalIndustryGroup,
+  ...verticalHowtoGroup,
+  ...verticalComparisonsGroup,
+  ...verticalAlternativesGroup
 ];
 
 export function getPageBySlug(category: SEOCategory, slug: string): SEOPageData | undefined {
@@ -648,4 +656,29 @@ export function getPageBySlug(category: SEOCategory, slug: string): SEOPageData 
 export function getPagesByCategory(category: SEOCategory): SEOPageData[] {
   return allSEOPages.filter(p => p.category === category);
 }
+
+export function getSeoPageRoute(slug: string): string {
+  // 1. Check if the slug belongs to a template page
+  if (slug.endsWith('-template') || slug === 'nda') {
+    return `/templates/${slug}`;
+  }
+  
+  // 2. Check if the slug is defined in allSEOPages
+  const page = allSEOPages.find(p => p.slug === slug);
+  if (page) {
+    return `/${page.category}/${page.slug}`;
+  }
+  
+  // 3. Fallback matching logic based on string content
+  if (slug.includes('vs')) {
+    return `/comparisons/${slug}`;
+  } else if (slug.includes('sign')) {
+    return `/how-to/${slug}`;
+  } else if (slug.includes('template')) {
+    return `/templates/${slug}`;
+  }
+  
+  return `/alternatives/${slug}`;
+}
+
 

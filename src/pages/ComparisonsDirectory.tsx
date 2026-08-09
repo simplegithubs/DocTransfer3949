@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Scale, HeartHandshake, Zap, ShieldAlert, Award, type LucideIcon } from 'lucide-react';
 import SEO from '../components/SEO';
+import { allSEOPages } from '../data/seoPages';
 
 interface ComparisonSummary {
   slug: string;
@@ -158,6 +159,48 @@ const ComparisonsDirectory: React.FC = () => {
             );
           })}
         </div>
+
+        {/* Explore More Comparisons Section */}
+        <section style={{ marginTop: '5rem', borderTop: '1px solid #e2e8f0', paddingTop: '4rem' }}>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0f172a', marginBottom: '1.5rem', textAlign: 'center' }}>
+            Explore Head-to-Head Comparisons by Niche
+          </h2>
+          <p style={{ textAlign: 'center', color: '#64748b', marginBottom: '2.5rem', maxWidth: '600px', margin: '0 auto 2.5rem auto', lineHeight: 1.5 }}>
+            See how DocTransfer stacks up against industry competitors on secure sharing, compliance, and detailed page tracking.
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
+            {allSEOPages.filter(p => p.category === 'comparisons').map((page) => (
+              <Link
+                key={page.slug}
+                to={`/comparisons/${page.slug}`}
+                style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  padding: '0.6rem 1.2rem',
+                  borderRadius: '9999px',
+                  color: '#4f46e5',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = '#4f46e5';
+                  e.currentTarget.style.backgroundColor = '#f5f3ff';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.backgroundColor = 'white';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                {page.title.replace(' vs ', ' vs. ').replace(' comparisons', '').replace(' comparison', '').replace(' Comparison', '')}
+              </Link>
+            ))}
+          </div>
+        </section>
       </main>
 
       <style>{`

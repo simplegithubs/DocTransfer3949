@@ -204,6 +204,191 @@ export const blogArticles: BlogArticle[] = [
         answer: 'Your agreement should include a termination clause that addresses this scenario, requiring the subcontractor to deliver all work-in-progress upon termination and assigning all IP rights to the client for completed portions.'
       }
     ]
+  },
+
+  // ─── NEW REAL ESTATE BLOG POSTS ───────────────────────────────────
+
+  {
+    slug: 'complete-guide-digital-real-estate-closings',
+    title: 'The Complete Guide to Digital Real Estate Closings in 2026',
+    metaTitle: 'The Complete Guide to Digital Real Estate Closings in 2026 | DocTransfer',
+    metaDescription: 'Learn how digital real estate closings work in 2026. From e-signatures to encrypted document vaults, discover how technology is transforming property transactions.',
+    keywords: 'digital real estate closing, electronic closing real estate, e-closing guide, remote real estate closing, online property closing',
+    author: 'DocTransfer Real Estate Team',
+    publishedDate: '2026-07-20',
+    readTime: '10 min read',
+    category: 'Real Estate',
+    heroImageUrl: '',
+    heroImageAlt: '',
+    excerpt: 'Digital closings are revolutionizing real estate transactions. Here is everything agents, buyers, and sellers need to know about closing property deals electronically in 2026.',
+    sections: [
+      {
+        title: 'What Is a Digital Real Estate Closing?',
+        content: 'A digital real estate closing (also called an e-closing or remote closing) is a property transaction where some or all of the closing documents are signed electronically rather than in person at a title company or attorney\'s office. Digital closings exist on a spectrum: a hybrid closing uses a combination of electronic and wet-ink signatures, while a fully digital closing (also called a Remote Online Notarization or RON closing) completes the entire process online, including notarization via live video conference. As of 2026, 44 states have enacted permanent RON legislation, making fully digital closings available to the majority of American home buyers and sellers. The technology has matured significantly since its pandemic-era acceleration, with established security protocols, court-tested legal validity, and growing consumer acceptance.'
+      },
+      {
+        title: 'The Technology Stack Behind Digital Closings',
+        content: 'A modern digital closing relies on several interconnected technologies. First, secure document sharing platforms like DocTransfer provide encrypted delivery of closing packages to all transaction parties. Documents are protected by zero-knowledge encryption, ensuring that sensitive financial information (settlement statements, loan documents, wire instructions) cannot be intercepted during transit. Second, e-signature platforms capture legally binding signatures that comply with the ESIGN Act and UETA. Third, Remote Online Notarization (RON) platforms connect buyers and sellers with commissioned notaries via live video conference, using identity verification technology (knowledge-based authentication, credential analysis, and biometric checks) to confirm signer identity. Finally, digital vaults provide long-term encrypted storage of executed closing documents with tamper-proof audit trails.',
+        templateLink: { label: 'Use our free Purchase Agreement Template', slug: 'purchase-agreement-template' }
+      },
+      {
+        title: 'Benefits of Digital Closings for All Parties',
+        content: 'Digital closings benefit every party in the transaction. Buyers save time by reviewing and signing documents from home rather than taking time off work for a 2-hour closing appointment. Sellers who have already relocated can sign remotely without traveling back to the property\'s jurisdiction. Real estate agents can close deals faster, reducing the pipeline bottleneck that occurs when scheduling in-person signings across multiple parties\' calendars. Title companies process more closings per day with less physical office space. Lenders receive executed documents faster, reducing the time between closing and funding. Industry data shows that digital closings reduce average closing time by 24 hours and reduce signing errors by 80% compared to traditional paper closings.'
+      },
+      {
+        title: 'Security Considerations and Fraud Prevention',
+        content: 'Security is the most critical aspect of digital closings, particularly given the rise of real estate wire fraud. DocTransfer addresses this through zero-knowledge client-side encryption—closing documents are encrypted in the sender\'s browser before upload, ensuring that even a server breach cannot expose settlement statements or wire instructions. Identity verification in RON closings uses multi-factor authentication: knowledge-based questions derived from credit bureau data, live comparison of government-issued ID to the signer on video, and credential analysis technology that detects forged or altered identification documents. These combined measures provide a significantly higher level of identity verification than traditional in-person closings, where a notary simply checks a driver\'s license.',
+        templateLink: { label: 'Try our Property Disclosure Template', slug: 'property-disclosure-template' }
+      },
+      {
+        title: 'How to Prepare for a Digital Closing',
+        content: 'Preparing for a digital closing requires a few simple steps. First, confirm that your state allows digital closings and RON (44 states as of 2026). Second, ensure all parties have a reliable internet connection and a device with a camera (for RON sessions). Third, have government-issued identification readily available for identity verification. Fourth, review all closing documents in advance—platforms like DocTransfer allow you to review the full closing package before the signing session, so you can ask questions and request corrections before the scheduled closing. Fifth, test your technology: complete any required software installations or browser checks before the closing day. Finally, coordinate with your title company or closing attorney to confirm the closing timeline and document delivery schedule.'
+      }
+    ],
+    relatedTemplates: [
+      { name: 'Purchase Agreement', slug: 'purchase-agreement-template' },
+      { name: 'Property Disclosure', slug: 'property-disclosure-template' },
+      { name: 'Lease Agreement', slug: 'lease-agreement-template' },
+      { name: 'Right of First Refusal (ROFR)', slug: 'rofr-template' }
+    ],
+    faqs: [
+      {
+        question: 'Are digital real estate closings legally valid?',
+        answer: 'Yes. Electronic signatures on real estate documents are legally valid under the federal ESIGN Act and state UETA laws. Remote Online Notarization is authorized in 44 states as of 2026, with permanent legislation providing a clear legal framework for fully digital closings.'
+      },
+      {
+        question: 'Can I do a fully remote closing without visiting the title company?',
+        answer: 'Yes, if your state has enacted RON (Remote Online Notarization) legislation. In RON-enabled states, you can complete the entire closing process online, including notarization via live video conference with a commissioned notary.'
+      },
+      {
+        question: 'Is a digital closing more secure than an in-person closing?',
+        answer: 'In many ways, yes. Digital closings use multi-factor identity verification, encrypted document delivery, and tamper-proof audit trails. Traditional in-person closings rely primarily on a notary checking a driver\'s license, which provides weaker identity verification.'
+      },
+      {
+        question: 'How long does a digital closing take?',
+        answer: 'A typical digital closing takes 15-30 minutes, compared to 1-2 hours for a traditional in-person closing. The time savings come from electronic signature efficiency and the ability to pre-review documents before the closing session.'
+      }
+    ]
+  },
+  {
+    slug: 'property-disclosure-compliance-guide',
+    title: 'Property Disclosure Compliance: What Every Agent Must Know',
+    metaTitle: 'Property Disclosure Compliance Guide for Real Estate Agents | DocTransfer',
+    metaDescription: 'A comprehensive guide to property disclosure requirements for real estate agents. Learn federal and state requirements, common mistakes, and how to protect your license.',
+    keywords: 'property disclosure compliance, seller disclosure requirements, real estate agent disclosure guide, lead paint disclosure, property condition disclosure',
+    author: 'DocTransfer Legal Team',
+    publishedDate: '2026-07-28',
+    readTime: '9 min read',
+    category: 'Real Estate',
+    heroImageUrl: '',
+    heroImageAlt: '',
+    excerpt: 'Property disclosure violations are the #1 source of real estate litigation. Here is what every agent needs to know to protect their clients, their license, and themselves.',
+    sections: [
+      {
+        title: 'The Legal Landscape of Property Disclosures',
+        content: 'Property disclosure requirements exist at both the federal and state level, creating a complex compliance landscape that every real estate agent must navigate. At the federal level, the Residential Lead-Based Paint Hazard Reduction Act of 1992 requires sellers and agents to disclose known lead-based paint hazards in homes built before 1978. Sellers must provide buyers with an EPA-approved pamphlet ("Protect Your Family From Lead in Your Home"), complete a lead paint disclosure form, and give buyers a 10-day period to conduct a lead paint inspection. Violations carry penalties up to $19,507 per occurrence. At the state level, requirements vary significantly. California requires sellers to complete the Transfer Disclosure Statement (TDS), Natural Hazard Disclosure (NHD), and several supplemental forms. Texas requires the Seller\'s Disclosure Notice. Most states have their own versions of property condition disclosure forms covering structural, mechanical, environmental, and legal issues.'
+      },
+      {
+        title: 'Common Disclosure Mistakes That Lead to Lawsuits',
+        content: 'The most expensive disclosure mistake is the failure to disclose a known material defect. Courts consistently hold that sellers who know about a defect—such as a leaking roof, foundation cracks, mold, or pest infestations—and fail to disclose it are liable for repair costs, diminished property value, and sometimes punitive damages. The second most common mistake is the "I didn\'t know" defense for obvious defects. Courts have ruled that sellers cannot claim ignorance of defects that would be apparent to a reasonable person living in the property. If the basement floods every spring, the seller cannot credibly claim they didn\'t know about water intrusion issues. The third mistake is agents coaching sellers on what not to disclose. This creates agency liability and can result in license revocation. Agents should never advise sellers to minimize or omit known defects from disclosure forms.',
+        templateLink: { label: 'Use our free Property Disclosure Template', slug: 'property-disclosure-template' }
+      },
+      {
+        title: 'Proving Disclosure Delivery with Document Tracking',
+        content: 'Even when sellers properly complete disclosure forms, the question of whether the buyer actually received and reviewed the disclosures frequently arises in litigation. Traditional delivery methods (email, mail, in-person handoff) provide limited proof of receipt and virtually no proof of review. DocTransfer\'s page-level tracking solves this problem entirely. When you send a seller disclosure through DocTransfer, the platform records: (1) exactly when the buyer received the document, (2) exactly when they opened it, (3) how many seconds they spent on each page, and (4) when they signed the acknowledgment. This creates a comprehensive, timestamped, IP-verified record that conclusively proves the buyer received, reviewed, and acknowledged every page of the disclosure. In litigation, this evidence is often dispositive—if the tracking data shows the buyer spent 3 minutes reading the page about roof condition, they cannot credibly claim they were not informed about the disclosed roof issues.',
+        templateLink: { label: 'Send disclosures securely with DocTransfer', slug: 'how-to-send-property-disclosures' }
+      },
+      {
+        title: 'State-by-State Disclosure Requirements',
+        content: 'While a comprehensive state-by-state guide is beyond the scope of this article, agents should be aware of several key variations. California has the most extensive disclosure requirements, including the TDS, NHD, Megan\'s Law database disclaimer, and supplemental forms for earthquake hazard zones. Texas requires the Seller\'s Disclosure Notice (TAR form) covering 15 categories of property conditions. New York requires a Property Condition Disclosure Statement or, alternatively, allows sellers to pay a $500 credit to buyers in lieu of completing the disclosure. Florida requires sellers to disclose material facts but does not mandate a specific disclosure form. Colorado requires the Seller\'s Property Disclosure form covering 72 specific items. Agents should always check their state\'s current requirements and use the most up-to-date forms provided by their state or local association.'
+      },
+      {
+        title: 'Best Practices for Agents Handling Disclosures',
+        content: 'Protecting yourself and your clients requires a systematic approach to disclosure compliance. First, always use your state association\'s current disclosure forms—generic forms may not cover state-specific requirements. Second, advise sellers to disclose everything they know, even items they consider minor. Courts consistently rule that over-disclosure is far safer than under-disclosure. Third, document your delivery process using a tracked sharing platform like DocTransfer that provides page-level proof of buyer review. Fourth, maintain copies of all disclosures in your transaction file for at least the statute of limitations period (typically 4-6 years depending on state). Fifth, never advise sellers on what to disclose or not disclose—simply explain the form and let the seller make their own disclosures honestly.'
+      }
+    ],
+    relatedTemplates: [
+      { name: 'Property Disclosure Statement', slug: 'property-disclosure-template' },
+      { name: 'Purchase Agreement', slug: 'purchase-agreement-template' },
+      { name: 'Lease Agreement', slug: 'lease-agreement-template' }
+    ],
+    faqs: [
+      {
+        question: 'What happens if a seller fails to disclose a known defect?',
+        answer: 'The buyer can sue for damages including repair costs, diminished property value, moving expenses, and sometimes punitive damages. Agents who knew about the defect may also be liable and face disciplinary action from the state licensing board.'
+      },
+      {
+        question: 'Does the agent have an independent duty to disclose known defects?',
+        answer: 'Yes. In most states, agents have an independent duty to disclose material facts known to them, regardless of whether the seller includes them on the disclosure form. Agents cannot hide behind the seller\'s incomplete disclosure.'
+      },
+      {
+        question: 'How long do I need to keep copies of disclosure documents?',
+        answer: 'At minimum, keep copies for the statute of limitations period in your state (typically 4-6 years for breach of contract, longer for fraud). Many brokerages require retention for 7-10 years. Digital storage on DocTransfer eliminates physical storage concerns.'
+      }
+    ]
+  },
+  {
+    slug: 'paperless-property-management-guide',
+    title: 'Going Paperless: A Property Manager\'s Document Workflow Guide',
+    metaTitle: 'Paperless Property Management Guide | DocTransfer',
+    metaDescription: 'Learn how to eliminate paper from your property management workflow. From digital lease signing to encrypted tenant records, build an efficient paperless system.',
+    keywords: 'paperless property management, digital property management, property manager document workflow, landlord go paperless, rental property digital records',
+    author: 'DocTransfer Property Team',
+    publishedDate: '2026-08-01',
+    readTime: '8 min read',
+    category: 'Real Estate',
+    heroImageUrl: '',
+    heroImageAlt: '',
+    excerpt: 'Paper-based property management is costing you time, money, and liability exposure. Here is how to build a fully digital document workflow that scales with your portfolio.',
+    sections: [
+      {
+        title: 'The Hidden Costs of Paper in Property Management',
+        content: 'Property managers who rely on paper documents face costs that extend far beyond ink and paper. A typical 100-unit property generates approximately 2,000 pages of documents per year: lease agreements, applications, inspection reports, maintenance requests, notices, and correspondence. Storing these documents requires dedicated filing cabinet space that costs $12-15 per square foot annually in office rent. Finding a specific document takes an average of 12 minutes of manual searching. And the risk of document loss from fire, flood, or simple misfiling creates liability exposure that can cost thousands in a single eviction proceeding where the landlord cannot produce the signed lease. The total hidden cost of paper-based document management for a 100-unit property exceeds $8,000 annually when accounting for storage space, staff time, printing costs, and liability exposure.'
+      },
+      {
+        title: 'Building Your Digital Document Framework',
+        content: 'The foundation of a paperless property management system is a well-organized digital document structure. Using DocTransfer\'s Data Room feature, create a hierarchy that mirrors your portfolio: Property Name → Unit Number → Document Type (Leases, Applications, Inspections, Maintenance, Notices). Within each unit folder, maintain sub-folders for the current tenant and archived previous tenants. This structure allows you to find any document in seconds and provides a clear audit trail of all tenant interactions. Key documents to digitize first: (1) all active lease agreements, (2) current tenant applications and screening reports, (3) move-in/move-out inspection reports, and (4) maintenance request logs.',
+        templateLink: { label: 'Start with our free Lease Agreement Template', slug: 'lease-agreement-template' }
+      },
+      {
+        title: 'Digital Lease Signing: The Biggest Time Saver',
+        content: 'The single largest time savings in a paperless property management system comes from digital lease signing. Traditional lease signing requires coordinating schedules with tenants, printing multi-page agreements, meeting in person, collecting wet signatures, scanning the signed documents, and filing the originals. This process takes an average of 3-5 days per lease. Digital lease signing through DocTransfer reduces this to under 2 hours: upload the lease, add signature fields, send a secure link to the tenant, and receive the signed lease back—often within minutes. For a property manager handling 20 lease renewals per month, this saves approximately 60-100 hours of administrative time annually. The tenant experience also improves dramatically: they can review and sign the lease from their phone immediately after approval, securing the unit faster.',
+        templateLink: { label: 'Learn how to sign leases online', slug: 'how-to-sign-lease-online' }
+      },
+      {
+        title: 'Securing Sensitive Tenant Data',
+        content: 'Property managers handle some of the most sensitive personal information in any industry: Social Security numbers on rental applications, bank statements for income verification, government-issued IDs, and employer information. Federal and state data breach notification laws require landlords to notify affected tenants if this information is compromised. Paper records stored in filing cabinets are vulnerable to physical theft, fire, and unauthorized access by maintenance staff or cleaning crews. DocTransfer\'s zero-knowledge encryption provides a fundamentally higher level of security: tenant documents are encrypted in the browser before upload, and even DocTransfer\'s own servers cannot access the unencrypted contents. This eliminates the most common data breach vectors and provides a defensible security posture in case of regulatory inquiry.',
+        templateLink: { label: 'Secure your rental applications', slug: 'rental-application-template' }
+      },
+      {
+        title: 'Measuring ROI: The Paperless Property Management Business Case',
+        content: 'The return on investment for going paperless is compelling and measurable. Direct cost savings include: elimination of printing costs ($0.10-0.15 per page × 2,000 pages = $200-300/year per 100 units), reduction in physical storage costs ($500-1,500/year depending on office location), and elimination of scanning equipment maintenance. Indirect savings are even larger: reduced administrative staff hours for document handling (estimated 200-400 hours/year for a 100-unit property at $20/hour = $4,000-8,000), faster lease turnaround reducing vacancy days (even 1 day faster × 20 units × $50/day = $1,000/year), and reduced legal liability from lost or incomplete records. For a 100-unit property, total annual savings from going paperless typically range from $6,000 to $12,000—a return that scales linearly with portfolio size.'
+      }
+    ],
+    relatedTemplates: [
+      { name: 'Lease Agreement', slug: 'lease-agreement-template' },
+      { name: 'Rental Application', slug: 'rental-application-template' },
+      { name: 'Sublease Agreement', slug: 'sublease-agreement-template' },
+      { name: 'Property Disclosure', slug: 'property-disclosure-template' }
+    ],
+    faqs: [
+      {
+        question: 'How long does it take to transition from paper to digital?',
+        answer: 'Most property managers can digitize their active documents within 2-4 weeks. Start by implementing digital signing for all new leases immediately, then gradually scan and upload existing documents during downtime. You don\'t need to digitize everything at once.'
+      },
+      {
+        question: 'Do I need to keep paper copies if I have digital versions?',
+        answer: 'In most states, properly executed electronic documents have the same legal standing as paper originals. However, check your state\'s specific requirements. DocTransfer\'s cryptographically sealed documents with audit trails often provide stronger evidence than paper originals.'
+      },
+      {
+        question: 'Can my maintenance team access documents in the field?',
+        answer: 'Yes. DocTransfer\'s Data Rooms are accessible from any device with a browser. Maintenance staff can access work orders, unit condition reports, and tenant contact information from their phones while on-site.'
+      },
+      {
+        question: 'What about tenants who are not comfortable with technology?',
+        answer: 'DocTransfer requires no app downloads or account creation. Tenants simply click a link and sign. For tenants who need additional assistance, you can walk them through the process in your office using their own phone or a shared tablet.'
+      }
+    ]
   }
 ];
 

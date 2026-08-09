@@ -222,7 +222,7 @@ function collectAllRoutes() {
       const filePath = path.join(seoPagesDir, file);
       const content = fs.readFileSync(filePath, 'utf8');
       
-      if (file.includes('templates')) {
+      if (file.toLowerCase().includes('templates')) {
         const slugRegex = /slug:\s*['"]([^'"]+)['"]/g;
         let match;
         while ((match = slugRegex.exec(content)) !== null) {

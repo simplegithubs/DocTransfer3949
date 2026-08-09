@@ -102,17 +102,23 @@ async function generateSitemap() {
                 const content = fs.readFileSync(filePath, 'utf8');
                 
                 // If it is templates group, parse templates slug
-                if (file.includes('templates')) {
-                    const regex = /slug:\s*['"]([^'"]+)['"]/g;
+                if (file.toLowerCase().includes('templates')) {
+                    // Match the object keys in Record<string, TemplateSEOContent> format
+                    // Pattern: 'slug-name': { at the start of an entry  
+                    const keyRegex = /^\s{2,4}'([^']+)':\s*\{/gm;
                     let match;
-                    while ((match = regex.exec(content)) !== null) {
+                    const templateSlugs = new Set();
+                    while ((match = keyRegex.exec(content)) !== null) {
+                        templateSlugs.add(match[1]);
+                    }
+                    templateSlugs.forEach(slug => {
                         entries.push({
-                            loc: `${BASE_URL}/templates/${match[1]}`,
+                            loc: `${BASE_URL}/templates/${slug}`,
                             priority: '0.85',
                             changefreq: 'weekly'
                         });
                         count++;
-                    }
+                    });
                 } else {
                     // For alternatives, comparisons, industry, howto, genz groups
                     const regex = /slug:\s*['"]([^'"]+)['"],\s*category:\s*['"]([^'"]+)['"]/g;

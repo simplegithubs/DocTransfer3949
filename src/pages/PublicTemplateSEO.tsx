@@ -16,6 +16,7 @@ import {
   HelpCircle,
   UserCheck
 } from 'lucide-react';
+import TemplateAnimation from '../components/seo-layouts/TemplateAnimation';
 
 const PublicTemplateSEO: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -40,6 +41,44 @@ const PublicTemplateSEO: React.FC = () => {
 
   // Find system template to get dynamic structure for PDF generation
   const systemTemplate = TEMPLATES.find(t => t.id === data.templateId);
+
+  // Initialize field values state
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>(() => {
+    const vals: Record<string, string> = {};
+    if (systemTemplate) {
+      systemTemplate.fields.slice(0, 3).forEach(f => {
+        vals[f.id] = String(f.defaultValue || '');
+      });
+    }
+    return vals;
+  });
+
+  const handleFieldChange = (fieldId: string, val: string) => {
+    const updated = { ...fieldValues, [fieldId]: val };
+    setFieldValues(updated);
+    localStorage.setItem('pendingTemplateValues', JSON.stringify(updated));
+  };
+
+  const getProcessedText = (text: string) => {
+    let result = text;
+    if (systemTemplate) {
+      systemTemplate.fields.slice(0, 3).forEach(f => {
+        const val = fieldValues[f.id];
+        if (val) {
+          const label = f.label;
+          const searchTerms = [
+            `\\[${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\]`,
+            `\\[${f.id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\]`
+          ];
+          searchTerms.forEach(term => {
+            const regex = new RegExp(term, 'gi');
+            result = result.replaceAll(regex, `<span style="background: #fef08a; padding: 2px 6px; border-radius: 4px; font-weight: bold; color: #1e293b; font-family: system-ui;">${val}</span>`);
+          });
+        }
+      });
+    }
+    return result;
+  };
 
   const handleDownloadSample = async () => {
     if (!systemTemplate) return;
@@ -170,9 +209,13 @@ const PublicTemplateSEO: React.FC = () => {
           
           {/* Left Column: Details & Preview */}
           <div>
-            {data.imageUrl && (
+            {data.imageUrl ? (
               <div className="seo-hero-image-wrapper" style={{ marginBottom: '2rem', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
                 <img src={data.imageUrl} alt={data.imageAlt || `Free ${data.templateName} template sample`} style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }} />
+              </div>
+            ) : (
+              <div className="seo-hero-image-wrapper" style={{ marginBottom: '2rem' }}>
+                <TemplateAnimation slug={data.slug} />
               </div>
             )}
             {/* Title Banner */}
@@ -213,6 +256,36 @@ const PublicTemplateSEO: React.FC = () => {
               </div>
             </div>
 
+            {/* Live Customization Form */}
+            <div style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '1.5rem', marginBottom: '2rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.01)' }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Sparkles size={18} color="#4f46e5" /> Live Template Customization
+              </h3>
+              <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1.25rem' }}>
+                Type your transaction details below. Watch the boilerplate contract update in real-time.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                {systemTemplate?.fields.slice(0, 3).map((field) => (
+                  <div key={field.id} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <label style={{ fontSize: '0.8rem', fontWeight: '600', color: '#475569' }}>{field.label}</label>
+                    <input
+                      type={field.type === 'date' ? 'date' : field.type === 'number' ? 'number' : 'text'}
+                      placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}...`}
+                      value={fieldValues[field.id] || ''}
+                      onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                      style={{
+                        padding: '0.6rem 0.8rem',
+                        borderRadius: '10px',
+                        border: '1px solid #cbd5e1',
+                        fontSize: '0.9rem',
+                        outline: 'none',
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Document Content Crawlable Preview */}
             <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#0f172a', marginBottom: '1rem' }}>
               Boilerplate Contract Preview
@@ -223,7 +296,10 @@ const PublicTemplateSEO: React.FC = () => {
               {data.boilerplateSections.map((section, idx) => (
                 <div key={idx} style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', margin: '1.5rem 0 0.5rem 0' }}>{section.title}</h3>
-                  <p style={{ fontSize: '0.95rem', lineHeight: '1.6', textAlign: 'justify', margin: '0 0 1rem 0' }}>{section.text}</p>
+                  <p 
+                    style={{ fontSize: '0.95rem', lineHeight: '1.6', textAlign: 'justify', margin: '0 0 1rem 0' }}
+                    dangerouslySetInnerHTML={{ __html: getProcessedText(section.text) }}
+                  />
                 </div>
               ))}
               <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '1.5rem', marginTop: '2.5rem', display: 'flex', justifyContent: 'space-between', fontFamily: 'system-ui' }}>

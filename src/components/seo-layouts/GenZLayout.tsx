@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Zap } from 'lucide-react';
-import type { GenZPageData } from '../../data/seoPages';
+import { getSeoPageRoute, type GenZPageData } from '../../data/seoPages';
 import GenZAnimation from './GenZAnimation';
 
 interface GenZLayoutProps {
@@ -169,7 +169,7 @@ const GenZLayout: React.FC<GenZLayoutProps> = ({ data }) => {
             {data.relatedSlugs.map((rSlug) => (
               <Link
                 key={rSlug}
-                to={rSlug.includes('vs') ? `/comparisons/${rSlug}` : rSlug.includes('template') ? `/templates/${rSlug}` : rSlug.includes('sign') ? `/how-to/${rSlug}` : `/alternatives/${rSlug}`}
+                to={getSeoPageRoute(rSlug)}
                 style={{
                   background: '#120b24',
                   border: '1px solid #23153c',

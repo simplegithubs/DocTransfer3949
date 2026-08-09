@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Clock, ShieldCheck, UserCheck, CheckCircle, FileText } from 'lucide-react';
-import type { TemplatePageData } from '../../data/seoPages';
+import { getSeoPageRoute, type TemplatePageData } from '../../data/seoPages';
 import TemplateAnimation from './TemplateAnimation';
 
 interface TemplateLayoutProps {
@@ -210,7 +210,7 @@ const TemplateLayout: React.FC<TemplateLayoutProps> = ({ data }) => {
             {data.relatedSlugs.map((rSlug) => (
               <Link
                 key={rSlug}
-                to={rSlug.includes('vs') ? `/comparisons/${rSlug}` : rSlug.includes('template') ? `/templates/${rSlug}` : rSlug.includes('sign') ? `/how-to/${rSlug}` : `/alternatives/${rSlug}`}
+                to={getSeoPageRoute(rSlug)}
                 style={{
                   background: 'white',
                   border: '1px solid #e2e8f0',

@@ -476,8 +476,6 @@ templatesData.forEach(item => {
     templatesOutput += `    boilerplateTitle: ${JSON.stringify(item.name.toUpperCase() + ' AGREEMENT')},\n`;
     templatesOutput += `    boilerplateSections: ${JSON.stringify(sections, null, 6)},\n`;
     templatesOutput += `    faqs: ${JSON.stringify(faqs, null, 6)},\n`;
-    templatesOutput += `    imageUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',\n`;
-    templatesOutput += `    imageAlt: ${JSON.stringify(item.name + ' template preview and signing fields')},\n`;
     templatesOutput += `    externalLinks: [\n`;
     templatesOutput += `      { label: 'Cornell Law School - Contract Principles', url: 'https://www.law.cornell.edu/' },\n`;
     templatesOutput += `      { label: 'SBA Guide - Business Contracts', url: 'https://www.sba.gov/' }\n`;

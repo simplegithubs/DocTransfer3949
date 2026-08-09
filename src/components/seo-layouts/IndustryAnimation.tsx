@@ -1,24 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { Home, Key, FileText, CheckCircle2, Shield, Lock, Award, TrendingUp, BarChart3, Users, UserCheck, Cloud, RefreshCw, Zap } from 'lucide-react';
+import RealEstateAnimation from './RealEstateAnimation';
+
+const HealthcareAnimation = lazy(() => import('./HealthcareAnimation'));
+const FinanceAnimation = lazy(() => import('./FinanceAnimation'));
+const WorkforceAnimation = lazy(() => import('./WorkforceAnimation'));
+const BuildAnimation = lazy(() => import('./BuildAnimation'));
+const LegalAnimationNew = lazy(() => import('./LegalAnimation'));
 
 interface IndustryAnimationProps {
   slug: string;
 }
 
-type AnimType = 'realestate' | 'legal' | 'finance' | 'hr' | 'default';
+type AnimType = 'realestate' | 'realestate-sub' | 'legal' | 'finance' | 'hr' | 'healthcare' | 'construction' | 'education' | 'insurance' | 'nonprofit' | 'default';
+
+const RE_SUB_SLUGS = ['property-management', 'title-company', 'mortgage', 'commercial-real-estate', 'escrow'];
 
 const IndustryAnimation: React.FC<IndustryAnimationProps> = ({ slug }) => {
   const [animType, setAnimType] = useState<AnimType>('default');
 
   useEffect(() => {
     const s = slug.toLowerCase();
-    if (s.includes('real-estate')) {
+    // Check if this is a real estate sub-vertical first
+    if (RE_SUB_SLUGS.some(sub => s.includes(sub))) {
+      setAnimType('realestate-sub');
+    } else if (s.includes('real-estate')) {
       setAnimType('realestate');
-    } else if (s.includes('legal') || s.includes('law-firm') || s.includes('hipaa') || s.includes('gdpr')) {
-      setAnimType('legal');
-    } else if (s.includes('financial') || s.includes('investor') || s.includes('pitch-deck')) {
+    } else if (s.includes('hipaa') || s.includes('medical') || s.includes('patient') || s.includes('healthcare') || s.includes('dental') || s.includes('pharmacy') || s.includes('mental-health') || s.includes('telehealth') || s.includes('clinical')) {
+      setAnimType('healthcare');
+    } else if (s.includes('accounting') || s.includes('tax-') || s.includes('1099') || s.includes('bookkeeper') || s.includes('cpa') || s.includes('payroll') || s.includes('financial-audit') || s.includes('quarterly-financial')) {
       setAnimType('finance');
-    } else if (s.includes('agency') || s.includes('onboarding') || s.includes('hr-confidential')) {
+    } else if (s.includes('hr-') || s.includes('onboarding') || s.includes('employee') || s.includes('performance-review') || s.includes('exit-interview') || s.includes('workplace') || s.includes('background-check') || s.includes('training-certification')) {
+      setAnimType('hr');
+    } else if (s.includes('construction') || s.includes('subcontractor') || s.includes('building-permit') || s.includes('blueprint') || s.includes('rfi-') || s.includes('punch-list') || s.includes('lien')) {
+      setAnimType('construction');
+    } else if (s.includes('law-firm') || s.includes('litigation') || s.includes('legal') || s.includes('estate-planning') || s.includes('patent') || s.includes('arbitration') || s.includes('immigration') || s.includes('family-law') || s.includes('compliance-legal') || s.includes('gdpr')) {
+      setAnimType('legal');
+    } else if (s.includes('university') || s.includes('student') || s.includes('academic') || s.includes('scholarship') || s.includes('school') || s.includes('faculty') || s.includes('study-abroad') || s.includes('admissions') || s.includes('alumni') || s.includes('research-paper')) {
+      setAnimType('education');
+    } else if (s.includes('insurance') || s.includes('policy-document') || s.includes('underwriting') || s.includes('claims') || s.includes('reinsurance') || s.includes('auto-insurance') || s.includes('health-insurance') || s.includes('property-insurance')) {
+      setAnimType('insurance');
+    } else if (s.includes('nonprofit') || s.includes('donor') || s.includes('board-resolution') || s.includes('volunteer') || s.includes('fundraising') || s.includes('grant-') || s.includes('charitable') || s.includes('nonprofit-bylaws')) {
+      setAnimType('nonprofit');
+    } else if (s.includes('agency') || s.includes('hr-confidential')) {
       setAnimType('hr');
     } else {
       setAnimType('default');
@@ -132,6 +156,12 @@ const IndustryAnimation: React.FC<IndustryAnimationProps> = ({ slug }) => {
       )}
 
       {animType === 'realestate' && <RealEstateAnim />}
+      {animType === 'realestate-sub' && <RealEstateAnimation slug={slug} />}
+      {animType === 'healthcare' && <Suspense fallback={<DefaultSyncAnim />}><HealthcareAnimation slug={slug} /></Suspense>}
+      {animType === 'construction' && <Suspense fallback={<DefaultSyncAnim />}><BuildAnimation slug={slug} /></Suspense>}
+      {animType === 'education' && <Suspense fallback={<DefaultSyncAnim />}><WorkforceAnimation slug={slug} /></Suspense>}
+      {animType === 'insurance' && <Suspense fallback={<DefaultSyncAnim />}><FinanceAnimation slug={slug} /></Suspense>}
+      {animType === 'nonprofit' && <Suspense fallback={<DefaultSyncAnim />}><LegalAnimationNew slug={slug} /></Suspense>}
       {animType === 'legal' && <LegalAnim />}
       {animType === 'finance' && <FinanceAnim />}
       {animType === 'hr' && <HRAnim />}

@@ -116,6 +116,11 @@ const TemplatesDashboard: React.FC<TemplatesDashboardProps> = ({ onBackToDocumen
     };
 
     const handleWizardSuccess = () => {
+        try {
+            localStorage.removeItem('pendingTemplateValues');
+        } catch (e) {
+            console.error('Failed to clear pendingTemplateValues:', e);
+        }
         setActiveWizardTemplate(null);
         setPreviewTemplate(null);
         setShowSuccessToast(true);

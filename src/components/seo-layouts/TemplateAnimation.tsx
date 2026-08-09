@@ -1,393 +1,320 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, CheckCircle2, Shield, Lock, Users, Calendar, ArrowRight, DollarSign, Award } from 'lucide-react';
+import { FileText, Key, CheckCircle2, Shield, Lock, Edit3, Send } from 'lucide-react';
 
 interface TemplateAnimationProps {
   slug: string;
 }
 
-type AnimType = 'nda' | 'service' | 'lease' | 'resolution';
-
 const TemplateAnimation: React.FC<TemplateAnimationProps> = ({ slug }) => {
-  const [animType, setAnimType] = useState<AnimType>('resolution');
+  const [step, setStep] = useState(0);
 
   useEffect(() => {
-    const s = slug.toLowerCase();
-    if (s.includes('nda') || s.includes('ip-assignment') || s.includes('non-compete')) {
-      setAnimType('nda');
-    } else if (s.includes('services') || s.includes('web-design') || s.includes('subcontractor') || s.includes('referral')) {
-      setAnimType('service');
-    } else if (s.includes('lease') || s.includes('vehicle')) {
-      setAnimType('lease');
-    } else {
-      setAnimType('resolution');
+    const interval = setInterval(() => {
+      setStep((prev) => (prev + 1) % 4);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getThemeColor = () => {
+    if (slug.includes('purchase') || slug.includes('deed') || slug.includes('agency')) return '#4f46e5'; // Indigo
+    if (slug.includes('lease') || slug.includes('sublease') || slug.includes('rental')) return '#10b981'; // Emerald
+    return '#8b5cf6'; // Violet
+  };
+
+  const getThemeGradient = () => {
+    if (slug.includes('purchase') || slug.includes('deed') || slug.includes('agency')) {
+      return 'linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)';
     }
-  }, [slug]);
+    if (slug.includes('lease') || slug.includes('sublease') || slug.includes('rental')) {
+      return 'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)';
+    }
+    return 'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%)';
+  };
+
+  const themeColor = getThemeColor();
+  const themeGradient = getThemeGradient();
 
   const styles = `
-    @keyframes tmpFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
+    @keyframes drawSignature {
+      to {
+        stroke-dashoffset: 0;
+      }
     }
-    @keyframes tmpPulse {
-      0%, 100% { transform: scale(1); opacity: 0.85; }
-      50% { transform: scale(1.06); opacity: 1; }
+    @keyframes floatElement {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1deg); }
     }
-    @keyframes tmpSlideIn {
-      0% { transform: translateX(-15px); opacity: 0; }
-      100% { transform: translateX(0); opacity: 1; }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
     }
-    @keyframes tmpFieldHighlight {
-      0%, 100% { background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); }
-      50% { background: rgba(99, 102, 241, 0.25); border-color: rgba(99, 102, 241, 0.6); }
-    }
-    @keyframes tmpStamp {
-      0% { transform: scale(2) rotate(-15deg); opacity: 0; }
-      80% { transform: scale(0.9) rotate(-10deg); opacity: 0.9; }
-      100% { transform: scale(1) rotate(-8deg); opacity: 1; }
-    }
-    @keyframes tmpDrawLine {
-      0% { width: 0; }
-      100% { width: 60px; }
-    }
-    .tmp-container {
-      position: relative;
-      width: 100%;
-      height: 320px;
-      background: radial-gradient(ellipse 120% 120% at 50% 0%, #ffffff 0%, #f8fafc 100%);
-      border-radius: 24px;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
-      margin-bottom: 2.5rem;
-    }
-    .tmp-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(99, 102, 241, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(99, 102, 241, 0.015) 1px, transparent 1px);
-      background-size: 18px 18px;
-      pointer-events: none;
-    }
-    .tmp-glow {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(50px);
-      pointer-events: none;
-    }
-    .tmp-badge {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: rgba(99, 102, 241, 0.05);
-      border: 1px solid rgba(99, 102, 241, 0.1);
-      color: #4f46e5;
-      padding: 4px 12px;
-      border-radius: 9999px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      display: flex;
-      align-items: center;
-      gap: 5px;
+    .anim-signature {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawSignature 2s ease-in-out forwards;
     }
   `;
 
   return (
-    <div className="tmp-container">
+    <div style={{
+      width: '100%',
+      minHeight: '280px',
+      background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+      borderRadius: '24px',
+      border: '1px solid #e2e8f0',
+      padding: '2rem',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      overflow: 'hidden',
+      boxShadow: '0 10px 30px -10px rgba(0,0,0,0.04)'
+    }}>
       <style dangerouslySetInnerHTML={{ __html: styles }} />
-      <div className="tmp-grid" />
 
-      {/* Decorative Orbs */}
-      <div className="tmp-glow" style={{ width: '180px', height: '180px', background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)', top: '10%', left: '20%' }} />
-      <div className="tmp-glow" style={{ width: '160px', height: '160px', background: 'radial-gradient(circle, rgba(16,185,129,0.04) 0%, transparent 70%)', bottom: '10%', right: '20%' }} />
+      {/* Background Decorative Rings */}
+      <div style={{
+        position: 'absolute',
+        width: '300px',
+        height: '300px',
+        borderRadius: '50%',
+        border: `2px dashed ${themeColor}15`,
+        pointerEvents: 'none'
+      }} />
 
-      {animType === 'nda' && <NDAPageAnim />}
-      {animType === 'service' && <ServicePageAnim />}
-      {animType === 'lease' && <LeasePageAnim />}
-      {animType === 'resolution' && <ResolutionPageAnim />}
+      {/* Main Interactive Stage */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'stretch',
+        gap: '2rem',
+        zIndex: 2,
+        maxWidth: '500px',
+        width: '100%'
+      }}>
+        {/* Step Indicators */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          gap: '1rem',
+          borderRight: '1px solid #e2e8f0',
+          paddingRight: '1.5rem'
+        }}>
+          {[
+            { label: 'Fill Fields' },
+            { label: 'E-Sign' },
+            { label: 'Encrypt' },
+            { label: 'Share' }
+          ].map((item, idx) => {
+            const isActive = step === idx;
+            return (
+              <div key={idx} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                opacity: isActive ? 1 : 0.4,
+                transform: isActive ? 'scale(1.05)' : 'scale(1)',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '10px',
+                  background: isActive ? themeColor : '#f1f5f9',
+                  color: isActive ? 'white' : '#64748b',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: isActive ? `0 4px 12px ${themeColor}30` : 'none',
+                  fontSize: '0.8rem',
+                  fontWeight: '800'
+                }}>
+                  {idx + 1}
+                </div>
+                <span style={{ fontSize: '0.85rem', fontWeight: isActive ? '700' : '500', color: isActive ? '#0f172a' : '#64748b' }}>
+                  {item.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Dynamic Animation Canvas */}
+        <div style={{
+          flex: 1,
+          background: 'white',
+          borderRadius: '16px',
+          border: '1px solid #e2e8f0',
+          boxShadow: '0 10px 20px -5px rgba(0,0,0,0.03)',
+          padding: '1.25rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          position: 'relative',
+          minHeight: '220px',
+          animation: 'floatElement 6s ease-in-out infinite'
+        }}>
+          {/* Header area of simulated contract */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.75rem' }}>
+            <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: themeGradient, display: 'flex', alignItems: 'center', justifyContent: 'center', color: themeColor }}>
+              <FileText size={16} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1e293b' }}>
+                {slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+              </div>
+              <div style={{ fontSize: '0.65rem', color: '#94a3b8' }}>DocTransfer E-Sign Secure</div>
+            </div>
+          </div>
+
+          {/* Interactive States based on Active Step */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.75rem' }}>
+            {step === 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: '600' }}>First Party Name</span>
+                  <div style={{
+                    padding: '6px 10px',
+                    borderRadius: '8px',
+                    border: `1.5px solid ${themeColor}`,
+                    background: '#f8fafc',
+                    fontSize: '0.75rem',
+                    color: '#0f172a',
+                    fontWeight: '700',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    boxShadow: `0 0 10px ${themeColor}10`
+                  }}>
+                    <span>DocTransfer LLC</span>
+                    <Edit3 size={12} color={themeColor} />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontSize: '0.65rem', color: '#64748b', fontWeight: '600' }}>Agreement Date</span>
+                  <div style={{
+                    padding: '6px 10px',
+                    borderRadius: '8px',
+                    border: '1.5px solid #e2e8f0',
+                    background: '#ffffff',
+                    fontSize: '0.75rem',
+                    color: '#94a3b8'
+                  }}>
+                    Select effective date...
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {step === 1 && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', height: '100%' }}>
+                <div style={{
+                  width: '100%',
+                  height: '70px',
+                  border: `2px dashed ${themeColor}`,
+                  borderRadius: '12px',
+                  background: `${themeColor}05`,
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden'
+                }}>
+                  <svg width="120" height="40" style={{ position: 'absolute' }}>
+                    <path
+                      d="M 10 30 Q 30 10, 60 25 T 110 15"
+                      fill="none"
+                      stroke={themeColor}
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      className="anim-signature"
+                    />
+                  </svg>
+                  <span style={{
+                    position: 'absolute',
+                    bottom: '4px',
+                    right: '8px',
+                    fontSize: '0.55rem',
+                    color: themeColor,
+                    fontWeight: '700',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}>
+                    Draw to Sign
+                  </span>
+                </div>
+                <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: '500' }}>Touchscreen E-Signature Active</span>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', height: '100%' }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)',
+                  position: 'relative'
+                }}>
+                  <Shield size={24} />
+                  <div style={{
+                    position: 'absolute',
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    border: '2px solid #10b981',
+                    animation: 'pulseGlow 2s ease-in-out infinite'
+                  }} />
+                </div>
+                <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#0f172a' }}>AES-256 Encrypted</span>
+                <span style={{ fontSize: '0.65rem', color: '#64748b', textAlign: 'center' }}>Client-Side Zero-Knowledge Keys Applied</span>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', height: '100%' }}>
+                <div style={{
+                  width: '100%',
+                  padding: '10px',
+                  borderRadius: '10px',
+                  background: '#f0fdf4',
+                  border: '1px solid #bbf7d0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <CheckCircle2 size={16} color="#10b981" />
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: '#166534' }}>Audit Trail Sealed</span>
+                    <span style={{ fontSize: '0.55rem', color: '#15803d' }}>Signed by all parties successfully</span>
+                  </div>
+                </div>
+                <div style={{
+                  width: '100%',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  background: themeColor,
+                  color: 'white',
+                  fontSize: '0.7rem',
+                  fontWeight: '700',
+                  textAlign: 'center',
+                  boxShadow: `0 4px 10px ${themeColor}30`
+                }}>
+                  Link Generated & Shared
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
-
-/* ============================================================
-   1. NDA / IP ASSIGNMENT DOCUMENT ANIMATION
-   ============================================================ */
-const NDAPageAnim: React.FC = () => (
-  <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    <div className="tmp-badge"><FileText size={10} /> Legal Agreement Template</div>
-
-    <div style={{ display: 'flex', alignItems: 'center', gap: '35px' }}>
-      {/* Draft Document Card */}
-      <div style={{
-        width: '150px', height: '190px',
-        background: 'white', borderRadius: '16px',
-        border: '1.5px solid #e2e8f0', padding: '14px',
-        display: 'flex', flexDirection: 'column', gap: '6px',
-        animation: 'tmpFloat 4s ease-in-out infinite',
-        position: 'relative',
-        boxShadow: '0 10px 25px rgba(99, 102, 241, 0.05)',
-      }}>
-        {/* Document Title */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontSize: '9px', fontWeight: '800', color: '#4f46e5' }}>MUTUAL NDA</span>
-          <Shield size={12} style={{ color: '#4f46e5' }} />
-        </div>
-        <div style={{ width: '100%', height: '2px', background: '#f1f5f9' }} />
-
-        {/* Dynamic Placeholder Variable Fields */}
-        <div style={{
-          padding: '4px 6px', borderRadius: '6px', border: '1px solid',
-          animation: 'tmpFieldHighlight 2s infinite ease-in-out',
-          fontSize: '7px', color: '#4f46e5', fontWeight: '700',
-        }}>
-          [Disclosing Party Name]
-        </div>
-
-        <div style={{
-          padding: '4px 6px', borderRadius: '6px', border: '1px solid',
-          animation: 'tmpFieldHighlight 2s infinite ease-in-out',
-          animationDelay: '1s',
-          fontSize: '7px', color: '#4f46e5', fontWeight: '700',
-        }}>
-          [Effective Date]
-        </div>
-
-        <div style={{ width: '90%', height: '2px', background: '#f1f5f9', marginTop: '4px' }} />
-        <div style={{ width: '95%', height: '2px', background: '#f1f5f9' }} />
-
-        {/* E-Signature indicator */}
-        <div style={{
-          flex: 1, borderTop: '1px dashed #e2e8f0', marginTop: '8px',
-          display: 'flex', alignItems: 'center', gap: '6px',
-        }}>
-          <div style={{ height: '1px', background: '#94a3b8', width: '50px' }} />
-          <span style={{ fontSize: '6px', color: '#64748b', fontWeight: '700' }}>SIGN HERE</span>
-        </div>
-      </div>
-
-      {/* Checklist list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {['Auto-fill custom placeholders', 'IP protection clauses included', 'One-click sign and lock'].map((text, i) => (
-          <div key={i} style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            background: 'white', border: '1px solid #e2e8f0',
-            borderRadius: '10px', padding: '8px 14px',
-            animation: `tmpSlideIn 0.5s ease forwards`, animationDelay: `${0.3 + i * 0.2}s`, opacity: 0,
-            boxShadow: '0 4px 6px rgba(0,0,0,0.01)',
-          }}>
-            <CheckCircle2 size={12} style={{ color: '#10b981' }} />
-            <span style={{ fontSize: '0.75rem', color: '#475569', fontWeight: '600' }}>{text}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
-/* ============================================================
-   2. SERVICES / CONTRACTOR TIMELINE ANIMATION
-   ============================================================ */
-const ServicePageAnim: React.FC = () => (
-  <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    <div className="tmp-badge"><FileText size={10} /> Services Agreement Template</div>
-
-    <div style={{ display: 'flex', alignItems: 'center', gap: '35px' }}>
-      {/* Service Contract Panel */}
-      <div style={{
-        width: '160px', height: '180px',
-        background: 'white', borderRadius: '16px',
-        border: '1.5px solid #e2e8f0', padding: '14px',
-        display: 'flex', flexDirection: 'column', gap: '6px',
-        animation: 'tmpFloat 4.2s ease-in-out infinite',
-        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.04)',
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontSize: '8px', fontWeight: '800', color: '#4f46e5', textTransform: 'uppercase' }}>Scope of Work</span>
-          <Calendar size={12} style={{ color: '#4f46e5' }} />
-        </div>
-        <div style={{ width: '100%', height: '2px', background: '#f1f5f9' }} />
-
-        {/* Milestone Steps */}
-        {[
-          { label: 'Milestone 1', val: 'Design Approval' },
-          { label: 'Milestone 2', val: 'Beta Launch' },
-          { label: 'Milestone 3', val: 'Final Handover' },
-        ].map((step, i) => (
-          <div key={i} style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            fontSize: '8px', color: '#475569', background: '#f8fafc',
-            border: '1px solid #f1f5f9', borderRadius: '6px', padding: '4px 6px',
-          }}>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#4f46e5', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white', fontSize: '6px', fontWeight: 'bold' }}>
-              ✓
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontWeight: '800', fontSize: '7px' }}>{step.label}</span>
-              <span style={{ fontSize: '6px', color: '#94a3b8' }}>{step.val}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Features List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {[
-          { text: 'Milestone tracking logs' },
-          { text: 'IP handover clause pre-built' },
-          { text: 'Clear payment schedule setup' },
-        ].map((item, i) => (
-          <div key={i} style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            background: 'white', border: '1px solid #e2e8f0',
-            borderRadius: '10px', padding: '8px 14px',
-            animation: `tmpSlideIn 0.5s ease forwards`, animationDelay: `${0.4 + i * 0.15}s`, opacity: 0,
-            boxShadow: '0 4px 6px rgba(0,0,0,0.01)',
-          }}>
-            <CheckCircle2 size={12} style={{ color: '#10b981' }} />
-            <span style={{ fontSize: '0.75rem', color: '#475569', fontWeight: '600' }}>{item.text}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
-/* ============================================================
-   3. LEASE / RENTAL AGREEMENT ANIMATION
-   ============================================================ */
-const LeasePageAnim: React.FC = () => (
-  <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    <div className="tmp-badge"><FileText size={10} /> Lease & Rental Agreement</div>
-
-    <div style={{ display: 'flex', alignItems: 'center', gap: '35px' }}>
-      {/* Lease agreement paper mockup */}
-      <div style={{
-        width: '150px', height: '190px',
-        background: 'white', borderRadius: '16px',
-        border: '1.5px solid #e2e8f0', padding: '14px',
-        display: 'flex', flexDirection: 'column', gap: '6px',
-        animation: 'tmpFloat 4.5s ease-in-out infinite',
-        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.04)',
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontSize: '8px', fontWeight: '800', color: '#4f46e5', textTransform: 'uppercase' }}>Rental Lease</span>
-          <DollarSign size={12} style={{ color: '#4f46e5' }} />
-        </div>
-        <div style={{ width: '100%', height: '2px', background: '#f1f5f9' }} />
-
-        {/* Pricing details */}
-        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '6px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <span style={{ fontSize: '6px', color: '#94a3b8', display: 'block' }}>MONTHLY RENT</span>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: '#1e293b' }}>$1,850</span>
-          </div>
-          <span style={{ fontSize: '6px', color: '#10b981', fontWeight: '700', background: 'rgba(16,185,129,0.1)', padding: '2px 4px', borderRadius: '4px' }}>ACTIVE</span>
-        </div>
-
-        {/* Highlight clause */}
-        <div style={{ fontSize: '6px', color: '#64748b', lineHeight: '1.3' }}>
-          The Tenant agrees to pay the landlord the monthly amount of $1,850 on the first day of each month.
-        </div>
-
-        {/* Signature line animation */}
-        <div style={{ flex: 1, borderTop: '1px dashed #e2e8f0', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '6px', color: '#94a3b8' }}>Tenant Sign</span>
-          <div style={{ height: '1.5px', background: '#4f46e5', animation: 'tmpDrawLine 2s infinite alternate', borderRadius: '1px' }} />
-        </div>
-      </div>
-
-      {/* Feature Details list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {['Fixed & periodic leases', 'Security deposit clauses', 'Instantly signed on mobile'].map((text, i) => (
-          <div key={i} style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            background: 'white', border: '1px solid #e2e8f0',
-            borderRadius: '10px', padding: '8px 14px',
-            animation: `tmpSlideIn 0.5s ease forwards`, animationDelay: `${0.3 + i * 0.2}s`, opacity: 0,
-            boxShadow: '0 4px 6px rgba(0,0,0,0.01)',
-          }}>
-            <CheckCircle2 size={12} style={{ color: '#10b981' }} />
-            <span style={{ fontSize: '0.75rem', color: '#475569', fontWeight: '600' }}>{text}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
-/* ============================================================
-   4. CORPORATE BOARD RESOLUTION ANIMATION
-   ============================================================ */
-const ResolutionPageAnim: React.FC = () => (
-  <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    <div className="tmp-badge"><FileText size={10} /> Corporate Resolution Template</div>
-
-    <div style={{ display: 'flex', alignItems: 'center', gap: '35px' }}>
-      {/* Board resolution document with vote stamps */}
-      <div style={{
-        width: '150px', height: '180px',
-        background: 'white', borderRadius: '16px',
-        border: '1.5px solid #e2e8f0', padding: '14px',
-        display: 'flex', flexDirection: 'column', gap: '6px',
-        animation: 'tmpFloat 4.6s ease-in-out infinite',
-        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.04)',
-        position: 'relative',
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontSize: '8px', fontWeight: '800', color: '#4f46e5', textTransform: 'uppercase' }}>Resolution</span>
-          <Award size={12} style={{ color: '#4f46e5' }} />
-        </div>
-        <div style={{ width: '100%', height: '2px', background: '#f1f5f9' }} />
-
-        {/* Vote count */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '7px', color: '#475569', background: '#f8fafc', padding: '4px 6px', borderRadius: '4px' }}>
-          <span>BOARD VOTES</span>
-          <span style={{ color: '#10b981', fontWeight: '800' }}>APPROVED (5-0)</span>
-        </div>
-
-        <div style={{ width: '100%', height: '2px', background: '#f1f5f9', marginTop: '2px' }} />
-        <div style={{ width: '90%', height: '2px', background: '#f1f5f9' }} />
-
-        {/* Corporate Stamp */}
-        <div style={{
-          position: 'absolute', top: '75px', right: '15px',
-          border: '2px solid #10b981', color: '#10b981',
-          padding: '2px 6px', borderRadius: '4px', fontSize: '8px', fontWeight: '800',
-          animation: 'tmpStamp 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-          opacity: 0,
-        }}>
-          RESOLVED
-        </div>
-
-        {/* Board member signatures */}
-        <div style={{ flex: 1, borderTop: '1px dashed #e2e8f0', marginTop: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-          <span style={{ fontSize: '5px', color: '#94a3b8' }}>Secretary</span>
-          <span style={{ fontSize: '5px', color: '#94a3b8' }}>President</span>
-        </div>
-      </div>
-
-      {/* Feature list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {['Official corporate templates', 'Multi-director signing room', 'Encrypted cryptographic vault'].map((text, i) => (
-          <div key={i} style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            background: 'white', border: '1px solid #e2e8f0',
-            borderRadius: '10px', padding: '8px 14px',
-            animation: `tmpSlideIn 0.5s ease forwards`, animationDelay: `${0.3 + i * 0.2}s`, opacity: 0,
-            boxShadow: '0 4px 6px rgba(0,0,0,0.01)',
-          }}>
-            <CheckCircle2 size={12} style={{ color: '#10b981' }} />
-            <span style={{ fontSize: '0.75rem', color: '#475569', fontWeight: '600' }}>{text}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
 
 export default TemplateAnimation;
