@@ -13,6 +13,7 @@ import TemplateRouteWrapper from './pages/TemplateRouteWrapper'
 import SEOCategoryPage from './pages/SEOCategoryPage'
 import ComparisonsDirectory from './pages/ComparisonsDirectory'
 import AlternativesDirectory from './pages/AlternativesDirectory'
+import SEOHubDirectory from './pages/SEOHubDirectory'
 import BlogDirectory from './pages/BlogDirectory'
 import BlogPostDetail from './pages/BlogPostDetail'
 import NotFound from './pages/NotFound'
@@ -38,6 +39,7 @@ function App() {
       <Route path="/templates/:slug" element={<TemplateRouteWrapper />} />
 
       {/* SEO Category Routes */}
+      <Route path="/sitemap-directory" element={<SEOHubDirectory />} />
       <Route path="/comparisons" element={<ComparisonsDirectory />} />
       <Route path="/alternatives" element={<AlternativesDirectory />} />
       <Route path="/alternatives/:slug" element={<SEOCategoryPage category="alternatives" />} />

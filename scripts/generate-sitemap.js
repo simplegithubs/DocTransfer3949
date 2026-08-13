@@ -52,7 +52,8 @@ async function generateSitemap() {
         { loc: `${BASE_URL}/pricing`, priority: '0.8', changefreq: 'weekly' },
         { loc: `${BASE_URL}/alternatives`, priority: '0.85', changefreq: 'weekly' },
         { loc: `${BASE_URL}/comparisons`, priority: '0.85', changefreq: 'weekly' },
-        { loc: `${BASE_URL}/blog`, priority: '0.85', changefreq: 'weekly' }
+        { loc: `${BASE_URL}/blog`, priority: '0.85', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/sitemap-directory`, priority: '0.9', changefreq: 'weekly' }
     ];
 
     // Append predefined system templates

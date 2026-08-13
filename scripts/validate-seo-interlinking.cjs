@@ -104,7 +104,7 @@ if (fs.existsSync(seoPagesDir)) {
         const slug = match[1];
         
         const slugIdx = match.index;
-        const rest = content.substring(slugIdx, slugIdx + 800);
+        const rest = content.substring(slugIdx, slugIdx + 2500);
         
         // Find category
         const catMatch = rest.match(/category:\s*['"]([^'"]+)['"]/);
@@ -198,6 +198,21 @@ templateRoutes.forEach((info) => {
     // Related items inside templates relate to other templates
     checkLink(sourceUrl, targetSlug, true);
   });
+});
+
+// 2.5 Simulate links from Directory/Hub Pages (SEOHubDirectory, AlternativesDirectory, ComparisonsDirectory)
+// Since React directories dynamically list these paths, they are NOT crawl orphans.
+allRoutes.forEach((info) => {
+  incomingLinks.get(`/${info.category}/${info.slug}`).add('/sitemap-directory');
+  if (info.category === 'alternatives') {
+    incomingLinks.get(`/${info.category}/${info.slug}`).add('/alternatives');
+  }
+  if (info.category === 'comparisons') {
+    incomingLinks.get(`/${info.category}/${info.slug}`).add('/comparisons');
+  }
+});
+templateRoutes.forEach((info) => {
+  incomingLinks.get(`/templates/${info.slug}`).add('/sitemap-directory');
 });
 
 // 3. Find Orphan Pages and analyze in-degree statistics
