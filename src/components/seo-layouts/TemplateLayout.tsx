@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Clock, ShieldCheck, UserCheck, CheckCircle, FileText } from 'lucide-react';
 import { getSeoPageRoute, type TemplatePageData } from '../../data/seoPages';
 import TemplateAnimation from './TemplateAnimation';
+import USPSecurityBanner from './USPSecurityBanner';
 
 interface TemplateLayoutProps {
   data: TemplatePageData;
@@ -202,6 +203,9 @@ const TemplateLayout: React.FC<TemplateLayoutProps> = ({ data }) => {
             </div>
           </div>
         </div>
+
+        {/* Security & Analytics USPs */}
+        <USPSecurityBanner />
 
         {/* Related Pages */}
         <section style={{ marginTop: '5rem', borderTop: '1px solid #e2e8f0', paddingTop: '3rem' }}>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, HelpCircle, CheckCircle, Sparkles } from 'lucide-react';
 import { getSeoPageRoute, type HowToPageData } from '../../data/seoPages';
 import HowToAnimation from './HowToAnimation';
+import USPSecurityBanner from './USPSecurityBanner';
 
 interface HowToLayoutProps {
   data: HowToPageData;
@@ -53,6 +54,9 @@ const HowToLayout: React.FC<HowToLayoutProps> = ({ data }) => {
             ))}
           </div>
         </section>
+
+        {/* Core Security & Analytics USPs */}
+        <USPSecurityBanner />
 
         {/* Section 2: Benefits */}
         <section style={{ marginBottom: '5rem' }}>

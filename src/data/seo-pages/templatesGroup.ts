@@ -528,7 +528,7 @@ export const templatesGroup: Record<string, TemplateSEOContent> = {
 ],
     faqs: [
       {
-            "question": "How do I download and customize this Mutual NDA Form?",
+            "question": "How do I download and customize this MutualNda Form?",
             "answer": "You can customize this Mutual NDA Form directly online by entering your details in our form wizard. Once ready, you can download a sample PDF or send a secure link to the other party to collect digital signatures."
       },
       {
