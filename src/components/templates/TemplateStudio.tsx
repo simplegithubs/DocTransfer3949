@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useUser, useAuth } from '@clerk/clerk-react';
+import { useUser, useAuth } from '../auth';
 import { getSafeSupabaseToken, createSupabaseClient } from '../../lib/supabase';
 import { saveCustomTemplate } from '../../services/templateService';
 import * as pdfjsLib from 'pdfjs-dist';

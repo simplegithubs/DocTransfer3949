@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useUser, useAuth } from '@clerk/clerk-react';
+import { useUser, useAuth } from '../auth';
 import { getSafeSupabaseToken } from '../../lib/supabase';
 import { fetchCustomTemplates, deleteCustomTemplate, type DocumentTemplate } from '../../services/templateService';
 import { TEMPLATES, TEMPLATE_CATEGORIES, type Template } from './templateData';

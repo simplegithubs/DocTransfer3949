@@ -9,55 +9,52 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(
     supabaseUrl || '',
-    supabaseAnonKey || ''
+    supabaseAnonKey || '',
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+        },
+    }
 );
 
 /**
- * Safely get a Supabase token from Clerk, handling missing template errors
+ * Safely get the active Supabase JWT session token.
+ * Can accept an optional token getter for backward compatibility.
  */
-export const getSafeSupabaseToken = async (getToken: (options?: { template?: string }) => Promise<string | null>) => {
+export const getSafeSupabaseToken = async (getToken?: () => Promise<string | null>): Promise<string | null> => {
     try {
-        // Attempt to get the dedicated Supabase template
-        const token = await getToken({ template: 'supabase' });
-        
-        // CRITICAL FIX: If the token is RS256 (starts with eyJhbGciOiJSUzI1NiI), 
-        // Supabase will reject it with "'alg' (Algorithm) Header Parameter value not allowed".
-        // This happens if the Clerk template is misconfigured or using default signing.
-        if (token && token.startsWith('eyJhbGciOiJSUzI1NiI')) {
-            console.error(
-                "CLERK CONFIGURATION ERROR: Your 'supabase' JWT template is using RS256, but Supabase requires HS256. " +
-                "1. Go to Clerk Dashboard > JWT Templates > 'supabase'. " +
-                "2. Change the signing algorithm to HS256. " +
-                "3. Ensure the signing key is your Supabase JWT Secret."
-            );
-            return null; // Fallback to anonymous access to prevent the hard 'alg' error
+        if (getToken) {
+            const token = await getToken();
+            if (token) return token;
         }
-        
-        return token;
-    } catch (error: any) {
-        // If template doesn't exist, avoid falling back to the default Clerk token (which is RS256)
-        if (error.message?.includes('No JWT template exists')) {
-            console.warn(
-                "CLERK SETUP REQUIRED: Please create a JWT template named 'supabase' in your Clerk Dashboard. " +
-                "Using anonymous access for now to prevent 'alg' errors."
-            );
-            return null;
-        }
-        throw error;
+        const { data: { session } } = await supabase.auth.getSession();
+        return session?.access_token || null;
+    } catch (error) {
+        console.error('Error fetching Supabase auth token:', error);
+        return null;
     }
 };
 
 /**
- * Helper to create a Supabase client with a custom JWT token (e.g., from Clerk)
- * This allows RLS policies to work correctly.
+ * Helper to get a Supabase client.
+ * If a custom token is provided, creates a client configured with that Authorization header;
+ * otherwise returns the shared singleton client which automatically tracks the active auth session.
  */
 export const createSupabaseClient = (token?: string) => {
+    if (!token) {
+        return supabase;
+    }
     return createClient(
         supabaseUrl || '',
         supabaseAnonKey || '',
         {
+            auth: {
+                persistSession: false,
+            },
             global: {
-                headers: token ? { Authorization: `Bearer ${token}` } : {},
+                headers: { Authorization: `Bearer ${token}` },
             },
         }
     );

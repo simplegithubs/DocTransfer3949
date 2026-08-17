@@ -28,7 +28,6 @@ This guide explains how to deploy the DocTransfer application to Vercel.
     *   `VITE_STRIPE_PUBLISHABLE_KEY`
     *   `VITE_STRIPE_STANDARD_PRICE_ID`
     *   `VITE_STRIPE_BUSINESS_PRICE_ID`
-    *   `VITE_CLERK_PUBLISHABLE_KEY`
     *   `VITE_SITE_URL` (Set this to your Vercel deployment URL, e.g., `https://doctransfer.vercel.app`)
 
     *Note: Do NOT add sensitive backend keys (like `STRIPE_SECRET_KEY` or `STRIPE_WEBHOOK_SECRET`) to the "Environment Variables" section if they are only used in backend functions not present in this frontend repo. However, if you have API routes in `api/` (Vercel Functions), you need them.*
@@ -51,4 +50,4 @@ This guide explains how to deploy the DocTransfer application to Vercel.
 
 - Visit the deployed URL.
 - Test navigation: Go to `/pricing` and refresh the page. It should not 404.
-- Test Authentication (Clerk) and Database (Supabase) connections.
+- Test Authentication (Supabase Auth) and Database (Supabase) connections.

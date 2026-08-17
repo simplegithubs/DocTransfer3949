@@ -236,7 +236,7 @@ const baseSEOPages: SEOPageData[] = [
     sideBySideTable: [
       { capability: 'Pricing', docTransferVal: 'Free Core tier, Premium at $15/user/month', competitorVal: 'Starts at $19/user/month (annual prepay)' },
       { capability: 'Core Features', docTransferVal: 'Dynamic template editor, view tracking, eIDAS signatures', competitorVal: 'Proposal builder, document editor, basic signatures' },
-      { capability: 'Integrations', docTransferVal: 'Google Drive, Supabase, Clerk', competitorVal: 'Salesforce, HubSpot, Stripe, QuickBooks' }
+      { capability: 'Integrations', docTransferVal: 'Google Drive, Supabase Auth', competitorVal: 'Salesforce, HubSpot, Stripe, QuickBooks' }
     ],
     prosCons: {
       docTransferPros: ['Zero-Knowledge E2EE Support', 'Page-by-page read time analytics', 'Full branding controls on free tier'],
@@ -269,7 +269,7 @@ const baseSEOPages: SEOPageData[] = [
     sideBySideTable: [
       { capability: 'Pricing', docTransferVal: 'Free Core tier, Premium at $15/user/month', competitorVal: 'Starts at $13/user/month, scaling to enterprise tiers' },
       { capability: 'Core Features', docTransferVal: 'E-signatures, template library, audit trails, E2EE', competitorVal: 'Acrobat integration, e-signatures, form creation' },
-      { capability: 'Integrations', docTransferVal: 'Google Drive, Supabase, Clerk, PDF-lib', competitorVal: 'Adobe Acrobat ecosystem, Microsoft, Workday' }
+      { capability: 'Integrations', docTransferVal: 'Google Drive, Supabase Auth, PDF-lib', competitorVal: 'Adobe Acrobat ecosystem, Microsoft, Workday' }
     ],
     prosCons: {
       docTransferPros: ['100% Free core features', 'E2EE zero-knowledge support', 'Detailed page view tracking'],
@@ -301,7 +301,7 @@ const baseSEOPages: SEOPageData[] = [
     sideBySideTable: [
       { capability: 'Pricing', docTransferVal: 'Free Core tier, Premium at $15/user/month', competitorVal: 'Starts at $36/user/month (annual prepay)' },
       { capability: 'Core Features', docTransferVal: 'Secure file transfer, e-signatures, E2EE, view logs', competitorVal: 'No-code workflow automation, web forms, contract management' },
-      { capability: 'Integrations', docTransferVal: 'Google Drive, Supabase, Clerk, PDF-lib', competitorVal: 'Salesforce, SharePoint, NetSuite, Slack' }
+      { capability: 'Integrations', docTransferVal: 'Google Drive, Supabase Auth, PDF-lib', competitorVal: 'Salesforce, SharePoint, NetSuite, Slack' }
     ],
     prosCons: {
       docTransferPros: ['Zero-knowledge E2EE support', 'Instant page-by-page recipient analytics', 'Completely free core tier'],
@@ -333,7 +333,7 @@ const baseSEOPages: SEOPageData[] = [
     sideBySideTable: [
       { capability: 'Pricing', docTransferVal: 'Free Core tier, Premium at $15/user/month', competitorVal: 'Starts at $10/user/month, scaling to $20/user/month' },
       { capability: 'Core Features', docTransferVal: 'E-signatures, E2EE, watermarking, sitemaps', competitorVal: 'Zoho ecosystem e-signatures, custom templates, audit trail' },
-      { capability: 'Integrations', docTransferVal: 'Google Drive, Supabase, Clerk, PDF-lib', competitorVal: 'Zoho suite (CRM, Books, Creator), Microsoft Teams' }
+      { capability: 'Integrations', docTransferVal: 'Google Drive, Supabase Auth, PDF-lib', competitorVal: 'Zoho suite (CRM, Books, Creator), Microsoft Teams' }
     ],
     prosCons: {
       docTransferPros: ['E2EE support', 'Recipient page-level viewing analytics', 'Completely free tier'],

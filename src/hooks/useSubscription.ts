@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useUser, useAuth } from '@clerk/clerk-react';
+import { useUser, useAuth } from '../components/auth';
 import { supabase, createSupabaseClient, getSafeSupabaseToken } from '../lib/supabase';
 
 export interface Subscription {
@@ -75,7 +75,7 @@ export const useSubscription = () => {
             try {
                 setIsLoading(true);
 
-                // Get Clerk token for Supabase
+                // Get Supabase session token
                 const token = await getSafeSupabaseToken(getToken);
                 const authenticatedSupabase = createSupabaseClient(token || undefined);
 

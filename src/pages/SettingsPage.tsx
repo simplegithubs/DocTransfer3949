@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useUser } from '@clerk/clerk-react';
+import { useUser } from '../components/auth';
 import { useNavigate } from 'react-router-dom';
 import BrandingSettings from '../components/BrandingSettings';
 import SLASettings from '../components/SLASettings';

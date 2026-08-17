@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Check, Sparkles, ArrowRight, Loader2, Globe, CreditCard } from 'lucide-react';
-import { useUser } from '@clerk/clerk-react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { useUser } from './components/auth';
+import { supabase } from './lib/supabase';
 
 const PaymentSuccess: React.FC = () => {
     const [searchParams] = useSearchParams();

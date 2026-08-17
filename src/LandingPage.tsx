@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, UserButton } from './components/auth';
 import Logo from './components/Logo';
 import SEO from './components/SEO';
 import UseCaseCards from './components/UseCaseCards';

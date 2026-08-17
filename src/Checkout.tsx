@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useUser, useAuth } from '@clerk/clerk-react';
+import { useUser, useAuth } from './components/auth';
 import Logo from './components/Logo';
 import SEO from './components/SEO';
 import {

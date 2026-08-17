@@ -17,7 +17,7 @@ import {
     FolderOpen
 } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
-import { useUser } from '@clerk/clerk-react';
+import { useUser } from '../auth';
 import { supabase } from '../../lib/supabase';
 import useSubscription from '../../hooks/useSubscription';
 import UsageLimitBanner from '../UsageLimitBanner';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, UserButton } from './auth';
 import Logo from './Logo';
 import SEO from './SEO';
 import { CheckCircle, XCircle, AlertCircle, ChevronRight, Twitter, Instagram, Youtube, Linkedin } from 'lucide-react';

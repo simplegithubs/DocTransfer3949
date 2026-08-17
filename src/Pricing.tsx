@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from './components/auth';
 import Logo from './components/Logo';
 import SEO from './components/SEO';
 import {
@@ -78,7 +78,7 @@ const Pricing: React.FC = () => {
         if (!hasUsedTrial) {
             try {
                 setStartingTrial(planType);
-                const token = await getToken({ template: 'supabase' });
+                const token = await getToken();
                 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
                 
                 const response = await fetch(`${supabaseUrl}/functions/v1/start-free-trial`, {

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { useUser, useAuth } from '@clerk/clerk-react';
+import { useUser, useAuth } from '../auth';
 import { supabase, createSupabaseClient, getSafeSupabaseToken } from '../../lib/supabase';
 import { generatePdfFromTemplate } from '../../lib/pdfTemplateGenerator';
 import { setupTemplateSignatures } from '../../lib/templateSignatures';

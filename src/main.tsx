@@ -3,14 +3,14 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
-import { ClerkProvider } from '@clerk/clerk-react'
+import { AuthProvider, AuthModal } from './components/auth'
 import ErrorBoundary from './components/ErrorBoundary'
 
-// Import your Publishable Key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 try {
-  if (!PUBLISHABLE_KEY) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     createRoot(document.getElementById('root')!).render(
       <StrictMode>
         <ErrorBoundary>
@@ -36,7 +36,7 @@ try {
                 Missing Configuration
               </h1>
               <p style={{ marginBottom: '1rem' }}>
-                The application cannot start because the Clerk Publishable Key is missing.
+                The application cannot start because the Supabase configuration is missing.
               </p>
               <div style={{
                 backgroundColor: '#f3f4f6',
@@ -44,12 +44,13 @@ try {
                 borderRadius: '0.375rem',
                 fontFamily: 'monospace',
                 marginBottom: '1rem',
-                wordBreak: 'break-all'
+                wordBreak: 'break-all',
+                fontSize: '0.875rem'
               }}>
-                VITE_CLERK_PUBLISHABLE_KEY
+                VITE_SUPABASE_URL &amp; VITE_SUPABASE_ANON_KEY
               </div>
               <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                Please check your Vercel Project Settings or local .env file to ensure the key is being picked up.
+                Please check your .env file or deployment settings to ensure Supabase variables are defined.
               </p>
             </div>
           </div>
@@ -60,16 +61,12 @@ try {
     createRoot(document.getElementById('root')!).render(
       <StrictMode>
         <ErrorBoundary>
-          <ClerkProvider
-            publishableKey={PUBLISHABLE_KEY}
-            signInFallbackRedirectUrl="/dataroom"
-            signUpFallbackRedirectUrl="/dataroom"
-            afterSignOutUrl="/"
-          >
+          <AuthProvider>
             <BrowserRouter>
               <App />
+              <AuthModal />
             </BrowserRouter>
-          </ClerkProvider>
+          </AuthProvider>
         </ErrorBoundary>
       </StrictMode>,
     )
