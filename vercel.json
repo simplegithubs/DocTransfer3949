@@ -27,22 +27,7 @@
             ]
         }
     ],
-    "cleanUrls": true,
-    "trailingSlash": false,
     "rewrites": [
-        { "source": "/view/:path*", "destination": "/index.html" },
-        { "source": "/sign/:path*", "destination": "/index.html" },
-        { "source": "/dataroom/:path*", "destination": "/index.html" },
-        { "source": "/dataroom", "destination": "/index.html" },
-        { "source": "/document-sharing/:path*", "destination": "/index.html" },
-        { "source": "/document-sharing", "destination": "/index.html" },
-        { "source": "/settings/:path*", "destination": "/index.html" },
-        { "source": "/settings", "destination": "/index.html" },
-        { "source": "/checkout/:path*", "destination": "/index.html" },
-        { "source": "/checkout", "destination": "/index.html" },
-        { "source": "/payment-success/:path*", "destination": "/index.html" },
-        { "source": "/payment-success", "destination": "/index.html" },
-        { "source": "/pricing", "destination": "/index.html" },
         { "source": "/(.*)", "destination": "/index.html" }
     ]
 }
