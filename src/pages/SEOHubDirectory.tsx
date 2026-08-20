@@ -9,15 +9,22 @@ import {
   Briefcase, 
   FileText, 
   ArrowRight,
-  TrendingUp
+  TrendingUp,
+  BookOpen,
+  Target
 } from 'lucide-react';
 import SEO from '../components/SEO';
 import { allSEOPages } from '../data/seoPages';
 import { templateSeoData } from '../data/templateSeoData';
+import { toolsList } from '../data/toolsData';
+import { integrationsList } from '../data/integrationsData';
+import { glossaryTerms } from '../data/glossaryData';
+import { solutionsData } from '../data/solutionsData';
+import { conquestData } from '../data/conquestData';
 
 const SEOHubDirectory: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'alternatives' | 'comparisons' | 'how-to' | 'industry' | 'templates'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'alternatives' | 'comparisons' | 'how-to' | 'industry' | 'templates' | 'tools' | 'integrations' | 'glossary' | 'solutions' | 'conquest'>('all');
 
   // Convert templateSeoData object into an array for easier rendering
   const templatesList = useMemo(() => {
@@ -30,7 +37,57 @@ const SEOHubDirectory: React.FC = () => {
     }));
   }, []);
 
-  // Combine regular SEO pages with templates
+  const toolsMappedList = useMemo(() => {
+    return toolsList.map(t => ({
+      slug: t.slug,
+      category: 'tools' as const,
+      title: t.name,
+      displayName: t.name,
+      description: t.tagline
+    }));
+  }, []);
+
+  const integrationsMappedList = useMemo(() => {
+    return integrationsList.map(i => ({
+      slug: i.slug,
+      category: 'integrations' as const,
+      title: `DocTransfer + ${i.name} Integration`,
+      displayName: `DocTransfer + ${i.name}`,
+      description: i.tagline
+    }));
+  }, []);
+
+  const glossaryMappedList = useMemo(() => {
+    return glossaryTerms.map(g => ({
+      slug: g.slug,
+      category: 'glossary' as const,
+      title: g.term,
+      displayName: g.term,
+      description: g.shortDefinition
+    }));
+  }, []);
+
+  const solutionsMappedList = useMemo(() => {
+    return solutionsData.map(s => ({
+      slug: s.slug,
+      category: 'solutions' as const,
+      title: s.title,
+      displayName: s.title,
+      description: s.subheadline
+    }));
+  }, []);
+
+  const conquestMappedList = useMemo(() => {
+    return conquestData.map(c => ({
+      slug: c.slug,
+      category: 'conquest' as const,
+      title: c.title,
+      displayName: c.title,
+      description: c.subheadline
+    }));
+  }, []);
+
+  // Combine regular SEO pages with templates, tools, and integrations
   const allMergedPages = useMemo(() => {
     const regularPages = allSEOPages.map(p => ({
       slug: p.slug,
@@ -46,8 +103,8 @@ const SEOHubDirectory: React.FC = () => {
       description: p.description
     }));
 
-    return [...regularPages, ...templatesList];
-  }, [templatesList]);
+    return [...regularPages, ...templatesList, ...toolsMappedList, ...integrationsMappedList, ...glossaryMappedList, ...solutionsMappedList, ...conquestMappedList];
+  }, [templatesList, toolsMappedList, integrationsMappedList, glossaryMappedList, solutionsMappedList, conquestMappedList]);
 
   // Filter items based on active tab and search query
   const filteredItems = useMemo(() => {
@@ -85,12 +142,24 @@ const SEOHubDirectory: React.FC = () => {
     { id: 'comparisons', label: 'Comparisons', count: stats.comparisons, icon: TrendingUp, color: '#10b981' },
     { id: 'templates', label: 'Templates', count: stats.templates, icon: FileText, color: '#f59e0b' },
     { id: 'how-to', label: 'How-To Guides', count: stats['how-to'], icon: HelpCircle, color: '#ec4899' },
-    { id: 'industry', label: 'Industry Hubs', count: stats.industry, icon: Briefcase, color: '#8b5cf6' }
+    { id: 'industry', label: 'Industry Hubs', count: stats.industry, icon: Briefcase, color: '#8b5cf6' },
+    { id: 'glossary', label: 'Glossary', count: glossaryMappedList.length, icon: BookOpen, color: '#059669' },
+    { id: 'solutions', label: 'Solutions', count: solutionsMappedList.length, icon: Target, color: '#6366f1' },
+    { id: 'conquest', label: 'DocSend Alternatives', count: conquestMappedList.length, icon: Sparkles, color: '#dc2626' }
   ];
 
   const getRoute = (category: string, slug: string) => {
     if (category === 'templates') {
       return `/templates/${slug}`;
+    }
+    if (category === 'glossary') {
+      return `/glossary/${slug}`;
+    }
+    if (category === 'solutions') {
+      return `/solutions/${slug}`;
+    }
+    if (category === 'conquest') {
+      return `/docsend-alternative/${slug}`;
     }
     return `/${category}/${slug}`;
   };

@@ -57,7 +57,17 @@ const verticalFiles = [
 let totalVerticalPages = 0;
 const verticalPages = [];
 
-// Helper to count and extract slugs using precise indentation-based regex
+// Sample pages to check metadata (including our new hubs and vertical pages)
+const sampleCheckUrls = [
+  '/alternatives/docusign-alternative-healthcare',
+  '/research/investor-pitch-deck-dwell-time-2026',
+  '/tools/vdr-cost-calculator',
+  '/integrations/google-drive',
+  '/glossary/virtual-data-room',
+  '/solutions/fundraising',
+  '/docsend-alternative/pricing',
+  '/templates'
+];
 for (const file of verticalFiles) {
   const filePath = path.join(seoPagesDir, file.name);
   if (fs.existsSync(filePath)) {

@@ -16,6 +16,22 @@ import AlternativesDirectory from './pages/AlternativesDirectory'
 import SEOHubDirectory from './pages/SEOHubDirectory'
 import BlogDirectory from './pages/BlogDirectory'
 import BlogPostDetail from './pages/BlogPostDetail'
+import ResearchHub from './pages/ResearchHub'
+import ResearchDetail from './pages/ResearchDetail'
+import ToolsHub from './pages/tools/ToolsHub'
+import PitchDeckAnalyzer from './pages/tools/PitchDeckAnalyzer'
+import NDAGenerator from './pages/tools/NDAGenerator'
+import VDRCostCalculator from './pages/tools/VDRCostCalculator'
+import PDFWatermarkTool from './pages/tools/PDFWatermarkTool'
+import IntegrationsHub from './pages/IntegrationsHub'
+import IntegrationDetail from './pages/IntegrationDetail'
+import GlossaryHub from './pages/GlossaryHub'
+import GlossaryDetail from './pages/GlossaryDetail'
+import SolutionsHub from './pages/SolutionsHub'
+import SolutionDetail from './pages/SolutionDetail'
+import ConquestHub from './pages/ConquestHub'
+import ConquestDetail from './pages/ConquestDetail'
+import TemplatesHub from './pages/TemplatesHub'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -36,6 +52,7 @@ function App() {
       {/* Public Routes */}
       <Route path="/view/:shareLink" element={<ViewDocument />} />
       <Route path="/sign/:signingLink" element={<SignDocument />} />
+      <Route path="/templates" element={<TemplatesHub />} />
       <Route path="/templates/:slug" element={<TemplateRouteWrapper />} />
 
       {/* SEO Category Routes */}
@@ -51,6 +68,33 @@ function App() {
       {/* Blog Routes */}
       <Route path="/blog" element={<BlogDirectory />} />
       <Route path="/blog/:slug" element={<BlogPostDetail />} />
+
+      {/* Research Routes */}
+      <Route path="/research" element={<ResearchHub />} />
+      <Route path="/research/:slug" element={<ResearchDetail />} />
+
+      {/* Free Tools Routes */}
+      <Route path="/tools" element={<ToolsHub />} />
+      <Route path="/tools/pitch-deck-analyzer" element={<PitchDeckAnalyzer />} />
+      <Route path="/tools/nda-generator" element={<NDAGenerator />} />
+      <Route path="/tools/vdr-cost-calculator" element={<VDRCostCalculator />} />
+      <Route path="/tools/pdf-watermarking-tool" element={<PDFWatermarkTool />} />
+
+      {/* Integrations Routes */}
+      <Route path="/integrations" element={<IntegrationsHub />} />
+      <Route path="/integrations/:slug" element={<IntegrationDetail />} />
+
+      {/* Glossary Routes */}
+      <Route path="/glossary" element={<GlossaryHub />} />
+      <Route path="/glossary/:slug" element={<GlossaryDetail />} />
+
+      {/* Solutions / Use Cases Routes */}
+      <Route path="/solutions" element={<SolutionsHub />} />
+      <Route path="/solutions/:slug" element={<SolutionDetail />} />
+
+      {/* DocSend Conquest Routes */}
+      <Route path="/docsend-alternative" element={<ConquestHub />} />
+      <Route path="/docsend-alternative/:slug" element={<ConquestDetail />} />
 
       {/* Application Routes */}
       <Route

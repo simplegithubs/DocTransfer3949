@@ -53,6 +53,17 @@ async function generateSitemap() {
         { loc: `${BASE_URL}/alternatives`, priority: '0.85', changefreq: 'weekly' },
         { loc: `${BASE_URL}/comparisons`, priority: '0.85', changefreq: 'weekly' },
         { loc: `${BASE_URL}/blog`, priority: '0.85', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/research`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/pitch-deck-analyzer`, priority: '0.95', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/nda-generator`, priority: '0.95', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/vdr-cost-calculator`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/pdf-watermarking-tool`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/integrations`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/glossary`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/solutions`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/templates`, priority: '0.95', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/docsend-alternative`, priority: '0.95', changefreq: 'weekly' },
         { loc: `${BASE_URL}/sitemap-directory`, priority: '0.9', changefreq: 'weekly' }
     ];
 
@@ -191,6 +202,106 @@ async function generateSitemap() {
         }
     } catch (parseErr) {
         console.warn("Warning: Failed to parse blogData.ts dynamically:", parseErr.message);
+    }
+
+    // Dynamically parse integration pages from integrationsData.ts
+    try {
+        const integrationsPath = path.resolve('src/data/integrationsData.ts');
+        if (fs.existsSync(integrationsPath)) {
+            const content = fs.readFileSync(integrationsPath, 'utf8');
+            const lines = content.split(/\r?\n/);
+            let count = 0;
+            lines.forEach(line => {
+                const match = line.match(/^\s{4}slug:\s*['"]([^'"]+)['"]/);
+                if (match) {
+                    const slug = match[1];
+                    entries.push({
+                        loc: `${BASE_URL}/integrations/${slug}`,
+                        priority: '0.85',
+                        changefreq: 'weekly'
+                    });
+                    count++;
+                }
+            });
+            console.log(`Parsed ${count} integration pages from integrationsData.ts.`);
+        }
+    } catch (parseErr) {
+        console.warn("Warning: Failed to parse integrationsData.ts dynamically:", parseErr.message);
+    }
+
+    // Dynamically parse glossary pages from glossaryData.ts
+    try {
+        const glossaryPath = path.resolve('src/data/glossaryData.ts');
+        if (fs.existsSync(glossaryPath)) {
+            const content = fs.readFileSync(glossaryPath, 'utf8');
+            const lines = content.split(/\r?\n/);
+            let count = 0;
+            lines.forEach(line => {
+                const match = line.match(/^\s{4}slug:\s*['"]([^'"]+)['"]/);
+                if (match) {
+                    const slug = match[1];
+                    entries.push({
+                        loc: `${BASE_URL}/glossary/${slug}`,
+                        priority: '0.85',
+                        changefreq: 'weekly'
+                    });
+                    count++;
+                }
+            });
+            console.log(`Parsed ${count} glossary term pages from glossaryData.ts.`);
+        }
+    } catch (parseErr) {
+        console.warn("Warning: Failed to parse glossaryData.ts dynamically:", parseErr.message);
+    }
+
+    // Dynamically parse solutions pages from solutionsData.ts
+    try {
+        const solutionsPath = path.resolve('src/data/solutionsData.ts');
+        if (fs.existsSync(solutionsPath)) {
+            const content = fs.readFileSync(solutionsPath, 'utf8');
+            const lines = content.split(/\r?\n/);
+            let count = 0;
+            lines.forEach(line => {
+                const match = line.match(/^\s{4}slug:\s*['"]([^'"]+)['"]/);
+                if (match) {
+                    const slug = match[1];
+                    entries.push({
+                        loc: `${BASE_URL}/solutions/${slug}`,
+                        priority: '0.9',
+                        changefreq: 'weekly'
+                    });
+                    count++;
+                }
+            });
+            console.log(`Parsed ${count} solution pages from solutionsData.ts.`);
+        }
+    } catch (parseErr) {
+        console.warn("Warning: Failed to parse solutionsData.ts dynamically:", parseErr.message);
+    }
+
+    // Dynamically parse conquest pages from conquestData.ts
+    try {
+        const conquestPath = path.resolve('src/data/conquestData.ts');
+        if (fs.existsSync(conquestPath)) {
+            const content = fs.readFileSync(conquestPath, 'utf8');
+            const lines = content.split(/\r?\n/);
+            let count = 0;
+            lines.forEach(line => {
+                const match = line.match(/^\s{4}slug:\s*['"]([^'"]+)['"]/);
+                if (match) {
+                    const slug = match[1];
+                    entries.push({
+                        loc: `${BASE_URL}/docsend-alternative/${slug}`,
+                        priority: '0.95',
+                        changefreq: 'weekly'
+                    });
+                    count++;
+                }
+            });
+            console.log(`Parsed ${count} conquest pages from conquestData.ts.`);
+        }
+    } catch (parseErr) {
+        console.warn("Warning: Failed to parse conquestData.ts dynamically:", parseErr.message);
     }
 
     // Fetch dynamic custom templates from Supabase database
