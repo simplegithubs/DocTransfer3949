@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies and build outputs
 node_modules
 dist
 dist-ssr
@@ -27,5 +28,24 @@ dist-ssr
 .env
 .env.local
 .env.*.local
-.vercel
 .env*
+!.env.example
+
+# Hosting CLI directories & temporary caches
+.vercel
+.netlify
+supabase/.temp/
+
+# Test & Debug outputs
+build_errors.txt
+build_log.txt
+eslint_report.txt
+verify_output.txt
+test_analytics.txt
+test_payload.json
+test_watermark.txt
+status.txt
+remote.txt
+response.json
+diagnose-cors.html
+

@@ -1,2 +1,0 @@
-This is a test document for verification of analytics tracking.
-It contains some simple text.
