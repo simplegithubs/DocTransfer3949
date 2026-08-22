@@ -26,6 +26,20 @@ const PublicTemplateSEO: React.FC = () => {
   // Fallback to home if slug doesn't exist in our SEO data
   const data = slug ? templateSeoData[slug] : null;
 
+  // Find system template to get dynamic structure for PDF generation
+  const systemTemplate = data ? TEMPLATES.find(t => t.id === data.templateId) : undefined;
+
+  // Initialize field values state
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>(() => {
+    const vals: Record<string, string> = {};
+    if (systemTemplate) {
+      systemTemplate.fields.slice(0, 3).forEach(f => {
+        vals[f.id] = String(f.defaultValue || '');
+      });
+    }
+    return vals;
+  });
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
@@ -38,20 +52,6 @@ const PublicTemplateSEO: React.FC = () => {
       </div>
     );
   }
-
-  // Find system template to get dynamic structure for PDF generation
-  const systemTemplate = TEMPLATES.find(t => t.id === data.templateId);
-
-  // Initialize field values state
-  const [fieldValues, setFieldValues] = useState<Record<string, string>>(() => {
-    const vals: Record<string, string> = {};
-    if (systemTemplate) {
-      systemTemplate.fields.slice(0, 3).forEach(f => {
-        vals[f.id] = String(f.defaultValue || '');
-      });
-    }
-    return vals;
-  });
 
   const handleFieldChange = (fieldId: string, val: string) => {
     const updated = { ...fieldValues, [fieldId]: val };
