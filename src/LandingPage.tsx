@@ -4,6 +4,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from './components/auth
 import Logo from './components/Logo';
 import SEO from './components/SEO';
 import UseCaseCards from './components/UseCaseCards';
+import Footer from './components/Footer';
 import {
   Shield,
   FileText,
@@ -222,32 +223,117 @@ const LandingPage: React.FC = () => {
                     position: 'absolute',
                     top: '100%',
                     left: '0',
-                    width: '180px',
+                    width: '220px',
                     background: 'white',
                     borderRadius: '12px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                    boxShadow: '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
                     padding: '0.75rem',
                     zIndex: 1000,
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '0.5rem',
+                    gap: '0.25rem',
                     border: '1px solid #f3f4f6'
                   }}
                 >
+                  <Link 
+                    to="/tools" 
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: '#1f2937', 
+                      fontWeight: 600,
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.9rem'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    🛠️ Free Tools
+                  </Link>
                   <Link 
                     to="/alternatives" 
                     style={{ 
                       textDecoration: 'none', 
                       color: '#1f2937', 
                       fontWeight: 500,
-                      padding: '0.5rem',
-                      borderRadius: '6px',
-                      display: 'block'
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '8px',
+                      display: 'block',
+                      fontSize: '0.9rem'
                     }}
                     onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
                     onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
                   >
-                    Alternatives
+                    Competitor Alternatives
+                  </Link>
+                  <Link 
+                    to="/solutions" 
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: '#1f2937', 
+                      fontWeight: 500,
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '8px',
+                      display: 'block',
+                      fontSize: '0.9rem'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    Industry Solutions
+                  </Link>
+                  <Link 
+                    to="/templates" 
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: '#1f2937', 
+                      fontWeight: 500,
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '8px',
+                      display: 'block',
+                      fontSize: '0.9rem'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    100+ Legal Templates
+                  </Link>
+                  <Link 
+                    to="/glossary" 
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: '#1f2937', 
+                      fontWeight: 500,
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '8px',
+                      display: 'block',
+                      fontSize: '0.9rem'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    Glossary (50+ Terms)
+                  </Link>
+                  <Link 
+                    to="/sitemap-directory" 
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: '#4f46e5', 
+                      fontWeight: 700,
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '8px',
+                      display: 'block',
+                      fontSize: '0.9rem',
+                      borderTop: '1px solid #f1f5f9',
+                      marginTop: '0.25rem'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.background = '#eff6ff'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    📁 Master Site Directory
                   </Link>
                 </div>
               )}
@@ -1490,211 +1576,8 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
       </main>
-
-       <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-col">
-            <div style={{ marginBottom: '1.5rem' }}>
-              <Logo size={32} />
-            </div>
-            <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6', maxWidth: '240px' }}>
-              Secure document sharing and analytics for modern teams. Built for privacy and speed.
-            </p>
-          </div>
-          <div className="footer-col">
-            <h4>Product</h4>
-            <ul>
-              <li><a href="#features">Features</a></li>
-              <li><a href="#security">Security</a></li>
-              <li><a href="/pricing">Pricing</a></li>
-              <li><a href="#">Enterprise</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Popular Templates</h4>
-            <ul>
-              <li><Link to="/templates/nda">NDA Template</Link></li>
-              <li><Link to="/templates/llc-operating">LLC Agreement</Link></li>
-              <li><Link to="/templates/sublease">Sublease Agreement</Link></li>
-              <li><Link to="/templates/sow">SOW Template</Link></li>
-              <li><Link to="/templates/sales-contract">Sales Contract</Link></li>
-              <li><Link to="/templates/offer-letter">Offer Letter</Link></li>
-              <li><Link to="/templates/contractor-agreement">Contractor Agreement</Link></li>
-              <li><Link to="/templates/w4-form">W-4 Form</Link></li>
-              <li><Link to="/templates/i9-form">I-9 Form</Link></li>
-              <li><Link to="/templates/purchase-order">Purchase Order</Link></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Company</h4>
-            <ul>
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Contact</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Legal</h4>
-            <ul>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Cookie Policy</a></li>
-            </ul>
-          </div>
-          <div className="footer-col">
-            <h4>Support</h4>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
-              <div style={{
-                background: 'rgba(59, 130, 246, 0.1)',
-                border: '1px solid rgba(59, 130, 246, 0.2)',
-                padding: '0.6rem',
-                borderRadius: '12px',
-                color: '#60a5fa',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Mail size={18} />
-              </div>
-              <div>
-                <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px' }}>Email Support</div>
-                <a href="mailto:roushan@doctransfer.online" style={{ color: 'white', fontWeight: 600, textDecoration: 'none', fontSize: '0.95rem' }}>
-                  roushan@doctransfer.online
-                </a>
-              </div>
-            </div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '2rem' }}>
-              <a
-                href="https://x.com/Roushan71262"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '0.6rem',
-                  borderRadius: '12px',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                }}
-              >
-                <Twitter size={18} />
-              </a>
-              <a
-                href="https://www.instagram.com/doctransfer2227/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '0.6rem',
-                  borderRadius: '12px',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.borderColor = 'transparent';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                }}
-              >
-                <Instagram size={18} />
-              </a>
-              <a
-                href="https://www.youtube.com/@doctransfer144"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '0.6rem',
-                  borderRadius: '12px',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#ff0000';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.borderColor = 'transparent';
-                  e.currentTarget.style.boxShadow = '0 10px 20px -5px rgba(255, 0, 0, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <Youtube size={18} />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/doctransfer-0a2291314/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '0.6rem',
-                  borderRadius: '12px',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#0077b5';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.borderColor = 'transparent';
-                  e.currentTarget.style.boxShadow = '0 10px 20px -5px rgba(0, 119, 181, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <Linkedin size={18} />
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <div className="footer-bottom">
-          <p>© 2026 DocTransfer Inc. All rights reserved.</p>
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy</a>
-            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Terms</a>
-            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Cookies</a>
-          </div>
-        </div>
-      </footer>
-    </div >
+      <Footer />
+    </div>
   );
 };
 

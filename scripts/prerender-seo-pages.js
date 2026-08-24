@@ -416,9 +416,21 @@ function buildSEOBodyContent(route) {
     }
   }
   
-  // CTA
-  parts.push(`<p><a href="https://doctransfer.app/signup">Get Started Free</a> — No credit card required.</p>`);
+  // CTA & Interactive Tools Links
+  parts.push(`<h2>Get Started with DocTransfer</h2>`);
+  parts.push(`<p>DocTransfer provides legally-binding e-signatures, client-side zero-knowledge encrypted vaults, dynamic watermarking, and real-time page-by-page viewing tracking. <a href="https://www.doctransfer.app/pricing">Start free today</a> — no credit card required.</p>`);
   
+  // High-Authority Crawlable Internal Linking Footer
+  parts.push(`<h2>Related Resources & Tools</h2>`);
+  parts.push(`<ul>
+        <li><a href="https://www.doctransfer.app/sitemap-directory">Master Site Directory (500+ Resources & Templates)</a></li>
+        <li><a href="https://www.doctransfer.app/tools">Free Interactive Tools (Pitch Deck Analyzer, NDA Generator, VDR Calculator)</a></li>
+        <li><a href="https://www.doctransfer.app/alternatives">Competitor Comparisons & Alternatives</a></li>
+        <li><a href="https://www.doctransfer.app/templates">100+ Free Legal & Business Document Templates</a></li>
+        <li><a href="https://www.doctransfer.app/solutions">Industry Compliance Solutions (Legal, Healthcare, Real Estate)</a></li>
+        <li><a href="https://www.doctransfer.app/glossary">Document Security & E-Signature Glossary</a></li>
+      </ul>`);
+
   return `<article>${parts.join('\n      ')}</article>`;
 }
 

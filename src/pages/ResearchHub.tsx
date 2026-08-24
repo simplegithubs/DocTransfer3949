@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, BarChart3, Clock, Calendar, TrendingUp, TrendingDown, Minus, Filter } from 'lucide-react';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 import { researchReports, type ResearchReport } from '../data/researchData';
 import ResearchAnimation from '../components/seo-layouts/ResearchAnimation';
 
@@ -286,13 +287,7 @@ const ResearchHub: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer style={{ borderTop: '1px solid #e2e8f0', padding: '2rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.875rem' }}>
-        <Link to="/" style={{ color: '#4f46e5', textDecoration: 'none', fontWeight: '700' }}>
-          <Sparkles size={14} style={{ verticalAlign: 'middle', marginRight: '0.25rem' }} />
-          DocTransfer
-        </Link>
-        {' '}— Secure Document Sharing & E-Signatures. © 2026 DocTransfer Inc.
-      </footer>
+      <Footer />
     </div>
   );
 };

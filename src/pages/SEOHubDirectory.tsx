@@ -14,6 +14,7 @@ import {
   Target
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 import { allSEOPages } from '../data/seoPages';
 import { templateSeoData } from '../data/templateSeoData';
 import { toolsList } from '../data/toolsData';
@@ -339,6 +340,8 @@ const SEOHubDirectory: React.FC = () => {
           </div>
         )}
       </main>
+
+      <Footer />
 
       <style>{`
         .directory-card:hover {

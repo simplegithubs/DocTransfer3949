@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Shield, HeartHandshake, Award, Scale, Zap, type LucideIcon } from 'lucide-react';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 import { allSEOPages } from '../data/seoPages';
 
 interface AlternativeSummary {
@@ -196,6 +197,8 @@ const AlternativesDirectory: React.FC = () => {
           </div>
         </section>
       </main>
+
+      <Footer />
 
       <style>{`
         .alternative-card:hover {

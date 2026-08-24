@@ -25,6 +25,7 @@ import {
   Shield
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 import { conquestData, type ConquestPage } from '../data/conquestData';
 
 const iconMap: Record<string, React.FC<{ size?: number; color?: string }>> = {
@@ -310,20 +311,7 @@ const ConquestHub: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer style={{ textAlign: 'center', padding: '3rem 1.5rem', color: '#94a3b8', fontSize: '0.85rem', borderTop: '1px solid #e2e8f0', marginTop: '4rem' }}>
-        <p>© {new Date().getFullYear()} DocTransfer. All rights reserved.</p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '0.75rem' }}>
-          <Link to="/" style={{ color: '#64748b', textDecoration: 'none' }}>Home</Link>
-          <Link to="/pricing" style={{ color: '#64748b', textDecoration: 'none' }}>Pricing</Link>
-          <Link to="/research" style={{ color: '#64748b', textDecoration: 'none' }}>Research</Link>
-          <Link to="/tools" style={{ color: '#64748b', textDecoration: 'none' }}>Tools</Link>
-          <Link to="/integrations" style={{ color: '#64748b', textDecoration: 'none' }}>Integrations</Link>
-          <Link to="/glossary" style={{ color: '#64748b', textDecoration: 'none' }}>Glossary</Link>
-          <Link to="/solutions" style={{ color: '#64748b', textDecoration: 'none' }}>Solutions</Link>
-          <Link to="/docsend-alternative" style={{ color: '#64748b', textDecoration: 'none' }}>DocSend Alternative</Link>
-          <Link to="/sitemap-directory" style={{ color: '#64748b', textDecoration: 'none' }}>Directory</Link>
-        </div>
-      </footer>
+      <Footer />
 
       <style>{`
         .conquest-card:hover {

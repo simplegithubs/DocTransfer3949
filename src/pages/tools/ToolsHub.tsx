@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Wrench, ArrowRight, FileSpreadsheet, FileCheck, Calculator, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
 import SEO from '../../components/SEO';
+import Footer from '../../components/Footer';
 import { toolsList, type ToolMetadata } from '../../data/toolsData';
 
 const iconMap: Record<string, React.FC<{ size?: number; color?: string }>> = {
@@ -246,13 +247,7 @@ const ToolsHub: React.FC = () => {
         </section>
       </main>
 
-      <footer style={{ borderTop: '1px solid #e2e8f0', padding: '2rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.875rem' }}>
-        <Link to="/" style={{ color: '#4f46e5', textDecoration: 'none', fontWeight: '700' }}>
-          <Sparkles size={14} style={{ verticalAlign: 'middle', marginRight: '0.25rem' }} />
-          DocTransfer
-        </Link>
-        {' '}— Secure Document Sharing & E-Signatures. © 2026 DocTransfer Inc.
-      </footer>
+      <Footer />
     </div>
   );
 };

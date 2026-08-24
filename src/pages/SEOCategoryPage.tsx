@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 import { getPageBySlug, type SEOCategory, type HowToPageData } from '../data/seoPages';
 
 // Layout Imports
@@ -207,6 +208,7 @@ const SEOCategoryPage: React.FC<SEOCategoryPageProps> = ({ category }) => {
         </div>
       </header>
       {renderLayout()}
+      <Footer />
     </>
   );
 };

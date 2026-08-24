@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Scale, HeartHandshake, Zap, ShieldAlert, Award, type LucideIcon } from 'lucide-react';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 import { allSEOPages } from '../data/seoPages';
 
 interface ComparisonSummary {
@@ -202,6 +203,8 @@ const ComparisonsDirectory: React.FC = () => {
           </div>
         </section>
       </main>
+
+      <Footer />
 
       <style>{`
         .comparison-card:hover {
