@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check, X, Shield, Sparkles, CheckCircle, AlertCircle } from 'lucide-react';
 import { getSeoPageRoute, type AlternativePageData } from '../../data/seoPages';
 import AlternativeAnimation from './AlternativeAnimation';
+import EmbeddedVDRCalculator from '../tools/EmbeddedVDRCalculator';
+import EmbeddedPitchDeckAnalyzer from '../tools/EmbeddedPitchDeckAnalyzer';
 
 interface AlternativeLayoutProps {
   data: AlternativePageData;
@@ -47,6 +49,15 @@ const AlternativeLayout: React.FC<AlternativeLayoutProps> = ({ data }) => {
         </section>
 
         {/* Section 2: Detailed Review of the Alternatives (Detailed List) */}
+        {/* Interactive Tool Widget */}
+        <div style={{ marginBottom: '3rem' }}>
+          {data.slug.includes('vdr') || data.slug.includes('data-room') ? (
+            <EmbeddedVDRCalculator />
+          ) : (
+            <EmbeddedPitchDeckAnalyzer />
+          )}
+        </div>
+
         {data.alternativesList && (
           <section style={{ marginBottom: '5rem' }}>
             <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '2.5rem', textAlign: 'center' }}>

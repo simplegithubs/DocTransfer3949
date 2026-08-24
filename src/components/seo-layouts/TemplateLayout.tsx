@@ -4,6 +4,7 @@ import { ArrowRight, Clock, ShieldCheck, UserCheck, CheckCircle, FileText } from
 import { getSeoPageRoute, type TemplatePageData } from '../../data/seoPages';
 import TemplateAnimation from './TemplateAnimation';
 import USPSecurityBanner from './USPSecurityBanner';
+import EmbeddedNDAGenerator from '../tools/EmbeddedNDAGenerator';
 
 interface TemplateLayoutProps {
   data: TemplatePageData;
@@ -80,6 +81,9 @@ const TemplateLayout: React.FC<TemplateLayoutProps> = ({ data }) => {
                 </div>
               </div>
             </div>
+
+            {/* Interactive Tool Widget */}
+            <EmbeddedNDAGenerator title={`Free Interactive ${data.templateName} Builder`} />
 
             {/* Document Content Preview */}
             <h2 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#0f172a', marginBottom: '1rem' }}>

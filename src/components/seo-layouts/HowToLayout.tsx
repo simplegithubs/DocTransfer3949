@@ -4,6 +4,9 @@ import { ArrowRight, HelpCircle, CheckCircle, Sparkles } from 'lucide-react';
 import { getSeoPageRoute, type HowToPageData } from '../../data/seoPages';
 import HowToAnimation from './HowToAnimation';
 import USPSecurityBanner from './USPSecurityBanner';
+import EmbeddedNDAGenerator from '../tools/EmbeddedNDAGenerator';
+import EmbeddedPitchDeckAnalyzer from '../tools/EmbeddedPitchDeckAnalyzer';
+import EmbeddedVDRCalculator from '../tools/EmbeddedVDRCalculator';
 
 interface HowToLayoutProps {
   data: HowToPageData;
@@ -54,6 +57,17 @@ const HowToLayout: React.FC<HowToLayoutProps> = ({ data }) => {
             ))}
           </div>
         </section>
+
+        {/* Interactive Tool Widget */}
+        <div style={{ marginBottom: '4rem' }}>
+          {data.slug.includes('pitch-deck') ? (
+            <EmbeddedPitchDeckAnalyzer />
+          ) : data.slug.includes('data-room') || data.slug.includes('vdr') ? (
+            <EmbeddedVDRCalculator />
+          ) : (
+            <EmbeddedNDAGenerator title={`Interactive Generator for ${data.howToTitle}`} />
+          )}
+        </div>
 
         {/* Core Security & Analytics USPs */}
         <USPSecurityBanner />
