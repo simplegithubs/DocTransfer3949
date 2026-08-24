@@ -7,7 +7,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'HIPAA-Compliant Document Sharing for Healthcare',
     metaTitle: 'HIPAA-Compliant Document Sharing for Healthcare | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for hipaa document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'hipaa document sharing, hipaa compliant file transfer, secure medical document sharing, healthcare file security, hipaa compliant document sharing, hipaa compliant file sharing, secure file sharing hipaa compliant, hipaa compliant file sharing service, hipaa compliant cloud file sharing',
+    keywords: 'hipaa document sharing, hipaa, doctransfer hipaa',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['medical-records-transfer', 'telehealth-consent-forms', 'clinical-trial-document-sharing'],
     painPoints: [
@@ -46,7 +46,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Medical Records Transfer Platform',
     metaTitle: 'Secure Medical Records Transfer Platform | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for medical records transfer. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'medical records transfer, secure patient records sharing, electronic medical records transfer, health records portal, hipaa secure file transfer, secure file transfer hipaa compliant, hipaa compliant secure file transfer, secure file transfer for cpas, hipaa compliant file transfer',
+    keywords: 'medical records transfer, secure medical records transfer platform, doctransfer medical',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['hipaa-document-sharing', 'telehealth-consent-forms', 'clinical-trial-document-sharing'],
     painPoints: [
@@ -85,7 +85,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Digital Telehealth Consent Forms & E-Signatures',
     metaTitle: 'Digital Telehealth Consent Forms & E-Signatures | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for telehealth consent forms. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'telehealth consent forms, digital patient consent, telemedicine consent template, virtual care consent, free patient consent form template',
+    keywords: 'telehealth consent forms, digital telehealth consent forms & e, doctransfer telehealth',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['hipaa-document-sharing', 'medical-records-transfer', 'clinical-trial-document-sharing'],
     painPoints: [
@@ -124,7 +124,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Clinical Trial Document Sharing',
     metaTitle: 'Secure Clinical Trial Document Sharing | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for clinical trial document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'clinical trial document sharing, research document transfer, clinical study file sharing, trial protocol distribution, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'clinical trial document sharing, secure clinical trial document sharing, doctransfer clinical',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['hipaa-document-sharing', 'medical-records-transfer', 'telehealth-consent-forms'],
     painPoints: [
@@ -163,7 +163,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Digital Patient Intake Forms & Secure Collection',
     metaTitle: 'Digital Patient Intake Forms & Secure Collection | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for digital patient intake forms. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'digital patient intake forms, patient registration forms online, medical intake forms electronic, patient onboarding forms, free patient consent form template, how to share patient records securely',
+    keywords: 'patient intake forms digital, digital patient intake forms & secure collection, doctransfer patient',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['hipaa-document-sharing', 'medical-records-transfer', 'telehealth-consent-forms'],
     painPoints: [
@@ -202,7 +202,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Healthcare Document Audit Trail & Compliance',
     metaTitle: 'Healthcare Document Audit Trail & Compliance | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for healthcare audit trail. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'healthcare audit trail, medical document compliance, hipaa audit log, healthcare document tracking, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'healthcare audit trail, healthcare document audit trail & compliance, doctransfer healthcare',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['hipaa-document-sharing', 'medical-records-transfer', 'telehealth-consent-forms'],
     painPoints: [
@@ -241,7 +241,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Document Sharing for Dental Practices',
     metaTitle: 'Secure Document Sharing for Dental Practices | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for dental practice document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'dental practice document sharing, dental records transfer, dental consent forms digital, dental office file sharing, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'dental practice document sharing, hipaa, doctransfer dental',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['hipaa-document-sharing', 'medical-records-transfer', 'telehealth-consent-forms'],
     painPoints: [
@@ -280,7 +280,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Pharmacy Compliance Document Management',
     metaTitle: 'Pharmacy Compliance Document Management | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for pharmacy compliance documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'pharmacy compliance documents, pharmaceutical document sharing, drug safety document transfer, pharmacy audit files, hipaa compliant document sharing, document portal for accountants, i 9 acceptable documents printable, i 9 documents printable, i 9 printable document',
+    keywords: 'pharmacy compliance documents, hipaa, doctransfer pharmacy',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['hipaa-document-sharing', 'medical-records-transfer', 'telehealth-consent-forms'],
     painPoints: [
@@ -358,7 +358,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Mental Health Records Sharing',
     metaTitle: 'Secure Mental Health Records Sharing | DocTransfer',
     description: 'Learn how Healthcare Professionals use DocTransfer for mental health records sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'mental health records sharing, therapy records transfer, counseling documents secure, behavioral health file sharing, how to share patient records securely',
+    keywords: 'mental health records sharing, secure mental health records sharing, mental health records sharing online',
     industryName: 'Healthcare Professionals',
     relatedSlugs: ['hipaa-document-sharing', 'medical-records-transfer', 'telehealth-consent-forms'],
     painPoints: [
@@ -436,7 +436,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Tax Document Collection Portal',
     metaTitle: 'Secure Tax Document Collection Portal | DocTransfer',
     description: 'Learn how Accounting Professionals use DocTransfer for tax document portal. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'tax document portal, tax file collection, client tax document upload, tax return sharing portal, client tax portal, document portal for accountants, hipaa compliant document sharing, i 9 printable document, i 9 tax form printable',
+    keywords: 'tax document portal, tax file collection, client tax document upload, tax return sharing portal, client tax portal, secure document portal, hipaa compliant document sharing, official document form, official tax document form',
     industryName: 'Accounting Professionals',
     relatedSlugs: ['accounting-firm-document-sharing', '1099-collection-platform', 'bookkeeper-file-transfer'],
     painPoints: [
@@ -553,7 +553,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'CPA Client Document Portal & Secure Sharing',
     metaTitle: 'CPA Client Document Portal & Secure Sharing | DocTransfer',
     description: 'Learn how Accounting Professionals use DocTransfer for cpa client portal. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'cpa client portal, cpa document sharing, accountant client portal, cpa file management, cpa firm client portal, client portal cpa, secure client cpa, cpa client',
+    keywords: 'bookkeeper file transfer, encrypted client portal, doctransfer bookkeeper',
     industryName: 'Accounting Professionals',
     relatedSlugs: ['accounting-firm-document-sharing', 'tax-document-portal', '1099-collection-platform'],
     painPoints: [
@@ -592,7 +592,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Financial Audit Document Sharing Platform',
     metaTitle: 'Financial Audit Document Sharing Platform | DocTransfer',
     description: 'Learn how Accounting Professionals use DocTransfer for financial audit document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'financial audit document sharing, audit file transfer, audit trail documents, financial audit portal, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'financial audit document sharing, encrypted client portal, financial audit document sharing online',
     industryName: 'Accounting Professionals',
     relatedSlugs: ['accounting-firm-document-sharing', 'tax-document-portal', '1099-collection-platform'],
     painPoints: [
@@ -670,7 +670,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Tax Preparation Document Collection System',
     metaTitle: 'Tax Preparation Document Collection System | DocTransfer',
     description: 'Learn how Accounting Professionals use DocTransfer for tax preparation document collection. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'tax preparation document collection, tax prep file upload, tax season document portal, tax filing collection, hipaa compliant document sharing, client tax portal, document portal for accountants, i 9 printable document, i 9 tax form printable',
+    keywords: 'tax preparation document collection, tax prep file upload, tax season document portal, tax filing collection, hipaa compliant document sharing, client tax portal, secure document portal, official document form, official tax document form',
     industryName: 'Accounting Professionals',
     relatedSlugs: ['accounting-firm-document-sharing', 'tax-document-portal', '1099-collection-platform'],
     painPoints: [
@@ -787,7 +787,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure HR Onboarding Document Sharing',
     metaTitle: 'Secure HR Onboarding Document Sharing | DocTransfer',
     description: 'Learn how HR Professionals use DocTransfer for hr onboarding document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'hr onboarding document sharing, employee onboarding documents, new hire paperwork portal, onboarding file transfer, hipaa compliant document sharing, document portal for accountants, remote hiring onboarding software, i 9 printable document',
+    keywords: 'hr onboarding document sharing, employee onboarding documents, new hire paperwork portal, onboarding file transfer, hipaa compliant document sharing, secure document portal, remote hiring onboarding software, official document form',
     industryName: 'HR Professionals',
     relatedSlugs: ['employee-records-management', 'remote-hiring-document-transfer', 'hr-compliance-document-sharing'],
     painPoints: [
@@ -904,7 +904,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'HR Compliance Document Sharing & Audit Trails',
     metaTitle: 'HR Compliance Document Sharing & Audit Trails | DocTransfer',
     description: 'Learn how HR Professionals use DocTransfer for hr compliance documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'hr compliance documents, hr audit trail, employment compliance files, hr regulatory documents, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'hr compliance documents, hr audit trail, employment compliance files, hr regulatory documents, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'HR Professionals',
     relatedSlugs: ['hr-onboarding-document-sharing', 'employee-records-management', 'remote-hiring-document-transfer'],
     painPoints: [
@@ -943,7 +943,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Employee Benefits Document Portal',
     metaTitle: 'Employee Benefits Document Portal | DocTransfer',
     description: 'Learn how HR Professionals use DocTransfer for employee benefits documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'employee benefits documents, benefits enrollment portal, benefits paperwork sharing, benefits administration files, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'employee benefits documents, benefits enrollment portal, benefits paperwork sharing, benefits administration files, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'HR Professionals',
     relatedSlugs: ['hr-onboarding-document-sharing', 'employee-records-management', 'remote-hiring-document-transfer'],
     painPoints: [
@@ -982,7 +982,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Performance Review Document Sharing',
     metaTitle: 'Secure Performance Review Document Sharing | DocTransfer',
     description: 'Learn how HR Professionals use DocTransfer for performance review documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'performance review documents, employee evaluation sharing, performance appraisal files, review document transfer, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'performance review documents, employee evaluation sharing, performance appraisal files, review document transfer, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'HR Professionals',
     relatedSlugs: ['hr-onboarding-document-sharing', 'employee-records-management', 'remote-hiring-document-transfer'],
     painPoints: [
@@ -1021,7 +1021,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Exit Interview & Offboarding Document Management',
     metaTitle: 'Exit Interview & Offboarding Document Management | DocTransfer',
     description: 'Learn how HR Professionals use DocTransfer for exit interview documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'exit interview documents, offboarding paperwork, employee separation documents, termination document portal, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'exit interview documents, offboarding paperwork, employee separation documents, termination document portal, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'HR Professionals',
     relatedSlugs: ['hr-onboarding-document-sharing', 'employee-records-management', 'remote-hiring-document-transfer'],
     painPoints: [
@@ -1099,7 +1099,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Background Check Document Collection Portal',
     metaTitle: 'Background Check Document Collection Portal | DocTransfer',
     description: 'Learn how HR Professionals use DocTransfer for background check documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'background check documents, pre-employment document collection, screening documents portal, background verification files, document portal for accountants, hipaa compliant document sharing, i 9 printable document, how to check someone\'s academic credentials',
+    keywords: 'background check documents, pre-employment document collection, screening documents portal, background verification files, secure document portal, hipaa compliant document sharing, official document form, how to check someone\'s academic credentials',
     industryName: 'HR Professionals',
     relatedSlugs: ['hr-onboarding-document-sharing', 'employee-records-management', 'remote-hiring-document-transfer'],
     painPoints: [
@@ -1138,7 +1138,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Training & Certification Document Sharing',
     metaTitle: 'Training & Certification Document Sharing | DocTransfer',
     description: 'Learn how HR Professionals use DocTransfer for training certification documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'training certification documents, employee training records, certification file sharing, training completion tracking, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'training certification documents, employee training records, certification file sharing, training completion tracking, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'HR Professionals',
     relatedSlugs: ['hr-onboarding-document-sharing', 'employee-records-management', 'remote-hiring-document-transfer'],
     painPoints: [
@@ -1177,7 +1177,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Construction Document Management Platform',
     metaTitle: 'Secure Construction Document Management Platform | DocTransfer',
     description: 'Learn how Construction Professionals use DocTransfer for construction document management. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'construction document management, construction file sharing, project document management, building document portal, hipaa compliant document sharing, document portal for accountants, free construction subcontractor agreement template word, free construction subcontractor agreement template, i 9 printable document',
+    keywords: 'construction document management, construction file sharing, project document management, building document portal, hipaa compliant document sharing, secure document portal, free construction subcontractor agreement template word, free construction subcontractor agreement template, official document form',
     industryName: 'Construction Professionals',
     relatedSlugs: ['subcontractor-file-sharing', 'building-permit-document-transfer', 'construction-project-file-sharing'],
     painPoints: [
@@ -1372,7 +1372,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Construction Safety Document Sharing',
     metaTitle: 'Construction Safety Document Sharing | DocTransfer',
     description: 'Learn how Construction Professionals use DocTransfer for construction safety documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'construction safety documents, safety plan sharing, job site safety files, osha document distribution, hipaa compliant document sharing, document portal for accountants, free construction subcontractor agreement template word, free construction subcontractor agreement template, i 9 printable document',
+    keywords: 'construction safety documents, safety plan sharing, job site safety files, osha document distribution, hipaa compliant document sharing, secure document portal, free construction subcontractor agreement template word, free construction subcontractor agreement template, official document form',
     industryName: 'Construction Professionals',
     relatedSlugs: ['construction-document-management', 'subcontractor-file-sharing', 'building-permit-document-transfer'],
     painPoints: [
@@ -1450,7 +1450,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'RFI Document Management & Tracking',
     metaTitle: 'RFI Document Management & Tracking | DocTransfer',
     description: 'Learn how Construction Professionals use DocTransfer for rfi document management. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'rfi document management, request for information tracking, construction rfi portal, rfi file sharing, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'rfi document management, request for information tracking, construction rfi portal, rfi file sharing, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Construction Professionals',
     relatedSlugs: ['construction-document-management', 'subcontractor-file-sharing', 'building-permit-document-transfer'],
     painPoints: [
@@ -1489,7 +1489,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Construction Bid Document Sharing & Collection',
     metaTitle: 'Construction Bid Document Sharing & Collection | DocTransfer',
     description: 'Learn how Construction Professionals use DocTransfer for construction bid documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'construction bid documents, bid document sharing, construction bidding portal, bid proposal file transfer, hipaa compliant document sharing, document portal for accountants, free construction subcontractor agreement template word, free construction subcontractor agreement template, i 9 printable document',
+    keywords: 'construction bid documents, bid document sharing, construction bidding portal, bid proposal file transfer, hipaa compliant document sharing, secure document portal, free construction subcontractor agreement template word, free construction subcontractor agreement template, official document form',
     industryName: 'Construction Professionals',
     relatedSlugs: ['construction-document-management', 'subcontractor-file-sharing', 'building-permit-document-transfer'],
     painPoints: [
@@ -1528,7 +1528,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Punch List Document Management & E-Signing',
     metaTitle: 'Punch List Document Management & E-Signing | DocTransfer',
     description: 'Learn how Construction Professionals use DocTransfer for punch list management. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'punch list management, construction punch list, project punch list document, punch list tracking, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'punch list management, construction punch list, project punch list document, punch list tracking, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Construction Professionals',
     relatedSlugs: ['construction-document-management', 'subcontractor-file-sharing', 'building-permit-document-transfer'],
     painPoints: [
@@ -1684,7 +1684,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Estate Planning Document Sharing & E-Signing',
     metaTitle: 'Estate Planning Document Sharing & E-Signing | DocTransfer',
     description: 'Learn how Legal Professionals use DocTransfer for estate planning document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'estate planning document sharing, will trust document transfer, estate file sharing, probate document portal, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'estate planning document sharing, will trust document transfer, estate file sharing, probate document portal, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Legal Professionals',
     relatedSlugs: ['law-firm-document-sharing', 'litigation-document-transfer', 'client-intake-portal-legal'],
     painPoints: [
@@ -1723,7 +1723,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Corporate Legal Document Management',
     metaTitle: 'Corporate Legal Document Management | DocTransfer',
     description: 'Learn how Legal Professionals use DocTransfer for corporate legal documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'corporate legal documents, business legal file sharing, corporate counsel document portal, legal department files, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'corporate legal documents, business legal file sharing, corporate counsel document portal, legal department files, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Legal Professionals',
     relatedSlugs: ['law-firm-document-sharing', 'litigation-document-transfer', 'client-intake-portal-legal'],
     painPoints: [
@@ -1762,7 +1762,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Immigration Document Collection Portal',
     metaTitle: 'Immigration Document Collection Portal | DocTransfer',
     description: 'Learn how Legal Professionals use DocTransfer for immigration document collection. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'immigration document collection, immigration file portal, visa document sharing, immigration case documents, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'immigration document collection, immigration file portal, visa document sharing, immigration case documents, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Legal Professionals',
     relatedSlugs: ['law-firm-document-sharing', 'litigation-document-transfer', 'client-intake-portal-legal'],
     painPoints: [
@@ -1801,7 +1801,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Family Law Document Sharing & Signatures',
     metaTitle: 'Family Law Document Sharing & Signatures | DocTransfer',
     description: 'Learn how Legal Professionals use DocTransfer for family law documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'family law documents, divorce document sharing, custody agreement transfer, family court documents, secure file sharing for law firms, hipaa compliant document sharing, file sharing for law firms, file sharing software for law firms, document portal for accountants',
+    keywords: 'family law documents, divorce document sharing, custody agreement transfer, family court documents, secure file sharing for law firms, hipaa compliant document sharing, file sharing for law firms, file sharing software for law firms, secure document portal',
     industryName: 'Legal Professionals',
     relatedSlugs: ['law-firm-document-sharing', 'litigation-document-transfer', 'client-intake-portal-legal'],
     painPoints: [
@@ -1879,7 +1879,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Arbitration & Mediation Document Sharing',
     metaTitle: 'Arbitration & Mediation Document Sharing | DocTransfer',
     description: 'Learn how Legal Professionals use DocTransfer for arbitration document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'arbitration document sharing, mediation file transfer, dispute resolution documents, arbitration case files, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'arbitration document sharing, mediation file transfer, dispute resolution documents, arbitration case files, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Legal Professionals',
     relatedSlugs: ['law-firm-document-sharing', 'litigation-document-transfer', 'client-intake-portal-legal'],
     painPoints: [
@@ -1918,7 +1918,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Legal Compliance Document Portal',
     metaTitle: 'Legal Compliance Document Portal | DocTransfer',
     description: 'Learn how Legal Professionals use DocTransfer for legal compliance documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'legal compliance documents, regulatory compliance file sharing, legal compliance portal, compliance document management, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'legal compliance documents, regulatory compliance file sharing, legal compliance portal, compliance document management, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Legal Professionals',
     relatedSlugs: ['law-firm-document-sharing', 'litigation-document-transfer', 'client-intake-portal-legal'],
     painPoints: [
@@ -2035,7 +2035,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Academic Credential Verification Platform',
     metaTitle: 'Academic Credential Verification Platform | DocTransfer',
     description: 'Learn how Education Professionals use DocTransfer for academic credential verification. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'academic credential verification, degree verification portal, credential validation platform, education verification, employment eligibility verification form printable, employment eligibility verification i 9 form download, form i 9 employment eligibility verification printable, printable employment eligibility verification form, how to verify academic credentials',
+    keywords: 'academic credential verification, degree verification portal, credential validation platform, education verification, employment verification document, employment verification form download, employment verification form printable, printable employment verification form, how to verify academic credentials',
     industryName: 'Education Professionals',
     relatedSlugs: ['university-transcript-sharing', 'student-records-transfer', 'scholarship-application-portal'],
     painPoints: [
@@ -2074,7 +2074,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Scholarship Application Document Portal',
     metaTitle: 'Scholarship Application Document Portal | DocTransfer',
     description: 'Learn how Education Professionals use DocTransfer for scholarship application portal. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'scholarship application portal, scholarship document collection, financial aid application files, scholarship file upload, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'scholarship application portal, scholarship document collection, financial aid application files, scholarship file upload, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Education Professionals',
     relatedSlugs: ['university-transcript-sharing', 'student-records-transfer', 'academic-credential-verification'],
     painPoints: [
@@ -2113,7 +2113,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'School District Document Sharing Platform',
     metaTitle: 'School District Document Sharing Platform | DocTransfer',
     description: 'Learn how Education Professionals use DocTransfer for school district documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'school district documents, k12 document sharing, school file transfer, district document portal, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'school district documents, k12 document sharing, school file transfer, district document portal, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Education Professionals',
     relatedSlugs: ['university-transcript-sharing', 'student-records-transfer', 'academic-credential-verification'],
     painPoints: [
@@ -2152,7 +2152,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Faculty Document Management & Sharing',
     metaTitle: 'Faculty Document Management & Sharing | DocTransfer',
     description: 'Learn how Education Professionals use DocTransfer for faculty document management. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'faculty document management, professor file sharing, academic staff documents, faculty records portal, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'faculty document management, professor file sharing, academic staff documents, faculty records portal, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Education Professionals',
     relatedSlugs: ['university-transcript-sharing', 'student-records-transfer', 'academic-credential-verification'],
     painPoints: [
@@ -2191,7 +2191,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Study Abroad Document Collection Portal',
     metaTitle: 'Study Abroad Document Collection Portal | DocTransfer',
     description: 'Learn how Education Professionals use DocTransfer for study abroad documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'study abroad documents, study abroad file collection, international student documents, abroad program portal, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'study abroad documents, study abroad file collection, international student documents, abroad program portal, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Education Professionals',
     relatedSlugs: ['university-transcript-sharing', 'student-records-transfer', 'academic-credential-verification'],
     painPoints: [
@@ -2230,7 +2230,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Admissions Document Portal & Application Tracking',
     metaTitle: 'Admissions Document Portal & Application Tracking | DocTransfer',
     description: 'Learn how Education Professionals use DocTransfer for admissions document portal. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'admissions document portal, college application documents, admissions file upload, application document tracking, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'admissions document portal, college application documents, admissions file upload, application document tracking, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Education Professionals',
     relatedSlugs: ['university-transcript-sharing', 'student-records-transfer', 'academic-credential-verification'],
     painPoints: [
@@ -2308,7 +2308,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Alumni Records Management & Verification',
     metaTitle: 'Alumni Records Management & Verification | DocTransfer',
     description: 'Learn how Education Professionals use DocTransfer for alumni records management. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'alumni records management, alumni document portal, graduate records verification, alumni file sharing, employment eligibility verification form printable, employment eligibility verification i 9 form download, form i 9 employment eligibility verification printable, printable employment eligibility verification form, how to share patient records securely',
+    keywords: 'alumni records management, alumni document portal, graduate records verification, alumni file sharing, employment verification document, employment verification form download, employment verification form printable, printable employment verification form, how to share patient records securely',
     industryName: 'Education Professionals',
     relatedSlugs: ['university-transcript-sharing', 'student-records-transfer', 'academic-credential-verification'],
     painPoints: [
@@ -2347,7 +2347,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Insurance Claim Document Sharing',
     metaTitle: 'Secure Insurance Claim Document Sharing | DocTransfer',
     description: 'Learn how Insurance Professionals use DocTransfer for insurance claim document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'insurance claim document sharing, claims file transfer, insurance claim portal, claim document management, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'insurance claim document sharing, claims file transfer, insurance claim portal, claim document management, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Insurance Professionals',
     relatedSlugs: ['policy-document-transfer', 'underwriting-file-sharing', 'insurance-agent-document-portal'],
     painPoints: [
@@ -2464,7 +2464,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Insurance Agent Document Portal',
     metaTitle: 'Insurance Agent Document Portal | DocTransfer',
     description: 'Learn how Insurance Professionals use DocTransfer for insurance agent document portal. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'insurance agent document portal, agent file sharing, insurance broker documents, agent document management, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'insurance agent document portal, agent file sharing, insurance broker documents, agent document management, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Insurance Professionals',
     relatedSlugs: ['insurance-claim-document-sharing', 'policy-document-transfer', 'underwriting-file-sharing'],
     painPoints: [
@@ -2503,7 +2503,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Life Insurance Application Document Portal',
     metaTitle: 'Life Insurance Application Document Portal | DocTransfer',
     description: 'Learn how Insurance Professionals use DocTransfer for life insurance application portal. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'life insurance application portal, life insurance documents, life policy application, life insurance file sharing, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'life insurance application portal, life insurance documents, life policy application, life insurance file sharing, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Insurance Professionals',
     relatedSlugs: ['insurance-claim-document-sharing', 'policy-document-transfer', 'underwriting-file-sharing'],
     painPoints: [
@@ -2542,7 +2542,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Auto Insurance Claims Document Management',
     metaTitle: 'Auto Insurance Claims Document Management | DocTransfer',
     description: 'Learn how Insurance Professionals use DocTransfer for auto insurance claims documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'auto insurance claims documents, car insurance claim files, auto damage documents, vehicle insurance portal, hipaa compliant document sharing, document portal for accountants, i 9 acceptable documents printable, i 9 documents printable, i 9 printable document',
+    keywords: 'auto insurance claims documents, car insurance claim files, auto damage documents, vehicle insurance portal, hipaa compliant document sharing, secure document portal, official verification documents, official document forms, official document form',
     industryName: 'Insurance Professionals',
     relatedSlugs: ['insurance-claim-document-sharing', 'policy-document-transfer', 'underwriting-file-sharing'],
     painPoints: [
@@ -2581,7 +2581,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Health Insurance Enrollment Document Portal',
     metaTitle: 'Health Insurance Enrollment Document Portal | DocTransfer',
     description: 'Learn how Insurance Professionals use DocTransfer for health insurance enrollment. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'health insurance enrollment, insurance enrollment documents, health plan enrollment files, open enrollment portal, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'health insurance enrollment, insurance enrollment documents, health plan enrollment files, open enrollment portal, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Insurance Professionals',
     relatedSlugs: ['insurance-claim-document-sharing', 'policy-document-transfer', 'underwriting-file-sharing'],
     painPoints: [
@@ -2620,7 +2620,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Property Insurance Document Sharing',
     metaTitle: 'Property Insurance Document Sharing | DocTransfer',
     description: 'Learn how Insurance Professionals use DocTransfer for property insurance documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'property insurance documents, homeowners insurance files, property claim document sharing, property insurance portal, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'property insurance documents, homeowners insurance files, property claim document sharing, property insurance portal, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Insurance Professionals',
     relatedSlugs: ['insurance-claim-document-sharing', 'policy-document-transfer', 'underwriting-file-sharing'],
     painPoints: [
@@ -2659,7 +2659,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Insurance Compliance Document Management',
     metaTitle: 'Insurance Compliance Document Management | DocTransfer',
     description: 'Learn how Insurance Professionals use DocTransfer for insurance compliance documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'insurance compliance documents, regulatory insurance files, insurance regulatory compliance, compliance document portal, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'insurance compliance documents, regulatory insurance files, insurance regulatory compliance, compliance document portal, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Insurance Professionals',
     relatedSlugs: ['insurance-claim-document-sharing', 'policy-document-transfer', 'underwriting-file-sharing'],
     painPoints: [
@@ -2737,7 +2737,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Secure Nonprofit Grant Document Sharing',
     metaTitle: 'Secure Nonprofit Grant Document Sharing | DocTransfer',
     description: 'Learn how Nonprofit Organizations use DocTransfer for nonprofit grant document sharing. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'nonprofit grant document sharing, grant application portal, grant submission documents, foundation grant files, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'nonprofit grant document sharing, grant application portal, grant submission documents, foundation grant files, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Nonprofit Organizations',
     relatedSlugs: ['donor-agreement-transfer', 'board-resolution-sharing', 'nonprofit-compliance-documents'],
     painPoints: [
@@ -2854,7 +2854,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Nonprofit Compliance Document Management',
     metaTitle: 'Nonprofit Compliance Document Management | DocTransfer',
     description: 'Learn how Nonprofit Organizations use DocTransfer for nonprofit compliance documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'nonprofit compliance documents, nonprofit regulatory files, charity compliance portal, 501c3 compliance documents, hipaa compliant document sharing, document portal for accountants, i 9 acceptable documents printable, i 9 documents printable, i 9 printable document',
+    keywords: 'nonprofit compliance documents, nonprofit regulatory files, charity compliance portal, 501c3 compliance documents, hipaa compliant document sharing, secure document portal, official verification documents, official document forms, official document form',
     industryName: 'Nonprofit Organizations',
     relatedSlugs: ['nonprofit-grant-document-sharing', 'donor-agreement-transfer', 'board-resolution-sharing'],
     painPoints: [
@@ -2932,7 +2932,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Fundraising Document Management Platform',
     metaTitle: 'Fundraising Document Management Platform | DocTransfer',
     description: 'Learn how Nonprofit Organizations use DocTransfer for fundraising documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'fundraising documents, campaign document sharing, fundraising file management, donor outreach documents, hipaa compliant document sharing, document portal for accountants, i 9 printable document',
+    keywords: 'fundraising documents, campaign document sharing, fundraising file management, donor outreach documents, hipaa compliant document sharing, secure document portal, official document form',
     industryName: 'Nonprofit Organizations',
     relatedSlugs: ['nonprofit-grant-document-sharing', 'donor-agreement-transfer', 'board-resolution-sharing'],
     painPoints: [
@@ -3010,7 +3010,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Grant Reporting Document Portal',
     metaTitle: 'Grant Reporting Document Portal | DocTransfer',
     description: 'Learn how Nonprofit Organizations use DocTransfer for grant reporting documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'grant reporting documents, grant report submission, funder report portal, grant compliance reporting, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'grant reporting documents, grant report submission, funder report portal, grant compliance reporting, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Nonprofit Organizations',
     relatedSlugs: ['nonprofit-grant-document-sharing', 'donor-agreement-transfer', 'board-resolution-sharing'],
     painPoints: [
@@ -3088,7 +3088,7 @@ export const verticalIndustryGroup: IndustryPageData[] = [
     title: 'Charitable Giving Document Portal',
     metaTitle: 'Charitable Giving Document Portal | DocTransfer',
     description: 'Learn how Nonprofit Organizations use DocTransfer for charitable giving documents. Secure file transfer, track document views, and sign agreements online.',
-    keywords: 'charitable giving documents, donation receipt portal, tax-deductible donation files, charitable contribution records, document portal for accountants, hipaa compliant document sharing, i 9 printable document',
+    keywords: 'charitable giving documents, donation receipt portal, tax-deductible donation files, charitable contribution records, secure document portal, hipaa compliant document sharing, official document form',
     industryName: 'Nonprofit Organizations',
     relatedSlugs: ['nonprofit-grant-document-sharing', 'donor-agreement-transfer', 'board-resolution-sharing'],
     painPoints: [

@@ -7,7 +7,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Medical Records Securely Online',
     metaTitle: 'How to Share Medical Records Securely Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share medical records securely online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share medical records securely, send medical records online, transfer patient records safely, hipaa file sharing, how to share patient records securely',
+    keywords: 'how to share medical records securely, how to share medical records securely online, doctransfer how',
     howToTitle: 'How to Share Medical Records Securely Online',
     relatedSlugs: ['how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form', 'how-to-send-lab-results-securely'],
     benefits: [
@@ -41,7 +41,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a HIPAA Consent Form Online',
     metaTitle: 'How to Create a HIPAA Consent Form Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a hipaa consent form online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create hipaa consent form, hipaa authorization form template, patient consent form builder, hipaa consent online, free patient consent form template, hipaa compliant online file sharing, hipaa compliant document sharing, hipaa compliant file transfer, hipaa compliant file sharing',
+    keywords: 'how to create hipaa consent form, how to create a hipaa consent form online, doctransfer how',
     howToTitle: 'How to Create a HIPAA Consent Form Online',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-e-sign-patient-intake-form', 'how-to-send-lab-results-securely'],
     benefits: [
@@ -75,7 +75,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to E-Sign Patient Intake Forms',
     metaTitle: 'How to E-Sign Patient Intake Forms - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to e-sign patient intake forms step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'e-sign patient intake form, digital patient forms signature, electronic intake form signing, patient form e-signature, how to share patient records securely, free patient consent form template',
+    keywords: 'how to e sign patient intake form, how to e, doctransfer how',
     howToTitle: 'How to E-Sign Patient Intake Forms',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-send-lab-results-securely'],
     benefits: [
@@ -109,7 +109,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Lab Results Securely to Patients',
     metaTitle: 'How to Send Lab Results Securely to Patients - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send lab results securely to patients step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send lab results securely, share lab reports online, secure lab result delivery, patient lab results portal, how to share patient records securely',
+    keywords: 'how to send lab results securely, how to send lab results securely to patients, doctransfer how',
     howToTitle: 'How to Send Lab Results Securely to Patients',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -143,7 +143,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Prescriptions Digitally & Securely',
     metaTitle: 'How to Share Prescriptions Digitally & Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share prescriptions digitally & securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share prescriptions digitally, digital prescription transfer, electronic prescription sharing, e-prescription delivery, how to share patient records securely',
+    keywords: 'how to share prescriptions digitally, how to share prescriptions digitally & securely, doctransfer how',
     howToTitle: 'How to Share Prescriptions Digitally & Securely',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -177,7 +177,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Patient Signatures Online',
     metaTitle: 'How to Collect Patient Signatures Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect patient signatures online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect patient signatures online, patient e-signature collection, medical consent signature, digital patient signing, how to share patient records securely, free patient consent form template',
+    keywords: 'how to collect patient signatures online, how to collect patient signatures online online, doctransfer how',
     howToTitle: 'How to Collect Patient Signatures Online',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -211,7 +211,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Transfer Dental Records Between Offices',
     metaTitle: 'How to Transfer Dental Records Between Offices - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to transfer dental records between offices step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'transfer dental records, dental records sharing, move dental files between offices, dental record transfer guide, how to share patient records securely, free standard form of agreement between contractor and subcontractor, hipaa compliant file transfer, hipaa file transfer, hipaa secure file transfer',
+    keywords: 'how to transfer dental records, how to transfer dental records between offices, doctransfer how',
     howToTitle: 'How to Transfer Dental Records Between Offices',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -245,7 +245,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a HIPAA-Compliant Data Room',
     metaTitle: 'How to Create a HIPAA-Compliant Data Room - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a hipaa-compliant data room step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'hipaa compliant data room, secure healthcare data room, medical virtual data room, hipaa file vault, hipaa compliant data transfer, hipaa compliant document sharing, hipaa compliant file transfer, hipaa compliant file sharing, secure file sharing hipaa compliant',
+    keywords: 'how to create hipaa compliant data room, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a HIPAA-Compliant Data Room',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -279,7 +279,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Insurance Claims Documents Securely',
     metaTitle: 'How to Share Insurance Claims Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share insurance claims documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share insurance claims securely, insurance document transfer, claims file sharing, insurance records portal, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to share insurance claims securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Insurance Claims Documents Securely',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -313,7 +313,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Digitize Medical Consent Forms',
     metaTitle: 'How to Digitize Medical Consent Forms - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to digitize medical consent forms step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'digitize medical consent forms, electronic consent forms healthcare, digital consent conversion, paperless consent forms, free patient consent form template',
+    keywords: 'how to digitize medical consent forms, upload and encrypt, doctransfer how',
     howToTitle: 'How to Digitize Medical Consent Forms',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -347,7 +347,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Referral Documents Securely',
     metaTitle: 'How to Send Referral Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send referral documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send referral documents securely, medical referral transfer, patient referral file sharing, referral letter secure, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to send referral documents securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send Referral Documents Securely',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -381,7 +381,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create Patient Portal Documents',
     metaTitle: 'How to Create Patient Portal Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create patient portal documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'patient portal documents, create patient document portal, patient file access portal, patient record portal setup, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'patient portal documents, create patient document portal, patient file access portal, patient record portal setup, how to share patient records securely, official verification documents, official document forms, official verification documents, printable official forms',
     howToTitle: 'How to Create Patient Portal Documents',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -415,7 +415,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Therapy Notes Securely',
     metaTitle: 'How to Share Therapy Notes Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share therapy notes securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share therapy notes securely, therapist document sharing, counseling notes transfer, mental health notes secure, how to share patient records securely',
+    keywords: 'how to create patient portal documents, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Therapy Notes Securely',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -449,7 +449,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Medical Images & X-Rays Securely',
     metaTitle: 'How to Send Medical Images & X-Rays Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send medical images & x-rays securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send medical images securely, share x-rays online, medical imaging transfer, radiology file sharing, how to share patient records securely',
+    keywords: 'how to share therapy notes securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send Medical Images & X-Rays Securely',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -483,7 +483,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Vaccination Record Form',
     metaTitle: 'How to Create a Vaccination Record Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a vaccination record form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'vaccination record form, immunization record template, vaccine documentation form, digital vaccine record',
+    keywords: 'how to send medical images securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Vaccination Record Form',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -517,7 +517,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Manage Clinical Trial Documents Securely',
     metaTitle: 'How to Manage Clinical Trial Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to manage clinical trial documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'manage clinical trial documents, clinical research file management, trial document organization, study protocol sharing, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create vaccination record form, upload and encrypt, doctransfer how',
     howToTitle: 'How to Manage Clinical Trial Documents Securely',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -551,7 +551,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Pharmacy Records Securely',
     metaTitle: 'How to Share Pharmacy Records Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share pharmacy records securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share pharmacy records, pharmacy document transfer, medication records sharing, prescription history transfer, how to share patient records securely',
+    keywords: 'how to manage clinical trial documents, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Pharmacy Records Securely',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -585,7 +585,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Telehealth Intake Form',
     metaTitle: 'How to Create a Telehealth Intake Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a telehealth intake form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'telehealth intake form, virtual visit intake form, telemedicine patient form, online intake form builder',
+    keywords: 'how to share pharmacy records, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Telehealth Intake Form',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -619,7 +619,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Pathology Reports Securely',
     metaTitle: 'How to Send Pathology Reports Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send pathology reports securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send pathology reports securely, pathology report sharing, lab pathology transfer, pathology results delivery, how to share patient records securely',
+    keywords: 'how to create telehealth intake form, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send Pathology Reports Securely',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -653,7 +653,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Handle Medical Records Requests Digitally',
     metaTitle: 'How to Handle Medical Records Requests Digitally - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to handle medical records requests digitally step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'medical records requests digital, patient records request handling, health records release process, medical file request management, how to share patient records securely',
+    keywords: 'how to send pathology reports securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Handle Medical Records Requests Digitally',
     relatedSlugs: ['how-to-share-medical-records-securely', 'how-to-create-hipaa-consent-form', 'how-to-e-sign-patient-intake-form'],
     benefits: [
@@ -687,7 +687,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect W-9 Forms Online Securely',
     metaTitle: 'How to Collect W-9 Forms Online Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect w-9 forms online securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect w9 forms online, w9 collection portal, digital w9 form collection, w9 e-signature, how to share patient records securely',
+    keywords: 'how to handle medical records requests, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect W-9 Forms Online Securely',
     relatedSlugs: ['how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally', 'how-to-share-financial-statements-securely'],
     benefits: [
@@ -721,7 +721,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Tax Documents Securely to Clients',
     metaTitle: 'How to Send Tax Documents Securely to Clients - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send tax documents securely to clients step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send tax documents securely, share tax returns online, secure tax file delivery, tax document transfer, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i 9 tax form printable, i9 acceptable documents printable',
+    keywords: 'how to collect w9 forms online, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send Tax Documents Securely to Clients',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-collect-1099-forms-digitally', 'how-to-share-financial-statements-securely'],
     benefits: [
@@ -755,7 +755,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect 1099 Forms Digitally',
     metaTitle: 'How to Collect 1099 Forms Digitally - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect 1099 forms digitally step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect 1099 forms digitally, 1099 collection online, digital 1099 submission, contractor 1099 portal',
+    keywords: 'how to send tax documents securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect 1099 Forms Digitally',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-share-financial-statements-securely'],
     benefits: [
@@ -789,7 +789,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Financial Statements Securely',
     metaTitle: 'How to Share Financial Statements Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share financial statements securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share financial statements securely, financial statement transfer, secure balance sheet sharing, income statement delivery, how to share patient records securely',
+    keywords: 'how to collect 1099 forms digitally, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Financial Statements Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -823,7 +823,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Client Document Portal for Accounting',
     metaTitle: 'How to Create a Client Document Portal for Accounting - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a client document portal for accounting step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'client document portal accounting, accounting client portal setup, cpa client file portal, bookkeeper portal, accounting client portal, client portal for accounting firms, accounting firm client portal, client portals for accounting firms, secure client portal for accountants',
+    keywords: 'how to share financial statements securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Client Document Portal for Accounting',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -857,7 +857,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to E-Sign an Engagement Letter',
     metaTitle: 'How to E-Sign an Engagement Letter - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to e-sign an engagement letter step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'e-sign engagement letter, accounting engagement letter signature, digital engagement letter, cpa engagement signing',
+    keywords: 'how to create client document portal, upload and encrypt, doctransfer how',
     howToTitle: 'How to E-Sign an Engagement Letter',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -891,7 +891,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Receipts Digitally from Clients',
     metaTitle: 'How to Collect Receipts Digitally from Clients - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect receipts digitally from clients step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect receipts digitally, digital receipt collection, expense receipt upload portal, client receipt gathering',
+    keywords: 'how to e sign engagement letter, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Receipts Digitally from Clients',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -925,7 +925,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Audit Reports Securely',
     metaTitle: 'How to Share Audit Reports Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share audit reports securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share audit reports securely, audit report transfer, financial audit sharing, audit findings distribution, how to share patient records securely',
+    keywords: 'how to collect receipts digitally, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Audit Reports Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -959,7 +959,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Payroll Documents Securely',
     metaTitle: 'How to Send Payroll Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send payroll documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send payroll documents securely, payroll file sharing, secure payroll transfer, payroll records delivery, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to share audit reports securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send Payroll Documents Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -993,7 +993,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Tax Organizer Form',
     metaTitle: 'How to Create a Tax Organizer Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a tax organizer form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create tax organizer form, tax organizer template, tax preparation checklist, client tax organizer, i 9 tax form printable, printable i 9 tax form, client tax portal',
+    keywords: 'how to send payroll documents securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Tax Organizer Form',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1027,7 +1027,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Bank Statements Securely',
     metaTitle: 'How to Collect Bank Statements Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect bank statements securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect bank statements securely, bank statement upload portal, financial document collection, secure bank file transfer, how to share patient records securely',
+    keywords: 'how to create tax organizer form, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Bank Statements Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1061,7 +1061,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Profit & Loss Statements Securely',
     metaTitle: 'How to Share Profit & Loss Statements Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share profit & loss statements securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share profit loss statement, p&l statement transfer, income statement sharing, financial report delivery, how to share patient records securely',
+    keywords: 'how to collect bank statements securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Profit & Loss Statements Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1095,7 +1095,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send W-2 Forms to Employees Securely',
     metaTitle: 'How to Send W-2 Forms to Employees Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send w-2 forms to employees securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send w2 forms employees, w2 distribution digital, employee w2 delivery, secure w2 sharing, how to share patient records securely',
+    keywords: 'how to share profit loss statements, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send W-2 Forms to Employees Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1129,7 +1129,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Tax Documents from Clients Online',
     metaTitle: 'How to Collect Tax Documents from Clients Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect tax documents from clients online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect tax documents clients, tax document collection portal, client tax file upload, tax season collection, i 9 acceptable documents printable, i 9 documents printable, i 9 tax form printable, i9 acceptable documents printable, printable i 9 tax form',
+    keywords: 'how to send w2 forms to employees, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Tax Documents from Clients Online',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1163,7 +1163,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Bookkeeping Records Securely',
     metaTitle: 'How to Share Bookkeeping Records Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share bookkeeping records securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share bookkeeping records, bookkeeping file transfer, accounting records sharing, financial records delivery, how to share patient records securely',
+    keywords: 'how to collect tax documents from clients, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Bookkeeping Records Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1197,7 +1197,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Invoice with E-Signature',
     metaTitle: 'How to Create an Invoice with E-Signature - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an invoice with e-signature step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'invoice e-signature, sign invoice online, digital invoice signing, invoice with electronic signature',
+    keywords: 'how to share bookkeeping records, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create an Invoice with E-Signature',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1231,7 +1231,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Financial Projections Securely',
     metaTitle: 'How to Send Financial Projections Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send financial projections securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send financial projections securely, financial forecast sharing, budget projection transfer, financial plan delivery, how to share patient records securely',
+    keywords: 'how to create invoice with e signature, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send Financial Projections Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1265,7 +1265,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Vendor Tax Forms (W-9/1099)',
     metaTitle: 'How to Collect Vendor Tax Forms (W-9/1099) - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect vendor tax forms (w-9/1099) step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect vendor tax forms, vendor w9 collection, vendor 1099 forms, supplier tax document collection, i 9 tax form printable, printable i 9 tax form, client tax portal',
+    keywords: 'how to send financial projections securely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Vendor Tax Forms (W-9/1099)',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1299,7 +1299,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Depreciation Schedules Securely',
     metaTitle: 'How to Share Depreciation Schedules Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share depreciation schedules securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share depreciation schedules, depreciation schedule transfer, asset depreciation sharing, fixed asset schedule delivery, how to share patient records securely',
+    keywords: 'how to collect vendor tax forms, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Depreciation Schedules Securely',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1333,7 +1333,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Expense Report Form',
     metaTitle: 'How to Create an Expense Report Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an expense report form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create expense report form, expense report template, digital expense report, employee expense form',
+    keywords: 'how to share depreciation schedules, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create an Expense Report Form',
     relatedSlugs: ['how-to-collect-w9-forms-online', 'how-to-send-tax-documents-securely', 'how-to-collect-1099-forms-digitally'],
     benefits: [
@@ -1367,7 +1367,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Employee Onboarding Packet',
     metaTitle: 'How to Create an Employee Onboarding Packet - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an employee onboarding packet step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'employee onboarding packet, new hire packet creation, onboarding document bundle, employee welcome packet, remote hiring onboarding software',
+    keywords: 'how to create expense report form, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create an Employee Onboarding Packet',
     relatedSlugs: ['how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically', 'how-to-create-employee-handbook-online'],
     benefits: [
@@ -1401,7 +1401,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Employee Signatures Remotely',
     metaTitle: 'How to Collect Employee Signatures Remotely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect employee signatures remotely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect employee signatures remotely, remote employee signing, digital employee signature, virtual hr signing',
+    keywords: 'how to create employee onboarding packet, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Employee Signatures Remotely',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-send-offer-letter-electronically', 'how-to-create-employee-handbook-online'],
     benefits: [
@@ -1435,7 +1435,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send an Offer Letter Electronically',
     metaTitle: 'How to Send an Offer Letter Electronically - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send an offer letter electronically step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send offer letter electronically, digital offer letter, e-sign offer letter, electronic job offer',
+    keywords: 'how to collect employee signatures remotely, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send an Offer Letter Electronically',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-create-employee-handbook-online'],
     benefits: [
@@ -1469,7 +1469,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Employee Handbook Online',
     metaTitle: 'How to Create an Employee Handbook Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an employee handbook online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create employee handbook online, digital employee handbook, online handbook builder, company handbook template',
+    keywords: 'how to send offer letter electronically, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create an Employee Handbook Online',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1503,7 +1503,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect I-9 Forms Remotely',
     metaTitle: 'How to Collect I-9 Forms Remotely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect i-9 forms remotely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect i9 forms remotely, remote i9 verification, digital i9 collection, electronic i9 form, printable i9 form, printable i9, editable i9 form, print i9 form, 2022 i9 form printable',
+    keywords: 'how to create employee handbook online, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect I-9 Forms Remotely',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1537,7 +1537,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Company Policies & Track Acknowledgment',
     metaTitle: 'How to Distribute Company Policies & Track Acknowledgment - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute company policies & track acknowledgment step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute company policies, policy acknowledgment tracking, employee policy distribution, policy sign-off tracking',
+    keywords: 'how to collect i9 forms remotely, 4. compliance, court, doctransfer how',
     howToTitle: 'How to Distribute Company Policies & Track Acknowledgment',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1571,7 +1571,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Performance Review Form',
     metaTitle: 'How to Create a Performance Review Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a performance review form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'performance review form, employee evaluation template, performance appraisal form, annual review form',
+    keywords: 'how to distribute company policies, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Performance Review Form',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1605,7 +1605,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Handle Employee Termination Documents',
     metaTitle: 'How to Handle Employee Termination Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to handle employee termination documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'employee termination documents, separation agreement process, termination paperwork guide, offboarding document checklist, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create performance review form, upload and encrypt, doctransfer how',
     howToTitle: 'How to Handle Employee Termination Documents',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1639,7 +1639,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send W-4 Forms to New Employees',
     metaTitle: 'How to Send W-4 Forms to New Employees - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send w-4 forms to new employees step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send w4 forms employees, w4 form distribution, employee tax form delivery, new hire w4 collection, sign w4 form online',
+    keywords: 'how to handle employee termination documents, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send W-4 Forms to New Employees',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1673,7 +1673,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an NDA for Employees',
     metaTitle: 'How to Create an NDA for Employees - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an nda for employees step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'nda for employees, employee confidentiality agreement, staff nda template, worker non-disclosure agreement',
+    keywords: 'how to send w4 forms to employees, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create an NDA for Employees',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1707,7 +1707,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Direct Deposit Forms Securely',
     metaTitle: 'How to Collect Direct Deposit Forms Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect direct deposit forms securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect direct deposit forms, direct deposit authorization, employee banking forms, payroll setup forms, how to share patient records securely',
+    keywords: 'how to create nda for employees, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Direct Deposit Forms Securely',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1741,7 +1741,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Employee Exit Survey Form',
     metaTitle: 'How to Create an Employee Exit Survey Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an employee exit survey form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'employee exit survey, exit interview questionnaire, offboarding survey template, departure survey form',
+    keywords: 'how to collect direct deposit forms, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create an Employee Exit Survey Form',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1775,7 +1775,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Benefits Enrollment Forms',
     metaTitle: 'How to Share Benefits Enrollment Forms - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share benefits enrollment forms step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'benefits enrollment forms, open enrollment documents, employee benefits paperwork, insurance enrollment forms, how to share patient records securely',
+    keywords: 'how to create employee exit survey, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Benefits Enrollment Forms',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1809,7 +1809,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Job Application Form',
     metaTitle: 'How to Create a Job Application Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a job application form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'job application form, employment application template, hiring application form, candidate application builder',
+    keywords: 'how to share benefits enrollment forms, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Job Application Form',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1843,7 +1843,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Promotion Letters Electronically',
     metaTitle: 'How to Send Promotion Letters Electronically - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send promotion letters electronically step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send promotion letter, digital promotion letter, electronic promotion notification, promotion document signing',
+    keywords: 'how to create job application form, upload and encrypt, doctransfer how',
     howToTitle: 'How to Send Promotion Letters Electronically',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1877,7 +1877,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Emergency Contact Forms',
     metaTitle: 'How to Collect Emergency Contact Forms - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect emergency contact forms step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'emergency contact forms, employee emergency information, emergency contact collection, staff emergency details',
+    keywords: 'how to send promotion letters, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Emergency Contact Forms',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1911,7 +1911,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Remote Work Agreement',
     metaTitle: 'How to Create a Remote Work Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a remote work agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'remote work agreement, work from home policy template, telecommuting agreement, remote employee contract, remote hiring onboarding software',
+    keywords: 'how to collect emergency contact forms, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Remote Work Agreement',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1945,7 +1945,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Training Materials Securely',
     metaTitle: 'How to Distribute Training Materials Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute training materials securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute training materials, training document sharing, employee training delivery, learning materials distribution, how to share patient records securely',
+    keywords: 'how to create remote work agreement, upload and encrypt, doctransfer how',
     howToTitle: 'How to Distribute Training Materials Securely',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -1979,7 +1979,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Harassment Training Acknowledgments',
     metaTitle: 'How to Collect Harassment Training Acknowledgments - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect harassment training acknowledgments step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'harassment training acknowledgment, compliance training sign-off, workplace training confirmation, training completion form',
+    keywords: 'how to distribute training materials, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Harassment Training Acknowledgments',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -2013,7 +2013,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Employee Warning Letter',
     metaTitle: 'How to Create an Employee Warning Letter - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an employee warning letter step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'employee warning letter, written warning template, disciplinary notice form, performance warning letter',
+    keywords: 'how to collect harassment training acknowledgment, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create an Employee Warning Letter',
     relatedSlugs: ['how-to-create-employee-onboarding-packet', 'how-to-collect-employee-signatures-remotely', 'how-to-send-offer-letter-electronically'],
     benefits: [
@@ -2047,7 +2047,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Construction Blueprints Securely',
     metaTitle: 'How to Share Construction Blueprints Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share construction blueprints securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share construction blueprints, blueprint sharing online, construction plan distribution, architectural drawing transfer, how to share patient records securely, free construction subcontractor agreement template word, free construction subcontractor agreement template',
+    keywords: 'how to create employee warning letter, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Construction Blueprints Securely',
     relatedSlugs: ['how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders', 'how-to-collect-subcontractor-documents'],
     benefits: [
@@ -2081,7 +2081,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Lien Waivers Online',
     metaTitle: 'How to Collect Lien Waivers Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect lien waivers online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect lien waivers online, digital lien waiver, electronic lien waiver, lien waiver collection portal',
+    keywords: 'how to share construction blueprints, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Lien Waivers Online',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-e-sign-change-orders', 'how-to-collect-subcontractor-documents'],
     benefits: [
@@ -2115,7 +2115,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to E-Sign Change Orders on Construction Projects',
     metaTitle: 'How to E-Sign Change Orders on Construction Projects - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to e-sign change orders on construction projects step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'e-sign change orders, digital change order signing, construction change order signature, change order e-signature, free construction subcontractor agreement template word, free construction subcontractor agreement template',
+    keywords: 'how to collect lien waivers online, upload and encrypt, doctransfer how',
     howToTitle: 'How to E-Sign Change Orders on Construction Projects',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-collect-subcontractor-documents'],
     benefits: [
@@ -2149,7 +2149,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Subcontractor Documents & Insurance',
     metaTitle: 'How to Collect Subcontractor Documents & Insurance - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect subcontractor documents & insurance step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect subcontractor documents, subcontractor insurance collection, sub document portal, contractor file gathering, free subcontractor agreement template, free subcontractor agreement, free subcontractor agreement template word, free construction subcontractor agreement template word, subcontractor contract template free',
+    keywords: 'how to e sign change orders, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Subcontractor Documents & Insurance',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2183,7 +2183,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Safety Plans with Construction Crew',
     metaTitle: 'How to Share Safety Plans with Construction Crew - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share safety plans with construction crew step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share safety plans construction, job site safety distribution, safety document sharing, crew safety plan delivery, how to share patient records securely, free construction subcontractor agreement template word, free construction subcontractor agreement template',
+    keywords: 'how to collect subcontractor documents, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Safety Plans with Construction Crew',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2217,7 +2217,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Construction Contract',
     metaTitle: 'How to Create a Construction Contract - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a construction contract step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create construction contract, construction agreement template, building contract creation, contractor agreement setup, free construction subcontractor agreement template word, free construction subcontractor agreement template',
+    keywords: 'how to share safety plans with crew, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Construction Contract',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2251,7 +2251,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Manage RFI Documents Digitally',
     metaTitle: 'How to Manage RFI Documents Digitally - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to manage rfi documents digitally step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'manage rfi documents, rfi tracking system, construction rfi management, request for information digital, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create construction contract, upload and encrypt, doctransfer how',
     howToTitle: 'How to Manage RFI Documents Digitally',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2285,7 +2285,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Project Specifications Securely',
     metaTitle: 'How to Distribute Project Specifications Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute project specifications securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute project specifications, project spec sharing, construction specifications transfer, spec document delivery, how to share patient records securely',
+    keywords: 'how to manage rfi documents, upload and encrypt, doctransfer how',
     howToTitle: 'How to Distribute Project Specifications Securely',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2319,7 +2319,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Contractor Certifications & Licenses',
     metaTitle: 'How to Collect Contractor Certifications & Licenses - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect contractor certifications & licenses step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect contractor certifications, contractor license collection, certification document portal, license verification files, free standard form of agreement between contractor and subcontractor, fillable contractor agreement',
+    keywords: 'how to distribute project specifications, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Contractor Certifications & Licenses',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2353,7 +2353,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Punch List Form',
     metaTitle: 'How to Create a Punch List Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a punch list form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create punch list form, construction punch list template, project punch list builder, completion list form',
+    keywords: 'how to collect contractor certifications, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Punch List Form',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2387,7 +2387,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Building Inspection Reports',
     metaTitle: 'How to Share Building Inspection Reports - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share building inspection reports step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share inspection reports, building inspection transfer, inspection report delivery, property inspection sharing, how to share patient records securely',
+    keywords: 'how to create punch list form, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Building Inspection Reports',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2421,7 +2421,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Sign Subcontractor Agreements Online',
     metaTitle: 'How to Sign Subcontractor Agreements Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to sign subcontractor agreements online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'sign subcontractor agreement online, digital subcontractor contract, e-sign sub agreement, contractor signing online, free subcontractor agreement template, free subcontractor agreement, free subcontractor agreement template word, free construction subcontractor agreement template word, subcontractor contract template free',
+    keywords: 'how to share inspection reports, upload and encrypt, doctransfer how',
     howToTitle: 'How to Sign Subcontractor Agreements Online',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2455,7 +2455,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Daily Construction Logs',
     metaTitle: 'How to Collect Daily Construction Logs - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect daily construction logs step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'daily construction logs, job site daily report, construction daily log collection, project daily log form, free construction subcontractor agreement template word, free construction subcontractor agreement template',
+    keywords: 'how to sign subcontractor agreements online, upload and encrypt, doctransfer how',
     howToTitle: 'How to Collect Daily Construction Logs',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2489,7 +2489,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute As-Built Drawings',
     metaTitle: 'How to Distribute As-Built Drawings - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute as-built drawings step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute as-built drawings, as-built drawing sharing, final construction drawings, as-built document delivery',
+    keywords: 'how to collect daily construction logs, upload and encrypt, doctransfer how',
     howToTitle: 'How to Distribute As-Built Drawings',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2523,7 +2523,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Material Submittals Securely',
     metaTitle: 'How to Share Material Submittals Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share material submittals securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share material submittals, construction submittal sharing, material submittal transfer, project submittal portal, how to share patient records securely',
+    keywords: 'how to distribute as built drawings, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Material Submittals Securely',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2557,7 +2557,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Construction Proposal',
     metaTitle: 'How to Create a Construction Proposal - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a construction proposal step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create construction proposal, construction bid proposal, building project proposal, contractor proposal template, free construction subcontractor agreement template word, free construction subcontractor agreement template',
+    keywords: 'how to share material submittals, upload and encrypt, doctransfer how',
     howToTitle: 'How to Create a Construction Proposal',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2591,7 +2591,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Warranty Documents from Subcontractors',
     metaTitle: 'How to Collect Warranty Documents from Subcontractors - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect warranty documents from subcontractors step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect warranty documents, construction warranty collection, subcontractor warranty files, warranty document portal, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create construction proposal, place form fields, doctransfer how',
     howToTitle: 'How to Collect Warranty Documents from Subcontractors',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2625,7 +2625,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Construction Schedules with Stakeholders',
     metaTitle: 'How to Share Construction Schedules with Stakeholders - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share construction schedules with stakeholders step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share construction schedules, project schedule distribution, construction timeline sharing, gantt chart sharing, how to share patient records securely, free construction subcontractor agreement template word, free construction subcontractor agreement template',
+    keywords: 'how to collect warranty documents, upload and encrypt, doctransfer how',
     howToTitle: 'How to Share Construction Schedules with Stakeholders',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2659,7 +2659,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Manage Construction Closeout Documents',
     metaTitle: 'How to Manage Construction Closeout Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to manage construction closeout documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'construction closeout documents, project closeout files, closeout document management, construction completion docs, free construction subcontractor agreement template word, free construction subcontractor agreement template, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable',
+    keywords: 'how to share construction schedules, place form fields, doctransfer how',
     howToTitle: 'How to Manage Construction Closeout Documents',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2693,7 +2693,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Construction Daily Report Form',
     metaTitle: 'How to Create a Construction Daily Report Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a construction daily report form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'construction daily report form, daily construction report, job site report template, daily project log form, free construction subcontractor agreement template word, free construction subcontractor agreement template',
+    keywords: 'how to manage construction closeout documents, place form fields, doctransfer how',
     howToTitle: 'How to Create a Construction Daily Report Form',
     relatedSlugs: ['how-to-share-construction-blueprints', 'how-to-collect-lien-waivers-online', 'how-to-e-sign-change-orders'],
     benefits: [
@@ -2727,7 +2727,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Legal Documents Securely',
     metaTitle: 'How to Share Legal Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share legal documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share legal documents securely, legal file sharing, attorney document transfer, secure legal file delivery, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create construction daily report, place form fields, doctransfer how',
     howToTitle: 'How to Share Legal Documents Securely',
     relatedSlugs: ['how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney', 'how-to-share-discovery-documents'],
     benefits: [
@@ -2761,7 +2761,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Retainer Agreement Online',
     metaTitle: 'How to Create a Retainer Agreement Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a retainer agreement online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create retainer agreement, retainer agreement template, attorney retainer, legal retainer form',
+    keywords: 'how to share legal documents securely, place form fields, doctransfer how',
     howToTitle: 'How to Create a Retainer Agreement Online',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-e-sign-power-of-attorney', 'how-to-share-discovery-documents'],
     benefits: [
@@ -2795,7 +2795,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to E-Sign a Power of Attorney',
     metaTitle: 'How to E-Sign a Power of Attorney - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to e-sign a power of attorney step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'e-sign power of attorney, digital power of attorney, sign poa online, electronic power of attorney',
+    keywords: 'how to create retainer agreement, place form fields, doctransfer how',
     howToTitle: 'How to E-Sign a Power of Attorney',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-share-discovery-documents'],
     benefits: [
@@ -2829,7 +2829,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Discovery Documents Securely',
     metaTitle: 'How to Share Discovery Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share discovery documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share discovery documents, ediscovery sharing, litigation discovery transfer, case discovery portal, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to e sign power of attorney, share and track, doctransfer how',
     howToTitle: 'How to Share Discovery Documents Securely',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -2863,7 +2863,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Cease & Desist Letter',
     metaTitle: 'How to Create a Cease & Desist Letter - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a cease & desist letter step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create cease desist letter, cease and desist template, demand letter creation, cease desist online',
+    keywords: 'how to share discovery documents, share and track, doctransfer how',
     howToTitle: 'How to Create a Cease & Desist Letter',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -2897,7 +2897,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Client Documents as a Law Firm',
     metaTitle: 'How to Collect Client Documents as a Law Firm - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect client documents as a law firm step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect client documents law firm, legal client portal, attorney document collection, law firm file upload, accounting firm client portal, cpa firm client portal, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable',
+    keywords: 'how to create cease desist letter, share and track, doctransfer how',
     howToTitle: 'How to Collect Client Documents as a Law Firm',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -2931,7 +2931,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Court Filings Securely',
     metaTitle: 'How to Share Court Filings Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share court filings securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share court filings securely, court document sharing, legal filing transfer, court file delivery, how to share patient records securely',
+    keywords: 'how to collect client documents law firm, share and track, doctransfer how',
     howToTitle: 'How to Share Court Filings Securely',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -2965,7 +2965,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Non-Compete Agreement',
     metaTitle: 'How to Create a Non-Compete Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a non-compete agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create non-compete agreement, non-compete template, non-competition clause, non-compete contract online',
+    keywords: 'how to share court filings securely, share and track, doctransfer how',
     howToTitle: 'How to Create a Non-Compete Agreement',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -2999,7 +2999,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Settlement Agreements for E-Signature',
     metaTitle: 'How to Send Settlement Agreements for E-Signature - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send settlement agreements for e-signature step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send settlement agreement, settlement e-signature, settlement document signing, settlement agreement delivery',
+    keywords: 'how to create non compete agreement, share and track, doctransfer how',
     howToTitle: 'How to Send Settlement Agreements for E-Signature',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3033,7 +3033,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Estate Planning Documents',
     metaTitle: 'How to Share Estate Planning Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share estate planning documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share estate planning documents, will trust sharing, estate file transfer, estate planning portal, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to send settlement agreements, share and track, doctransfer how',
     howToTitle: 'How to Share Estate Planning Documents',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3067,7 +3067,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an IP Assignment Agreement',
     metaTitle: 'How to Create an IP Assignment Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an ip assignment agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'ip assignment agreement, intellectual property assignment, ip transfer contract, ip assignment template',
+    keywords: 'how to share estate planning documents, share and track, doctransfer how',
     howToTitle: 'How to Create an IP Assignment Agreement',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3101,7 +3101,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Deposition Transcripts Securely',
     metaTitle: 'How to Share Deposition Transcripts Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share deposition transcripts securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share deposition transcripts, deposition file sharing, legal transcript transfer, deposition document delivery, how to share patient records securely',
+    keywords: 'how to create ip assignment agreement, seal and archive, doctransfer how',
     howToTitle: 'How to Share Deposition Transcripts Securely',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3135,7 +3135,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Immigration Documents Online',
     metaTitle: 'How to Collect Immigration Documents Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect immigration documents online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect immigration documents, immigration file portal, visa document collection, immigration document upload, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to share deposition transcripts, seal and archive, doctransfer how',
     howToTitle: 'How to Collect Immigration Documents Online',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3169,7 +3169,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Partnership Agreement',
     metaTitle: 'How to Create a Partnership Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a partnership agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create partnership agreement, partnership contract template, business partnership form, partnership agreement online, printable partnership agreement, free printable partnership agreement, free printable partnership agreement word',
+    keywords: 'how to collect immigration documents, 1. why collect immigration documents matters for modern organizations, doctransfer how',
     howToTitle: 'How to Create a Partnership Agreement',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3203,7 +3203,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Demand Letters Electronically',
     metaTitle: 'How to Send Demand Letters Electronically - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send demand letters electronically step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send demand letter electronically, digital demand letter, electronic demand letter, demand letter delivery',
+    keywords: 'how to create partnership agreement, seal and archive, doctransfer how',
     howToTitle: 'How to Send Demand Letters Electronically',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3237,7 +3237,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Mediation Documents Securely',
     metaTitle: 'How to Share Mediation Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share mediation documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share mediation documents, mediation file transfer, dispute resolution sharing, mediation agreement delivery, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to send demand letters electronically, 1. why send demand letter electronically matters for modern organizations, doctransfer how',
     howToTitle: 'How to Share Mediation Documents Securely',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3271,7 +3271,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Prenuptial Agreement',
     metaTitle: 'How to Create a Prenuptial Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a prenuptial agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create prenuptial agreement, prenup template, prenuptial contract online, prenup agreement form',
+    keywords: 'how to share mediation documents, 1. why share mediation documents matters for modern organizations, doctransfer how',
     howToTitle: 'How to Create a Prenuptial Agreement',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3305,7 +3305,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Notarized Documents Online',
     metaTitle: 'How to Collect Notarized Documents Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect notarized documents online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect notarized documents, remote notarization collection, digital notary documents, notarized file portal, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create prenuptial agreement, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Notarized Documents Online',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3339,7 +3339,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Corporate Bylaws & Articles',
     metaTitle: 'How to Share Corporate Bylaws & Articles - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share corporate bylaws & articles step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share corporate bylaws, bylaws distribution, articles of incorporation sharing, corporate governance documents, how to share patient records securely',
+    keywords: 'how to collect notarized documents, 2. zero, doctransfer how',
     howToTitle: 'How to Share Corporate Bylaws & Articles',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3373,7 +3373,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Release of Liability Waiver',
     metaTitle: 'How to Create a Release of Liability Waiver - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a release of liability waiver step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'release of liability template, liability waiver form, hold harmless agreement, waiver of responsibility, sign liability release online',
+    keywords: 'how to share corporate bylaws, 2. zero, doctransfer how',
     howToTitle: 'How to Create a Release of Liability Waiver',
     relatedSlugs: ['how-to-share-legal-documents-securely', 'how-to-create-retainer-agreement', 'how-to-e-sign-power-of-attorney'],
     benefits: [
@@ -3407,7 +3407,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Academic Transcripts Securely',
     metaTitle: 'How to Share Academic Transcripts Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share academic transcripts securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share transcripts securely, secure transcript delivery, academic transcript sharing, digital transcript transfer, how to share patient records securely, how to verify academic credentials, how to check someone\'s academic credentials',
+    keywords: 'how to create release of liability, 2. zero, doctransfer hows academic credentials',
     howToTitle: 'How to Share Academic Transcripts Securely',
     relatedSlugs: ['how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms', 'how-to-create-scholarship-application-form'],
     benefits: [
@@ -3441,7 +3441,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Send Recommendation Letters Digitally',
     metaTitle: 'How to Send Recommendation Letters Digitally - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to send recommendation letters digitally step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'send recommendation letters, digital recommendation, electronic letter of recommendation, recommendation letter delivery',
+    keywords: 'how to share transcripts securely, 2. zero, doctransfer how',
     howToTitle: 'How to Send Recommendation Letters Digitally',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-collect-enrollment-forms', 'how-to-create-scholarship-application-form'],
     benefits: [
@@ -3475,7 +3475,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Enrollment Forms Online',
     metaTitle: 'How to Collect Enrollment Forms Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect enrollment forms online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect enrollment forms online, student enrollment collection, enrollment form portal, digital enrollment forms',
+    keywords: 'how to send recommendation letters, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Enrollment Forms Online',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-create-scholarship-application-form'],
     benefits: [
@@ -3509,7 +3509,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Scholarship Application Form',
     metaTitle: 'How to Create a Scholarship Application Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a scholarship application form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'scholarship application form, scholarship template, financial aid application form, scholarship form builder',
+    keywords: 'how to collect enrollment forms, 2. zero, doctransfer how',
     howToTitle: 'How to Create a Scholarship Application Form',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3543,7 +3543,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share FERPA-Protected Documents Securely',
     metaTitle: 'How to Share FERPA-Protected Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share ferpa-protected documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share ferpa documents, ferpa compliant sharing, student record transfer, ferpa file security, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create scholarship application form, 2. zero, doctransfer how',
     howToTitle: 'How to Share FERPA-Protected Documents Securely',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3577,7 +3577,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Course Materials Securely',
     metaTitle: 'How to Distribute Course Materials Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute course materials securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute course materials, course content sharing, academic material delivery, syllabus distribution, how to share patient records securely',
+    keywords: 'how to share ferpa documents, 2. zero, doctransfer how',
     howToTitle: 'How to Distribute Course Materials Securely',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3611,7 +3611,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Study Abroad Documents',
     metaTitle: 'How to Collect Study Abroad Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect study abroad documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect study abroad documents, study abroad file portal, international student paperwork, abroad document collection, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to distribute course materials, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Study Abroad Documents',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3645,7 +3645,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Student Agreement Form',
     metaTitle: 'How to Create a Student Agreement Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a student agreement form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'student agreement form, student contract template, academic agreement form, student policy acknowledgment',
+    keywords: 'how to collect study abroad documents, 2. zero, doctransfer how',
     howToTitle: 'How to Create a Student Agreement Form',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3679,7 +3679,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Admissions Decisions Securely',
     metaTitle: 'How to Share Admissions Decisions Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share admissions decisions securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share admissions decisions, college decision letter, admissions notification delivery, acceptance letter sharing, how to share patient records securely',
+    keywords: 'how to create student agreement form, 2. zero, doctransfer how',
     howToTitle: 'How to Share Admissions Decisions Securely',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3713,7 +3713,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Verify Academic Credentials Digitally',
     metaTitle: 'How to Verify Academic Credentials Digitally - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to verify academic credentials digitally step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'verify academic credentials, digital credential verification, degree verification online, academic credential check, how to verify academic credentials, how to check someone\'s academic credentials',
+    keywords: 'how to share admissions decisions, 2. zero, doctransfer hows academic credentials',
     howToTitle: 'How to Verify Academic Credentials Digitally',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3747,7 +3747,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Graduation Certificates Digitally',
     metaTitle: 'How to Distribute Graduation Certificates Digitally - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute graduation certificates digitally step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute graduation certificates, digital diploma delivery, electronic certificate sharing, graduation credential transfer',
+    keywords: 'how to verify academic credentials, 2. zero, doctransfer how',
     howToTitle: 'How to Distribute Graduation Certificates Digitally',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3781,7 +3781,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Parent Consent Forms for Students',
     metaTitle: 'How to Collect Parent Consent Forms for Students - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect parent consent forms for students step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'parent consent forms, parental permission forms, student consent collection, parent authorization forms, free patient consent form template',
+    keywords: 'how to distribute graduation certificates, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Parent Consent Forms for Students',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3815,7 +3815,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Research Papers Securely',
     metaTitle: 'How to Share Research Papers Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share research papers securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share research papers securely, academic research sharing, scholarly paper transfer, research document delivery, how to share patient records securely',
+    keywords: 'how to collect parent consent forms, 2. zero, doctransfer how',
     howToTitle: 'How to Share Research Papers Securely',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3849,7 +3849,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Internship Agreement',
     metaTitle: 'How to Create an Internship Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an internship agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'internship agreement template, intern contract form, internship offer letter, student internship agreement',
+    keywords: 'how to share research papers securely, 2. zero, doctransfer how',
     howToTitle: 'How to Create an Internship Agreement',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3883,7 +3883,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Financial Aid Documents',
     metaTitle: 'How to Collect Financial Aid Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect financial aid documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect financial aid documents, fafsa document collection, financial aid file upload, student aid paperwork, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create internship agreement, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Financial Aid Documents',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3917,7 +3917,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share School Health Records Securely',
     metaTitle: 'How to Share School Health Records Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share school health records securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'school health records, student health forms, school immunization records, student medical sharing, how to share patient records securely',
+    keywords: 'how to collect financial aid documents, 2. zero, doctransfer how',
     howToTitle: 'How to Share School Health Records Securely',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3951,7 +3951,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Tuition Agreement Form',
     metaTitle: 'How to Create a Tuition Agreement Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a tuition agreement form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'tuition agreement form, tuition payment contract, enrollment payment agreement, tuition contract template',
+    keywords: 'how to share school health records, 2. zero, doctransfer how',
     howToTitle: 'How to Create a Tuition Agreement Form',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -3985,7 +3985,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Student Handbooks Digitally',
     metaTitle: 'How to Distribute Student Handbooks Digitally - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute student handbooks digitally step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute student handbooks, digital student handbook, student policy distribution, handbook acknowledgment',
+    keywords: 'how to create tuition agreement form, 2. zero, doctransfer how',
     howToTitle: 'How to Distribute Student Handbooks Digitally',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -4019,7 +4019,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Teacher Certifications & Licenses',
     metaTitle: 'How to Collect Teacher Certifications & Licenses - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect teacher certifications & licenses step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect teacher certifications, teacher license verification, educator credential collection, teaching certificate portal',
+    keywords: 'how to distribute student handbooks, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Teacher Certifications & Licenses',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -4053,7 +4053,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Grading Reports Securely with Parents',
     metaTitle: 'How to Share Grading Reports Securely with Parents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share grading reports securely with parents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share grading reports, report card sharing, student grades delivery, academic report transfer, how to share patient records securely',
+    keywords: 'how to collect teacher certifications, 2. zero, doctransfer how',
     howToTitle: 'How to Share Grading Reports Securely with Parents',
     relatedSlugs: ['how-to-share-transcripts-securely', 'how-to-send-recommendation-letters', 'how-to-collect-enrollment-forms'],
     benefits: [
@@ -4087,7 +4087,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Submit Insurance Claim Documents Online',
     metaTitle: 'How to Submit Insurance Claim Documents Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to submit insurance claim documents online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'submit insurance claim documents, insurance claim upload, claim file submission, insurance document filing, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to share grading reports securely, 2. zero, doctransfer how',
     howToTitle: 'How to Submit Insurance Claim Documents Online',
     relatedSlugs: ['how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications', 'how-to-e-sign-insurance-forms'],
     benefits: [
@@ -4121,7 +4121,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Insurance Policies Digitally',
     metaTitle: 'How to Share Insurance Policies Digitally - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share insurance policies digitally step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share insurance policies digitally, digital policy delivery, electronic policy sharing, insurance policy transfer, how to share patient records securely',
+    keywords: 'how to submit insurance claim documents, 2. zero, doctransfer how',
     howToTitle: 'How to Share Insurance Policies Digitally',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-collect-insurance-applications', 'how-to-e-sign-insurance-forms'],
     benefits: [
@@ -4155,7 +4155,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Insurance Applications Online',
     metaTitle: 'How to Collect Insurance Applications Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect insurance applications online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect insurance applications, insurance application portal, policy application collection, insurance enrollment online',
+    keywords: 'how to share insurance policies digitally, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Insurance Applications Online',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-e-sign-insurance-forms'],
     benefits: [
@@ -4189,7 +4189,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to E-Sign Insurance Forms & Applications',
     metaTitle: 'How to E-Sign Insurance Forms & Applications - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to e-sign insurance forms & applications step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'e-sign insurance forms, insurance digital signature, electronic insurance signing, insurance form e-signature',
+    keywords: 'how to collect insurance applications, 2. zero, doctransfer how',
     howToTitle: 'How to E-Sign Insurance Forms & Applications',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4223,7 +4223,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Damage Reports with Insurers',
     metaTitle: 'How to Share Damage Reports with Insurers - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share damage reports with insurers step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share damage reports insurers, damage documentation sharing, insurance damage report, claim damage file upload, how to share patient records securely',
+    keywords: 'how to e sign insurance forms, 2. zero, doctransfer how',
     howToTitle: 'How to Share Damage Reports with Insurers',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4257,7 +4257,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Certificate of Insurance (COI)',
     metaTitle: 'How to Create a Certificate of Insurance (COI) - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a certificate of insurance (coi) step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create certificate of insurance, coi template, insurance certificate form, certificate of liability insurance',
+    keywords: 'how to share damage reports with insurers, 2. zero, doctransfer how',
     howToTitle: 'How to Create a Certificate of Insurance (COI)',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4291,7 +4291,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Policyholder Documents Securely',
     metaTitle: 'How to Collect Policyholder Documents Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect policyholder documents securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect policyholder documents, insurance client documents, policyholder file portal, insurance document collection, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create certificate of insurance, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Policyholder Documents Securely',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4325,7 +4325,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Policy Renewals Electronically',
     metaTitle: 'How to Distribute Policy Renewals Electronically - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute policy renewals electronically step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute policy renewals, electronic policy renewal, digital renewal notices, policy renewal distribution',
+    keywords: 'how to collect policyholder documents, 2. zero, doctransfer how',
     howToTitle: 'How to Distribute Policy Renewals Electronically',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4359,7 +4359,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Actuarial Reports Securely',
     metaTitle: 'How to Share Actuarial Reports Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share actuarial reports securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share actuarial reports, actuarial document sharing, insurance risk reports, actuarial analysis transfer, how to share patient records securely',
+    keywords: 'how to distribute policy renewals, 2. zero, doctransfer how',
     howToTitle: 'How to Share Actuarial Reports Securely',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4393,7 +4393,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Insurance Proposal',
     metaTitle: 'How to Create an Insurance Proposal - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an insurance proposal step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create insurance proposal, insurance quote proposal, coverage proposal template, insurance bid document',
+    keywords: 'how to share actuarial reports, 2. zero, doctransfer how',
     howToTitle: 'How to Create an Insurance Proposal',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4427,7 +4427,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Beneficiary Designation Forms',
     metaTitle: 'How to Collect Beneficiary Designation Forms - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect beneficiary designation forms step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect beneficiary forms, beneficiary designation collection, insurance beneficiary documents, beneficiary change form',
+    keywords: 'how to create insurance proposal, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Beneficiary Designation Forms',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4461,7 +4461,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Loss Run Reports Securely',
     metaTitle: 'How to Share Loss Run Reports Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share loss run reports securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share loss run reports, loss run sharing, insurance loss history, claims history transfer, how to share patient records securely',
+    keywords: 'how to collect beneficiary forms, 2. zero, doctransfer how',
     howToTitle: 'How to Share Loss Run Reports Securely',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4495,7 +4495,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create an Insurance Binder',
     metaTitle: 'How to Create an Insurance Binder - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create an insurance binder step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create insurance binder, insurance binder template, temporary insurance binder, coverage binder form',
+    keywords: 'how to share loss run reports, 2. zero, doctransfer how',
     howToTitle: 'How to Create an Insurance Binder',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4529,7 +4529,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Proof of Insurance Online',
     metaTitle: 'How to Collect Proof of Insurance Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect proof of insurance online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect proof of insurance, insurance verification portal, proof of coverage collection, insurance card upload',
+    keywords: 'how to create insurance binder, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Proof of Insurance Online',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4563,7 +4563,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Underwriting Submissions',
     metaTitle: 'How to Share Underwriting Submissions - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share underwriting submissions step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share underwriting submissions, underwriting document transfer, insurance submission portal, risk assessment sharing, how to share patient records securely',
+    keywords: 'how to collect proof of insurance, 2. zero, doctransfer how',
     howToTitle: 'How to Share Underwriting Submissions',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4597,7 +4597,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Claims Intake Form',
     metaTitle: 'How to Create a Claims Intake Form - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a claims intake form step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'claims intake form, insurance claim form, first notice of loss form, claim report template',
+    keywords: 'how to share underwriting submissions, 2. zero, doctransfer how',
     howToTitle: 'How to Create a Claims Intake Form',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4631,7 +4631,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Insurance Quotes Securely',
     metaTitle: 'How to Distribute Insurance Quotes Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute insurance quotes securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute insurance quotes, insurance quote delivery, digital insurance quote, coverage quote sharing, how to share patient records securely',
+    keywords: 'how to create claims intake form, 2. zero, doctransfer how',
     howToTitle: 'How to Distribute Insurance Quotes Securely',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4665,7 +4665,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Auto Accident Documents',
     metaTitle: 'How to Collect Auto Accident Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect auto accident documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect auto accident documents, car accident file upload, accident documentation portal, vehicle damage file collection, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to distribute insurance quotes, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Auto Accident Documents',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4699,7 +4699,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Commercial Insurance Proposals',
     metaTitle: 'How to Share Commercial Insurance Proposals - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share commercial insurance proposals step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'commercial insurance proposals, business insurance proposal, commercial coverage bid, business policy proposal, how to share patient records securely',
+    keywords: 'how to collect auto accident documents, 2. zero, doctransfer how',
     howToTitle: 'How to Share Commercial Insurance Proposals',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4733,7 +4733,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Handle Insurance Audit Documents',
     metaTitle: 'How to Handle Insurance Audit Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to handle insurance audit documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'insurance audit documents, insurance audit file sharing, premium audit documents, insurance audit compliance, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to share commercial insurance proposals, 2. zero, doctransfer how',
     howToTitle: 'How to Handle Insurance Audit Documents',
     relatedSlugs: ['how-to-submit-insurance-claim-documents', 'how-to-share-insurance-policies-digitally', 'how-to-collect-insurance-applications'],
     benefits: [
@@ -4767,7 +4767,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Submit Grant Applications Securely',
     metaTitle: 'How to Submit Grant Applications Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to submit grant applications securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'submit grant applications securely, secure grant submission, grant application portal, foundation grant filing, how to share patient records securely',
+    keywords: 'how to handle insurance audit documents, 2. zero, doctransfer how',
     howToTitle: 'How to Submit Grant Applications Securely',
     relatedSlugs: ['how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement', 'how-to-share-nonprofit-financial-statements'],
     benefits: [
@@ -4801,7 +4801,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Board Signatures Remotely',
     metaTitle: 'How to Collect Board Signatures Remotely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect board signatures remotely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect board signatures remotely, remote board signing, digital board resolution, electronic board consent',
+    keywords: 'how to submit grant applications securely, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Board Signatures Remotely',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-create-donor-agreement', 'how-to-share-nonprofit-financial-statements'],
     benefits: [
@@ -4835,7 +4835,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Donor Agreement',
     metaTitle: 'How to Create a Donor Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a donor agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create donor agreement, donation agreement template, charitable pledge form, donor contract creation',
+    keywords: 'how to collect board signatures remotely, 2. zero, doctransfer how',
     howToTitle: 'How to Create a Donor Agreement',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-share-nonprofit-financial-statements'],
     benefits: [
@@ -4869,7 +4869,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Nonprofit Financial Statements',
     metaTitle: 'How to Share Nonprofit Financial Statements - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share nonprofit financial statements step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share nonprofit financial statements, charity financial report, nonprofit budget sharing, annual financial report, how to share patient records securely',
+    keywords: 'how to create donor agreement, 2. zero, doctransfer how',
     howToTitle: 'How to Share Nonprofit Financial Statements',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -4903,7 +4903,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Volunteer Agreements Online',
     metaTitle: 'How to Collect Volunteer Agreements Online - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect volunteer agreements online step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect volunteer agreements, volunteer consent forms, volunteer sign-up documents, volunteer onboarding forms',
+    keywords: 'how to share nonprofit financial statements, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Volunteer Agreements Online',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -4937,7 +4937,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create Board Meeting Minutes',
     metaTitle: 'How to Create Board Meeting Minutes - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create board meeting minutes step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'board meeting minutes, nonprofit meeting minutes, board minutes template, meeting minutes form',
+    keywords: 'how to collect volunteer agreements, 2. zero, doctransfer how',
     howToTitle: 'How to Create Board Meeting Minutes',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -4971,7 +4971,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Annual Reports to Donors',
     metaTitle: 'How to Distribute Annual Reports to Donors - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute annual reports to donors step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute annual reports donors, annual report sharing, donor report distribution, nonprofit annual report delivery',
+    keywords: 'how to create board meeting minutes, 2. zero, doctransfer how',
     howToTitle: 'How to Distribute Annual Reports to Donors',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5005,7 +5005,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Grant Compliance Documents',
     metaTitle: 'How to Share Grant Compliance Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share grant compliance documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share grant compliance documents, grant reporting files, funder compliance sharing, grant document transfer, how to share patient records securely, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to distribute annual reports to donors, 2. zero, doctransfer how',
     howToTitle: 'How to Share Grant Compliance Documents',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5039,7 +5039,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Donation Pledge Forms',
     metaTitle: 'How to Collect Donation Pledge Forms - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect donation pledge forms step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'collect donation pledge forms, pledge form collection, charitable pledge signing, donor pledge commitment',
+    keywords: 'how to share grant compliance documents, 2. zero, doctransfer how',
     howToTitle: 'How to Collect Donation Pledge Forms',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5073,7 +5073,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Sponsorship Agreement',
     metaTitle: 'How to Create a Sponsorship Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a sponsorship agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'create sponsorship agreement, sponsorship contract template, event sponsorship form, sponsor agreement template',
+    keywords: 'how to collect donation pledge forms, 2. zero, doctransfer how',
     howToTitle: 'How to Create a Sponsorship Agreement',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5107,7 +5107,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share 501(c)(3) Determination Letter',
     metaTitle: 'How to Share 501(c)(3) Determination Letter - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share 501(c)(3) determination letter step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share 501c3 determination letter, irs determination letter, tax-exempt status letter, 501c3 verification sharing, how to share patient records securely',
+    keywords: 'how to create sponsorship agreement, 2. zero, doctransfer how',
     howToTitle: 'How to Share 501(c)(3) Determination Letter',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5141,7 +5141,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect In-Kind Donation Forms',
     metaTitle: 'How to Collect In-Kind Donation Forms - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect in-kind donation forms step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'in-kind donation forms, donated goods documentation, non-cash donation form, in-kind contribution receipt',
+    keywords: 'how to share 501c3 determination letter, 2. zero, doctransfer how',
     howToTitle: 'How to Collect In-Kind Donation Forms',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5175,7 +5175,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Fiscal Sponsorship Agreement',
     metaTitle: 'How to Create a Fiscal Sponsorship Agreement - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a fiscal sponsorship agreement step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'fiscal sponsorship agreement, fiscal sponsor contract, fiscal sponsorship template, nonprofit fiscal agent',
+    keywords: 'how to collect in kind donation forms, 3. page, doctransfer how',
     howToTitle: 'How to Create a Fiscal Sponsorship Agreement',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5209,7 +5209,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Distribute Fundraising Materials Securely',
     metaTitle: 'How to Distribute Fundraising Materials Securely - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to distribute fundraising materials securely step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'distribute fundraising materials, fundraising document sharing, campaign materials delivery, donor outreach files, how to share patient records securely',
+    keywords: 'how to create fiscal sponsorship agreement, 3. page, doctransfer how',
     howToTitle: 'How to Distribute Fundraising Materials Securely',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5243,7 +5243,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Audit Reports with Board Members',
     metaTitle: 'How to Share Audit Reports with Board Members - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share audit reports with board members step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'share audit reports board, nonprofit audit sharing, financial audit distribution, board audit report delivery, how to share patient records securely',
+    keywords: 'how to distribute fundraising materials, 3. page, doctransfer how',
     howToTitle: 'How to Share Audit Reports with Board Members',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5277,7 +5277,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Collect Conflict of Interest Forms',
     metaTitle: 'How to Collect Conflict of Interest Forms - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to collect conflict of interest forms step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'conflict of interest forms, coi disclosure forms, board conflict declaration, nonprofit coi policy',
+    keywords: 'how to share audit reports with board, 3. page, doctransfer how',
     howToTitle: 'How to Collect Conflict of Interest Forms',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5311,7 +5311,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Memorandum of Understanding',
     metaTitle: 'How to Create a Memorandum of Understanding - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a memorandum of understanding step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'memorandum of understanding template, mou template, partnership mou, nonprofit collaboration agreement',
+    keywords: 'how to collect conflict of interest forms, 3. page, doctransfer how',
     howToTitle: 'How to Create a Memorandum of Understanding',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5345,7 +5345,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Handle Nonprofit Merger Documents',
     metaTitle: 'How to Handle Nonprofit Merger Documents - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to handle nonprofit merger documents step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'nonprofit merger documents, charity merger files, organization consolidation, nonprofit merger agreement, i 9 acceptable documents printable, i 9 documents printable, i9 acceptable documents printable, printable i9 documents',
+    keywords: 'how to create memorandum of understanding, 3. page, doctransfer how',
     howToTitle: 'How to Handle Nonprofit Merger Documents',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5379,7 +5379,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Share Program Evaluation Reports',
     metaTitle: 'How to Share Program Evaluation Reports - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to share program evaluation reports step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'program evaluation reports, impact assessment sharing, program outcome reports, evaluation report delivery, how to share patient records securely',
+    keywords: 'how to handle nonprofit merger documents, 3. page, doctransfer how',
     howToTitle: 'How to Share Program Evaluation Reports',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
@@ -5413,7 +5413,7 @@ export const verticalHowtoGroup: HowToPageData[] = [
     title: 'How to Create a Gift Acceptance Policy',
     metaTitle: 'How to Create a Gift Acceptance Policy - Step-by-Step Guide | DocTransfer',
     description: 'Learn how to create a gift acceptance policy step-by-step. Secure your documents, track recipient views, and gather legal signatures online for free with DocTransfer.',
-    keywords: 'gift acceptance policy, donation acceptance guidelines, charitable gift policy, nonprofit gift policy template',
+    keywords: 'how to share program evaluation reports, 3. page, doctransfer how',
     howToTitle: 'How to Create a Gift Acceptance Policy',
     relatedSlugs: ['how-to-submit-grant-applications-securely', 'how-to-collect-board-signatures-remotely', 'how-to-create-donor-agreement'],
     benefits: [
