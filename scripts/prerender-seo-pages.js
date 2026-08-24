@@ -573,14 +573,12 @@ function generateStaticHTML(template, route) {
     html = html.replace('</head>', `  ${structuredDataHtml}\n</head>`);
   }
   
-  // CRITICAL FIX: Inject SEO content inside #root as VISUALLY HIDDEN (sr-only) content.
-  // Googlebot/screen readers read and index visually hidden content perfectly,
-  // but it is completely invisible to human users, preventing the Flash of Unstyled Content (FOUC).
-  // React will completely replace the #root innerHTML when it mounts.
+  // CRITICAL FIX: Inject visible, semantic SEO content inside #root for initial pass indexing.
+  // Googlebot reads and indexes clean visible HTML. React replaces #root content upon client hydration.
   // Match clean template, old visible article pattern, or previously hidden pattern
   html = html.replace(
     /<div id="root">(?:<div class="seo-fallback"[^>]*>)?(?:<article>[\s\S]*?<\/article>)?(?:<\/div>)?(?:<h1[^>]*>[^<]*<\/h1>)?<\/div>/,
-    `<div id="root"><div class="seo-fallback" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://doctransfer.app">Visit DocTransfer</a></p></noscript>`
+    `<div id="root"><div class="seo-fallback" style="max-width:900px;margin:0 auto;padding:2rem 1rem;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;line-height:1.6">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://www.doctransfer.app">Visit DocTransfer</a></p></noscript>`
   );
   
   return html;

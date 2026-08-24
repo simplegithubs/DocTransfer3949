@@ -12,6 +12,14 @@ Allow: /templates
 Allow: /templates/
 Allow: /blog
 Allow: /blog/
+Allow: /research/
+Allow: /tools/
+Allow: /integrations/
+Allow: /glossary/
+Allow: /solutions/
+Allow: /docsend-alternative
+Allow: /docsend-alternative/
+Allow: /sitemap-directory
 
 # Protect private dashboard, user data, and internal pages
 Disallow: /dataroom

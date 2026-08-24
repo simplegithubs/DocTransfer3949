@@ -1,5 +1,7 @@
 {
     "outputDirectory": "dist",
+    "cleanUrls": true,
+    "trailingSlash": false,
     "headers": [
         {
             "source": "/(.*)",
@@ -28,6 +30,9 @@
         }
     ],
     "rewrites": [
-        { "source": "/(.*)", "destination": "/index.html" }
+        {
+            "source": "/((?!assets/|.*\\.(?:css|js|png|jpg|jpeg|gif|svg|ico|xml|json|txt|html|xsl)$).*+)",
+            "destination": "/index.html"
+        }
     ]
 }
