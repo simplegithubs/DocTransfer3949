@@ -31,7 +31,19 @@
     ],
     "rewrites": [
         {
-            "source": "/((?!assets/|.*\\.(?:css|js|png|jpg|jpeg|gif|svg|ico|xml|json|txt|html|xsl)$).*+)",
+            "source": "/llms.txt",
+            "destination": "/llms.txt"
+        },
+        {
+            "source": "/robots.txt",
+            "destination": "/robots.txt"
+        },
+        {
+            "source": "/sitemap.xml",
+            "destination": "/sitemap.xml"
+        },
+        {
+            "source": "/((?!assets/)(?!.*\\.(?:css|js|png|jpg|jpeg|gif|svg|ico|xml|json|txt|html|xsl)$).*)",
             "destination": "/index.html"
         }
     ]
