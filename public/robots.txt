@@ -1,27 +1,7 @@
 User-agent: *
 Allow: /
-Allow: /pricing
-Allow: /alternatives
-Allow: /alternatives/
-Allow: /comparisons
-Allow: /comparisons/
-Allow: /how-to/
-Allow: /industry/
-Allow: /gen-z/
-Allow: /templates
-Allow: /templates/
-Allow: /blog
-Allow: /blog/
-Allow: /research/
-Allow: /tools/
-Allow: /integrations/
-Allow: /glossary/
-Allow: /solutions/
-Allow: /docsend-alternative
-Allow: /docsend-alternative/
-Allow: /sitemap-directory
 
-# Protect private dashboard, user data, and internal pages
+# Disallow private user portals, data room vaults, and authenticated routes
 Disallow: /dataroom
 Disallow: /settings
 Disallow: /audit
@@ -33,7 +13,5 @@ Disallow: /checkout
 Disallow: /payment-success
 Disallow: /document-sharing
 
-# Crawl rate
-Crawl-delay: 1
-
+# Master XML Sitemap
 Sitemap: https://www.doctransfer.app/sitemap.xml

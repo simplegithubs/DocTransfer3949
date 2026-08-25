@@ -7,6 +7,8 @@ import USPSecurityBanner from './USPSecurityBanner';
 import EmbeddedNDAGenerator from '../tools/EmbeddedNDAGenerator';
 import EmbeddedPitchDeckAnalyzer from '../tools/EmbeddedPitchDeckAnalyzer';
 import EmbeddedVDRCalculator from '../tools/EmbeddedVDRCalculator';
+import LiveTrackingSimulator from './LiveTrackingSimulator';
+import RelatedContentSilo from './RelatedContentSilo';
 
 interface HowToLayoutProps {
   data: HowToPageData;
@@ -92,6 +94,9 @@ const HowToLayout: React.FC<HowToLayoutProps> = ({ data }) => {
           </div>
         </section>
 
+        {/* Interactive Live Document Tracking Simulator */}
+        <LiveTrackingSimulator />
+
         {/* Section 3: FAQ */}
         <section style={{ marginBottom: '5rem' }}>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
@@ -156,6 +161,9 @@ const HowToLayout: React.FC<HowToLayoutProps> = ({ data }) => {
             </Link>
           </div>
         </section>
+
+        {/* Contextual Internal Link Silo */}
+        <RelatedContentSilo category="how-to" currentSlug={data.slug} relatedSlugs={data.relatedSlugs} />
 
         {/* Related Pages */}
         <section style={{ marginTop: '5rem', borderTop: '1px solid #e2e8f0', paddingTop: '3rem' }}>

@@ -23,6 +23,10 @@ import PitchDeckAnalyzer from './pages/tools/PitchDeckAnalyzer'
 import NDAGenerator from './pages/tools/NDAGenerator'
 import VDRCostCalculator from './pages/tools/VDRCostCalculator'
 import PDFWatermarkTool from './pages/tools/PDFWatermarkTool'
+import ESignComplianceChecker from './pages/tools/ESignComplianceChecker'
+import DueDiligenceScorecard from './pages/tools/DueDiligenceScorecard'
+import PDFEncryptionTool from './pages/tools/PDFEncryptionTool'
+import ReadingTimeEstimator from './pages/tools/ReadingTimeEstimator'
 import IntegrationsHub from './pages/IntegrationsHub'
 import IntegrationDetail from './pages/IntegrationDetail'
 import GlossaryHub from './pages/GlossaryHub'
@@ -32,6 +36,7 @@ import SolutionDetail from './pages/SolutionDetail'
 import ConquestHub from './pages/ConquestHub'
 import ConquestDetail from './pages/ConquestDetail'
 import TemplatesHub from './pages/TemplatesHub'
+import PressAndBadges from './pages/PressAndBadges'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -68,6 +73,7 @@ function App() {
       {/* Blog Routes */}
       <Route path="/blog" element={<BlogDirectory />} />
       <Route path="/blog/:slug" element={<BlogPostDetail />} />
+      <Route path="/press" element={<PressAndBadges />} />
 
       {/* Research Routes */}
       <Route path="/research" element={<ResearchHub />} />
@@ -79,6 +85,10 @@ function App() {
       <Route path="/tools/nda-generator" element={<NDAGenerator />} />
       <Route path="/tools/vdr-cost-calculator" element={<VDRCostCalculator />} />
       <Route path="/tools/pdf-watermarking-tool" element={<PDFWatermarkTool />} />
+      <Route path="/tools/esign-compliance-checker" element={<ESignComplianceChecker />} />
+      <Route path="/tools/due-diligence-scorecard" element={<DueDiligenceScorecard />} />
+      <Route path="/tools/pdf-encryption-tool" element={<PDFEncryptionTool />} />
+      <Route path="/tools/reading-time-estimator" element={<ReadingTimeEstimator />} />
 
       {/* Integrations Routes */}
       <Route path="/integrations" element={<IntegrationsHub />} />

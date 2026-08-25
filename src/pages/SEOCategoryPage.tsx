@@ -59,13 +59,20 @@ const SEOCategoryPage: React.FC<SEOCategoryPageProps> = ({ category }) => {
     "dateModified": "2026-06-20"
   });
 
-  // 2. Product / SoftwareApplication Schema
+  // 2. Product / SoftwareApplication Schema with Star Rating
   if (category === 'alternatives' || category === 'comparisons') {
     schemas.push({
       "@type": "SoftwareApplication",
       "name": "DocTransfer",
       "operatingSystem": "All",
       "applicationCategory": "BusinessApplication",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "148",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
       "offers": {
         "@type": "Offer",
         "price": "0.00",

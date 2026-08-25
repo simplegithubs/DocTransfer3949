@@ -4,6 +4,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from './components/auth
 import Logo from './components/Logo';
 import SEO from './components/SEO';
 import UseCaseCards from './components/UseCaseCards';
+import TestimonialsSection from './components/landing/TestimonialsSection';
 import Footer from './components/Footer';
 import {
   Shield,
@@ -338,7 +339,6 @@ const LandingPage: React.FC = () => {
                 </div>
               )}
             </div>
-            <a href="#security" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Security</a>
           </div>
           <SignedOut>
             <SignInButton mode="modal">
@@ -1491,6 +1491,9 @@ const LandingPage: React.FC = () => {
             <div className="showcase-glow glow-3"></div>
           </div>
         </section>
+
+        {/* Loved by the busiest people - Testimonials & Customer Stories */}
+        <TestimonialsSection />
 
         {/* Popular Document Templates Section */}
         <section className="popular-templates-section">

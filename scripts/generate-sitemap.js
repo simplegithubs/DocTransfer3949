@@ -59,11 +59,16 @@ async function generateSitemap() {
         { loc: `${BASE_URL}/tools/nda-generator`, priority: '0.95', changefreq: 'weekly' },
         { loc: `${BASE_URL}/tools/vdr-cost-calculator`, priority: '0.9', changefreq: 'weekly' },
         { loc: `${BASE_URL}/tools/pdf-watermarking-tool`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/esign-compliance-checker`, priority: '0.95', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/due-diligence-scorecard`, priority: '0.95', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/pdf-encryption-tool`, priority: '0.9', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/reading-time-estimator`, priority: '0.9', changefreq: 'weekly' },
         { loc: `${BASE_URL}/integrations`, priority: '0.9', changefreq: 'weekly' },
         { loc: `${BASE_URL}/glossary`, priority: '0.9', changefreq: 'weekly' },
         { loc: `${BASE_URL}/solutions`, priority: '0.9', changefreq: 'weekly' },
         { loc: `${BASE_URL}/templates`, priority: '0.95', changefreq: 'weekly' },
         { loc: `${BASE_URL}/docsend-alternative`, priority: '0.95', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/press`, priority: '0.85', changefreq: 'weekly' },
         { loc: `${BASE_URL}/sitemap-directory`, priority: '0.9', changefreq: 'weekly' }
     ];
 
@@ -116,8 +121,8 @@ async function generateSitemap() {
                 // If it is templates group, parse templates slug
                 if (file.toLowerCase().includes('templates')) {
                     // Match the object keys in Record<string, TemplateSEOContent> format
-                    // Pattern: 'slug-name': { at the start of an entry  
-                    const keyRegex = /^\s{2,4}'([^']+)':\s*\{/gm;
+                    // Pattern: 'slug-name': { or "slug-name": {
+                    const keyRegex = /^\s{2,4}['"]([^'"]+)['"]:\s*\{/gm;
                     let match;
                     const templateSlugs = new Set();
                     while ((match = keyRegex.exec(content)) !== null) {
@@ -133,7 +138,7 @@ async function generateSitemap() {
                     });
                 } else {
                     // For alternatives, comparisons, industry, howto, genz groups
-                    const regex = /slug:\s*['"]([^'"]+)['"],\s*category:\s*['"]([^'"]+)['"]/g;
+                    const regex = /(?:["'])?slug(?:["'])?:\s*['"]([^'"]+)['"],\s*(?:\r?\n\s*)?(?:["'])?category(?:["'])?:\s*['"]([^'"]+)['"]/g;
                     let match;
                     while ((match = regex.exec(content)) !== null) {
                         const slug = match[1];

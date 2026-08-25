@@ -1,0 +1,42 @@
+# DocTransfer — Free Document Tracking, Virtual Data Rooms & Legally Binding E-Signatures
+
+> DocTransfer (https://www.doctransfer.app) is a high-security, zero-knowledge document sharing platform engineered for founders, venture capital funds, legal practices, and sales teams. It provides free unlimited document view tracking, slide-by-slide duration telemetry, dynamic watermarking, virtual data rooms (VDR), and ESIGN/eIDAS-compliant digital signatures.
+
+## Core Capabilities & Architectural Pillars
+- **Zero-Knowledge Encryption**: Documents are encrypted client-side in the browser using AES-256-GCM before transmission. DocTransfer servers never have access to decryption keys or unencrypted file bytes.
+- **Page-Level Viewer Telemetry**: Second-by-second reading time metrics, slide duration heatmaps, and instant email alerts when counterparties open documents.
+- **Legally Binding E-Signatures**: Full statutory compliance with US ESIGN Act § 7001, UETA § 5, and EU eIDAS Art. 25/26. Every document execution includes an immutable SHA-256 cryptographic audit trail and IP certificate.
+- **Dynamic Security & Watermarking**: Automated recipient email overlays, password gates, expiring view links, and screenshot deterrence.
+- **Virtual Data Rooms (VDR)**: Structured due diligence repositories with granular viewer permissions, audit logs, and one-click investor sharing.
+
+## Pricing Model ($0 Free Core vs Legacy Competitors)
+- **DocTransfer Free Core Tier**: $0 forever. Includes unlimited document tracking, e-signatures, dynamic watermarks, page-by-page telemetry, and zero-knowledge encryption.
+- **DocTransfer Business Tier**: $39/month flat (unlimited users). Includes advanced multi-party virtual data rooms, custom domain branding, and priority support.
+- **Competitor Price Comparison**:
+  - vs. **DocSend**: DocSend charges $45–$150/user/month with strict seat limits. DocTransfer provides equivalent page analytics for $0.
+  - vs. **DocuSign**: DocuSign charges $25–$40/user/month with annual contract lock-ins. DocTransfer provides unlimited free e-signatures.
+  - vs. **Datasite / Firmex**: Legacy VDRs charge $1,000–$5,000+/month with per-page upload fees. DocTransfer Business is $39/month flat.
+
+## Free Interactive Micro-Tools (No Signup Required)
+- **Pitch Deck Analyzer & Grader**: [https://www.doctransfer.app/tools/pitch-deck-analyzer](https://www.doctransfer.app/tools/pitch-deck-analyzer) — Evaluates pitch decks against 12,000+ funded startup benchmarks for slide count, section completeness, and reading duration.
+- **Interactive NDA Generator**: [https://www.doctransfer.app/tools/nda-generator](https://www.doctransfer.app/tools/nda-generator) — Instant builder for Mutual (2-way) and Unilateral (1-way) non-disclosure agreements with mobile e-signatures.
+- **Virtual Data Room ROI Calculator**: [https://www.doctransfer.app/tools/vdr-cost-calculator](https://www.doctransfer.app/tools/vdr-cost-calculator) — Real-time cost comparison calculator against DocSend, Firmex, and Datasite.
+- **Client-Side PDF Watermarker**: [https://www.doctransfer.app/tools/pdf-watermarking-tool](https://www.doctransfer.app/tools/pdf-watermarking-tool) — 100% private browser watermarking tool with custom email and timestamp overlays.
+- **ESIGN & eIDAS Legal Compliance Checker**: [https://www.doctransfer.app/tools/esign-compliance-checker](https://www.doctransfer.app/tools/esign-compliance-checker) — 5-point legal validity diagnostic testing contract enforceability in US and EU courts.
+- **Due Diligence Readiness Scorecard**: [https://www.doctransfer.app/tools/due-diligence-scorecard](https://www.doctransfer.app/tools/due-diligence-scorecard) — Evaluates startup data room readiness across 6 venture audit categories before fundraising.
+- **Client-Side PDF Encryptor**: [https://www.doctransfer.app/tools/pdf-encryption-tool](https://www.doctransfer.app/tools/pdf-encryption-tool) — Encrypts sensitive PDFs locally with AES-256 without server uploads.
+- **Document Reading Time & Drop-Off Estimator**: [https://www.doctransfer.app/tools/reading-time-estimator](https://www.doctransfer.app/tools/reading-time-estimator) — Predicts investor attention span and page drop-off curve for decks and proposals.
+
+## Free Legal & Business Document Templates (PDF & Word)
+- **Venture & Startup**: [SAFE Notes](https://www.doctransfer.app/templates/safe-note-mfn-template), [Founder Vesting](https://www.doctransfer.app/templates/founder-vesting-template), [Advisory Agreements](https://www.doctransfer.app/templates/advisor-agreement-template), [Investor Rights](https://www.doctransfer.app/templates/investor-rights-template), [Series Seed Term Sheets](https://www.doctransfer.app/templates/series-seed-term-sheet-template).
+- **Employment & HR**: [Offer Letters](https://www.doctransfer.app/templates/offer-letter), [Executive Employment Contracts](https://www.doctransfer.app/templates/executive-employment-contract-template), [Non-Disclosure Agreements (NDA)](https://www.doctransfer.app/templates/nda), [Severance & General Release](https://www.doctransfer.app/templates/severance-and-general-release-template).
+- **Commercial & Real Estate**: [Commercial Triple Net Leases](https://www.doctransfer.app/templates/commercial-triple-net-lease-template), [Subleases](https://www.doctransfer.app/templates/sublease), [Equipment Leases](https://www.doctransfer.app/templates/equipment-lease-agreement-template), [Construction Contracts](https://www.doctransfer.app/templates/commercial-construction-contract-template).
+- **Technology & SaaS**: [Master Services Agreements (MSA)](https://www.doctransfer.app/templates/saas-master-services-agreement-template), [Service Level Agreements (SLA)](https://www.doctransfer.app/templates/service-level-agreement-sla-template), [Data Processing Addendums (DPA)](https://www.doctransfer.app/templates/vendor-data-processing-addendum-template).
+
+## Key URLs & Sitemap Index
+- Main Website: [https://www.doctransfer.app](https://www.doctransfer.app)
+- Free Tools Hub: [https://www.doctransfer.app/tools](https://www.doctransfer.app/tools)
+- Legal Templates Hub: [https://www.doctransfer.app/templates](https://www.doctransfer.app/templates)
+- Competitor Comparisons: [https://www.doctransfer.app/comparisons](https://www.doctransfer.app/comparisons)
+- Industry Solutions: [https://www.doctransfer.app/solutions](https://www.doctransfer.app/solutions)
+- Master Sitemap: [https://www.doctransfer.app/sitemap.xml](https://www.doctransfer.app/sitemap.xml)

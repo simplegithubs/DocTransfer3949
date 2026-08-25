@@ -174,6 +174,7 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               <li><Link to="/glossary" style={linkStyle(light)}>Glossary of Terms (50+)</Link></li>
               <li><Link to="/blog" style={linkStyle(light)}>Document Security Blog</Link></li>
               <li><Link to="/research" style={linkStyle(light)}>Research & Benchmarks</Link></li>
+              <li><Link to="/press" style={linkStyle(light)}>Press Kit & Trust Badges</Link></li>
             </ul>
           </div>
         </div>

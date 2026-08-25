@@ -139,6 +139,126 @@ export const toolsList: ToolMetadata[] = [
         answer: 'Watermarking prevents unauthorized screenshot sharing and identifies leaks by linking shared copies to specific recipient names or timestamps.'
       }
     ]
+  },
+  {
+    slug: 'esign-compliance-checker',
+    name: 'Free ESIGN & eIDAS Legal Compliance Checker',
+    tagline: 'Audit digital signature workflows against US ESIGN Act, UETA, and EU eIDAS statutory requirements.',
+    metaTitle: 'Free ESIGN & eIDAS Compliance Checker (2026) | DocTransfer',
+    metaDescription: 'Test your electronic signature workflow for court admissibility, tamper-evident seals, signer consent, and audit trail fidelity. 100% Free diagnostic.',
+    keywords: 'esign act compliance checker, is electronic signature legal, ueta compliance test, eidas signature audit tool, digital signature validity check',
+    category: 'legal',
+    icon: 'Scale',
+    popular: true,
+    estimatedTime: '1 min',
+    features: [
+      'Interactive 5-point statutory requirement audit',
+      'Instant legal admissibility rating (0–100%)',
+      'Court-admissibility breakdown for US (ESIGN/UETA) and EU (eIDAS)',
+      'Actionable recommendations to ensure tamper-proof enforceability'
+    ],
+    ctaText: 'Audit Signature Workflow Free',
+    ctaRoute: '/tools/esign-compliance-checker',
+    faqs: [
+      {
+        question: 'What makes an electronic signature legally binding?',
+        answer: 'Under the US ESIGN Act and EU eIDAS, an e-signature is legally binding if it satisfies five core criteria: intent to sign, explicit consent to do business electronically, association of the signature with the record, attribution to the signer, and a tamper-evident audit trail.'
+      },
+      {
+        question: 'Are DocTransfer electronic signatures legally compliant?',
+        answer: 'Yes! DocTransfer complies with ESIGN, UETA, and EU eIDAS regulations, generating SHA-256 cryptographic hashes, timestamped audit logs, and IP verification certificates for every document.'
+      }
+    ]
+  },
+  {
+    slug: 'due-diligence-scorecard',
+    name: 'Investor Due Diligence Readiness Scorecard',
+    tagline: 'Evaluate your startup data room readiness across 6 key venture audit categories.',
+    metaTitle: 'Startup Due Diligence Readiness Scorecard (2026) | DocTransfer',
+    metaDescription: 'Interactive diagnostic tool to score your data room completeness for Seed, Series A, or M&A. Check Cap Table, IP Assignment, Financials & Contracts.',
+    keywords: 'due diligence readiness scorecard, startup due diligence checklist, virtual data room readiness, series a due diligence audit, investor data room grader',
+    category: 'fundraising',
+    icon: 'FolderCheck',
+    popular: true,
+    estimatedTime: '2 mins',
+    features: [
+      '6-pillar startup diligence evaluation (Corporate, IP, Financials, Team, Legal, Tech)',
+      'Instant readiness score out of 100 with category grading',
+      'Missing document alerts that prevent closing delays',
+      '1-click export to structured DocTransfer Data Room structure'
+    ],
+    ctaText: 'Check Diligence Readiness',
+    ctaRoute: '/tools/due-diligence-scorecard',
+    faqs: [
+      {
+        question: 'What documents are required for venture due diligence?',
+        answer: 'Investors typically require Articles of Incorporation, Cap Table, 83(b) elections, IP Assignment Agreements (CIIA), historical financial models, customer contracts, material vendor agreements, and employee offer letters.'
+      },
+      {
+        question: 'How does DocTransfer accelerate due diligence?',
+        answer: 'DocTransfer provides instant folder structures, zero-knowledge encryption, dynamic watermarking with viewer email stamps, and page-by-page analytics to see which investors review which diligence files.'
+      }
+    ]
+  },
+  {
+    slug: 'pdf-encryption-tool',
+    name: 'Client-Side PDF Encryptor & Password Shield',
+    tagline: 'Encrypt sensitive PDF files locally in your browser with AES-256 before sharing.',
+    metaTitle: 'Free Client-Side PDF Encryption Tool (AES-256) | DocTransfer',
+    metaDescription: 'Encrypt sensitive documents directly inside your browser with AES-256 encryption. Zero server upload, maximum privacy, instant download.',
+    keywords: 'encrypt pdf online free, client side pdf encryptor, browser pdf password protection, aes 256 pdf encryption tool, zero knowledge file encryptor',
+    category: 'security',
+    icon: 'Lock',
+    popular: false,
+    estimatedTime: '< 1 min',
+    features: [
+      '100% Client-side AES-256 encryption using Web Crypto API',
+      'Zero server upload — files never touch an external network',
+      'Custom password protection and high-entropy key generator',
+      'Direct integration with DocTransfer zero-knowledge sharing'
+    ],
+    ctaText: 'Encrypt PDF Now',
+    ctaRoute: '/tools/pdf-encryption-tool',
+    faqs: [
+      {
+        question: 'Is client-side PDF encryption safe?',
+        answer: 'Yes! Client-side encryption ensures that encryption keys and raw file bytes never leave your browser memory. Even if your network connection is intercepted, the data remains unreadable without the secret key.'
+      },
+      {
+        question: 'Can DocTransfer read my encrypted files?',
+        answer: 'No. DocTransfer operates on a zero-knowledge architecture, meaning our servers never have access to your decryption keys or unencrypted file contents.'
+      }
+    ]
+  },
+  {
+    slug: 'reading-time-estimator',
+    name: 'Document Reading Time & Drop-Off Estimator',
+    tagline: 'Calculate investor reading duration and page drop-off risk for decks, proposals, and contracts.',
+    metaTitle: 'Document Reading Time & Drop-Off Estimator (2026) | DocTransfer',
+    metaDescription: 'Estimate reader attention span, average time spent per page, and drop-off risks for pitch decks, sales proposals, and contracts. 100% Free tool.',
+    keywords: 'document reading time estimator, pitch deck duration calculator, contract reading time tool, investor dropoff predictor, sales proposal analytics',
+    category: 'calculators',
+    icon: 'Clock',
+    popular: false,
+    estimatedTime: '30 secs',
+    features: [
+      'Estimates total reading duration based on page count and content density',
+      'Calculates slide-by-slide investor drop-off probability',
+      'Provides actionable length recommendations for pitch decks and sales proposals',
+      'Benchmarked against 12,000+ real-world document engagement records'
+    ],
+    ctaText: 'Estimate Reading Time',
+    ctaRoute: '/tools/reading-time-estimator',
+    faqs: [
+      {
+        question: 'How long do investors typically spend reading a pitch deck?',
+        answer: 'According to industry benchmark data, the average VC spends only 2 minutes and 42 seconds reviewing a pitch deck before making an initial pass/meet decision.'
+      },
+      {
+        question: 'How can I measure the actual time people spend on my documents?',
+        answer: 'DocTransfer provides second-by-second viewer telemetry, showing you exactly which pages were viewed, how many seconds were spent on each slide, and where readers stopped.'
+      }
+    ]
   }
 ];
 

@@ -5,6 +5,9 @@ import { getSeoPageRoute, type AlternativePageData } from '../../data/seoPages';
 import AlternativeAnimation from './AlternativeAnimation';
 import EmbeddedVDRCalculator from '../tools/EmbeddedVDRCalculator';
 import EmbeddedPitchDeckAnalyzer from '../tools/EmbeddedPitchDeckAnalyzer';
+import InteractiveROICalculator from './InteractiveROICalculator';
+import LiveTrackingSimulator from './LiveTrackingSimulator';
+import RelatedContentSilo from './RelatedContentSilo';
 
 interface AlternativeLayoutProps {
   data: AlternativePageData;
@@ -57,6 +60,9 @@ const AlternativeLayout: React.FC<AlternativeLayoutProps> = ({ data }) => {
             <EmbeddedPitchDeckAnalyzer />
           )}
         </div>
+
+        {/* Real-Time Cost & ROI Savings Calculator */}
+        <InteractiveROICalculator competitorName={data.competitorName} />
 
         {data.alternativesList && (
           <section style={{ marginBottom: '5rem' }}>
@@ -249,6 +255,9 @@ const AlternativeLayout: React.FC<AlternativeLayoutProps> = ({ data }) => {
           </section>
         )}
 
+        {/* Interactive Live Document Tracking Simulator */}
+        <LiveTrackingSimulator />
+
         {/* Section 8: Frequently Asked Questions */}
         {data.faqs && data.faqs.length > 0 && (
           <section style={{ marginBottom: '5rem' }}>
@@ -299,6 +308,9 @@ const AlternativeLayout: React.FC<AlternativeLayoutProps> = ({ data }) => {
             </Link>
           </div>
         </section>
+
+        {/* Contextual Internal Link Silo */}
+        <RelatedContentSilo category="alternatives" currentSlug={data.slug} relatedSlugs={data.relatedSlugs} />
 
         {/* Related Pages / Links */}
         <section style={{ marginTop: '5rem', borderTop: '1px solid #e2e8f0', paddingTop: '3rem' }}>

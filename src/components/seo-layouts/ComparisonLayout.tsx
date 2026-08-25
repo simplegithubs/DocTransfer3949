@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check, X, Shield, Sparkles, HelpCircle, CheckCircle, AlertCircle } from 'lucide-react';
 import { getSeoPageRoute, type ComparisonPageData } from '../../data/seoPages';
 import ComparisonAnimation from './ComparisonAnimation';
+import InteractiveROICalculator from './InteractiveROICalculator';
+import LiveTrackingSimulator from './LiveTrackingSimulator';
+import RelatedContentSilo from './RelatedContentSilo';
 
 interface ComparisonLayoutProps {
   data: ComparisonPageData;
@@ -94,6 +97,9 @@ const ComparisonLayout: React.FC<ComparisonLayoutProps> = ({ data }) => {
             </table>
           </div>
         </section>
+
+        {/* Interactive ROI & Savings Calculator */}
+        <InteractiveROICalculator competitorName={data.competitorName} />
 
         {/* Section 3: Pros and Cons */}
         <section style={{ marginBottom: '5rem' }}>
@@ -292,6 +298,9 @@ const ComparisonLayout: React.FC<ComparisonLayoutProps> = ({ data }) => {
           </section>
         )}
 
+        {/* Live Document Tracking Simulator */}
+        <LiveTrackingSimulator />
+
         {/* Section 6: FAQs */}
         <section style={{ marginBottom: '5rem' }}>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
@@ -340,6 +349,9 @@ const ComparisonLayout: React.FC<ComparisonLayoutProps> = ({ data }) => {
             </Link>
           </div>
         </section>
+
+        {/* Contextual Internal Link Silo */}
+        <RelatedContentSilo category="comparisons" currentSlug={data.slug} relatedSlugs={data.relatedSlugs} />
 
         {/* Related Pages */}
         <section style={{ marginTop: '5rem', borderTop: '1px solid #e2e8f0', paddingTop: '3rem' }}>

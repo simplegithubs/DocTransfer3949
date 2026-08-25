@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, AlertCircle, Shield, Award, Sparkles } from 'lucide-react';
 import { getSeoPageRoute, type IndustryPageData } from '../../data/seoPages';
 import IndustryAnimation from './IndustryAnimation';
+import LiveTrackingSimulator from './LiveTrackingSimulator';
+import RelatedContentSilo from './RelatedContentSilo';
 
 interface IndustryLayoutProps {
   data: IndustryPageData;
@@ -160,6 +162,9 @@ const IndustryLayout: React.FC<IndustryLayoutProps> = ({ data }) => {
           </section>
         )}
 
+        {/* Interactive Live Document Tracking Simulator */}
+        <LiveTrackingSimulator />
+
         {/* Section 5: Frequently Asked Questions */}
         {data.faqs && data.faqs.length > 0 && (
           <section style={{ marginBottom: '5rem' }}>
@@ -217,6 +222,9 @@ const IndustryLayout: React.FC<IndustryLayoutProps> = ({ data }) => {
             </Link>
           </div>
         </section>
+
+        {/* Contextual Internal Link Silo */}
+        <RelatedContentSilo category="industry" currentSlug={data.slug} relatedSlugs={data.relatedSlugs} />
 
         {/* Related Pages */}
         <section style={{ marginTop: '5rem', borderTop: '1px solid #e2e8f0', paddingTop: '3rem' }}>

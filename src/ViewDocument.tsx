@@ -12,6 +12,7 @@ import { getPreviewType, getExtension } from './lib/fileTypes';
 import { decryptFile } from './lib/encryption';
 import SEO from './components/SEO';
 import { BASE_URL } from './lib/seo';
+import DocTransferViewerBadge from './components/DocTransferViewerBadge';
 
 interface DocumentData {
     id: string;
@@ -1419,6 +1420,9 @@ const ViewDocument: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            {/* PLG Document Viewer Viral Badge */}
+            <DocTransferViewerBadge />
 
             {/* Modal animations */}
             <style>{`

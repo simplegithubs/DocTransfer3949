@@ -27,8 +27,8 @@ const baseTemplateSeoData: Record<string, TemplateSEOContent> = {
     slug: 'rofr-template',
     templateId: 'rofr-template',
     templateName: 'Right of First Refusal (ROFR)',
-    pageTitle: 'Free Right of First Refusal (ROFR) Template - Download & Edit Online',
-    metaDescription: 'Download free Right of First Refusal (ROFR) template with professional clauses. Sign online instantly.',
+    pageTitle: "Free Right of First Refusal (ROFR) Template (PDF & Word) - Fill & Sign Online",
+    metaDescription: "[100% Free] Customize, sign, and download your Right of First Refusal (ROFR) template in PDF & Word. Track recipient viewing duration with real-time analytics. Export now.",
     keywords: 'right of first refusal template, free rofr template, right of first refusal agreement, download rofr template',
     benefits: 'professional clauses',
     introduction: 'A Right of First Refusal (ROFR) is a powerful contractual agreement that grants a specific party (the holder or grantee) the legal right to purchase an asset, property, or business interest before the owner (the grantor) can sell it to a third party. This arrangement is widely used in real estate transactions, corporate shareholding agreements, and general business ventures to protect existing investments and maintain control over asset transfers. By establishing a ROFR, the grantee is assured that if the owner receives a bona fide offer from an outside buyer, the owner must first offer the same terms to the grantee. This ensures that stakeholders have the opportunity to acquire critical assets or prevent competitors from acquiring them, aligning interests and providing long-term security in commercial relationships.',
@@ -83,8 +83,8 @@ const baseTemplateSeoData: Record<string, TemplateSEOContent> = {
     slug: 'nda-template',
     templateId: 'nda-template',
     templateName: 'Non-Disclosure Agreement (NDA)',
-    pageTitle: 'Free Non-Disclosure Agreement (NDA) Template - Download & Edit Online',
-    metaDescription: 'Download free Non-Disclosure Agreement (NDA) template with protective confidentiality clauses. Sign online instantly.',
+    pageTitle: "Free Non-Disclosure Agreement (NDA) Template (PDF & Word) - Fill & Sign Online",
+    metaDescription: "[100% Free] Customize, sign, and download your Non-Disclosure Agreement (NDA) template in PDF & Word. Track recipient viewing duration with real-time analytics. Export now.",
     keywords: 'non-disclosure agreement template, free nda template, confidentiality agreement, sign nda online',
     benefits: 'protective confidentiality clauses',
     introduction: 'A Non-Disclosure Agreement (NDA), also referred to as a confidentiality agreement, is a vital legal contract designed to protect sensitive, proprietary, or non-public information from unauthorized disclosure. In modern business, NDAs are essential for fostering trust during initial merger discussions, partnership evaluations, hiring processes, or product development collaborations. By executing an NDA, the signing parties commit to keeping shared information strictly confidential, establishing a legal framework that outlines what constitutes confidential info, how it can be used, and the consequences of a breach. Whether you are a startup sharing a pitch deck or an enterprise licensing technology, a robust NDA safeguards your intellectual property and competitive edge.',
@@ -139,8 +139,8 @@ const baseTemplateSeoData: Record<string, TemplateSEOContent> = {
     slug: 'lease-agreement-template',
     templateId: 'lease-agreement-template',
     templateName: 'Lease Agreement',
-    pageTitle: 'Free Lease Agreement Template - Download & Edit Online',
-    metaDescription: 'Download free Lease Agreement template with comprehensive landlord & tenant terms. Sign online instantly.',
+    pageTitle: "Free Lease Agreement Template (PDF & Word) - Fill & Sign Online",
+    metaDescription: "[100% Free] Customize, sign, and download your Lease Agreement template in PDF & Word. Track recipient viewing duration with real-time analytics. Export now.",
     keywords: 'lease agreement template, free rental agreement, residential lease template, sign lease online',
     benefits: 'comprehensive landlord & tenant terms',
     introduction: 'A Lease Agreement is a foundational contract in real estate that outlines the terms and conditions under which a landlord rents a residential or commercial property to a tenant. Establishing a clear, written lease is vital for protecting the interests of both parties, ensuring compliance with local housing codes, and preventing disputes over rent payments, property maintenance, and occupancy rules. A standard lease agreement covers key details such as the monthly rent rate, payment due dates, security deposit requirements, pet policies, utilities responsibility, and lease duration. By clearly documenting these expectations, both landlords and tenants can operate with confidence, backed by a legally binding framework.',
@@ -195,8 +195,8 @@ const baseTemplateSeoData: Record<string, TemplateSEOContent> = {
     slug: 'service-agreement-template',
     templateId: 'service-agreement-template',
     templateName: 'Service Agreement',
-    pageTitle: 'Free Service Agreement Template - Download & Edit Online',
-    metaDescription: 'Download free Service Agreement template with clear deliverables and payment terms. Sign online instantly.',
+    pageTitle: "Free Service Agreement Template (PDF & Word) - Fill & Sign Online",
+    metaDescription: "[100% Free] Customize, sign, and download your Service Agreement template in PDF & Word. Track recipient viewing duration with real-time analytics. Export now.",
     keywords: 'service agreement template, free master services agreement, consultant contract, sign service agreement online',
     benefits: 'clear deliverables and payment terms',
     introduction: 'A Service Agreement is a formal commercial contract between a service provider and a client that defines the terms under which professional services will be rendered. Used across industries ranging from software development and digital marketing to general contracting and consulting, this agreement is crucial for aligning expectations, establishing payment structures, and mitigating liability. A well-constructed service agreement details the scope of work, project milestones, compensation rates, intellectual property rights, confidentiality clauses, and termination procedures. Having a clear agreement ensures that both parties understand their roles, helping to build productive, dispute-free business relationships.',
@@ -251,8 +251,8 @@ const baseTemplateSeoData: Record<string, TemplateSEOContent> = {
     slug: 'employment-contract-template',
     templateId: 'employment-contract-template',
     templateName: 'Employment Contract',
-    pageTitle: 'Free Employment Contract Template - Download & Edit Online',
-    metaDescription: 'Download free Employment Contract template with full-time benefits & protections. Sign online instantly.',
+    pageTitle: "Free Employment Contract Template (PDF & Word) - Fill & Sign Online",
+    metaDescription: "[100% Free] Customize, sign, and download your Employment Contract template in PDF & Word. Track recipient viewing duration with real-time analytics. Export now.",
     keywords: 'employment contract template, free job offer contract, standard employment agreement, sign employment contract',
     benefits: 'full-time benefits & protections',
     introduction: 'An Employment Contract is a formal legally binding agreement between an employer and an employee that establishes the terms, conditions, rights, and duties of the employment relationship. Crucial for both full-time and part-time positions, a detailed employment contract provides clarity on job titles, responsibilities, compensation, working hours, benefit packages, and company policies. Additionally, it protects company assets by incorporating non-compete, confidentiality, and intellectual property ownership clauses. Having a written contract in place minimizes misunderstandings and provides legal protection for both employers and employees in case disputes arise over job expectations or termination terms.',
@@ -307,8 +307,8 @@ const baseTemplateSeoData: Record<string, TemplateSEOContent> = {
     slug: 'freelance-agreement-template',
     templateId: 'freelance-agreement-template',
     templateName: 'Freelance Agreement',
-    pageTitle: 'Free Freelance Agreement Template - Download & Edit Online',
-    metaDescription: 'Download free Freelance Agreement template with flexible contractor clauses. Sign online instantly.',
+    pageTitle: "Free lance Agreement Template (PDF & Word) - Fill & Sign Online",
+    metaDescription: "[100% Free] Customize, sign, and download your lance Agreement template in PDF & Word. Track recipient viewing duration with real-time analytics. Export now.",
     keywords: 'freelance agreement template, independent contractor agreement, freelance contract pdf, sign freelance agreement',
     benefits: 'flexible contractor clauses',
     introduction: 'A Freelance Agreement, also known as an independent contractor agreement, is a vital contract that defines the working relationship between a freelance professional and a client. As the gig economy expands, having a clear freelance agreement is essential for protecting both parties, outlining the specific project scope, establishing payment rates, and clarifying that the freelancer is an independent contractor rather than an employee. A strong agreement covers critical details such as project deadlines, invoice schedules, expense reimbursements, intellectual property ownership, and liability limitations. Implementing a written agreement ensures that creative and technical professionals receive timely payment and clients receive quality deliverables on schedule.',
@@ -363,8 +363,8 @@ const baseTemplateSeoData: Record<string, TemplateSEOContent> = {
     slug: 'consulting-agreement-template',
     templateId: 'consulting-agreement-template',
     templateName: 'Consulting Agreement',
-    pageTitle: 'Free Consulting Agreement Template - Download & Edit Online',
-    metaDescription: 'Download free Consulting Agreement template with professional retainer & scope terms. Sign online instantly.',
+    pageTitle: "Free Consulting Agreement Template (PDF & Word) - Fill & Sign Online",
+    metaDescription: "[100% Free] Customize, sign, and download your Consulting Agreement template in PDF & Word. Track recipient viewing duration with real-time analytics. Export now.",
     keywords: 'consulting agreement template, free consulting contract, consulting retainer agreement, sign consulting agreement',
     benefits: 'professional retainer & scope terms',
     introduction: 'A Consulting Agreement is a premium business contract between an independent consultant or agency and a client that outlines the terms of a professional advisory engagement. Unlike standard service contracts, consulting agreements often involve high-level strategic advisory work, market analysis, or specialized technical expertise. A well-designed agreement is essential for defining the consultant\'s scope of work, retainer fees, project durations, intellectual property rights, non-disclosure terms, and liability limits. This contract ensures that the consultant is compensated appropriately for their expertise and the client receives actionable insights and deliverables to drive business growth.',
@@ -419,8 +419,8 @@ const baseTemplateSeoData: Record<string, TemplateSEOContent> = {
     slug: 'partnership-agreement-template',
     templateId: 'partnership-agreement-template',
     templateName: 'Partnership Agreement',
-    pageTitle: 'Free Partnership Agreement Template - Download & Edit Online',
-    metaDescription: 'Download free Partnership Agreement template with capital contribution & distribution clauses. Sign online instantly.',
+    pageTitle: "Free Partnership Agreement Template (PDF & Word) - Fill & Sign Online",
+    metaDescription: "[100% Free] Customize, sign, and download your Partnership Agreement template in PDF & Word. Track recipient viewing duration with real-time analytics. Export now.",
     keywords: 'partnership agreement template, free general partnership agreement, business partnership contract, sign partnership agreement',
     benefits: 'capital contribution & distribution clauses',
     introduction: 'A Partnership Agreement is a foundational legal document that establishes the governing rules, ownership percentages, financial responsibilities, and operational procedures for a business partnership. Crucial for general partnerships, limited partnerships, and joint ventures, a comprehensive agreement ensures that all partners are aligned on capital contributions, profit-sharing ratios, decision-making powers, and dispute resolution methods. By documenting these terms, partners can avoid costly legal conflicts, protect their personal assets, and establish a clear framework for managing, growing, or dissolving the business cooperatively.',
@@ -662,10 +662,12 @@ const extraTemplateSeoData: Record<string, Partial<TemplateSEOContent>> = {
 
 import { templatesGroup } from './seo-pages/templatesGroup';
 import { verticalTemplatesGroup } from './seo-pages/verticalTemplatesGroup';
+import { scaleTemplatesGroup } from './seo-pages/scaleTemplatesGroup';
 
 export const templateSeoData: Record<string, TemplateSEOContent> = {
   ...templatesGroup,
-  ...verticalTemplatesGroup
+  ...verticalTemplatesGroup,
+  ...scaleTemplatesGroup
 };
 
 for (const slug in baseTemplateSeoData) {

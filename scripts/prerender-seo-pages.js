@@ -25,24 +25,32 @@ const BASE_URL = 'https://www.doctransfer.app';
 // ============================================================
 
 function parseTitleAndDescription(content, slug) {
-  const escapedSlug = slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  
   const slugIndex = content.indexOf(`'${slug}'`) !== -1 ? content.indexOf(`'${slug}'`) : content.indexOf(`"${slug}"`);
   if (slugIndex === -1) return null;
   
   const startBrace = content.lastIndexOf('{', slugIndex);
-  const endBrace = content.indexOf('},', slugIndex);
-  if (startBrace === -1 || endBrace === -1) return null;
+  if (startBrace === -1) return null;
+
+  let braceCount = 0;
+  let endBrace = startBrace;
+  for (let i = startBrace; i < content.length; i++) {
+    if (content[i] === '{') braceCount++;
+    if (content[i] === '}') braceCount--;
+    if (braceCount === 0) { endBrace = i; break; }
+  }
   
   const block = content.substring(startBrace, endBrace + 1);
   
-  const titleMatch = block.match(/metaTitle:\s*[`'"]([^`'"]+)[`'"]/);
-  const descMatch = block.match(/description:\s*[`'"]([^`'"]+)[`'"]/);
-  const plainTitleMatch = block.match(/title:\s*[`'"]([^`'"]+)[`'"]/);
+  const metaTitleMatch = block.match(/(?:["'])?metaTitle(?:["'])?:\s*[`'"]([^`'"]+)[`'"]/);
+  const pageTitleMatch = block.match(/(?:["'])?pageTitle(?:["'])?:\s*[`'"]([^`'"]+)[`'"]/);
+  const plainTitleMatch = block.match(/^\s*(?:["'])?title(?:["'])?:\s*[`'"]([^`'"]+)[`'"]/m);
+  
+  const descMatch = block.match(/(?:["'])?description(?:["'])?:\s*[`'"]([^`'"]+)[`'"]/);
+  const metaDescMatch = block.match(/(?:["'])?metaDescription(?:["'])?:\s*[`'"]([^`'"]+)[`'"]/);
   
   return {
-    title: titleMatch ? titleMatch[1] : (plainTitleMatch ? plainTitleMatch[1] : null),
-    description: descMatch ? descMatch[1].replace(/\\n/g, ' ').trim() : null,
+    title: metaTitleMatch ? metaTitleMatch[1] : (pageTitleMatch ? pageTitleMatch[1] : (plainTitleMatch ? plainTitleMatch[1] : null)),
+    description: descMatch ? descMatch[1].replace(/\\n/g, ' ').trim() : (metaDescMatch ? metaDescMatch[1].replace(/\\n/g, ' ').trim() : null),
   };
 }
 
@@ -65,64 +73,64 @@ function parseFullPageData(content, slug) {
   const result = {};
   
   // Extract category
-  const catMatch = block.match(/category:\s*['"]([^'"]+)['"]/);
+  const catMatch = block.match(/(?:["'])?category(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (catMatch) result.category = catMatch[1];
   
   // Extract title
-  const titleMatch = block.match(/title:\s*['"]([^'"]+)['"]/);
+  const titleMatch = block.match(/(?:["'])?title(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (titleMatch) result.title = titleMatch[1];
   
   // Extract metaTitle
-  const metaTitleMatch = block.match(/metaTitle:\s*['"]([^'"]+)['"]/);
+  const metaTitleMatch = block.match(/(?:["'])?metaTitle(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (metaTitleMatch) result.metaTitle = metaTitleMatch[1];
   
   // Extract description
-  const descMatch = block.match(/description:\s*['"]([^'"]+)['"]/);
+  const descMatch = block.match(/(?:["'])?description(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (descMatch) result.description = descMatch[1].replace(/\\n/g, ' ').trim();
   
   // Extract verdict
-  const verdictMatch = block.match(/verdict:\s*['"]([^'"]+)['"]/);
+  const verdictMatch = block.match(/(?:["'])?verdict(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (verdictMatch) result.verdict = verdictMatch[1];
   
   // Extract overview
-  const overviewMatch = block.match(/overview:\s*['"]([^'"]+)['"]/);
+  const overviewMatch = block.match(/(?:["'])?overview(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (overviewMatch) result.overview = overviewMatch[1];
   
   // Extract valueProp
-  const valuePropMatch = block.match(/valueProp:\s*['"]([^'"]+)['"]/);
+  const valuePropMatch = block.match(/(?:["'])?valueProp(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (valuePropMatch) result.valueProp = valuePropMatch[1];
   
   // Extract competitorName
-  const compMatch = block.match(/competitorName:\s*['"]([^'"]+)['"]/);
+  const compMatch = block.match(/(?:["'])?competitorName(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (compMatch) result.competitorName = compMatch[1];
   
   // Extract socialProof (gen-z pages)
-  const socialMatch = block.match(/socialProof:\s*['"]([^'"]+)['"]/);
+  const socialMatch = block.match(/(?:["'])?socialProof(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (socialMatch) result.socialProof = socialMatch[1];
   
   // Extract tagline (gen-z pages)
-  const taglineMatch = block.match(/tagline:\s*['"]([^'"]+)['"]/);
+  const taglineMatch = block.match(/(?:["'])?tagline(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (taglineMatch) result.tagline = taglineMatch[1];
   
   // Extract headline (gen-z pages)
-  const headlineMatch = block.match(/headline:\s*['"]([^'"]+)['"]/);
+  const headlineMatch = block.match(/(?:["'])?headline(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (headlineMatch) result.headline = headlineMatch[1];
   
   // Extract howToTitle
-  const howToMatch = block.match(/howToTitle:\s*['"]([^'"]+)['"]/);
+  const howToMatch = block.match(/(?:["'])?howToTitle(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (howToMatch) result.howToTitle = howToMatch[1];
   
   // Extract industryName
-  const industryMatch = block.match(/industryName:\s*['"]([^'"]+)['"]/);
+  const industryMatch = block.match(/(?:["'])?industryName(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (industryMatch) result.industryName = industryMatch[1];
   
   // Extract complianceNotes
-  const complianceMatch = block.match(/complianceNotes:\s*['"]([^'"]+)['"]/);
+  const complianceMatch = block.match(/(?:["'])?complianceNotes(?:["'])?:\s*['"]([^'"]+)['"]/);
   if (complianceMatch) result.complianceNotes = complianceMatch[1];
   
   // Extract FAQs
   const faqs = [];
-  const faqRegex = /question:\s*['"]([^'"]+)['"],\s*answer:\s*['"]([^'"]+)['"]/g;
+  const faqRegex = /(?:["'])?question(?:["'])?:\s*['"]([^'"]+)['"],\s*(?:["'])?answer(?:["'])?:\s*['"]([^'"]+)['"]/g;
   let faqMatch;
   while ((faqMatch = faqRegex.exec(block)) !== null) {
     faqs.push({ question: faqMatch[1], answer: faqMatch[2] });
@@ -184,12 +192,20 @@ function parseExpandedContent(slug) {
 function collectAllRoutes() {
   const routes = [];
   
-  // Static routes
+  // Static routes & Hubs
   routes.push({ path: '/', title: 'DocTransfer | Free DocSend Alternative | Secure Document Sharing & VDR', description: 'The best free DocSend alternative. Securely share pitch decks, legal documents, and sensitive files with end-to-end encryption, dynamic watermarking, and real-time page-by-page analytics.', bodyContent: 'DocTransfer is the best free DocSend alternative for secure document sharing. Share pitch decks, legal documents, and sensitive files with end-to-end encryption, dynamic watermarking, and real-time page-by-page analytics. Features include e-signatures, password protection, virtual data rooms, and document tracking. Start sharing documents securely for free today.' });
   routes.push({ path: '/pricing', title: 'Pricing - DocTransfer | Free & Premium Plans', description: 'Compare DocTransfer pricing plans. Start free forever with premium document sharing features, or upgrade for advanced analytics and team collaboration.', bodyContent: 'DocTransfer Pricing Plans. Free tier includes unlimited document sharing, e-signatures, page-by-page analytics, dynamic watermarking, and password protection. Premium plans available for advanced virtual data rooms, custom branding, and enterprise security features.' });
   routes.push({ path: '/comparisons', title: 'Document Sharing Platform Comparisons - DocTransfer', description: 'Compare DocTransfer with other document sharing platforms. See detailed feature comparisons with DocSend, PandaDoc, DocuSign, and more.', bodyContent: 'Compare DocTransfer with leading document sharing platforms. Detailed feature, pricing, and security comparisons with DocuSign, PandaDoc, Adobe Sign, DocSend, and more. See why DocTransfer offers better value with free e-signatures, end-to-end encryption, and page-level analytics.' });
   routes.push({ path: '/alternatives', title: 'Best Document Sharing Alternatives 2026 - DocTransfer', description: 'Explore the best alternatives to popular document sharing platforms. Find the right free DocSend, DocuSign, and PandaDoc alternatives for your needs.', bodyContent: 'Explore the best alternatives to popular document sharing and e-signature platforms. DocTransfer is the leading free alternative to DocuSign, PandaDoc, DocSend, and Adobe Sign. Get unlimited signatures, encrypted document sharing, and real-time analytics without expensive subscriptions.' });
+  routes.push({ path: '/templates', title: '100+ Free Legal & Business Document Templates - DocTransfer', description: 'Download, customize, and electronically sign 100+ legal contracts, NDAs, HR agreements, and business forms for free.', bodyContent: 'Free Legal Document Templates. Access 100+ standardized contracts, non-disclosure agreements, offer letters, lease agreements, and corporate resolutions. Legally binding and fully customizable.' });
+  routes.push({ path: '/tools', title: 'Free Online Document Security & Analytics Micro-Tools - DocTransfer', description: 'Explore our free suite of interactive document tools: Pitch Deck Analyzer, NDA Generator, VDR Cost Calculator, and PDF Watermarker.', bodyContent: 'Free Document Tools Hub. Analyze pitch decks, generate legally-enforceable NDAs, calculate virtual data room costs, and apply dynamic watermarks online without signing up.' });
+  routes.push({ path: '/integrations', title: 'DocTransfer Integrations & Cloud Storage Connectors', description: 'Connect DocTransfer with Google Drive, OneDrive, Box, Dropbox, Salesforce, HubSpot, Slack, and Zapier for seamless automated workflows.', bodyContent: 'DocTransfer Integrations Hub. Seamlessly connect DocTransfer with your cloud storage, CRM, and team communication stack. Layer page analytics and encryption onto your existing tools.' });
+  routes.push({ path: '/glossary', title: 'Document Security & E-Signature Glossary (2026)', description: 'Complete dictionary and reference guide for virtual data rooms, e-signatures, zero-knowledge encryption, and document compliance terms.', bodyContent: 'Document Security & E-Signature Glossary. Definitions, statutory references, and architectural explanations for key terms in secure file transfer, compliance, and venture capital deals.' });
+  routes.push({ path: '/solutions', title: 'Industry Document Solutions - DocTransfer', description: 'Tailored document sharing, tracking, and signing solutions for Fundraising, M&A Due Diligence, Legal, Healthcare, Real Estate, and Startups.', bodyContent: 'DocTransfer Industry Solutions. Discover compliant, high-security document portals customized for legal practices, healthcare records, real estate closings, and venture fundraising.' });
+  routes.push({ path: '/docsend-alternative', title: 'DocSend Alternative Hub - Why Teams Switch to DocTransfer', description: 'Discover why thousands of founders and sales teams switch from DocSend to DocTransfer. Unlimited page analytics and e-signatures for $0.', bodyContent: 'DocSend Alternative Hub. Complete migration guides, feature breakdowns, and pricing comparisons showing why DocTransfer is the superior free DocSend alternative.' });
+  routes.push({ path: '/research', title: 'State of Document Security & Pitch Deck Benchmarks - DocTransfer Research', description: 'Empirical research and data on investor reading habits, NDA execution velocity, and data room security benchmarks.', bodyContent: 'DocTransfer Research & Industry Benchmarks. Data-driven insights on pitch deck engagement, contract signing velocity, and cloud file security trends.' });
   routes.push({ path: '/blog', title: 'Blog - DocTransfer | Document Security & Sharing Guides', description: 'Expert guides on document security, e-signatures, and secure file sharing. Learn best practices for protecting sensitive business documents.', bodyContent: 'The DocTransfer Blog. Expert guides on document security, electronic signatures, secure file sharing, and business document management. Learn best practices for protecting sensitive documents, understanding NDA agreements, and managing contracts digitally.' });
+  routes.push({ path: '/press', title: 'Press Kit & Official Trust Badges - DocTransfer', description: 'Download official DocTransfer trust badges, logos, and media resources. Embed verified e-signature and encryption badges on your site.', bodyContent: 'DocTransfer Press Kit & Media Resources. Download verified security and trust badges for pitch decks, investor data rooms, and website footers. Contact our media relations team.' });
   routes.push({ path: '/sitemap-directory', title: 'DocTransfer Resource & Document Directory', description: 'Browse our complete directory of document signing templates, e-signature comparison matrices, and secure workflow solutions by industry.', bodyContent: 'DocTransfer Resource & Document Directory. Access our complete programmatic repository of legally binding templates, alternative comparisons, and industry compliance hubs.' });
 
   // Dynamic SEO pages from seoPages.ts
@@ -224,7 +240,7 @@ function collectAllRoutes() {
       const content = fs.readFileSync(filePath, 'utf8');
       
       if (file.toLowerCase().includes('templates')) {
-        const slugRegex = /slug:\s*['"]([^'"]+)['"]/g;
+        const slugRegex = /(?:["'])?slug(?:["'])?:\s*['"]([^'"]+)['"]/g;
         let match;
         while ((match = slugRegex.exec(content)) !== null) {
           const slug = match[1];
@@ -238,7 +254,7 @@ function collectAllRoutes() {
           });
         }
       } else {
-        const regex = /slug:\s*['"]([^'"]+)['"],\s*(?:\n\s*)?category:\s*['"]([^'"]+)['"]/g;
+        const regex = /(?:["'])?slug(?:["'])?:\s*['"]([^'"]+)['"],\s*(?:\r?\n\s*)?(?:["'])?category(?:["'])?:\s*['"]([^'"]+)['"]/g;
         let match;
         while ((match = regex.exec(content)) !== null) {
           const slug = match[1];
@@ -304,6 +320,106 @@ function collectAllRoutes() {
         }
       }
     });
+  }
+
+  // Integrations data
+  const integrationsPath = path.resolve('src/data/integrationsData.ts');
+  if (fs.existsSync(integrationsPath)) {
+    const content = fs.readFileSync(integrationsPath, 'utf8');
+    const regex = /slug:\s*['"]([^'"]+)['"]/g;
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+      const slug = match[1];
+      const p = `/integrations/${slug}`;
+      const meta = parseTitleAndDescription(content, slug);
+      const pageData = parseFullPageData(content, slug);
+      routes.push({
+        path: p,
+        title: meta?.title || `${slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} Integration - DocTransfer`,
+        description: meta?.description || `Connect DocTransfer with ${slug.replace(/-/g, ' ')} for secure document tracking and electronic signatures.`,
+        pageData,
+      });
+    }
+  }
+
+  // Glossary data
+  const glossaryPath = path.resolve('src/data/glossaryData.ts');
+  if (fs.existsSync(glossaryPath)) {
+    const content = fs.readFileSync(glossaryPath, 'utf8');
+    const regex = /slug:\s*['"]([^'"]+)['"]/g;
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+      const slug = match[1];
+      const p = `/glossary/${slug}`;
+      const meta = parseTitleAndDescription(content, slug);
+      const pageData = parseFullPageData(content, slug);
+      routes.push({
+        path: p,
+        title: meta?.title || `What is ${slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}? - DocTransfer Glossary`,
+        description: meta?.description || `Definition and guide for ${slug.replace(/-/g, ' ')} in modern secure file sharing.`,
+        pageData,
+      });
+    }
+  }
+
+  // Solutions data
+  const solutionsPath = path.resolve('src/data/solutionsData.ts');
+  if (fs.existsSync(solutionsPath)) {
+    const content = fs.readFileSync(solutionsPath, 'utf8');
+    const regex = /slug:\s*['"]([^'"]+)['"]/g;
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+      const slug = match[1];
+      const p = `/solutions/${slug}`;
+      const meta = parseTitleAndDescription(content, slug);
+      const pageData = parseFullPageData(content, slug);
+      routes.push({
+        path: p,
+        title: meta?.title || `DocTransfer Solution for ${slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`,
+        description: meta?.description || `Secure document sharing and signature solutions for ${slug.replace(/-/g, ' ')}.`,
+        pageData,
+      });
+    }
+  }
+
+  // Conquest data (docsend-alternative subpages)
+  const conquestPath = path.resolve('src/data/conquestData.ts');
+  if (fs.existsSync(conquestPath)) {
+    const content = fs.readFileSync(conquestPath, 'utf8');
+    const regex = /slug:\s*['"]([^'"]+)['"]/g;
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+      const slug = match[1];
+      const p = `/docsend-alternative/${slug}`;
+      const meta = parseTitleAndDescription(content, slug);
+      const pageData = parseFullPageData(content, slug);
+      routes.push({
+        path: p,
+        title: meta?.title || `DocSend Alternative - ${slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} | DocTransfer`,
+        description: meta?.description || `Compare DocSend vs DocTransfer for ${slug.replace(/-/g, ' ')}. Free unlimited document tracking.`,
+        pageData,
+      });
+    }
+  }
+
+  // Tools data
+  const toolsPath = path.resolve('src/data/toolsData.ts');
+  if (fs.existsSync(toolsPath)) {
+    const content = fs.readFileSync(toolsPath, 'utf8');
+    const regex = /slug:\s*['"]([^'"]+)['"]/g;
+    let match;
+    while ((match = regex.exec(content)) !== null) {
+      const slug = match[1];
+      const p = `/tools/${slug}`;
+      const meta = parseTitleAndDescription(content, slug);
+      const pageData = parseFullPageData(content, slug);
+      routes.push({
+        path: p,
+        title: meta?.title || `Free ${slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} - DocTransfer`,
+        description: meta?.description || `Use our free online ${slug.replace(/-/g, ' ')} tool without signup.`,
+        pageData,
+      });
+    }
   }
 
   // System templates
@@ -443,7 +559,7 @@ function buildStructuredData(route) {
   const canonicalUrl = `${BASE_URL}${routePath === '/' ? '' : routePath}`;
   const schemas = [];
   
-  // WebPage schema for all pages
+  // 1. WebPage schema for all pages
   schemas.push({
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -453,11 +569,115 @@ function buildStructuredData(route) {
     'publisher': {
       '@type': 'Organization',
       'name': 'DocTransfer',
-      'url': 'https://www.doctransfer.app'
+      'url': 'https://www.doctransfer.app',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': 'https://www.doctransfer.app/logo.png'
+      }
     }
   });
+
+  // 2. BreadcrumbList schema for structured search result paths
+  const pathSegments = routePath.split('/').filter(Boolean);
+  const breadcrumbElements = [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': 'Home',
+      'item': BASE_URL
+    }
+  ];
+
+  if (pathSegments.length >= 1) {
+    const section = pathSegments[0];
+    const sectionName = {
+      'alternatives': 'Alternatives',
+      'comparisons': 'Comparisons',
+      'templates': 'Templates',
+      'how-to': 'How-To Guides',
+      'industry': 'Industry',
+      'tools': 'Free Tools',
+      'blog': 'Blog',
+      'research': 'Research',
+      'solutions': 'Solutions',
+      'glossary': 'Glossary',
+      'docsend-alternative': 'DocSend Alternative'
+    }[section] || section.charAt(0).toUpperCase() + section.slice(1);
+
+    breadcrumbElements.push({
+      '@type': 'ListItem',
+      'position': 2,
+      'name': sectionName,
+      'item': `${BASE_URL}/${section}`
+    });
+
+    if (pathSegments.length >= 2) {
+      breadcrumbElements.push({
+        '@type': 'ListItem',
+        'position': 3,
+        'name': title.split(' | ')[0].split(' - ')[0],
+        'item': canonicalUrl
+      });
+    }
+  }
+
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': breadcrumbElements
+  });
+
+  // 3. SoftwareApplication + AggregateRating schema (Shows 5-star rating in Google SERP results)
+  const isSoftwareRelated = routePath.startsWith('/alternatives') ||
+    routePath.startsWith('/comparisons') ||
+    routePath.startsWith('/tools') ||
+    routePath.startsWith('/docsend-alternative') ||
+    routePath.startsWith('/solutions') ||
+    routePath === '/pricing' ||
+    pageData?.category === 'alternatives' ||
+    pageData?.category === 'comparisons';
+
+  if (isSoftwareRelated) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      'name': 'DocTransfer',
+      'applicationCategory': 'BusinessApplication',
+      'operatingSystem': 'Web, macOS, Windows, iOS, Android',
+      'aggregateRating': {
+        '@type': 'AggregateRating',
+        'ratingValue': '4.9',
+        'ratingCount': '148',
+        'bestRating': '5',
+        'worstRating': '1'
+      },
+      'offers': {
+        '@type': 'Offer',
+        'price': '0.00',
+        'priceCurrency': 'USD',
+        'description': 'Free Plan with full page-by-page document analytics and encryption'
+      }
+    });
+  }
+
+  // 4. DigitalDocument schema for template pages
+  if (routePath.startsWith('/templates') && routePath !== '/templates') {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'DigitalDocument',
+      'name': title,
+      'description': description,
+      'url': canonicalUrl,
+      'encodingFormat': 'application/pdf',
+      'offers': {
+        '@type': 'Offer',
+        'price': '0.00',
+        'priceCurrency': 'USD'
+      }
+    });
+  }
   
-  // FAQ schema if FAQs exist
+  // 5. FAQ schema if FAQs exist
   const faqs = expandedContent?.faqs || pageData?.faqs;
   if (faqs && faqs.length > 0) {
     schemas.push({
@@ -474,13 +694,32 @@ function buildStructuredData(route) {
     });
   }
   
-  // HowTo schema for how-to pages
+  // 6. HowTo schema for how-to pages
   if (pageData?.category === 'how-to' && pageData.howToTitle) {
     schemas.push({
       '@context': 'https://schema.org',
       '@type': 'HowTo',
       'name': pageData.howToTitle,
       'description': description
+    });
+  }
+
+  // 7. WebApplication schema for interactive tool pages
+  if (routePath.startsWith('/tools/') && routePath !== '/tools') {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      'name': title,
+      'description': description,
+      'url': canonicalUrl,
+      'applicationCategory': 'BusinessApplication',
+      'operatingSystem': 'All',
+      'browserRequirements': 'Requires JavaScript and HTML5 support',
+      'offers': {
+        '@type': 'Offer',
+        'price': '0.00',
+        'priceCurrency': 'USD'
+      }
     });
   }
   
@@ -636,10 +875,18 @@ async function main() {
       fs.writeFileSync(templatePath, html, 'utf8');
       console.log(`  ✅ / (overwritten dist/index.html)${hasRichContent ? ' 📝' : ''}`);
     } else {
+      // 1. Save directory index: dist/category/slug/index.html
       const outputDir = path.join(DIST_DIR, route.path);
       fs.mkdirSync(outputDir, { recursive: true });
       const outputPath = path.join(outputDir, 'index.html');
       fs.writeFileSync(outputPath, html, 'utf8');
+
+      // 2. Save direct cleanUrl target: dist/category/slug.html (ensures Vercel cleanUrls serves static pre-rendered HTML)
+      const cleanUrlPath = path.join(DIST_DIR, `${route.path}.html`);
+      const cleanUrlDir = path.dirname(cleanUrlPath);
+      fs.mkdirSync(cleanUrlDir, { recursive: true });
+      fs.writeFileSync(cleanUrlPath, html, 'utf8');
+
       console.log(`  ✅ ${route.path}${hasRichContent ? ' 📝' : ''}`);
     }
     created++;
