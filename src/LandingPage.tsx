@@ -5,6 +5,7 @@ import Logo from './components/Logo';
 import SEO from './components/SEO';
 import UseCaseCards from './components/UseCaseCards';
 import TestimonialsSection from './components/landing/TestimonialsSection';
+import ComplianceRoadmapSection from './components/landing/ComplianceRoadmapSection';
 import Footer from './components/Footer';
 import {
   Shield,
@@ -1529,6 +1530,9 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/* Enterprise Compliance Roadmap Section */}
+        <ComplianceRoadmapSection />
 
         {/* CTA Section */}
         <section className="cta-section">
