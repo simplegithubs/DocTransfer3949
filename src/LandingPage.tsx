@@ -6,6 +6,7 @@ import SEO from './components/SEO';
 import UseCaseCards from './components/UseCaseCards';
 import TestimonialsSection from './components/landing/TestimonialsSection';
 import ComplianceRoadmapSection from './components/landing/ComplianceRoadmapSection';
+import CryptographicSecurityHighlight from './components/landing/CryptographicSecurityHighlight';
 import Footer from './components/Footer';
 import {
   Shield,
@@ -1530,6 +1531,9 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/* Cryptographic Security Architecture Highlight (AES-256, Zero-Knowledge, Client-Side Cryptography) */}
+        <CryptographicSecurityHighlight />
 
         {/* Enterprise Compliance Roadmap Section */}
         <ComplianceRoadmapSection />
