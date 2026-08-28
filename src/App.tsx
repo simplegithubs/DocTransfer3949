@@ -37,6 +37,7 @@ import ConquestHub from './pages/ConquestHub'
 import ConquestDetail from './pages/ConquestDetail'
 import TemplatesHub from './pages/TemplatesHub'
 import PressAndBadges from './pages/PressAndBadges'
+import SecurityPage from './pages/SecurityPage'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route path="/security" element={<SecurityPage />} />
       <Route path="/payment-success" element={<PaymentSuccess />} />
       <Route
         path="/checkout"

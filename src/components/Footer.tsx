@@ -99,8 +99,8 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               <li><Link to="/pricing" style={linkStyle(light)}>Pricing Plans</Link></li>
               <li><Link to="/dataroom" style={linkStyle(light)}>Virtual Data Room</Link></li>
               <li><Link to="/document-sharing" style={linkStyle(light)}>Document Sharing</Link></li>
-              <li><a href="/#features" style={linkStyle(light)}>Security Features</a></li>
-              <li><a href="/#security" style={linkStyle(light)}>Compliance & Audit</a></li>
+              <li><Link to="/security" style={{ ...linkStyle(light), color: '#818cf8', fontWeight: 600 }}>Trust & Security Hub</Link></li>
+              <li><Link to="/security" style={linkStyle(light)}>Compliance & Audit</Link></li>
               <li><Link to="/integrations" style={linkStyle(light)}>Integrations</Link></li>
             </ul>
           </div>
