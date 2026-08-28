@@ -100,6 +100,7 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               <li><Link to="/dataroom" style={linkStyle(light)}>Virtual Data Room</Link></li>
               <li><Link to="/document-sharing" style={linkStyle(light)}>Document Sharing</Link></li>
               <li><Link to="/security" style={{ ...linkStyle(light), color: '#818cf8', fontWeight: 600 }}>Trust & Security Hub</Link></li>
+              <li><Link to="/transparency" style={{ ...linkStyle(light), color: '#38bdf8', fontWeight: 600 }}>Public Transparency Report</Link></li>
               <li><Link to="/security" style={linkStyle(light)}>Compliance & Audit</Link></li>
               <li><Link to="/integrations" style={linkStyle(light)}>Integrations</Link></li>
             </ul>
