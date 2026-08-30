@@ -18,6 +18,21 @@
   --gradient-text: linear-gradient(to right, #111827, #4f46e5);
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

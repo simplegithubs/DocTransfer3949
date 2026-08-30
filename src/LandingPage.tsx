@@ -48,7 +48,6 @@ import {
 const LandingPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showProductMenu, setShowProductMenu] = useState(false);
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'esignature' | 'google-drive'>('upload');
 
 
@@ -196,151 +195,6 @@ const LandingPage: React.FC = () => {
             <Link to="/pricing" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Pricing</Link>
             <Link to="/comparisons" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Comparisons</Link>
             <Link to="/blog" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Blog</Link>
-            <div
-              className="nav-item-dropdown"
-              style={{ position: 'relative', display: 'inline-block', marginRight: '1.5rem' }}
-              onMouseEnter={() => setShowMoreMenu(true)}
-              onMouseLeave={() => setShowMoreMenu(false)}
-            >
-              <button
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#4b5563',
-                  fontWeight: 500,
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                  padding: '0'
-                }}
-              >
-                More <ChevronDown size={16} />
-              </button>
-
-              {showMoreMenu && (
-                <div
-                  className="more-dropdown"
-                  style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: '0',
-                    width: '220px',
-                    background: 'white',
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                    padding: '0.75rem',
-                    zIndex: 1000,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.25rem',
-                    border: '1px solid #f3f4f6'
-                  }}
-                >
-                  <Link 
-                    to="/tools" 
-                    style={{ 
-                      textDecoration: 'none', 
-                      color: '#1f2937', 
-                      fontWeight: 600,
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      fontSize: '0.9rem'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                  >
-                    🛠️ Free Tools
-                  </Link>
-                  <Link 
-                    to="/alternatives" 
-                    style={{ 
-                      textDecoration: 'none', 
-                      color: '#1f2937', 
-                      fontWeight: 500,
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: '8px',
-                      display: 'block',
-                      fontSize: '0.9rem'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                  >
-                    Competitor Alternatives
-                  </Link>
-                  <Link 
-                    to="/solutions" 
-                    style={{ 
-                      textDecoration: 'none', 
-                      color: '#1f2937', 
-                      fontWeight: 500,
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: '8px',
-                      display: 'block',
-                      fontSize: '0.9rem'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                  >
-                    Industry Solutions
-                  </Link>
-                  <Link 
-                    to="/templates" 
-                    style={{ 
-                      textDecoration: 'none', 
-                      color: '#1f2937', 
-                      fontWeight: 500,
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: '8px',
-                      display: 'block',
-                      fontSize: '0.9rem'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                  >
-                    100+ Legal Templates
-                  </Link>
-                  <Link 
-                    to="/glossary" 
-                    style={{ 
-                      textDecoration: 'none', 
-                      color: '#1f2937', 
-                      fontWeight: 500,
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: '8px',
-                      display: 'block',
-                      fontSize: '0.9rem'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = '#f3f4f6'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                  >
-                    Glossary (50+ Terms)
-                  </Link>
-                  <Link 
-                    to="/sitemap-directory" 
-                    style={{ 
-                      textDecoration: 'none', 
-                      color: '#4f46e5', 
-                      fontWeight: 700,
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: '8px',
-                      display: 'block',
-                      fontSize: '0.9rem',
-                      borderTop: '1px solid #f1f5f9',
-                      marginTop: '0.25rem'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = '#eff6ff'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                  >
-                    📁 Master Site Directory
-                  </Link>
-                </div>
-              )}
-            </div>
           </div>
           <SignedOut>
             <SignInButton mode="modal">
@@ -413,15 +267,26 @@ const LandingPage: React.FC = () => {
             <div className="floating-orb orb-3"></div>
           </div>
 
-          <h1 className="hero-title-animated">Securely Share, Track, and Manage Sensitive Files with DocTransfer</h1>
-          <p className="hero-subtitle-animated">The best free DocSend alternative. Securely share files with end-to-end encryption, real-time page-by-page analytics, dynamic watermarks, and e-signatures—completely free forever.</p>
-          <div className="hero-actions">
-            <Link to="/dataroom">
-              <button className="hero-btn-primary">Get Started Free</button>
-            </Link>
-            <Link to="/pricing">
-              <button className="hero-btn-secondary">View Pricing</button>
-            </Link>
+          <h1 className="hero-title-animated">The secure deal room for sharing, tracking & signing sensitive documents.</h1>
+          <p className="hero-subtitle-animated">Share confidential documents with complete control. Track every viewer, protect every page, and collect signatures — all in one place.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2rem' }}>
+            <div className="hero-actions" style={{ marginBottom: '0.75rem' }}>
+              <Link to="/dataroom">
+                <button className="hero-btn-primary">Create a Deal Room — Free</button>
+              </Link>
+              <Link to="/pricing">
+                <button className="hero-btn-secondary">View Pricing</button>
+              </Link>
+            </div>
+            <p style={{
+              fontSize: '1.05rem',
+              fontWeight: 700,
+              color: '#475569',
+              margin: 0,
+              textAlign: 'center'
+            }}>
+              No credit card required.
+            </p>
           </div>
 
           {/* Hero Feature Navigation Bar */}
@@ -472,59 +337,18 @@ const LandingPage: React.FC = () => {
                 position: 'relative',
                 zIndex: 10,
                 overflow: 'hidden',
-                border: '1px solid #f3f4f6',
-                padding: '2rem'
+                border: '1px solid #f3f4f6'
               }}>
-                <div style={{
-                  width: '100%',
-                  height: '400px',
-                  border: '2px dashed #e2e8f0',
-                  borderRadius: '16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: '#ffffff',
-                  transition: 'background-color 0.2s ease',
-                  cursor: 'pointer'
-                }}>
-                  <div style={{
-                    width: '120px',
-                    height: '120px',
-                    borderRadius: '50%',
-                    backgroundColor: '#f8fafc',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '2rem'
-                  }}>
-                    <FileText size={56} color="#64748b" strokeWidth={1.5} />
-                  </div>
-                  <h3 style={{
-                    fontSize: '1.6rem',
-                    fontWeight: 600,
-                    color: '#1e3a5f',
-                    marginBottom: '1rem',
-                    fontFamily: "'Inter', sans-serif"
-                  }}>
-                    Click to upload or drag and drop
-                  </h3>
-                  <p style={{
-                    fontSize: '1.2rem',
-                    color: '#94a3b8',
-                    marginBottom: '0.8rem',
-                    fontWeight: 400
-                  }}>
-                    Supports multiple files (Bundles)
-                  </p>
-                  <p style={{
-                    fontSize: '1.2rem',
-                    color: '#94a3b8',
-                    fontWeight: 400
-                  }}>
-                    Maximum file size: 20 MB per file
-                  </p>
-                </div>
+                <img
+                  src="/dealroom-dashboard.jpg"
+                  alt="DocTransfer Deal Room Dashboard"
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    display: 'block',
+                    borderRadius: '24px'
+                  }}
+                />
               </div>
             )}
 

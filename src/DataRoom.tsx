@@ -25,7 +25,8 @@ import {
     Minus,
     Plus,
     Shield,
-    Sparkles
+    Sparkles,
+    Loader2
 } from 'lucide-react';
 import Skeleton from './components/ui/Skeleton';
 import { hashPassword, generateSecureToken } from './lib/security';
@@ -95,6 +96,8 @@ const DataRoom: React.FC = () => {
     const [uploadedBundleLink, setUploadedBundleLink] = useState<string | null>(null); // New state for bundle link
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [uploadProgressStage, setUploadProgressStage] = useState('Preparing file...');
     const [uploadError, setUploadError] = useState<string | null>(null);
     const [filePreview, setFilePreview] = useState<string | null>(null);
     const [showPreviewModal, setShowPreviewModal] = useState(false);
@@ -311,7 +314,16 @@ const DataRoom: React.FC = () => {
         }
 
         setIsUploading(true);
+        setUploadProgress(15);
+        setUploadProgressStage('Preparing file & initial security handshake...');
         setUploadError(null);
+
+        const progressInterval = setInterval(() => {
+            setUploadProgress(prev => {
+                if (prev < 85) return prev + Math.floor(Math.random() * 6 + 2);
+                return prev;
+            });
+        }, 180);
 
         const isEncrypted = aesEncryptionEnabled;
         const encryptionKey = isEncrypted ? generateEncryptionKey() : null;
@@ -329,6 +341,7 @@ const DataRoom: React.FC = () => {
             let bundleShareLink: string | null = null;
 
             if (selectedFiles.length > 1) {
+                setUploadProgressStage('Configuring secure document bundle...');
                 // Generates friendly name e.g. "Contract.pdf and 2 others"
                 const bundleName = `${selectedFiles[0].name} and ${selectedFiles.length - 1} others`;
                 bundleShareLink = generateSecureToken(12);
@@ -357,9 +370,9 @@ const DataRoom: React.FC = () => {
             // --- FILE UPLOAD LOOP ---
             const uploadedDocs: Document[] = [];
 
-            for (const file of selectedFiles) {
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
                 console.log('Processing file:', file.name);
-
 
                 // 2. Generate unique file path
                 const timestamp = Date.now();
@@ -374,10 +387,13 @@ const DataRoom: React.FC = () => {
                 let encryptionIv: string | null = null;
 
                 if (isEncrypted && encryptionKey) {
+                    setUploadProgressStage(`Encrypting ${file.name} with AES-256...`);
                     console.log('Encrypting file...');
                     const { encryptedBlob, iv } = await encryptFile(file, encryptionKey);
                     fileToUpload = encryptedBlob;
                     encryptionIv = iv;
+                } else {
+                    setUploadProgressStage(`Uploading ${file.name} to cloud storage...`);
                 }
 
                 // 4. Upload to Supabase storage
@@ -399,6 +415,7 @@ const DataRoom: React.FC = () => {
                     throw new Error(`Storage upload failed for ${file.name}: ${uploadError.message}`);
                 }
 
+                setUploadProgressStage('Creating access controls & tracking rules...');
                 const docShareLink = generateSecureToken(12);
 
                 // 4. Save document metadata to database
@@ -474,6 +491,9 @@ const DataRoom: React.FC = () => {
             } // End Loop
 
             console.log('All files uploaded successfully');
+            setUploadProgressStage('Finalizing shareable link...');
+            clearInterval(progressInterval);
+            setUploadProgress(95);
 
             // Set state based on Single vs Bundle
             if (bundleId && bundleShareLink) {
@@ -526,15 +546,20 @@ const DataRoom: React.FC = () => {
             setDocuments(prev => [...uploadedDocs, ...prev]);
             setSelectedFiles([]);
 
-
+            setUploadProgress(100);
+            setUploadProgressStage('Secure link ready!');
+            await new Promise(res => setTimeout(res, 400));
 
         } catch (error: any) {
+            clearInterval(progressInterval);
             console.error('Upload error:', error);
             const errorMessage = error.message || 'Upload failed';
             setUploadError(errorMessage);
+        } finally {
+            clearInterval(progressInterval);
+            setIsUploading(false);
+            setUploadProgress(0);
         }
-
-        setIsUploading(false);
     };
 
     const copyLink = (link: string) => { // Modified to accept any link
@@ -1326,25 +1351,53 @@ const DataRoom: React.FC = () => {
                                         style={{
                                             marginTop: '1.5rem',
                                             width: '100%',
-                                            padding: '0.875rem',
-                                            background: selectedFiles.length === 0 || isUploading ? '#9ca3af' : '#6366f1',
+                                            padding: isUploading ? '0.75rem 1rem' : '0.875rem 1.5rem',
+                                            background: selectedFiles.length === 0 
+                                                ? '#9ca3af' 
+                                                : isUploading 
+                                                    ? 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' 
+                                                    : '#6366f1',
                                             color: 'white',
                                             border: 'none',
-                                            borderRadius: '10px',
+                                            borderRadius: '12px',
                                             fontWeight: '600',
                                             fontSize: '0.95rem',
                                             cursor: selectedFiles.length === 0 || isUploading ? 'not-allowed' : 'pointer',
                                             display: 'flex',
+                                            flexDirection: 'column',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            gap: '0.5rem'
+                                            gap: '0.5rem',
+                                            position: 'relative',
+                                            overflow: 'hidden',
+                                            boxShadow: selectedFiles.length > 0 && !isUploading ? '0 4px 14px rgba(99, 102, 241, 0.4)' : 'none',
+                                            transition: 'all 0.3s ease'
                                         }}
                                     >
-                                        {isUploading ? 'Generating Link...' : (
-                                            <>
+                                        {isUploading ? (
+                                            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
+                                                    <span>Generating Link... {uploadProgress}%</span>
+                                                </div>
+                                                {/* Button Inner Loading Bar */}
+                                                <div style={{ width: '100%', height: '4px', background: 'rgba(255, 255, 255, 0.25)', borderRadius: '999px', overflow: 'hidden' }}>
+                                                    <div 
+                                                        style={{ 
+                                                            height: '100%', 
+                                                            width: `${uploadProgress}%`, 
+                                                            background: '#ffffff', 
+                                                            borderRadius: '999px', 
+                                                            transition: 'width 0.3s ease' 
+                                                        }} 
+                                                    />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                                 <LinkIcon size={18} />
                                                 {selectedFiles.length > 1 ? 'Generate Bundle Link' : 'Generate Secure Link'}
-                                            </>
+                                            </div>
                                         )}
                                     </button>
                                 </div>
@@ -1357,9 +1410,91 @@ const DataRoom: React.FC = () => {
                                     </div>
                                     <p style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '2rem' }}>Your secure, trackable document link</p>
 
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', minHeight: '400px', justifyContent: (!uploadedDoc && !uploadedBundleLink) ? 'center' : 'flex-start' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', minHeight: '400px', justifyContent: (!isUploading && !uploadedDoc && !uploadedBundleLink) ? 'center' : 'flex-start' }}>
+                                        {/* Loading State in Sharing Link Section */}
+                                        {isUploading && (
+                                            <div style={{
+                                                padding: '2rem',
+                                                background: 'white',
+                                                borderRadius: '16px',
+                                                border: '1px solid #e0e7ff',
+                                                boxShadow: '0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 8px 10px -6px rgba(99, 102, 241, 0.05)',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '1.25rem'
+                                            }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <div style={{
+                                                        width: '42px',
+                                                        height: '42px',
+                                                        borderRadius: '12px',
+                                                        background: 'linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%)',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        color: '#4f46e5',
+                                                        flexShrink: 0
+                                                    }}>
+                                                        <Lock size={20} style={{ animation: 'pulse 1.5s infinite' }} />
+                                                    </div>
+                                                    <div>
+                                                        <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#1e1b4b', margin: 0 }}>
+                                                            Generating Secure Share Link
+                                                        </h3>
+                                                        <p style={{ fontSize: '0.85rem', color: '#6366f1', margin: 0, fontWeight: 500 }}>
+                                                            {uploadProgressStage}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Shimmering Progress Bar */}
+                                                <div>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                                        <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#64748b' }}>Security & Link Setup</span>
+                                                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#4f46e5' }}>{uploadProgress}%</span>
+                                                    </div>
+                                                    <div style={{
+                                                        width: '100%',
+                                                        height: '8px',
+                                                        background: '#f1f5f9',
+                                                        borderRadius: '999px',
+                                                        overflow: 'hidden',
+                                                        position: 'relative'
+                                                    }}>
+                                                        <div style={{
+                                                            height: '100%',
+                                                            width: `${uploadProgress}%`,
+                                                            background: 'linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
+                                                            borderRadius: '999px',
+                                                            transition: 'width 0.3s ease',
+                                                            boxShadow: '0 0 12px rgba(99, 102, 241, 0.5)'
+                                                        }} />
+                                                    </div>
+                                                </div>
+
+                                                {/* Skeleton Placeholders for Public Share Link Box */}
+                                                <div style={{ marginTop: '0.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>Encrypting & securing document URL...</div>
+                                                    <div style={{
+                                                        width: '100%',
+                                                        height: '48px',
+                                                        background: '#f8fafc',
+                                                        border: '1.5px dashed #cbd5e1',
+                                                        borderRadius: '10px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        padding: '0 1rem',
+                                                        justifyContent: 'space-between'
+                                                    }}>
+                                                        <div style={{ width: '70%', height: '14px', background: '#e2e8f0', borderRadius: '4px', animation: 'pulse 1.5s infinite' }} />
+                                                        <div style={{ width: '32px', height: '32px', background: '#e2e8f0', borderRadius: '6px', animation: 'pulse 1.5s infinite' }} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
                                         {/* Bundle Link Display */}
-                                        {uploadedBundleLink && (
+                                        {!isUploading && uploadedBundleLink && (
                                             <div style={{ padding: '1.5rem', background: '#ecfdf5', borderRadius: '12px', border: '1px solid #a7f3d0' }}>
                                                 <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#065f46' }}>📦 Bundle Share Link</h3>
                                                 <p style={{ fontSize: '0.875rem', color: '#047857', marginBottom: '1rem' }}>
@@ -1383,7 +1518,7 @@ const DataRoom: React.FC = () => {
                                         )}
 
                                         {/* Single Doc Link Display */}
-                                        {uploadedDoc && !uploadedBundleLink && (
+                                        {!isUploading && uploadedDoc && !uploadedBundleLink && (
                                             <div style={{ padding: '1.5rem', background: '#f9fafb', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
                                                 <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>Public Share Link</h3>
                                                 <div style={{ width: '100%', padding: '0.75rem', background: 'white', border: '1px solid #d1d5db', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -1406,7 +1541,7 @@ const DataRoom: React.FC = () => {
 
 
                                         {/* Preview section */}
-                                        {selectedFiles.length > 0 && filePreview && !uploadedDoc && !uploadedBundleLink && (
+                                        {!isUploading && selectedFiles.length > 0 && filePreview && !uploadedDoc && !uploadedBundleLink && (
                                             <div style={{ width: '100%', maxHeight: '350px', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1rem', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                                                 {selectedFiles.length > 1 && (
                                                     <div style={{ marginBottom: '1rem', fontWeight: '600', color: '#374151' }}>Previewing first file:</div>
@@ -1438,7 +1573,7 @@ const DataRoom: React.FC = () => {
                                             </div>
                                         )}
 
-                                        {uploadedDoc && !uploadedBundleLink && (
+                                        {!isUploading && uploadedDoc && !uploadedBundleLink && (
                                             <button
                                                 onClick={handlePreview}
                                                 style={{
@@ -1466,7 +1601,7 @@ const DataRoom: React.FC = () => {
                                         )}
 
                                         {/* Empty State / Placeholder */}
-                                        {!uploadedDoc && !uploadedBundleLink && selectedFiles.length === 0 && (
+                                        {!isUploading && !uploadedDoc && !uploadedBundleLink && selectedFiles.length === 0 && (
                                             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d1d5db', flexDirection: 'column', gap: '1rem' }}>
                                                 <LinkIcon size={64} style={{ opacity: 0.3 }} />
                                                 <p style={{ textAlign: 'center', maxWidth: '200px' }}>Upload a document and click "Generate Secure Link" to create a shareable link</p>

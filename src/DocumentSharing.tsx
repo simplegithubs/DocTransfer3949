@@ -15,7 +15,8 @@ import {
     File as FileIcon,
     X,
     Shield,
-    Mail
+    Mail,
+    Loader2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from './lib/supabase';
@@ -569,9 +570,14 @@ const DocumentSharing: React.FC = () => {
                             className="btn-generate"
                             onClick={handleUpload}
                             disabled={!uploadedFile || isUploading}
-                            style={{ opacity: !uploadedFile || isUploading ? 0.7 : 1, cursor: !uploadedFile || isUploading ? 'not-allowed' : 'pointer' }}
+                            style={{ opacity: !uploadedFile || isUploading ? 0.8 : 1, cursor: !uploadedFile || isUploading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}
                         >
-                            {isUploading ? 'Generating Link...' : (
+                            {isUploading ? (
+                                <>
+                                    <Loader2 size={22} style={{ animation: 'spin 1s linear infinite' }} />
+                                    Generating Secure Link...
+                                </>
+                            ) : (
                                 <>
                                     <LinkIcon size={24} />
                                     Generate Secure Link
