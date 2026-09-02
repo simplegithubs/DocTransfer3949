@@ -5,7 +5,7 @@ import { supabase, createSupabaseClient, getSafeSupabaseToken } from '../lib/sup
 export interface Subscription {
     id: string;
     user_id: string;
-    plan_type: 'free' | 'standard' | 'business';
+    plan_type: 'free' | 'pro' | 'standard' | 'business' | 'dataroom';
     status: 'active' | 'canceled' | 'past_due' | 'trialing' | 'incomplete';
     current_period_start: string | null;
     current_period_end: string | null;
@@ -29,12 +29,17 @@ const processSub = (sub: Subscription | null): Subscription | null => {
     if (!sub) return null;
     
     // Check if the plan is paid and active
-    const isPaid = (sub.plan_type === 'standard' || sub.plan_type === 'business') &&
+    const isPaidPlan = ['pro', 'standard', 'business', 'dataroom'].includes(sub.plan_type);
+    const hasValidPeriod = !sub.current_period_end || new Date(sub.current_period_end) > new Date();
+    const isPaid = isPaidPlan &&
         (sub.status === 'active' || sub.status === 'trialing') &&
-        (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
+        hasValidPeriod;
         
-    // If the plan type is standard/business but not active/paid/valid, demote to free!
+    // If the plan type is paid but expired or inactive, demote to free!
     if (sub.plan_type !== 'free' && !isPaid) {
+        try {
+            localStorage.removeItem('doctransfer_active_sub');
+        } catch (e) {}
         return {
             ...sub,
             plan_type: 'free',
@@ -138,7 +143,37 @@ export const useSubscription = () => {
                         });
                     }
                 } else {
-                    setSubscription(processSub(subData));
+                    const processed = processSub(subData);
+                    let finalSub = processed;
+                    
+                    // If DB returned free but user recently paid, check local cache fallback
+                    if (processed?.plan_type === 'free') {
+                        try {
+                            const cachedStr = localStorage.getItem('doctransfer_active_sub');
+                            if (cachedStr) {
+                                const cached = JSON.parse(cachedStr);
+                                if (cached.user_id === user.id && cached.current_period_end && new Date(cached.current_period_end) > new Date()) {
+                                    finalSub = processSub({
+                                        ...subData,
+                                        plan_type: cached.plan_type,
+                                        status: 'active',
+                                        current_period_end: cached.current_period_end
+                                    });
+                                }
+                            }
+                        } catch (e) {}
+                    } else if (processed?.plan_type) {
+                        // Persist verified active sub
+                        try {
+                            localStorage.setItem('doctransfer_active_sub', JSON.stringify({
+                                user_id: user.id,
+                                plan_type: processed.plan_type,
+                                status: processed.status,
+                                current_period_end: processed.current_period_end
+                            }));
+                        } catch (e) {}
+                    }
+                    setSubscription(finalSub);
                 }
 
                 // Fetch current month usage
@@ -282,7 +317,7 @@ export const useSubscription = () => {
         if (!user) return true;
         if (!subscription) return true;
         if (subscription.status === 'trialing' || subscription.plan_type === 'free') {
-            return dailyUploadCount < 10;
+            return dailyUploadCount < 3; // Strict 3 documents limit for lean free tier
         }
         return true;
     };
@@ -292,7 +327,7 @@ export const useSubscription = () => {
      */
     const canCreateESignature = (): boolean => {
         if (!subscription || subscription.plan_type === 'free') return false; // Locked for free
-        // Both Standard and Business have unlimited e-signatures
+        // Pro, Standard, Business, and Data Room all have unlimited e-signatures
         return true;
     };
 
@@ -301,26 +336,32 @@ export const useSubscription = () => {
      */
     const getMaxFileSize = (): number => {
         if (!subscription || subscription.plan_type === 'free') {
-            return 10 * 1024 * 1024; // 10MB limit for free tier
+            return 5 * 1024 * 1024; // 5MB limit for lean free tier
         }
-        if (subscription.plan_type === 'standard') {
-            return 50 * 1024 * 1024; // 50MB for Standard
+        if (subscription.plan_type === 'pro' || subscription.plan_type === 'standard') {
+            return 50 * 1024 * 1024; // 50MB for Pro / Standard
         }
-        return 500 * 1024 * 1024; // 500MB for Business
+        if (subscription.plan_type === 'business') {
+            return 500 * 1024 * 1024; // 500MB for Business
+        }
+        if (subscription.plan_type === 'dataroom') {
+            return 2048 * 1024 * 1024; // 2GB for Data Room / VDR
+        }
+        return 50 * 1024 * 1024;
     };
 
     /**
      * Check if user has access to a specific feature
      */
     const hasFeature = (feature: string): boolean => {
-        // Free plan features
+        // Free plan features (lean: basic total view count only, page-by-page dwell time locked)
         if (!subscription || subscription.plan_type === 'free') {
-            return ['page_by_page_analytics', 'unlimited_visitors'].includes(feature);
+            return ['basic_view_count', 'unlimited_visitors'].includes(feature);
         }
 
-        // Standard plan features
-        if (subscription.plan_type === 'standard') {
-            const standardFeatures = [
+        // Pro & Standard plan features
+        if (subscription.plan_type === 'pro' || subscription.plan_type === 'standard') {
+            const proFeatures = [
                 'page_by_page_analytics',
                 'unlimited_visitors',
                 'password_protection',
@@ -334,12 +375,40 @@ export const useSubscription = () => {
                 'screenshot_protection',
                 'burn_after_reading',
                 'document_bundles',
-                'advanced_analytics'
+                'advanced_analytics',
+                'deal_rooms'
             ];
-            return standardFeatures.includes(feature);
+            return proFeatures.includes(feature);
         }
 
-        // Business plan gets all features
+        // Business plan features
+        if (subscription.plan_type === 'business') {
+            const businessFeatures = [
+                'page_by_page_analytics',
+                'unlimited_visitors',
+                'password_protection',
+                'link_expiration',
+                'aes_encryption',
+                'email_verification',
+                'watermarking',
+                'audit_trails',
+                'esignature',
+                'allow_downloads',
+                'screenshot_protection',
+                'burn_after_reading',
+                'document_bundles',
+                'advanced_analytics',
+                'deal_rooms',
+                'vault_mode',
+                'custom_branding',
+                'client_intake',
+                'gst_invoicing',
+                'team_seats_3'
+            ];
+            return businessFeatures.includes(feature);
+        }
+
+        // Data Room (VDR) gets all features including enterprise diligence tools
         return true;
     };
 
@@ -351,14 +420,14 @@ export const useSubscription = () => {
     };
 
     /**
-     * Get remaining uploads for the current period (Today/Yearly for Free, Unlimited for Paid)
+     * Get remaining uploads for the current period (3 for Free, Unlimited for Paid)
      */
     const getRemainingUploads = (): number => {
         if (!user || isLoading) return Infinity; // Don't block while loading or if not logged in
         if (!subscription) return Infinity;
 
         if (subscription.status === 'trialing' || subscription.plan_type === 'free') {
-            return Math.max(0, 10 - dailyUploadCount);
+            return Math.max(0, 3 - dailyUploadCount);
         }
 
         return Infinity; // Unlimited for active paid plans
@@ -369,7 +438,6 @@ export const useSubscription = () => {
      */
     const getRemainingESignatures = (): number => {
         if (!subscription || subscription.plan_type === 'free') return 0; // Locked on free
-        // Standard and Business both have unlimited e-signatures
         return Infinity;
     };
 
@@ -379,6 +447,10 @@ export const useSubscription = () => {
     const getStorageDurationDays = (): number => {
         return 36500; // Unlimited for everyone
     };
+
+    const isPaidActive = ['pro', 'standard', 'business', 'dataroom'].includes(subscription?.plan_type || '') &&
+        (subscription?.status === 'active' || subscription?.status === 'trialing') &&
+        (!subscription?.current_period_end || new Date(subscription.current_period_end) > new Date());
 
     return {
         subscription,
@@ -398,15 +470,11 @@ export const useSubscription = () => {
         getRemainingUploads,
         getRemainingESignatures,
         getStorageDurationDays,
-        isPaid: (subscription?.plan_type === 'standard' || subscription?.plan_type === 'business') &&
-            (subscription.status === 'active' || subscription.status === 'trialing') &&
-            (!subscription.current_period_end || new Date(subscription.current_period_end) > new Date()),
-        isStandard: subscription?.plan_type === 'standard' &&
-            (subscription.status === 'active' || subscription.status === 'trialing') &&
-            (!subscription.current_period_end || new Date(subscription.current_period_end) > new Date()),
-        isBusiness: subscription?.plan_type === 'business' &&
-            (subscription.status === 'active' || subscription.status === 'trialing') &&
-            (!subscription.current_period_end || new Date(subscription.current_period_end) > new Date()),
+        isPaid: isPaidActive,
+        isPro: (subscription?.plan_type === 'pro' || subscription?.plan_type === 'standard') && isPaidActive,
+        isStandard: subscription?.plan_type === 'standard' && isPaidActive,
+        isBusiness: subscription?.plan_type === 'business' && isPaidActive,
+        isDataRoom: subscription?.plan_type === 'dataroom' && isPaidActive,
     };
 };
 

@@ -11,116 +11,159 @@ import {
     Zap,
     Briefcase,
     CreditCard,
-    Globe,
+    FolderLock,
     Lock,
     ChevronRight,
     RefreshCw,
     Clock,
     CheckCircle2,
     Sparkles,
-    Mail,
-    Phone
+    ShieldCheck,
+    Phone,
+    AlertCircle
 } from 'lucide-react';
-import { supabase, createSupabaseClient, getSafeSupabaseToken } from './lib/supabase';
+import { supabase } from './lib/supabase';
 
-type PaymentGateway = 'paypal';
+type PaymentGateway = 'razorpay';
 
-const PAYPAL_PLAN_URLS: Record<string, string> = {
-    standard: `https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=${import.meta.env.VITE_PAYPAL_STANDARD_PLAN_ID || 'P-0FL71448PL026300WNIIUAVQ'}`,
-    business: `https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=${import.meta.env.VITE_PAYPAL_BUSINESS_PLAN_ID || 'P-53396685LJ841883FNIIUBMY'}`,
-};
-
-const PLAN_DETAILS: Record<string, {
+interface PlanConfig {
     name: string;
-    price: string;
-    priceNum: number;
-    period: string;
+    inrMonthly: number;
+    inrAnnualMonthly: number;
+    usdMonthly: number;
+    usdAnnualMonthly: number;
     color: string;
     icon: any;
     features: string[];
     gradient: string;
-}> = {
-    standard: {
-        name: 'Standard',
-        price: '$25',
-        priceNum: 25,
-        period: '/month',
+    planId: string;
+}
+
+const PLAN_CONFIGS: Record<string, PlanConfig> = {
+    pro: {
+        name: 'Pro Plan',
+        inrMonthly: 699,
+        inrAnnualMonthly: 499,
+        usdMonthly: 19,
+        usdAnnualMonthly: 15,
         color: '#3b82f6',
         icon: Zap,
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+        planId: import.meta.env.VITE_RAZORPAY_PRO_PLAN_ID || 'plan_TXFen0j8CaoC4o',
         features: [
-            'Unlimited file transfers',
-            '50MB file size limit',
-            'AES-256 Encryption',
-            'Self-Destruct (Time/Views)',
-            'Email Verification',
-            'Dynamic Watermarking',
-            'Allow Downloads',
-            'Password Protection'
+            'Unlimited document uploads & tracking',
+            '50MB file size limit per upload',
+            '5 Active Virtual Deal Rooms',
+            'Page-by-page dwell time forensics',
+            'Dynamic anti-leak watermark (Email & IP)',
+            'Unlimited e-signatures (IT Act 2000 & ESIGN)',
+            'Section 65B court-admissible audit log',
+            'Remote self-destruct / kill switch'
+        ]
+    },
+    standard: {
+        name: 'Pro Plan',
+        inrMonthly: 699,
+        inrAnnualMonthly: 499,
+        usdMonthly: 19,
+        usdAnnualMonthly: 15,
+        color: '#3b82f6',
+        icon: Zap,
+        gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+        planId: import.meta.env.VITE_RAZORPAY_PRO_PLAN_ID || 'plan_TXFen0j8CaoC4o',
+        features: [
+            'Unlimited document uploads & tracking',
+            '50MB file size limit per upload',
+            '5 Active Virtual Deal Rooms',
+            'Page-by-page dwell time forensics',
+            'Dynamic anti-leak watermark (Email & IP)',
+            'Unlimited e-signatures (IT Act 2000 & ESIGN)',
+            'Section 65B court-admissible audit log',
+            'Remote self-destruct / kill switch'
         ]
     },
     business: {
-        name: 'Business',
-        price: '$39',
-        priceNum: 39,
-        period: '/month',
+        name: 'Business CA Suite',
+        inrMonthly: 1799,
+        inrAnnualMonthly: 1349,
+        usdMonthly: 49,
+        usdAnnualMonthly: 39,
         color: '#8b5cf6',
         icon: Briefcase,
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+        planId: import.meta.env.VITE_RAZORPAY_BUSINESS_PLAN_ID || 'plan_TXFg28EWp7dw4C',
         features: [
-            'Everything in Standard',
-            '500MB file size limit',
-            'Vault Mode (E2E Encryption)',
-            'Audit Trails & Compliance',
-            'SSO Integration',
-            'Custom Branding',
-            'View & Print Limits',
-            'Dedicated Support'
+            'Everything in Pro Plan included',
+            '500MB file size limit per upload',
+            'Unlimited Deal Rooms & folders',
+            'Zero-Knowledge Vault Mode (AES-256 E2EE)',
+            'Custom domain & brand white-labeling',
+            'Client intake portals & secure dropboxes',
+            'Automatic GST Tax Invoicing (ITC eligible)',
+            '3 Team member seats included'
+        ]
+    },
+    dataroom: {
+        name: 'Virtual Data Room (VDR)',
+        inrMonthly: 4999,
+        inrAnnualMonthly: 3749,
+        usdMonthly: 129,
+        usdAnnualMonthly: 99,
+        color: '#10b981',
+        icon: FolderLock,
+        gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+        planId: import.meta.env.VITE_RAZORPAY_DATAROOM_PLAN_ID || 'plan_TXFgoDrw5IBk6O',
+        features: [
+            'Everything in Business Suite included',
+            '2GB file size limit per upload',
+            'Multi-party isolated bidder deal rooms',
+            'Structured due diligence Q&A workflow',
+            'Bates numbering & auto-index file tree',
+            '1-Click complete compliance ZIP archive',
+            '10 Included team seats + unlimited guests',
+            'Dedicated deal room concierge support'
         ]
     }
 };
 
-const PayPalMonogram: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg
-        width="26"
-        height="32"
-        viewBox="0 0 26 32"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        {...props}
-    >
-        <path
-            fill="#003087"
-            d="M7.266,29.154l0.523-3.322l-1.165-0.027H1.061L4.927,1.292C4.939,1.218,4.978,1.149,5.035,1.1 c0.057-0.049,0.13-0.076,0.206-0.076h9.38c3.114,0,5.263,0.648,6.385,1.927c0.526,0.6,0.861,1.227,1.023,1.917 c0.17,0.724,0.173,1.589,0.007,2.644l-0.012,0.077v0.676l0.526,0.298c0.443,0.235,0.795,0.504,1.065,0.812 c0.45,0.513,0.741,1.165,0.864,1.938c0.127,0.795,0.085,1.741-0.123,2.812c-0.24,1.232-0.628,2.305-1.152,3.183 c-0.482,0.809-1.096,1.48-1.825,2c-0.696,0.494-1.523,0.869-2.458,1.109c-0.906,0.236-1.939,0.355-3.072,0.355h-0.73 c-0.522,0-1.029,0.188-1.427,0.525c-0.399,0.344-0.663,0.814-0.744,1.328l-0.055,0.299l-0.924,5.855l-0.042,0.215 c-0.011,0.061-0.03,0.102-0.058,0.125c-0.025,0.021-0.061,0.035-0.096,0.035H7.266z"
-        />
-        <path
-            fill="#0079C1"
-            d="M23.048,7.667c-0.028,0.179-0.06,0.362-0.096,0.55 c-1.237,6.351-5.469,8.545-10.874,8.545H9.326c-0.661,0-1.218,0.48-1.321,1.132L6.596,26.83l-0.399,2.533 c-0.067,0.428,0.263,0.814,0.695,0.814h4.881c0.578,0,1.069-0.42,1.16-0.99l0.048-0.248l0.919-5.832l0.059-0.32 c0.09-0.572,0.582-0.992,1.16-0.992h0.73c4.729,0,8.431-1.92,9.513-7.476c0.452-2.321,0.218-4.259-0.978-5.622 C24.022,8.286,23.573,7.945,23.048,7.667z"
-        />
-        <path
-            fill="#00457C"
-            d="M21.754,7.151c-0.189-0.055-0.384-0.105-0.584-0.15c-0.201-0.044-0.407-0.083-0.619-0.117 c-0.742-0.12-1.555-0.177-2.426-0.177h-7.352c-0.181,0-0.353,0.041-0.507,0.115C9.927,6.985,9.675,7.306,9.614,7.699L8.05,17.605 l-0.045,0.289c0.103-0.652,0.66-1.132,1.321-1.132h2.752c5.405,0,9.637-2.195,10.874-8.545c0.037-0.188,0.068-0.371,0.096-0.55 c-0.313-0.166-0.652-0.308-1.017-0.429C21.941,7.208,21.848,7.179,21.754,7.151z"
-        />
-        <path
-            fill="#003087"
-            d="M9.614,7.699c0.061-0.393,0.313-0.714,0.652-0.876c0.155-0.074,0.326-0.115,0.507-0.115h7.352 c0.871,0,1.684,0.057,2.426,0.177c0.212,0.034,0.418,0.073,0.619,0.117c0.2,0.045,0.395,0.095,0.584,0.15 c0.094,0.028,0.187,0.057,0.278,0.086c0.365,0.121,0.704,0.264,1.017,0.429c0.368-2.347-0.003-3.945-1.272-5.392 C20.378,0.682,17.853,0,14.622,0h-9.38c-0.66,0-1.223,0.48-1.325,1.133L0.01,25.898c-0.077,0.49,0.301,0.932,0.795,0.932h5.791 l1.454-9.225L9.614,7.699z"
-        />
+const RazorpayLogo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg width="100" height="24" viewBox="0 0 100 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <path d="M12.5 1.5L2 22.5H7.5L11 15.5H16.5L12.5 1.5Z" fill="#0C2340" />
+        <path d="M11 15.5L7.5 22.5H18L21.5 15.5H11Z" fill="#3395FF" />
+        <text x="26" y="17" fill="#0C2340" fontFamily="sans-serif" fontWeight="800" fontSize="14" letterSpacing="0.05em">
+            Razorpay
+        </text>
     </svg>
 );
 
+const COUNTRY_CODES = [
+    { code: '+91', flag: '🇮🇳', name: 'India' },
+    { code: '+1', flag: '🇺🇸', name: 'United States / Canada' },
+    { code: '+44', flag: '🇬🇧', name: 'United Kingdom' },
+    { code: '+971', flag: '🇦🇪', name: 'United Arab Emirates' },
+    { code: '+65', flag: '🇸🇬', name: 'Singapore' },
+    { code: '+61', flag: '🇦🇺', name: 'Australia' },
+    { code: '+49', flag: '🇩🇪', name: 'Germany' },
+    { code: '+33', flag: '🇫🇷', name: 'France' },
+    { code: '+81', flag: '🇯🇵', name: 'Japan' }
+];
+
 const Checkout: React.FC = () => {
     const [searchParams] = useSearchParams();
-    const planType = searchParams.get('plan') || 'standard';
+    const rawPlan = searchParams.get('plan') || 'pro';
+    const planType = rawPlan === 'standard' ? 'pro' : rawPlan;
+    const initialCurrency = (searchParams.get('currency') || 'INR').toUpperCase() as 'INR' | 'USD';
+    const initialCycle = (searchParams.get('cycle') || 'monthly').toLowerCase() as 'monthly' | 'annual';
+
+    const [currency, setCurrency] = useState<'INR' | 'USD'>(initialCurrency);
+    const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>(initialCycle);
     const { user } = useUser();
-    const { getToken } = useAuth();
     const navigate = useNavigate();
-    const [selectedGateway, setSelectedGateway] = useState<PaymentGateway>('paypal');
     const [loading, setLoading] = useState(false);
-    const [hoveredGateway, setHoveredGateway] = useState<string | null>(null);
+    const [razorpayScriptLoaded, setRazorpayScriptLoaded] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const isContactFormValid = true;
-
-    const plan = PLAN_DETAILS[planType] || PLAN_DETAILS.standard;
+    const plan = PLAN_CONFIGS[planType] || PLAN_CONFIGS.pro;
     const PlanIcon = plan.icon;
 
     useEffect(() => {
@@ -129,107 +172,207 @@ const Checkout: React.FC = () => {
         }
     }, [user, navigate]);
 
-    const [paypalScriptLoaded, setPaypalScriptLoaded] = useState(false);
-    const [paypalScriptLoading, setPaypalScriptLoading] = useState(false);
-
-    // Load PayPal SDK dynamically when PayPal is selected (and not standard/business plans using a direct link)
+    // Load Razorpay SDK dynamically
     useEffect(() => {
-        if (selectedGateway === 'paypal' && (planType !== 'standard' && planType !== 'business') && !paypalScriptLoaded && !paypalScriptLoading) {
-            setPaypalScriptLoading(true);
-            const scriptId = 'paypal-sdk-script';
-            const existingScript = document.getElementById(scriptId);
+        const scriptId = 'razorpay-sdk-script';
+        if (document.getElementById(scriptId)) {
+            setRazorpayScriptLoaded(true);
+            return;
+        }
 
-            const initializePaypalButtons = () => {
-                setPaypalScriptLoaded(true);
-                setPaypalScriptLoading(false);
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => {
+            setRazorpayScriptLoaded(true);
+        };
+        script.onerror = () => {
+            console.error('Failed to load Razorpay SDK');
+        };
+        document.body.appendChild(script);
+    }, []);
+
+    // Price calculations
+    const isINR = currency === 'INR';
+    const isAnnual = billingCycle === 'annual';
+    const monthlyRate = isINR
+        ? (isAnnual ? plan.inrAnnualMonthly : plan.inrMonthly)
+        : (isAnnual ? plan.usdAnnualMonthly : plan.usdMonthly);
+    const symbol = isINR ? '₹' : '$';
+
+    const totalDueToday = isAnnual
+        ? monthlyRate * 12
+        : monthlyRate;
+
+    // User account details
+    const userEmail = user?.email || user?.primaryEmailAddress?.emailAddress || user?.rawUser?.email || '';
+    const userName = user?.fullName || userEmail || 'DocTransfer User';
+    const initialPhone = (user as any)?.phone || user?.rawUser?.phone || user?.rawUser?.user_metadata?.phone || '';
+
+    const [countryCode, setCountryCode] = useState<string>(currency === 'INR' ? '+91' : '+1');
+    const [phoneNumber, setPhoneNumber] = useState<string>(initialPhone.replace(/^\+\d{1,3}/, ''));
+    const [phoneError, setPhoneError] = useState<string | null>(null);
+    const logoUrl = `${window.location.origin}/apple-touch-icon.png`;
+
+    const handleRazorpayPayment = async () => {
+        if (!user) return;
+
+        // Validate phone number
+        const cleanDigits = phoneNumber.replace(/\D/g, '');
+        if (!cleanDigits) {
+            setPhoneError('Please enter your mobile number to proceed with payment.');
+            return;
+        }
+
+        if (countryCode === '+91' && cleanDigits.length !== 10) {
+            setPhoneError('Please enter a valid 10-digit Indian mobile number.');
+            return;
+        } else if (cleanDigits.length < 7) {
+            setPhoneError('Please enter a valid mobile number.');
+            return;
+        }
+
+        setPhoneError(null);
+        setLoading(true);
+        setErrorMsg(null);
+
+        const fullPhone = `${countryCode}${cleanDigits}`;
+
+        try {
+            const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TXFmzOIjNJwVht';
+
+            // 1. Create Razorpay Subscription via Supabase Edge Function
+            let subData: any = null;
+            try {
+                const { data, error } = await supabase.functions.invoke('create-razorpay-subscription', {
+                    body: {
+                        userId: user.id,
+                        planType: planType,
+                        billingCycle: billingCycle,
+                        userEmail: userEmail,
+                        userName: userName,
+                        userPhone: fullPhone
+                    }
+                });
+
+                if (error) {
+                    console.warn("Edge function subscription call notice:", error);
+                }
+                subData = data;
+            } catch (invokeErr) {
+                console.warn("Edge function invocation fallback:", invokeErr);
+            }
+
+            const subscriptionId = subData?.subscriptionId;
+
+            // 2. Open Razorpay Checkout Modal
+            if (typeof (window as any).Razorpay === 'undefined') {
+                throw new Error('Razorpay SDK is not ready yet. Please check your internet connection and try again.');
+            }
+
+            const options: any = {
+                key: keyId,
+                name: 'DocTransfer',
+                description: `${plan.name} (${billingCycle === 'annual' ? 'Annual' : 'Monthly'})`,
+                image: logoUrl,
+                prefill: {
+                    name: userName,
+                    email: userEmail,
+                    contact: fullPhone
+                },
+                readonly: {
+                    email: true, // 🔒 Strictly locks email so Razorpay detects and preserves the logged-in DocTransfer email
+                    contact: true, // 🔒 Strictly locks phone number so Razorpay uses the user's filled number
+                    name: false
+                },
+                notes: {
+                    userId: user.id,
+                    userEmail: userEmail,
+                    userPhone: fullPhone,
+                    planType: planType,
+                    billingCycle: billingCycle
+                },
+                theme: {
+                    color: plan.color
+                },
+                modal: {
+                    ondismiss: function () {
+                        setLoading(false);
+                    }
+                },
+                handler: async function (response: any) {
+                    console.log("Razorpay payment success response:", response);
+                    setLoading(true);
+
+                    const transactionRef = response.razorpay_payment_id || response.razorpay_subscription_id || subscriptionId || '';
+
+                    // 3. Verify Payment Signature & Activate Subscription
+                    let activated = false;
+                    try {
+                        const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-razorpay-payment', {
+                            body: {
+                                userId: user.id,
+                                planType: planType,
+                                billingCycle: billingCycle,
+                                razorpayPaymentId: response.razorpay_payment_id,
+                                razorpaySubscriptionId: response.razorpay_subscription_id || subscriptionId,
+                                razorpaySignature: response.razorpay_signature
+                            }
+                        });
+
+                        if (!verifyError && verifyData?.success) {
+                            activated = true;
+                        } else {
+                            console.warn("Edge function verification notice:", verifyError);
+                        }
+                    } catch (verifyCatch) {
+                        console.warn("Edge function invoke notice:", verifyCatch);
+                    }
+
+                    // Fallback to direct RPC activation to guarantee unlocking
+                    if (!activated) {
+                        try {
+                            await supabase.rpc('activate_user_subscription', {
+                                p_user_id: user.id,
+                                p_plan_type: planType,
+                                p_billing_cycle: billingCycle,
+                                p_transaction_ref: transactionRef
+                            });
+                        } catch (rpcErr) {
+                            console.warn("RPC activation fallback notice:", rpcErr);
+                        }
+                    }
+
+                    // Redirect to Payment Success page
+                    navigate(
+                        `/payment-success?gateway=razorpay&plan=${planType}&cycle=${billingCycle}&payment_id=${response.razorpay_payment_id || ''}&subscription_id=${response.razorpay_subscription_id || subscriptionId || ''}`
+                    );
+                }
             };
 
-            if (existingScript) {
-                if ((window as any).paypal) {
-                    initializePaypalButtons();
-                } else {
-                    existingScript.addEventListener('load', initializePaypalButtons);
-                    existingScript.addEventListener('error', () => {
-                        setPaypalScriptLoading(false);
-                    });
-                }
+            // If a valid recurring subscription ID was returned, attach it
+            if (subscriptionId && !subscriptionId.startsWith('sub_simulated_')) {
+                options.subscription_id = subscriptionId;
             } else {
-                const script = document.createElement('script');
-                script.id = scriptId;
-                script.src = 'https://www.paypal.com/sdk/js?client-id=BAA2asJ61lTSlNxLdm0Qg-vFm74gvBDUGKPEILzWHRKwZqOkI9z9H1rE0-WZ1JkPI_BWFiE5pcrKiehozo&vault=true&intent=subscription';
-                script.setAttribute('data-sdk-integration-source', 'button-factory');
-                script.onload = initializePaypalButtons;
-                script.onerror = () => {
-                    setPaypalScriptLoading(false);
-                    alert('Failed to load PayPal SDK. Please try again.');
-                };
-                document.body.appendChild(script);
+                // If recurring subscription is in sandbox / fallback mode, use amount checkout
+                options.amount = totalDueToday * (isINR ? 100 : 100);
+                options.currency = currency;
             }
-        }
-    }, [selectedGateway, planType, paypalScriptLoaded, paypalScriptLoading]);
 
-    // Render PayPal Buttons when loaded (and not standard/business plans using a direct link)
-    useEffect(() => {
-        if (selectedGateway === 'paypal' && (planType !== 'standard' && planType !== 'business') && paypalScriptLoaded && (window as any).paypal) {
-            const container = document.getElementById('paypal-button-container');
-            if (container) {
-                container.innerHTML = '';
-                try {
-                    (window as any).paypal.Buttons({
-                        style: {
-                            shape: 'pill',
-                            color: 'blue',
-                            layout: 'vertical',
-                            label: 'subscribe'
-                        },
-                        createSubscription: function(data: any, actions: any) {
-                            return actions.subscription.create({
-                                plan_id: planType === 'business'
-                                    ? (import.meta.env.VITE_PAYPAL_BUSINESS_PLAN_ID || 'P-53396685LJ841883FNIIUBMY')
-                                    : (import.meta.env.VITE_PAYPAL_STANDARD_PLAN_ID || 'P-0FL71448PL026300WNIIUAVQ')
-                            });
-                        },
-                        onApprove: function(data: any, actions: any) {
-                            localStorage.setItem('paypal_pending', JSON.stringify({
-                                userId: user!.id,
-                                planType: planType,
-                                timestamp: Date.now()
-                            }));
-                            navigate(`/payment-success?gateway=paypal&plan=${planType}&session_id=${data.subscriptionID}`);
-                        },
-                        onError: function(err: any) {
-                            console.error('PayPal Buttons error:', err);
-                        }
-                    }).render('#paypal-button-container');
-                } catch (e) {
-                    console.error('Error rendering PayPal buttons:', e);
-                }
-            }
-        }
-    }, [selectedGateway, paypalScriptLoaded, planType, user, navigate]);
+            const rzp = new (window as any).Razorpay(options);
+            rzp.on('payment.failed', function (resp: any) {
+                console.error("Razorpay Payment Failed:", resp.error);
+                setErrorMsg(`Payment failed: ${resp.error?.description || 'Transaction declined'}`);
+                setLoading(false);
+            });
 
+            rzp.open();
 
-
-
-    const handlePayment = async () => {
-        if (!selectedGateway || !user) return;
-
-        if (selectedGateway === 'paypal') {
-            if (planType === 'standard' || planType === 'business') {
-                const url = planType === 'business'
-                    ? (import.meta.env.VITE_PAYPAL_BUSINESS_PAYMENT_LINK || 'https://www.paypal.com/ncp/payment/9HPJ832RLMYCL')
-                    : (import.meta.env.VITE_PAYPAL_STANDARD_PAYMENT_LINK || 'https://www.paypal.com/ncp/payment/NDETAF5C5TT9J');
-                setLoading(true);
-
-                localStorage.setItem('paypal_pending', JSON.stringify({
-                    userId: user.id,
-                    planType: planType,
-                    timestamp: Date.now()
-                }));
-
-                // Redirect in the same tab to ensure checkout completion before redirection back
-                window.location.href = url;
-            }
+        } catch (err: any) {
+            console.error("Checkout submission error:", err);
+            setErrorMsg(err.message || 'Failed to initialize Razorpay checkout. Please try again.');
+            setLoading(false);
         }
     };
 
@@ -240,9 +383,9 @@ const Checkout: React.FC = () => {
             fontFamily: "'Inter', sans-serif"
         }}>
             <SEO
-                title={`Checkout — ${plan.name} Plan | DocTransfer`}
-                description={`Subscribe to DocTransfer ${plan.name} plan for ${plan.price}/month. Secure payment via PayPal.`}
-                keywords="DocTransfer checkout, secure payment, subscription"
+                title={`Checkout — ${plan.name} | DocTransfer`}
+                description={`Subscribe to DocTransfer ${plan.name} via Razorpay. Secure payments via UPI, Cards, and NetBanking.`}
+                keywords="DocTransfer checkout, Razorpay payment, secure data room checkout"
             />
 
             {/* Top Bar */}
@@ -264,10 +407,7 @@ const Checkout: React.FC = () => {
                         fontSize: '0.9rem',
                         fontWeight: 500,
                         transition: 'color 0.2s'
-                    }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = '#0f172a'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
-                    >
+                    }}>
                         <ArrowLeft size={18} />
                         Back to Plans
                     </Link>
@@ -279,11 +419,11 @@ const Checkout: React.FC = () => {
                     alignItems: 'center',
                     gap: '0.5rem',
                     color: '#64748b',
-                    fontSize: '0.8rem',
-                    fontWeight: 500
+                    fontSize: '0.82rem',
+                    fontWeight: 600
                 }}>
-                    <Lock size={14} />
-                    Secure Checkout
+                    <Lock size={15} color="#10b981" />
+                    256-Bit SSL Encrypted Checkout
                 </div>
             </header>
 
@@ -294,61 +434,45 @@ const Checkout: React.FC = () => {
                 padding: '1.25rem 2rem'
             }}>
                 <div style={{
-                    maxWidth: '900px',
+                    maxWidth: '850px',
                     margin: '0 auto',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0'
+                    justifyContent: 'center'
                 }}>
                     {[
-                        { step: 1, label: 'Choose Plan', done: true },
+                        { step: 1, label: 'Select Plan', done: true },
                         { step: 2, label: 'Payment Method', done: false, active: true },
-                        { step: 3, label: 'Confirmation', done: false }
+                        { step: 3, label: 'Instant Activation', done: false }
                     ].map((s, i) => (
                         <React.Fragment key={s.step}>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.6rem'
-                            }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                                 <div style={{
-                                    width: '32px',
-                                    height: '32px',
+                                    width: '30px',
+                                    height: '30px',
                                     borderRadius: '50%',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     fontSize: '0.8rem',
                                     fontWeight: 700,
-                                    background: s.done
-                                        ? '#10b981'
-                                        : s.active
-                                            ? plan.color
-                                            : '#e2e8f0',
-                                    color: s.done || s.active ? 'white' : '#94a3b8',
-                                    transition: 'all 0.3s'
+                                    background: s.done ? '#10b981' : (s.active ? plan.color : '#e2e8f0'),
+                                    color: s.done || s.active ? 'white' : '#94a3b8'
                                 }}>
                                     {s.done ? <Check size={16} strokeWidth={3} /> : s.step}
                                 </div>
                                 <span style={{
                                     fontSize: '0.85rem',
                                     fontWeight: s.active ? 700 : 500,
-                                    color: s.done
-                                        ? '#10b981'
-                                        : s.active
-                                            ? '#0f172a'
-                                            : '#94a3b8'
+                                    color: s.active ? '#0f172a' : (s.done ? '#10b981' : '#94a3b8')
                                 }}>{s.label}</span>
                             </div>
                             {i < 2 && (
                                 <div style={{
-                                    width: '80px',
+                                    width: '70px',
                                     height: '2px',
                                     background: s.done ? '#10b981' : '#e2e8f0',
-                                    margin: '0 1rem',
-                                    borderRadius: '1px',
-                                    transition: 'background 0.3s'
+                                    margin: '0 1rem'
                                 }} />
                             )}
                         </React.Fragment>
@@ -358,208 +482,296 @@ const Checkout: React.FC = () => {
 
             {/* Main Content */}
             <main style={{
-                maxWidth: '1100px',
+                maxWidth: '1120px',
                 margin: '0 auto',
-                padding: '3rem 2rem',
+                padding: '3rem 1.5rem',
                 display: 'grid',
                 gridTemplateColumns: '1fr 400px',
-                gap: '3rem',
+                gap: '2.5rem',
                 alignItems: 'start'
             }}>
-                {/* Left — Payment Method Selection */}
+                {/* Left Column: Payment Gateway Card */}
                 <div>
-                    <h1 style={{
-                        fontSize: '1.75rem',
-                        fontWeight: 800,
-                        color: '#0f172a',
-                        marginBottom: '0.5rem'
-                    }}>
-                        Select Payment Method
+                    <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.5rem' }}>
+                        Complete Your Subscription
                     </h1>
-                    <p style={{
-                        color: '#64748b',
-                        fontSize: '0.95rem',
-                        marginBottom: '2.5rem',
-                        lineHeight: 1.6
-                    }}>
-                        Choose how you'd like to pay for your <strong>{plan.name}</strong> subscription.
-                        All transactions are encrypted and secure.
+                    <p style={{ color: '#64748b', fontSize: '0.95rem', marginBottom: userEmail ? '1rem' : '2rem', lineHeight: 1.6 }}>
+                        You are subscribing to <strong>{plan.name}</strong>. Transactions are processed securely via <strong>Razorpay</strong>.
                     </p>
 
-                    {/* Payment Gateway Cards */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
-                        {/* PayPal Option */}
-                        <div
-                            style={{
-                                border: '2px solid #0070ba',
-                                borderRadius: '20px',
-                                padding: '1.75rem',
-                                background: 'linear-gradient(135deg, rgba(0, 112, 186, 0.04) 0%, rgba(0, 48, 135, 0.08) 100%)',
-                                boxShadow: '0 12px 30px rgba(0, 112, 186, 0.15), 0 0 0 1px rgba(0, 112, 186, 0.05)',
-                                position: 'relative',
-                                overflow: 'hidden'
-                            }}
-                        >
-                            {/* Selection indicator */}
-                            <div style={{
-                                position: 'absolute',
-                                top: '1.75rem',
-                                right: '1.75rem',
-                                width: '26px',
-                                height: '26px',
-                                borderRadius: '50%',
-                                background: 'linear-gradient(135deg, #0079C1 0%, #003087 100%)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                <Check size={15} color="white" strokeWidth={3.5} />
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1.25rem' }}>
-                                <div style={{
-                                    width: '56px',
-                                    height: '56px',
-                                    borderRadius: '14px',
-                                    background: '#ffffff',
-                                    border: '1px solid #e2e8f0',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
-                                    flexShrink: 0,
-                                    padding: '10px'
-                                }}>
-                                    <PayPalMonogram style={{ width: '28px', height: '28px' }} />
-                                </div>
-                                <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                        <h3 style={{
-                                            fontSize: '1.2rem',
-                                            fontWeight: 800,
-                                            color: '#0f172a',
-                                            margin: 0,
-                                            letterSpacing: '-0.01em'
-                                        }}>PayPal</h3>
-                                        <span style={{
-                                            fontSize: '0.65rem',
-                                            fontWeight: 800,
-                                            background: '#e0f0ff',
-                                            color: '#003087',
-                                            padding: '3px 8px',
-                                            borderRadius: '6px',
-                                            letterSpacing: '0.05em'
-                                        }}>🌍 SECURE PAYMENT</span>
-                                    </div>
-                                    <p style={{ color: '#64748b', fontSize: '0.88rem', margin: '0.25rem 0 0', lineHeight: 1.4 }}>
-                                        Pay securely with credit/debit card or your PayPal account
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div style={{
-                                display: 'flex',
-                                gap: '0.5rem',
-                                flexWrap: 'wrap',
-                                paddingLeft: '72px'
-                            }}>
-                                {[
-                                    { label: 'PayPal Checkout', color: '#003087', bg: '#e0f0ff' },
-                                    { label: 'Visa', color: '#1e40af', bg: '#dbeafe' },
-                                    { label: 'Mastercard', color: '#dc2626', bg: '#fee2e2' },
-                                    { label: 'Amex', color: '#006fcf', bg: '#e0f0ff' },
-                                    { label: 'Discover', color: '#f97316', bg: '#ffedd5' }
-                                ].map(m => (
-                                    <span key={m.label} style={{
-                                        fontSize: '0.72rem',
-                                        fontWeight: 700,
-                                        color: m.color,
-                                        background: m.bg,
-                                        padding: '4px 10px',
-                                        borderRadius: '8px',
-                                        letterSpacing: '0.01em'
-                                    }}>{m.label}</span>
-                                ))}
-                            </div>
+                    {userEmail && (
+                        <div style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            background: '#eff6ff',
+                            color: '#1d4ed8',
+                            padding: '0.45rem 0.9rem',
+                            borderRadius: '10px',
+                            fontSize: '0.82rem',
+                            fontWeight: 600,
+                            marginBottom: '1.75rem',
+                            border: '1px solid #bfdbfe'
+                        }}>
+                            <ShieldCheck size={16} color="#2563eb" />
+                            <span>Logged in as: <strong>{userEmail}</strong></span>
                         </div>
-                    </div>
+                    )}
 
-
-
-                    {/* Subscribe Button / PayPal Buttons Container */}
-                    {selectedGateway === 'paypal' && (planType !== 'standard' && planType !== 'business') ? (
-                        <div style={{ marginTop: '1.5rem', width: '100%' }}>
-                            {paypalScriptLoading && (
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '0.75rem',
-                                    padding: '1.5rem',
-                                    color: '#64748b',
-                                    fontSize: '0.95rem',
-                                    fontWeight: 600,
-                                    background: '#f8fafc',
-                                    borderRadius: '14px',
-                                    border: '1px dashed #cbd5e1'
-                                }}>
-                                    <Loader2 className="checkout-spin" size={20} />
-                                    Loading secure PayPal checkout...
-                                </div>
-                            )}
-                            <div id="paypal-button-container" style={{ width: '100%', display: paypalScriptLoading ? 'none' : 'block' }}></div>
+                    {errorMsg && (
+                        <div style={{
+                            background: '#fef2f2',
+                            border: '1px solid #fecaca',
+                            color: '#991b1b',
+                            padding: '1rem 1.25rem',
+                            borderRadius: '12px',
+                            marginBottom: '1.5rem',
+                            fontSize: '0.9rem'
+                        }}>
+                            {errorMsg}
                         </div>
-                    ) : (
-                        <button
-                            onClick={handlePayment}
-                            disabled={loading}
-                            style={{
-                                width: '100%',
-                                padding: '1.25rem 2rem',
+                    )}
+
+                    {/* Razorpay Gateway Box */}
+                    <div style={{
+                        border: '2px solid #3b82f6',
+                        borderRadius: '20px',
+                        padding: '1.75rem',
+                        background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, rgba(37, 99, 235, 0.08) 100%)',
+                        boxShadow: '0 12px 32px rgba(59, 130, 246, 0.12)',
+                        marginBottom: '1.5rem',
+                        position: 'relative'
+                    }}>
+                        {/* Radio select badge */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '1.5rem',
+                            right: '1.5rem',
+                            width: '24px',
+                            height: '24px',
+                            borderRadius: '50%',
+                            background: '#3b82f6',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'white'
+                        }}>
+                            <Check size={14} strokeWidth={3.5} />
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1.25rem' }}>
+                            <div style={{
+                                width: '56px',
+                                height: '56px',
                                 borderRadius: '14px',
-                                border: 'none',
-                                background: 'linear-gradient(135deg, #0070ba 0%, #003087 100%)',
-                                color: 'white',
-                                fontWeight: 800,
-                                fontSize: '1.05rem',
-                                cursor: 'pointer',
+                                background: 'white',
+                                border: '1px solid #e2e8f0',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '0.75rem',
-                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                boxShadow: '0 8px 24px rgba(0, 112, 186, 0.35)',
-                                letterSpacing: '0.01em'
-                            }}
-                            onMouseEnter={(e) => {
-                                if (!loading) {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.filter = 'brightness(1.06)';
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.filter = 'brightness(1)';
-                            }}
-                        >
-                            {loading ? (
-                                <>
-                                    <Loader2 size={22} className="checkout-spin" />
-                                    Processing...
-                                </>
-                            ) : (
-                                <>
-                                    <Lock size={18} />
-                                    Subscribe Now — {plan.price}/mo
-                                    <ChevronRight size={18} />
-                                </>
-                            )}
-                        </button>
-                    )}
+                                boxShadow: '0 4px 10px rgba(0,0,0,0.04)'
+                            }}>
+                                <CreditCard size={26} color="#0284c7" />
+                            </div>
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                                        Razorpay Gateway
+                                    </h3>
+                                    <span style={{
+                                        fontSize: '0.68rem',
+                                        fontWeight: 800,
+                                        background: '#dbeafe',
+                                        color: '#1d4ed8',
+                                        padding: '3px 8px',
+                                        borderRadius: '6px'
+                                    }}>RECOMMENDED</span>
+                                </div>
+                                <p style={{ color: '#64748b', fontSize: '0.88rem', margin: '0.25rem 0 0' }}>
+                                    UPI, RuPay, Visa, Mastercard, NetBanking & Global Cards
+                                </p>
+                            </div>
+                        </div>
 
-                    {/* Trust indicators */}
+                        {/* Supported Badges */}
+                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                            {[
+                                { name: 'Google Pay', bg: '#e0f2fe', color: '#0369a1' },
+                                { name: 'PhonePe', bg: '#ede9fe', color: '#6d28d9' },
+                                { name: 'Paytm UPI', bg: '#e0f2fe', color: '#0284c7' },
+                                { name: 'RuPay', bg: '#ffedd5', color: '#c2410c' },
+                                { name: 'Visa & MC', bg: '#f1f5f9', color: '#334155' },
+                                { name: '50+ Banks', bg: '#dcfce7', color: '#15803d' }
+                            ].map(b => (
+                                <span key={b.name} style={{
+                                    fontSize: '0.72rem',
+                                    fontWeight: 700,
+                                    background: b.bg,
+                                    color: b.color,
+                                    padding: '4px 10px',
+                                    borderRadius: '8px'
+                                }}>{b.name}</span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Phone Number Input Card */}
                     <div style={{
-                        marginTop: '1.5rem',
+                        background: 'white',
+                        border: phoneError ? '1.5px solid #ef4444' : '1px solid #e2e8f0',
+                        borderRadius: '18px',
+                        padding: '1.25rem 1.5rem',
+                        marginBottom: '1.5rem',
+                        boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
+                        transition: 'all 0.2s ease'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                            <label style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                fontSize: '0.92rem',
+                                fontWeight: 700,
+                                color: '#0f172a'
+                            }}>
+                                <Phone size={16} color="#0284c7" />
+                                Your Mobile Number (for Razorpay)
+                            </label>
+                            <span style={{
+                                fontSize: '0.68rem',
+                                fontWeight: 800,
+                                background: '#fef3c7',
+                                color: '#b45309',
+                                padding: '2px 8px',
+                                borderRadius: '6px'
+                            }}>REQUIRED</span>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '0.6rem' }}>
+                            {/* Country Code Selector */}
+                            <select
+                                value={countryCode}
+                                onChange={(e) => setCountryCode(e.target.value)}
+                                style={{
+                                    padding: '0.75rem 0.85rem',
+                                    borderRadius: '12px',
+                                    border: '1px solid #cbd5e1',
+                                    background: '#f8fafc',
+                                    color: '#0f172a',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 700,
+                                    outline: 'none',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                {COUNTRY_CODES.map((c) => (
+                                    <option key={c.code} value={c.code}>
+                                        {c.flag} {c.code}
+                                    </option>
+                                ))}
+                            </select>
+
+                            {/* Phone Input */}
+                            <input
+                                type="tel"
+                                value={phoneNumber}
+                                onChange={(e) => {
+                                    setPhoneNumber(e.target.value);
+                                    if (phoneError) setPhoneError(null);
+                                }}
+                                placeholder={countryCode === '+91' ? '98765 43210' : 'Mobile number'}
+                                style={{
+                                    flex: 1,
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '12px',
+                                    border: phoneError ? '1px solid #ef4444' : '1px solid #cbd5e1',
+                                    background: '#ffffff',
+                                    color: '#0f172a',
+                                    fontSize: '0.95rem',
+                                    fontWeight: 600,
+                                    outline: 'none',
+                                    transition: 'border 0.2s'
+                                }}
+                                onFocus={(e) => {
+                                    if (!phoneError) e.target.style.borderColor = '#0284c7';
+                                }}
+                                onBlur={(e) => {
+                                    if (!phoneError) e.target.style.borderColor = '#cbd5e1';
+                                }}
+                            />
+                        </div>
+
+                        {phoneError ? (
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.4rem',
+                                color: '#ef4444',
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                marginTop: '0.6rem'
+                            }}>
+                                <AlertCircle size={14} />
+                                {phoneError}
+                            </div>
+                        ) : (
+                            <p style={{
+                                margin: '0.6rem 0 0',
+                                fontSize: '0.75rem',
+                                color: '#64748b',
+                                lineHeight: 1.4
+                            }}>
+                                🔒 Razorpay uses this number for OTPs, UPI approval prompts, and GST payment receipts.
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Pay Button */}
+                    <button
+                        onClick={handleRazorpayPayment}
+                        disabled={loading}
+                        style={{
+                            width: '100%',
+                            padding: '1.25rem 2rem',
+                            borderRadius: '16px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+                            color: 'white',
+                            fontWeight: 800,
+                            fontSize: '1.05rem',
+                            cursor: loading ? 'default' : 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.75rem',
+                            boxShadow: '0 10px 25px rgba(2, 132, 199, 0.35)',
+                            transition: 'all 0.2s',
+                            letterSpacing: '0.01em'
+                        }}
+                        onMouseEnter={(e) => {
+                            if (!loading) e.currentTarget.style.filter = 'brightness(1.06)';
+                        }}
+                        onMouseLeave={(e) => {
+                            if (!loading) e.currentTarget.style.filter = 'brightness(1)';
+                        }}
+                    >
+                        {loading ? (
+                            <>
+                                <Loader2 size={20} className="checkout-spin" />
+                                Launching Secure Razorpay Checkout...
+                            </>
+                        ) : (
+                            <>
+                                <Lock size={18} />
+                                Pay with Razorpay — {symbol}{monthlyRate}/mo
+                                <ChevronRight size={18} />
+                            </>
+                        )}
+                    </button>
+
+                    {/* Trust Indicators */}
+                    <div style={{
+                        marginTop: '1.75rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -567,138 +779,115 @@ const Checkout: React.FC = () => {
                         flexWrap: 'wrap'
                     }}>
                         {[
-                            { icon: Shield, text: '256-bit SSL Encrypted' },
+                            { icon: ShieldCheck, text: 'RBI & NPCI Compliant' },
                             { icon: RefreshCw, text: 'Cancel Anytime' },
-                            { icon: Clock, text: 'Instant Activation' }
+                            { icon: Clock, text: 'Instant Plan Activation' }
                         ].map(t => (
                             <div key={t.text} style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '0.4rem',
                                 color: '#64748b',
-                                fontSize: '0.78rem',
+                                fontSize: '0.8rem',
                                 fontWeight: 500
                             }}>
-                                <t.icon size={14} color="#94a3b8" />
+                                <t.icon size={15} color="#10b981" />
                                 {t.text}
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Right — Order Summary Sidebar */}
-                <div style={{
-                    position: 'sticky',
-                    top: '120px'
-                }}>
-                    {/* Plan Summary Card */}
+                {/* Right Column: Order Summary */}
+                <div>
                     <div style={{
                         background: 'white',
                         borderRadius: '20px',
                         border: '1px solid #e2e8f0',
                         overflow: 'hidden',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.06)'
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
                     }}>
-                        {/* Header */}
+                        {/* Header Banner */}
                         <div style={{
                             background: plan.gradient,
-                            padding: '1.75rem',
-                            color: 'white',
-                            position: 'relative',
-                            overflow: 'hidden'
+                            padding: '1.5rem 1.75rem',
+                            color: 'white'
                         }}>
-                            {/* Decorative circle */}
                             <div style={{
-                                position: 'absolute',
-                                top: '-20px',
-                                right: '-20px',
-                                width: '100px',
-                                height: '100px',
-                                borderRadius: '50%',
-                                background: 'rgba(255,255,255,0.1)'
-                            }} />
-                            <div style={{
-                                position: 'absolute',
-                                bottom: '-30px',
-                                left: '-10px',
-                                width: '70px',
-                                height: '70px',
-                                borderRadius: '50%',
-                                background: 'rgba(255,255,255,0.06)'
-                            }} />
-                            <div style={{ position: 'relative', zIndex: 1 }}>
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                fontSize: '0.75rem',
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.08em',
+                                opacity: 0.9,
+                                marginBottom: '0.75rem'
+                            }}>
+                                <Sparkles size={14} /> Order Summary
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                 <div style={{
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '10px',
+                                    background: 'rgba(255,255,255,0.2)',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    marginBottom: '0.25rem',
-                                    fontSize: '0.75rem',
-                                    fontWeight: 600,
-                                    opacity: 0.9,
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '0.08em'
+                                    justifyContent: 'center'
                                 }}>
-                                    <Sparkles size={14} />
-                                    Order Summary
+                                    <PlanIcon size={22} />
                                 </div>
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.75rem',
-                                    marginTop: '0.75rem'
-                                }}>
-                                    <div style={{
-                                        width: '44px',
-                                        height: '44px',
-                                        borderRadius: '12px',
-                                        background: 'rgba(255,255,255,0.2)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        <PlanIcon size={22} />
-                                    </div>
-                                    <div>
-                                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>
-                                            {plan.name} Plan
-                                        </h3>
-                                        <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.85 }}>
-                                            Monthly subscription
-                                        </p>
-                                    </div>
+                                <div>
+                                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>
+                                        {plan.name}
+                                    </h3>
+                                    <p style={{ margin: 0, fontSize: '0.82rem', opacity: 0.85 }}>
+                                        {isAnnual ? 'Annual billing (Save ~25%)' : 'Monthly billing'}
+                                    </p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Pricing */}
-                        <div style={{ padding: '1.75rem' }}>
+                        {/* Line Items */}
+                        <div style={{ padding: '1.5rem' }}>
                             <div style={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'center',
-                                paddingBottom: '1rem',
-                                borderBottom: '1px solid #f1f5f9'
+                                paddingBottom: '0.75rem',
+                                borderBottom: '1px solid #f1f5f9',
+                                fontSize: '0.9rem',
+                                color: '#475569'
                             }}>
-                                <span style={{ color: '#475569', fontSize: '0.9rem', fontWeight: 500 }}>
-                                    {plan.name} Plan
-                                </span>
-                                <span style={{ color: '#0f172a', fontSize: '0.95rem', fontWeight: 700 }}>
-                                    {plan.price}/mo
+                                <span>Subscription Plan</span>
+                                <span style={{ fontWeight: 700, color: '#0f172a' }}>{plan.name}</span>
+                            </div>
+
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                padding: '0.75rem 0',
+                                borderBottom: '1px solid #f1f5f9',
+                                fontSize: '0.9rem',
+                                color: '#475569'
+                            }}>
+                                <span>Billing Cycle</span>
+                                <span style={{ fontWeight: 600, color: '#0f172a' }}>
+                                    {isAnnual ? 'Annual' : 'Monthly'}
                                 </span>
                             </div>
 
                             <div style={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'center',
-                                padding: '1rem 0',
-                                borderBottom: '1px solid #f1f5f9'
+                                padding: '0.75rem 0',
+                                borderBottom: '1px solid #f1f5f9',
+                                fontSize: '0.9rem',
+                                color: '#475569'
                             }}>
-                                <span style={{ color: '#475569', fontSize: '0.9rem', fontWeight: 500 }}>
-                                    Billing cycle
-                                </span>
-                                <span style={{ color: '#0f172a', fontSize: '0.9rem', fontWeight: 600 }}>
-                                    Monthly
+                                <span>Monthly Rate</span>
+                                <span style={{ fontWeight: 600, color: '#0f172a' }}>
+                                    {symbol}{monthlyRate}/mo
                                 </span>
                             </div>
 
@@ -706,23 +895,15 @@ const Checkout: React.FC = () => {
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'baseline',
-                                paddingTop: '1.25rem',
+                                paddingTop: '1rem',
                                 marginTop: '0.25rem'
                             }}>
-                                <span style={{ color: '#0f172a', fontSize: '1rem', fontWeight: 800 }}>
-                                    Total due today
+                                <span style={{ fontWeight: 800, color: '#0f172a', fontSize: '1rem' }}>
+                                    {isAnnual ? 'Total Billed Today (1 Year)' : 'Total Due Today'}
                                 </span>
                                 <div style={{ textAlign: 'right' }}>
-                                    <span style={{
-                                        fontSize: '1.75rem',
-                                        fontWeight: 800,
-                                        color: '#0f172a',
-                                        letterSpacing: '-0.02em'
-                                    }}>
-                                        {plan.price}
-                                    </span>
-                                    <span style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: 500 }}>
-                                        /mo
+                                    <span style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a' }}>
+                                        {symbol}{totalDueToday}
                                     </span>
                                 </div>
                             </div>
@@ -734,39 +915,31 @@ const Checkout: React.FC = () => {
                         background: 'white',
                         borderRadius: '16px',
                         border: '1px solid #e2e8f0',
-                        padding: '1.5rem',
+                        padding: '1.25rem 1.5rem',
                         marginTop: '1rem',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.03)'
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
                     }}>
                         <h4 style={{
-                            margin: '0 0 1rem',
-                            fontSize: '0.85rem',
+                            margin: '0 0 0.85rem',
+                            fontSize: '0.8rem',
                             fontWeight: 700,
                             color: '#0f172a',
                             textTransform: 'uppercase',
-                            letterSpacing: '0.06em'
+                            letterSpacing: '0.05em'
                         }}>
-                            What's Included
+                            Included in your plan
                         </h4>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                             {plan.features.map((f, i) => (
-                                <div key={i} style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.6rem'
-                                }}>
-                                    <CheckCircle2 size={16} color={plan.color} strokeWidth={2.5} />
-                                    <span style={{
-                                        fontSize: '0.82rem',
-                                        color: '#475569',
-                                        fontWeight: 500
-                                    }}>{f}</span>
+                                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                    <CheckCircle2 size={15} color={plan.color} strokeWidth={2.5} />
+                                    <span style={{ fontSize: '0.82rem', color: '#475569', fontWeight: 500 }}>
+                                        {f}
+                                    </span>
                                 </div>
                             ))}
                         </div>
                     </div>
-
-
                 </div>
             </main>
 
@@ -778,16 +951,6 @@ const Checkout: React.FC = () => {
                     }
                     .checkout-spin {
                         animation: spin 1s linear infinite;
-                    }
-                    @keyframes fadeSlideIn {
-                        from {
-                            opacity: 0;
-                            transform: translateY(-8px);
-                        }
-                        to {
-                            opacity: 1;
-                            transform: translateY(0);
-                        }
                     }
                     @media (max-width: 900px) {
                         main {

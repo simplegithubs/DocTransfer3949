@@ -608,7 +608,310 @@ const VERTICALS = {
       { name: 'Fluxx', prefix: 'fluxx', weakness: 'Enterprise grant management, complex and expensive', price: 'Custom ($$$)' },
       { name: 'Foundant', prefix: 'foundant', weakness: 'Foundation-side only, no grantee document sharing', price: 'Custom ($$$)' }
     ]
+  },
+  indianStartups: {
+    label: 'Indian Startups & VC',
+    industryName: 'Founders, Angels & Venture Capitalists in India',
+    painPoints: [
+      'Pitch decks leaked to competitors or forwarded without founder consent',
+      'Expensive US-dollar subscriptions for DocSend or Carta cutting into early-stage INR runway',
+      'Lack of visibility into angel or VC investor interest on specific slides and financial models',
+      'Manual follow-ups and friction collecting signatures on SAFE notes and Founder Agreements'
+    ],
+    features: [
+      { title: 'Zero-Knowledge Pitch Deck Vault', description: 'AES-256 browser-side encryption prevents unauthorized leaks before pitching Indian angels or VCs.' },
+      { title: 'Slide & Page-Level Engagement Tracking', description: 'Track second-by-second reading time per slide to gauge investor intent before pitching.' },
+      { title: 'One-Click Tap-to-Sign SAFE & Term Sheets', description: 'Collect legally binding electronic signatures on founder agreements, SAFE notes, and NDAs without signers needing accounts.' },
+      { title: 'Dynamic Recipient Watermarking', description: 'Overlay investor email addresses dynamically across pitch deck slides to prevent screenshots and unauthorized forwards.' }
+    ],
+    complianceNote: 'Fully compliant with the Indian Contract Act 1872 (Section 10A), IT Act 2000 (Section 65B for electronic evidence admissibility), and Companies Act 2013 for board resolutions. Zero-knowledge AES-256 encryption exceeds DPDP Act 2023 data protection standards.',
+    stats: [
+      { value: '100%', label: 'Free Forever Core Tier for Early-Stage Indian Founders' },
+      { value: '4.8x', label: 'Faster Term Sheet Close Rate with Real-Time Tracking' },
+      { value: 'Sec 65B', label: 'IT Act 2000 Admissible E-Sign Audit Trails' }
+    ],
+    industry: [
+      { slug: 'startup-pitch-deck-tracking-india', title: 'Pitch Deck Tracking for Indian Startups', kw: 'pitch deck tracking india, startup pitch deck analytics, docsend alternative for indian startups, track vc pitch deck views' },
+      { slug: 'angel-investor-data-room-india', title: 'Virtual Data Room for Indian Angel Investors', kw: 'angel investor data room india, startup fundraising data room, vdr for angel syndicates india, share investment memo' },
+      { slug: 'vc-due-diligence-room-india', title: 'VC Due Diligence Data Room India', kw: 'vc due diligence room india, venture capital data room, series a due diligence files, startup due diligence tracker' },
+      { slug: 'startup-fundraising-document-sharing-india', title: 'Secure Startup Fundraising Document Sharing India', kw: 'startup fundraising document sharing india, share cap table securely, secure pitch deck link, startup investor updates' },
+      { slug: 'safe-note-agreement-india', title: 'iSAFE & SAFE Note E-Signing India', kw: 'safe note agreement india, isafe note signing, convertible note startup india, seed funding agreement' },
+      { slug: 'founder-agreement-india', title: 'Co-Founder Agreement E-Signing India', kw: 'founder agreement india, co founder equity agreement, founders deed e sign, startup partnership agreement' },
+      { slug: 'startup-cap-table-sharing-india', title: 'Secure Cap Table & Financial Model Sharing India', kw: 'startup cap table sharing india, financial model investor link, secure cap table watermark, startup valuation sharing' },
+      { slug: 'seed-round-deck-tracking-india', title: 'Seed Round Pitch Deck Tracking India', kw: 'seed round deck tracking india, pre seed investor pitch deck, track angel deck views, startup seed round sharing' },
+      { slug: 'term-sheet-document-room-india', title: 'Term Sheet Sharing & Negotiation Room India', kw: 'term sheet document room india, term sheet e signature, vc term sheet negotiation, investment term sheet tracking' },
+      { slug: 'startup-board-resolution-india', title: 'Startup Board Resolution & SHA E-Sign India', kw: 'startup board resolution india, shareholders agreement e sign, mca board approval e sign, startup governance docs' }
+    ],
+    howto: [
+      { slug: 'how-to-track-pitch-deck-views-india', title: 'How to Track Pitch Deck Views for Indian Investors', kw: 'how to track pitch deck views india, track docsend link india, pitch deck analytics for vcs, check if investor viewed deck' },
+      { slug: 'how-to-create-safe-note-india', title: 'How to Create and E-Sign an iSAFE Note in India', kw: 'how to create safe note india, isafe note template e sign, startup convertible note india, sign safe note online' },
+      { slug: 'how-to-share-pitch-deck-with-vc-india', title: 'How to Share a Pitch Deck Securely with Indian VCs', kw: 'how to share pitch deck with vc india, send pitch deck without downloading, password protect pitch deck, dynamic watermark deck' },
+      { slug: 'how-to-create-founder-agreement-india', title: 'How to Create and Sign a Co-Founder Agreement in India', kw: 'how to create founder agreement india, co-founder vesting agreement online, legal founder agreement india, sign founder deed' },
+      { slug: 'how-to-send-term-sheet-india', title: 'How to Send and Track an Investment Term Sheet in India', kw: 'how to send term sheet india, term sheet signature tracker, track term sheet review time, angel syndicate term sheet' },
+      { slug: 'how-to-create-startup-data-room-india', title: 'How to Set Up a Free Virtual Data Room for Indian Startups', kw: 'how to create startup data room india, free vdr for fundraising, series a data room setup, secure investor vault india' },
+      { slug: 'how-to-e-sign-angel-investment-agreement-india', title: 'How to E-Sign an Angel Investment Agreement in India', kw: 'how to e sign angel investment agreement india, angel syndicate signature, online investment agreement e sign, legal e sign india' },
+      { slug: 'how-to-share-cap-table-securely-india', title: 'How to Share a Startup Cap Table Securely in India', kw: 'how to share cap table securely india, cap table watermark, prevent cap table leak, confidential cap table link' },
+      { slug: 'how-to-create-sha-india', title: 'How to E-Sign a Shareholders Agreement (SHA) in India', kw: 'how to create sha india, shareholders agreement e signing, investor rights agreement india, sha audit trail' },
+      { slug: 'how-to-send-board-resolution-for-funding-india', title: 'How to Pass and E-Sign a Board Resolution for Funding in India', kw: 'how to send board resolution for funding india, companies act board resolution e sign, digital board meeting minutes, startup director sign' },
+      { slug: 'how-to-share-startup-financial-projections-india', title: 'How to Share Startup Financial Projections with Investors', kw: 'how to share startup financial projections india, mis report investor link, confidential financial model tracking, startup mis sharing' },
+      { slug: 'how-to-protect-pitch-deck-from-leaks-india', title: 'How to Protect Your Pitch Deck from Leaks in India', kw: 'how to protect pitch deck from leaks india, pitch deck drm watermark, prevent deck download, secure pitch deck sharing' },
+      { slug: 'how-to-e-sign-startup-nda-india', title: 'How to E-Sign a Startup NDA with Indian Investors and Partners', kw: 'how to e sign startup nda india, mutual nda online india, startup non disclosure agreement e sign, legally binding nda india' },
+      { slug: 'how-to-create-advisor-agreement-india', title: 'How to Create and Sign a Startup Advisor Agreement in India', kw: 'how to create advisor agreement india, fast agreement advisor equity india, advisor agreement template e sign, startup mentor agreement' },
+      { slug: 'how-to-track-investor-interest-pitch-deck-india', title: 'How to Measure Investor Interest from Pitch Deck Analytics', kw: 'how to track investor interest pitch deck india, pitch deck time per slide, investor analytics deck, startup fundraising metrics' },
+      { slug: 'how-to-share-due-diligence-checklist-india', title: 'How to Share a Due Diligence Checklist with VC Analysts', kw: 'how to share due diligence checklist india, vc due diligence checklist, startup legal audit room, series a diligence docs' },
+      { slug: 'how-to-collect-signatures-from-multiple-angels-india', title: 'How to Collect E-Signatures from Multiple Angel Investors in India', kw: 'how to collect signatures from multiple angels india, angel syndicate e signature, multi party signing india, syndicate agreement online' },
+      { slug: 'how-to-send-monthly-investor-updates-india', title: 'How to Send Secure Monthly Investor Updates with Tracking', kw: 'how to send monthly investor updates india, startup investor update tracking, confidential mis sharing, investor relations email link' },
+      { slug: 'how-to-e-sign-esop-grant-letter-india', title: 'How to Issue and E-Sign ESOP Grant Letters in India', kw: 'how to e sign esop grant letter india, esop policy agreement online, startup employee stock options sign, esop scheme e sign' },
+      { slug: 'how-to-revoke-access-to-pitch-deck-india', title: 'How to Instantly Revoke Access to Shared Pitch Decks & Documents', kw: 'how to revoke access to pitch deck india, expire document link, kill switch pitch deck, secure link expiration' }
+    ],
+    templates: [
+      { slug: 'safe-note-india-template', name: 'iSAFE Note Agreement India', templateId: 'contractor-agreement', kw: 'safe note india template, isafe agreement format, startup convertible note template india, seed investment agreement template' },
+      { slug: 'founder-agreement-india-template', name: 'Co-Founder Agreement India', templateId: 'contractor-agreement', kw: 'founder agreement india template, co-founder equity contract format, startup partnership deed template, founder vesting deed' },
+      { slug: 'term-sheet-india-template', name: 'Investment Term Sheet India', templateId: 'sow', kw: 'term sheet india template, seed funding term sheet format, angel investment term sheet template, startup term sheet doc' },
+      { slug: 'startup-nda-india-template', name: 'Mutual Startup NDA India', templateId: 'nda', kw: 'startup nda india template, non disclosure agreement format india, investor nda template, proprietary information agreement india' },
+      { slug: 'angel-investment-agreement-india-template', name: 'Angel Investment Agreement India', templateId: 'sales-contract', kw: 'angel investment agreement india template, angel funding contract format, angel round agreement template, angel syndicate agreement' },
+      { slug: 'startup-board-resolution-india-template', name: 'Startup Board Resolution for Fundraise India', templateId: 'llc-operating', kw: 'startup board resolution india template, board resolution for allotment of shares, companies act board resolution template, mca filing resolution' },
+      { slug: 'shareholders-agreement-india-template', name: 'Shareholders Agreement (SHA) India', templateId: 'sales-contract', kw: 'shareholders agreement india template, sha template india, investor rights agreement format, co-founder sha deed' },
+      { slug: 'startup-advisor-agreement-india-template', name: 'Startup Advisor Agreement India', templateId: 'contractor-agreement', kw: 'startup advisor agreement india template, fast agreement india, advisor equity grant template, startup mentor contract' },
+      { slug: 'co-founder-vesting-agreement-india-template', name: 'Co-Founder Reverse Vesting Agreement India', templateId: 'contractor-agreement', kw: 'co-founder vesting agreement india template, reverse vesting agreement format, founder equity lock-in deed, startup vesting schedule' },
+      { slug: 'pitch-deck-cover-letter-india-template', name: 'Pitch Deck Cover Letter & Teaser India', templateId: 'sow', kw: 'pitch deck cover letter india template, investor teaser format, one page pitch memo india, executive summary template startup' }
+    ],
+    competitors: [
+      { name: 'DocSend', prefix: 'docsend', weakness: 'Expensive USD pricing ($15-$45/user/month), no INR support, no UPI payments', price: '$15-$45/user/month' },
+      { name: 'PandaDoc', prefix: 'pandadoc', weakness: 'Expensive per-seat pricing, complex quote builder overkill for simple pitch decks', price: '$19-$49/user/month' },
+      { name: 'Digify', prefix: 'digify', weakness: 'High entry price ($99+/month), lacks free tier for bootstrap startups', price: '$99+/month' },
+      { name: 'Dropbox Sign', prefix: 'dropbox-sign', weakness: 'Lacks page-by-page viewing duration tracking, limited free sends', price: '$15+/month' },
+      { name: 'DocuSign', prefix: 'docusign', weakness: 'Legacy enterprise sales process, costly add-ons for watermarking and tracking', price: '$10-$40/user/month' }
+    ]
+  },
+  indianCA: {
+    label: 'Indian Chartered Accountants & Tax',
+    industryName: 'Chartered Accountants, Tax Consultants & Auditors in India',
+    painPoints: [
+      'Clients sending confidential PAN, Aadhaar, bank statements and Form 16 over unsecured WhatsApp or plain email',
+      'Chasing clients repeatedly during July-September tax audit season without knowing if they opened request letters',
+      'Risk of data leaks violating ICAI confidentiality guidelines and DPDP Act 2023 financial privacy rules',
+      'Cumbersome print-sign-scan workflows for engagement letters, tax audit reports, and representation letters'
+    ],
+    features: [
+      { title: 'Zero-Knowledge Client Tax Vault', description: 'AES-256 client-side encryption ensures taxpayer documents and financials remain confidential and ICAI-compliant.' },
+      { title: 'Page-Level Financial Statement Tracking', description: 'Know exactly when clients, bankers, or tax officers inspect audit reports, balance sheets, and schedules.' },
+      { title: 'Court-Admissible IT Act E-Signatures', description: 'Collect legally binding electronic signatures on CA engagement letters, representation letters, and audit certificates.' },
+      { title: 'Dynamic PAN & Aadhaar Watermarking', description: 'Automatically overlay recipient email and timestamps on sensitive financial statements to prevent unauthorized circulation.' }
+    ],
+    complianceNote: 'Designed for Indian Chartered Accountants under ICAI Code of Ethics and guidelines. Fully valid under IT Act 2000 Section 5 (legal recognition of electronic signatures) and Section 65B (electronic evidence admissibility). Meets DPDP Act 2023 standards for safeguarding financial data.',
+    stats: [
+      { value: '100%', label: 'Free Forever Core Tier for Practicing CAs & Tax Firms' },
+      { value: '3.5x', label: 'Faster Document Turnaround During Busy ITR & Audit Seasons' },
+      { value: 'Sec 65B', label: 'Admissible Evidence for Indian Tax & Legal Proceedings' }
+    ],
+    industry: [
+      { slug: 'chartered-accountant-document-portal-india', title: 'Document Portal for Indian Chartered Accountants', kw: 'chartered accountant document portal india, ca client portal india, secure file sharing for chartered accountants, ca document management' },
+      { slug: 'tax-audit-report-sharing-india', title: 'Secure Tax Audit Report Sharing India', kw: 'tax audit report sharing india, 3cd audit report client link, send audit report to bank, tax audit document portal' },
+      { slug: 'gst-return-filing-documents-india', title: 'GST Return Filing Document Collection India', kw: 'gst return filing documents india, collect gstr 1 gstr 3b docs, gst audit document room, share gst reconciliation' },
+      { slug: 'itr-document-collection-portal-india', title: 'ITR Document Collection Portal for Tax Consultants', kw: 'itr document collection portal india, collect form 16 and bank statements, tax filing document portal, income tax return client files' },
+      { slug: 'ca-client-portal-india', title: 'CA Client Portal for Document Exchange India', kw: 'ca client portal india, ca firm file sharing, secure client document collection india, chartered accountant cloud vault' },
+      { slug: 'financial-statement-sharing-india', title: 'Confidential Financial Statement Sharing for CA Firms', kw: 'financial statement sharing india, share audited balance sheet securely, confidential p&l statement sharing, ca financial report link' },
+      { slug: 'company-audit-document-room-india', title: 'Company Statutory Audit Document Room India', kw: 'company audit document room india, statutory audit file sharing, audit working papers portal, mca compliance document room' },
+      { slug: 'tds-certificate-distribution-india', title: 'Form 16 & TDS Certificate Secure Distribution India', kw: 'tds certificate distribution india, send form 16 securely to employees, form 16a distribution portal, tds reconciliation sharing' },
+      { slug: 'mca-filing-document-portal-india', title: 'MCA Filing & Company Secretarial Document Portal', kw: 'mca filing document portal india, roc compliance document sharing, director kyc collection, share annual return roc' },
+      { slug: 'ca-firm-document-management-india', title: 'Secure Document Management for Indian CA Firms', kw: 'ca firm document management india, tax consultant file sharing software, icai compliant document portal, ca office automation' }
+    ],
+    howto: [
+      { slug: 'how-to-send-tax-audit-reports-securely-india', title: 'How to Send Tax Audit Reports Securely to Clients & Banks in India', kw: 'how to send tax audit reports securely india, share 3cd report with bank, send audited financials password protected, tax audit link' },
+      { slug: 'how-to-collect-itr-documents-from-clients-india', title: 'How to Collect ITR Documents from Clients in India', kw: 'how to collect itr documents from clients india, collect form 16 bank statement tax filing, client tax document checklist, itr filing file upload' },
+      { slug: 'how-to-share-gst-returns-securely-india', title: 'How to Share GST Returns and Reconciliation Reports Securely', kw: 'how to share gst returns securely india, send gstr 9 9c to client, share gst audit report, password protect gst report' },
+      { slug: 'how-to-create-ca-client-portal-india', title: 'How to Set Up a Free CA Client Document Portal in India', kw: 'how to create ca client portal india, free client portal for ca firms, tax consultant file upload portal, ca document room setup' },
+      { slug: 'how-to-e-sign-engagement-letter-india-ca', title: 'How to E-Sign CA Engagement Letters and Representation Letters in India', kw: 'how to e sign engagement letter india ca, ca engagement letter online signature, management representation letter e sign, icai engagement letter sign' },
+      { slug: 'how-to-send-tds-certificates-securely', title: 'How to Send Form 16 & Form 16A Certificates Securely to Clients', kw: 'how to send tds certificates securely, distribute form 16 password protected, send form 16a via secure link, tds certificate portal' },
+      { slug: 'how-to-collect-director-kyc-documents-india', title: 'How to Collect Director KYC Documents (DIR-3 KYC) in India', kw: 'how to collect director kyc documents india, dir 3 kyc document checklist, share pan aadhaar passport securely, roc kyc collection' },
+      { slug: 'how-to-share-balance-sheet-with-bank-india', title: 'How to Share Audited Balance Sheets and CMA Data with Banks in India', kw: 'how to share balance sheet with bank india, send cma data to bank loan officer, track bank manager viewing financials, audited accounts link' },
+      { slug: 'how-to-create-tax-organizer-india', title: 'How to Create a Tax Document Organizer for Indian Individual Taxpayers', kw: 'how to create tax organizer india, client tax questionnaire india, itr checklist for salaried taxpayers, tax planning document collector' },
+      { slug: 'how-to-send-financial-projections-to-investors-india', title: 'How to Send Certified Financial Projections to Investors in India', kw: 'how to send financial projections to investors india, ca certified projections link, financial model watermark, share valuation report' },
+      { slug: 'how-to-e-sign-statutory-audit-report-india', title: 'How to E-Sign Statutory Audit Reports and CARO Disclosures in India', kw: 'how to e sign statutory audit report india, caro 2020 report signature, independent auditor report e sign, companies act audit sign' },
+      { slug: 'how-to-share-internal-audit-working-papers-india', title: 'How to Share Internal Audit Working Papers Securely with Audit Committees', kw: 'how to share internal audit working papers india, audit committee document portal, confidential audit observations, internal audit memo' },
+      { slug: 'how-to-protect-client-pan-aadhaar-documents-india', title: 'How to Protect Client PAN and Aadhaar Documents from Leaks in India', kw: 'how to protect client pan aadhaar documents india, dpdp act compliance ca firm, mask pan aadhaar document sharing, client kyc security' },
+      { slug: 'how-to-e-sign-partnership-firm-audit-india', title: 'How to E-Sign Partnership Firm Audit Reports and Tax Filings in India', kw: 'how to e sign partnership firm audit india, partnership tax return sign, form 3cb 3cd signing, partners resolution e sign' },
+      { slug: 'how-to-track-client-document-review-time-ca', title: 'How CAs Can Track Client Document Review Time on Computation Sheets', kw: 'how to track client document review time ca, tax computation review tracking, check if client opened tax computation, ca analytics' },
+      { slug: 'how-to-collect-vendor-invoices-for-gst-audit-india', title: 'How to Collect Vendor Invoices & E-Way Bills for GST Audits in India', kw: 'how to collect vendor invoices for gst audit india, input tax credit document collection, itc reconciliation files, e way bill verification' },
+      { slug: 'how-to-share-net-worth-certificate-india', title: 'How to Issue and Share CA Certified Net Worth Certificates Securely', kw: 'how to share net worth certificate india, ca net worth certificate for visa, net worth statement bank loan, verified net worth certificate' },
+      { slug: 'how-to-send-transfer-pricing-study-india', title: 'How to Share Transfer Pricing Study Reports Securely in India', kw: 'how to send transfer pricing study india, form 3ceb report sharing, transfer pricing documentation portal, cross border tax file sharing' },
+      { slug: 'how-to-e-sign-llp-annual-returns-india', title: 'How to E-Sign and Share LLP Annual Returns (Form 11 & Form 8) in India', kw: 'how to e sign llp annual returns india, llp form 8 signature, llp form 11 partner signing, mca llp filing documents' },
+      { slug: 'how-to-create-secure-client-onboarding-ca-india', title: 'How to Create a Secure Client Onboarding Flow for CA Practices in India', kw: 'how to create secure client onboarding ca india, new tax client onboarding checklist, ca engagement workflow, digital client intake ca firm' }
+    ],
+    templates: [
+      { slug: 'ca-engagement-letter-india-template', name: 'CA Audit Engagement Letter India', templateId: 'contractor-agreement', kw: 'ca engagement letter india template, icai engagement letter format, statutory audit engagement letter template, tax audit engagement agreement' },
+      { slug: 'client-tax-organizer-india-template', name: 'Client ITR Tax Organizer & Checklist India', templateId: 'w4-form', kw: 'client tax organizer india template, itr filing checklist format, tax documents collection template, individual tax questionnaire' },
+      { slug: 'audit-report-cover-letter-india-template', name: 'Audit Report Submission Cover Letter India', templateId: 'sow', kw: 'audit report cover letter india template, tax audit submission letter, audited accounts dispatch letter format, auditor memo template' },
+      { slug: 'gst-invoice-india-template', name: 'GST Compliant Tax Invoice India', templateId: 'purchase-order', kw: 'gst invoice india template, gst bill format excel pdf, tax invoice template with hsn sac, gst compliant invoice format' },
+      { slug: 'form-15ca-cb-template', name: 'Form 15CA and 15CB Checklist & Undertaking India', templateId: 'sow', kw: 'form 15ca cb template, foreign remittance certificate checklist, 15cb undertaking format, ca certificate for remittance' },
+      { slug: 'director-appointment-letter-india-template', name: 'Director Appointment Letter & DIR-2 Consent India', templateId: 'offer-letter', kw: 'director appointment letter india template, dir 2 consent letter format, board appointment resolution, director terms letter' },
+      { slug: 'shareholder-resolution-india-template', name: 'Shareholder Resolution for Auditor Appointment India', templateId: 'llc-operating', kw: 'shareholder resolution for auditor appointment india, agm resolution statutory auditor, adt-1 appointment notice template, mca auditor resolution' },
+      { slug: 'power-of-attorney-tax-india-template', name: 'Power of Attorney for Income Tax Proceedings India', templateId: 'nda', kw: 'power of attorney tax india template, poa for itat hearing format, vakalatnama tax representation template, ca authority letter' },
+      { slug: 'management-representation-letter-india-template', name: 'Management Representation Letter for Audit India', templateId: 'sow', kw: 'management representation letter india template, sa 580 representation letter format, management letter to statutory auditor, audit representation certificate' },
+      { slug: 'company-incorporation-checklist-india-template', name: 'SPICe+ Company Incorporation Document Checklist India', templateId: 'w4-form', kw: 'company incorporation checklist india template, spice plus document checklist, pvt ltd company registration docs, mca incorporation checklist' }
+    ],
+    competitors: [
+      { name: 'TaxDome', prefix: 'taxdome', weakness: 'Expensive USD subscription ($50+/user/month), overkill for standalone CA practices', price: '$50+/month' },
+      { name: 'SmartVault', prefix: 'smartvault', weakness: 'US-centric tax integration, high per-user cost, no UPI payments', price: '$40+/month' },
+      { name: 'Zoho WorkDrive', prefix: 'zoho-workdrive', weakness: 'Cloud storage only, lacks second-by-second page analytics and legal e-sign audit trails', price: '$2.50+/user/month' },
+      { name: 'ClearTax', prefix: 'cleartax', weakness: 'Filing utility only, lacks client-side AES-256 encrypted vaults for custom audit documents', price: 'Enterprise tiers' },
+      { name: 'Google Drive', prefix: 'google-drive', weakness: 'Zero view duration tracking, no legal e-signatures, links forwarded without access control', price: 'Free / $6/month' }
+    ]
+  },
+  indianLegal: {
+    label: 'Indian Legal & Real Estate',
+    industryName: 'Advocates, Law Firms, Property Owners & Landlords in India',
+    painPoints: [
+      'Creating and managing rental agreements with state-specific stamp paper laws across Bangalore, Mumbai, Delhi, Hyderabad',
+      'Unencrypted transmission of confidential litigation briefs, property title deeds, and settlement terms',
+      'Physical signature bottlenecks delaying lease agreements, property sales, and commercial NDAs',
+      'Lack of tamper-evident digital audit logs required under Indian Evidence Act Section 65B'
+    ],
+    features: [
+      { title: 'State-Specific Rent Agreement Creator', description: 'Draft, customize, and e-sign standard 11-month lease agreements compliant with local Rent Control Acts.' },
+      { title: 'Zero-Knowledge Advocate Vault', description: 'Client-side AES-256 encryption safeguards privileged attorney-client correspondence, affidavits, and court briefs.' },
+      { title: 'Indian Evidence Act Section 65B Audit Trail', description: 'Every e-signed agreement includes cryptographic hashes, IP addresses, and timestamps admissible in Indian courts.' },
+      { title: 'Dynamic Aadhaar & PAN Watermark Protection', description: 'Prevent misuse of property ownership deeds, sale agreements, and identity documents during negotiations.' }
+    ],
+    complianceNote: 'E-signatures valid under IT Act 2000 Section 5 (legal recognition of electronic signatures) and Indian Contract Act 1872 (Section 10A). Rent agreements formatted to meet state-specific Stamp Act requirements for Karnataka, Maharashtra, Delhi, Tamil Nadu, and Telangana. Audit trails are fully admissible under Indian Evidence Act Section 65B.',
+    stats: [
+      { value: '100%', label: 'Free Forever Core Tier for Advocates, Landlords & Tenants' },
+      { value: '10 Mins', label: 'Average Time to Create & Sign an Online Rent Agreement' },
+      { value: 'Sec 65B', label: 'Court-Admissible Evidence Certificate Generated with Every Sign' }
+    ],
+    industry: [
+      { slug: 'rent-agreement-india-online', title: 'Online Rent Agreement Creation & E-Sign India', kw: 'rent agreement india online, online rental agreement e sign, 11 month lease agreement india, rent agreement online registration' },
+      { slug: 'advocate-document-sharing-india', title: 'Secure Document Sharing for Indian Advocates & Law Firms', kw: 'advocate document sharing india, law firm client portal india, legal document sharing secure, advocate case file vault' },
+      { slug: 'property-sale-deed-transfer-india', title: 'Property Sale Agreement & Deed Sharing India', kw: 'property sale deed transfer india, sale agreement property e sign, property purchase document room, title deed verification link' },
+      { slug: 'legal-notice-sharing-india', title: 'Legal Notice Drafting & Delivery Tracking India', kw: 'legal notice sharing india, send legal notice online tracking, proof of delivery legal notice, legal notice email link' },
+      { slug: 'court-filing-document-portal-india', title: 'Court Filing & Litigation Document Portal India', kw: 'court filing document portal india, high court filing document vault, nclt document room, litigation brief sharing secure' },
+      { slug: 'law-firm-client-portal-india', title: 'Law Firm Client Portal & E-Sign Platform India', kw: 'law firm client portal india, attorney client privilege portal, legal contract management india, advocate office software' },
+      { slug: 'arbitration-document-sharing-india-law', title: 'Arbitration & Dispute Resolution Document Room India', kw: 'arbitration document sharing india law, dispute resolution data room, arbitral tribunal document sharing, commercial arbitration files' },
+      { slug: 'ip-trademark-filing-india', title: 'IP & Trademark Filing Document Management India', kw: 'ip trademark filing india, trademark attorney client portal, patent assignment agreement e sign, ip license document sharing' },
+      { slug: 'company-registration-documents-india', title: 'Company Registration & MoA / AoA E-Signing India', kw: 'company registration documents india, moa aoa signing online, pvt ltd incorporation legal docs, subscriber sheet e sign' },
+      { slug: 'mergers-acquisitions-data-room-india', title: 'Indian M&A Virtual Data Room & Due Diligence Platform', kw: 'mergers acquisitions data room india, indian m&a vdr, legal due diligence data room india, business acquisition document room' }
+    ],
+    howto: [
+      { slug: 'how-to-create-rent-agreement-online-india', title: 'How to Create and E-Sign an 11-Month Rent Agreement Online in India', kw: 'how to create rent agreement online india, draft 11 month rental agreement, e sign rent agreement legally, online rent agreement format' },
+      { slug: 'how-to-e-sign-contracts-legally-in-india', title: 'How to E-Sign Contracts Legally Under Indian Law (IT Act 2000)', kw: 'how to e sign contracts legally in india, it act 2000 electronic signature, legal validity of e signature in india, court admissible e sign' },
+      { slug: 'how-to-send-legal-notice-india', title: 'How to Draft and Send a Legal Notice with Proof of Delivery in India', kw: 'how to send legal notice india, track legal notice opening, section 138 cheque bounce notice send, legal notice delivery proof' },
+      { slug: 'how-to-create-sale-deed-india', title: 'How to Draft an Agreement for Sale of Immovable Property in India', kw: 'how to create sale deed india, property sale agreement format, draft agreement to sell immovable property, real estate sale deed india' },
+      { slug: 'how-to-share-court-documents-securely-india', title: 'How to Share Court Filings and Litigation Briefs Securely with Clients', kw: 'how to share court documents securely india, advocate client case file sharing, secure litigation brief link, high court petition sharing' },
+      { slug: 'how-to-create-power-of-attorney-india', title: 'How to Create and Execute a General or Special Power of Attorney in India', kw: 'how to create power of attorney india, general poa format india, special power of attorney format, execute poa online india' },
+      { slug: 'how-to-create-affidavit-online-india', title: 'How to Draft and Format an Affidavit Online in India', kw: 'how to create affidavit online india, general affidavit format, name change affidavit template, address proof affidavit india' },
+      { slug: 'how-to-register-rent-agreement-bangalore', title: 'How to Create and Sign a Rental Agreement in Bangalore (Karnataka)', kw: 'how to register rent agreement bangalore, bangalore rental agreement format, karnataka stamp paper rent agreement, e sign rent agreement bangalore' },
+      { slug: 'how-to-register-rent-agreement-mumbai', title: 'How to Create and Sign a Leave and License Agreement in Mumbai (Maharashtra)', kw: 'how to register rent agreement mumbai, leave and license agreement mumbai format, maharashtra stamp duty rent agreement, mumbai tenant agreement' },
+      { slug: 'how-to-create-will-testament-india', title: 'How to Draft a Legal Will and Testament in India', kw: 'how to create will testament india, legal will format india, draft simple will online, last will and testament template india' },
+      { slug: 'how-to-e-sign-commercial-lease-agreement-india', title: 'How to E-Sign a Commercial Lease Agreement for Office Space in India', kw: 'how to e sign commercial lease agreement india, commercial rent agreement format, office lease agreement india, commercial tenancy deed' },
+      { slug: 'how-to-create-freelance-contract-india-law', title: 'How to Create a Legally Binding Freelancer Agreement in India', kw: 'how to create freelance contract india law, freelance consultant agreement format, service contract india e sign, client freelancer contract' },
+      { slug: 'how-to-e-sign-promissory-note-india', title: 'How to Draft and Execute a Demand Promissory Note in India', kw: 'how to e sign promissory note india, demand promissory note format india, loan agreement with promissory note, money lending promissory note' },
+      { slug: 'how-to-share-property-title-documents-safely', title: 'How to Share Property Title Deeds Safely During Due Diligence in India', kw: 'how to share property title documents safely, encumbrance certificate sharing, mother deed verification link, watermark property documents' },
+      { slug: 'how-to-draft-mutual-divorce-settlement-india', title: 'How to Draft a Mutual Consent Divorce Settlement Agreement in India', kw: 'how to draft mutual divorce settlement india, divorce settlement deed format, maintenance and custody agreement, mutual consent divorce memo' },
+      { slug: 'how-to-e-sign-consulting-agreement-india', title: 'How to E-Sign a Professional Consulting Services Agreement in India', kw: 'how to e sign consulting agreement india, consultant contract format india, advisory services agreement e sign, scope of work consulting india' },
+      { slug: 'how-to-create-eviction-notice-landlord-india', title: 'How to Draft and Send a Tenant Eviction Notice in India', kw: 'how to create eviction notice landlord india, notice to vacate rental property format, tenant eviction notice template, landlord notice to tenant' },
+      { slug: 'how-to-verify-electronic-signatures-section-65b', title: 'How to Verify Electronic Signatures & Section 65B Certificates in India', kw: 'how to verify electronic signatures section 65b, 65b certificate generator, electronic evidence proof indian court, tamper proof audit trail' },
+      { slug: 'how-to-draft-memorandum-of-understanding-mou-india', title: 'How to Draft and E-Sign a Memorandum of Understanding (MoU) in India', kw: 'how to draft memorandum of understanding mou india, mou format india, memorandum of understanding template, business partnership mou e sign' },
+      { slug: 'how-to-create-relinquishment-deed-india', title: 'How to Draft a Property Relinquishment Deed / Release Deed in India', kw: 'how to create relinquishment deed india, release deed format for property, share release deed ancestral property, relinquishment deed legal draft' }
+    ],
+    templates: [
+      { slug: 'rent-agreement-india-template', name: '11-Month Residential Rent Agreement India', templateId: 'sublease', kw: 'rent agreement india template, 11 month rent agreement format pdf, residential lease agreement format india, house rent agreement doc' },
+      { slug: 'rent-agreement-bangalore-template', name: 'Bangalore Rental Agreement (Karnataka)', templateId: 'sublease', kw: 'rent agreement bangalore template, rental agreement format bangalore, karnataka house rent agreement template, bangalore 11 month lease' },
+      { slug: 'rent-agreement-mumbai-template', name: 'Mumbai Leave & License Agreement (Maharashtra)', templateId: 'sublease', kw: 'rent agreement mumbai template, leave and license agreement format mumbai, maharashtra rental agreement template, flat rent agreement mumbai' },
+      { slug: 'rent-agreement-delhi-template', name: 'Delhi NCR Rent Agreement Template', templateId: 'sublease', kw: 'rent agreement delhi template, delhi rent agreement format pdf, noida gurgaon rental agreement format, house rent agreement delhi ncr' },
+      { slug: 'nda-format-india-template', name: 'Non-Disclosure Agreement (NDA) India Format', templateId: 'nda', kw: 'nda format india template, non disclosure agreement format india, commercial nda template india, mutual confidentiality deed india' },
+      { slug: 'power-of-attorney-india-template', name: 'General Power of Attorney (GPA) India', templateId: 'contractor-agreement', kw: 'power of attorney india template, gpa format india, general power of attorney deed template, special power of attorney format' },
+      { slug: 'legal-notice-india-template', name: 'Legal Notice Format India (Recovery & Breach)', templateId: 'sow', kw: 'legal notice india template, legal notice for non payment format, breach of contract legal notice, advocate notice draft template' },
+      { slug: 'sale-agreement-property-india-template', name: 'Agreement for Sale of Immovable Property India', templateId: 'sales-contract', kw: 'sale agreement property india template, agreement to sell flat format, property sale agreement template india, plot sale agreement format' },
+      { slug: 'freelancer-contract-india-template', name: 'Freelancer & Independent Contractor Agreement India', templateId: 'contractor-agreement', kw: 'freelancer contract india template, freelance service agreement format, independent contractor agreement india, client freelancer deed' },
+      { slug: 'partnership-deed-india-template', name: 'Partnership Deed Format India', templateId: 'llc-operating', kw: 'partnership deed india template, partnership deed format india, partnership agreement template, deed of partnership firm' }
+    ],
+    competitors: [
+      { name: 'Leegality', prefix: 'leegality', weakness: 'Enterprise contract required, expensive minimum commitment, complex API setup', price: 'Enterprise' },
+      { name: 'SpotDraft', prefix: 'spotdraft', weakness: 'Priced for large corporate legal teams ($$$), inaccessible to independent advocates and landlords', price: 'Custom ($$$)' },
+      { name: 'LegalDesk', prefix: 'legaldesk', weakness: 'Pay-per-document fee model with no built-in client data rooms or page analytics', price: '₹500-₹1500/doc' },
+      { name: 'Zoho Sign', prefix: 'zoho-sign', weakness: 'Lacks dynamic watermarking and slide-by-slide viewing duration tracking', price: '₹600+/user/month' },
+      { name: 'DocuSign', prefix: 'docusign', weakness: 'Expensive USD billing ($10-$40/mo), no India-specific stamp paper or rent agreement workflows', price: '$10-$40/month' },
+      { name: 'PandaDoc', prefix: 'pandadoc', weakness: 'High USD per-seat cost, no native WhatsApp sharing integration', price: '$19+/user/month' },
+      { name: 'Adobe Acrobat Sign', prefix: 'adobe-sign', weakness: 'Heavy desktop software heritage, sluggish mobile experience for property tenants and clients', price: '$13+/user/month' }
+    ]
+  },
+  indianHR: {
+    label: 'Indian HR & Employment',
+    industryName: 'HR Managers, Founders & MSME Employers in India',
+    painPoints: [
+      'Sending salary breakdown letters with complex CTC structures (Basic, HRA, Special Allowance, PF, Gratuity) via unformatted email',
+      'Delays in candidate onboarding due to physical signing of offer letters, NDAs, and appointment letters',
+      'Collecting sensitive KYC documents (PAN, Aadhaar, previous company relieving letters) over unsecured channels',
+      'Disputes over employment terms and lack of verifiable audit trails for employee exit settlements'
+    ],
+    features: [
+      { title: 'CTC Breakdown Offer Letter Studio', description: 'Create and send professional offer letters with detailed Indian CTC salary structure and one-tap candidate signing.' },
+      { title: 'Encrypted Employee Onboarding Vault', description: 'Safely collect candidate PAN, Aadhaar, degree certificates, and Form 16 under DPDP Act 2023 compliance.' },
+      { title: 'Instant Tap-to-Sign Mobile Letters', description: 'Candidates sign offer letters and appointment deeds instantly on their mobile phone without creating an account.' },
+      { title: 'Statutory Compliance Audit Log', description: 'Generate tamper-proof IT Act Section 65B signature certificates for employment contracts, relieving letters, and NDAs.' }
+    ],
+    complianceNote: 'Fully compliant with the Indian Contract Act 1872, IT Act 2000, Industrial Disputes Act 1947, Payment of Gratuity Act 1972, and Employees Provident Fund (EPF) Act 1952. Employee data storage complies with DPDP Act 2023 data privacy regulations.',
+    stats: [
+      { value: '100%', label: 'Free Forever Core Tier for HR Teams, Recruiters & MSMEs' },
+      { value: '82%', label: 'Candidate Offer Acceptance Signed Within 2 Hours on Mobile' },
+      { value: 'Sec 65B', label: 'Court-Admissible Legal Signatures for All Employment Letters' }
+    ],
+    industry: [
+      { slug: 'offer-letter-format-india-ctc', title: 'Offer Letter Format with CTC Structure India', kw: 'offer letter format india ctc, job offer letter format with salary breakup, employee offer letter india, candidate offer letter e sign' },
+      { slug: 'employee-onboarding-documents-india', title: 'Employee Onboarding Document Collection Portal India', kw: 'employee onboarding documents india, collect candidate kyc online, new joiner document portal, employee document submission portal' },
+      { slug: 'relieving-letter-format-india', title: 'Relieving Letter & Experience Certificate Issuance India', kw: 'relieving letter format india, employee relieving letter online, experience letter format, relieving cum experience certificate' },
+      { slug: 'experience-certificate-format-india', title: 'Experience Certificate Issuance & Tracking India', kw: 'experience certificate format india, service certificate for employee, work experience letter e sign, verified experience certificate' },
+      { slug: 'employee-kyc-collection-india', title: 'Employee KYC Collection & Verification Portal India', kw: 'employee kyc collection india, collect pan aadhaar form 16, employee background verification docs, hr kyc document portal' },
+      { slug: 'hr-compliance-documents-india', title: 'HR Compliance & Statutory Document Portal India', kw: 'hr compliance documents india, shops and establishment hr documents, factory act hr documents, labour law compliance documents india' },
+      { slug: 'pf-esic-document-collection-india', title: 'EPF Form 11 & ESIC Declaration Document Collection', kw: 'pf esic document collection india, form 11 epf declaration, esic form 1 employee declaration, provident fund nomination collection' },
+      { slug: 'appraisal-letter-format-india', title: 'Salary Increment & Appraisal Letter Distribution India', kw: 'appraisal letter format india, salary increment letter e sign, annual promotion letter format, compensation revision letter' },
+      { slug: 'internship-agreement-india', title: 'Internship Offer Letter & Agreement E-Signing India', kw: 'internship agreement india, intern offer letter format with stipend, college internship agreement, student internship contract' },
+      { slug: 'employee-separation-documents-india', title: 'Employee Separation & Full and Final Settlement (FnF) India', kw: 'employee separation documents india, fnf settlement letter format, employee resignation acceptance letter, clearance certificate hr' }
+    ],
+    howto: [
+      { slug: 'how-to-create-offer-letter-with-ctc-breakup-india', title: 'How to Create and E-Sign a Job Offer Letter with CTC Breakup in India', kw: 'how to create offer letter with ctc breakup india, salary structure offer letter, draft job offer letter online, candidate offer letter e sign' },
+      { slug: 'how-to-collect-employee-kyc-documents-india', title: 'How to Collect New Employee KYC Documents Securely in India', kw: 'how to collect employee kyc documents india, collect employee pan aadhaar bank proof, digital employee onboarding flow, hr kyc checklist' },
+      { slug: 'how-to-send-relieving-letter-india', title: 'How to Issue and Send a Relieving Letter Online in India', kw: 'how to send relieving letter india, generate relieving letter for resigning employee, relieving letter format download, digital relieving letter' },
+      { slug: 'how-to-create-experience-certificate-india', title: 'How to Create and Send a Work Experience Certificate in India', kw: 'how to create experience certificate india, employee experience letter format, issue experience certificate online, service certificate hr' },
+      { slug: 'how-to-collect-pf-nomination-forms-india', title: 'How to Collect EPF Form 11 & Form 2 Nomination Forms from Employees', kw: 'how to collect pf nomination forms india, form 11 pf declaration form, form 2 epf nomination online, provident fund onboarding docs' },
+      { slug: 'how-to-create-appointment-letter-india', title: 'How to Draft and E-Sign an Employment Appointment Letter in India', kw: 'how to create appointment letter india, employee appointment contract format, permanent appointment letter e sign, terms of employment letter' },
+      { slug: 'how-to-send-appraisal-letter-securely-india', title: 'How to Send Performance Appraisal & Salary Increment Letters Securely', kw: 'how to send appraisal letter securely india, salary hike letter distribution, confidential compensation letter link, appraisal letter tracking' },
+      { slug: 'how-to-collect-form-11-pf-india', title: 'How to Collect and Verify Form 11 EPF Self Declarations Online', kw: 'how to collect form 11 pf india, epf composite declaration form, uan declaration form 11, pf onboarding form collection' },
+      { slug: 'how-to-create-probation-confirmation-letter-india', title: 'How to Issue a Probation Confirmation Letter for Employees in India', kw: 'how to create probation confirmation letter india, confirmation letter format after probation, employee confirmation letter e sign, probation completion letter' },
+      { slug: 'how-to-share-salary-slips-securely-india', title: 'How to Share Password-Protected Salary Slips and Form 16 with Employees', kw: 'how to share salary slips securely india, send payslips password protected, form 16 employee distribution, confidential payslip portal' },
+      { slug: 'how-to-e-sign-employee-nda-india', title: 'How to E-Sign an Employee Non-Disclosure and IP Assignment Agreement in India', kw: 'how to e sign employee nda india, employee confidentiality agreement format, intellectual property assignment agreement india, staff nda e sign' },
+      { slug: 'how-to-draft-consultant-offer-letter-india', title: 'How to Draft a Retainer or Consultant Agreement in India', kw: 'how to draft consultant offer letter india, professional retainer agreement format, consultant scope of work e sign, retainership contract' },
+      { slug: 'how-to-create-internship-certificate-india', title: 'How to Issue an Internship Completion Certificate Online in India', kw: 'how to create internship certificate india, internship completion certificate format, college intern recommendation letter, student intern letter' },
+      { slug: 'how-to-send-warning-letter-to-employee-india', title: 'How to Draft and Send an Official Warning Letter to an Employee in India', kw: 'how to send warning letter to employee india, employee show cause notice format, performance improvement plan pip letter, disciplinary warning letter' },
+      { slug: 'how-to-create-full-and-final-settlement-letter-india', title: 'How to Create a Full & Final Settlement (FnF) Statement & Clearance Letter', kw: 'how to create full and final settlement letter india, fnf computation statement format, employee clearance certificate, fnf discharge voucher' },
+      { slug: 'how-to-collect-previous-employer-relieving-letters', title: 'How to Collect and Verify Previous Employer Relieving & Experience Letters', kw: 'how to collect previous employer relieving letters, background verification document checklist, previous employment proof portal, bgv document upload' },
+      { slug: 'how-to-issue-remote-work-policy-agreement-india', title: 'How to Issue and E-Sign a Work from Home (WFH) Policy Agreement in India', kw: 'how to issue remote work policy agreement india, wfh policy agreement format, hybrid work agreement e sign, remote employee policy deed' },
+      { slug: 'how-to-track-candidate-offer-letter-review-time', title: 'How HR Teams Can Track Candidate Viewing Time on Job Offer Letters', kw: 'how to track candidate offer letter review time, check if candidate opened offer letter, offer letter analytics hr, candidate engagement tracking' },
+      { slug: 'how-to-create-posh-policy-acknowledgement-india', title: 'How to Issue and Collect POSH Policy Acknowledgement Forms in India', kw: 'how to create posh policy acknowledgement india, posh act employee acknowledgement format, prevention of sexual harassment policy sign, posh declaration' },
+      { slug: 'how-to-e-sign-employment-bond-india-legality', title: 'How to Draft an Employment Training Agreement & Legality in India', kw: 'how to e sign employment bond india legality, employee training agreement format, employment bond validity in india, service agreement employee' }
+    ],
+    templates: [
+      { slug: 'offer-letter-india-ctc-template', name: 'Job Offer Letter with CTC Breakdown India', templateId: 'offer-letter', kw: 'offer letter india ctc template, job offer letter format with salary breakup, employee appointment offer template, corporate offer letter format' },
+      { slug: 'relieving-letter-india-template', name: 'Employee Relieving Letter India', templateId: 'offer-letter', kw: 'relieving letter india template, employee relieving letter format pdf, service exit letter format, relieving cum experience letter template' },
+      { slug: 'experience-certificate-india-template', name: 'Work Experience Certificate India', templateId: 'offer-letter', kw: 'experience certificate india template, work experience letter format doc, employee service certificate template, verified experience letter' },
+      { slug: 'appointment-letter-india-template', name: 'Employment Appointment Letter India', templateId: 'offer-letter', kw: 'appointment letter india template, terms of employment agreement format, permanent employee appointment deed, hr appointment letter' },
+      { slug: 'appraisal-letter-india-template', name: 'Annual Salary Increment & Appraisal Letter India', templateId: 'offer-letter', kw: 'appraisal letter india template, salary hike letter format, performance promotion letter template, compensation revision format' },
+      { slug: 'internship-offer-letter-india-template', name: 'Internship Offer Letter & Agreement India', templateId: 'offer-letter', kw: 'internship offer letter india template, intern stipend letter format, college student internship agreement, internship appointment letter' },
+      { slug: 'employee-nda-india-template', name: 'Employee Non-Disclosure & Confidentiality Agreement India', templateId: 'nda', kw: 'employee nda india template, employee confidentiality agreement format, workplace secrecy agreement, ip assignment agreement employee' },
+      { slug: 'probation-confirmation-letter-india-template', name: 'Probation Confirmation Letter India', templateId: 'offer-letter', kw: 'probation confirmation letter india template, employee confirmation letter format, probation period completion letter, permanent status letter' },
+      { slug: 'employee-warning-letter-india-template', name: 'Employee Official Warning / Show Cause Letter India', templateId: 'offer-letter', kw: 'employee warning letter india template, performance warning notice format, misconduct show cause letter, employee pip letter format' },
+      { slug: 'full-final-settlement-letter-india-template', name: 'Full and Final Settlement (FnF) Clearance Letter India', templateId: 'offer-letter', kw: 'full final settlement letter india template, fnf clearance letter format, employee exit settlement voucher, full and final discharge letter' }
+    ],
+    competitors: [
+      { name: 'Keka', prefix: 'keka', weakness: 'Heavy all-in-one HRMS with long implementation cycles, overkill for simple document signing', price: '₹6,999+/month' },
+      { name: 'Darwinbox', prefix: 'darwinbox', weakness: 'Enterprise-only pricing and complex setup, inaccessible to early-stage Indian MSMEs', price: 'Custom Enterprise' },
+      { name: 'GreytHR', prefix: 'greythr', weakness: 'Payroll-centric UI, lacks second-by-second candidate document engagement tracking', price: '₹3,495+/month' },
+      { name: 'Zoho People', prefix: 'zoho-people', weakness: 'Basic document upload without zero-knowledge encryption or dynamic watermarking', price: '₹40-₹200/user/month' },
+      { name: 'BambooHR', prefix: 'bamboohr', weakness: 'US-dollar pricing ($99+/mo), lacks India-specific statutory PF/ESIC/CTC document templates', price: '$99+/month' }
+    ]
   }
+
 };
 
 // ─────────────────────────────────────────────
@@ -670,6 +973,53 @@ function genFaqs(category, pk, sk) {
   ];
 }
 
+function genIndiaBodySections(category, pk, sk, tk, qk, vKey, label) {
+  return [
+    {
+      title: `1. Why ${toTitleCase(pk)} Matters for Indian Businesses & Professionals`,
+      text: `Implementing a secure and legally recognized workflow for ${pk} is essential for Indian founders, chartered accountants, legal professionals, and enterprises. Relying on unencrypted email attachments or WhatsApp forwards exposes organizations to data leaks, regulatory fines, and non-admissible evidence in court. By adopting dedicated, high-security infrastructure for ${pk}, organizations ensure that sensitive financial models, property records, and commercial agreements remain strictly confidential. Integrating ${sk} capabilities allows senders to verify counterparty identity and prevent unauthorized downloads or circulation. Rapid mobile e-signatures further streamline contract execution across India's fast-paced digital economy.`
+    },
+    {
+      title: '2. Zero-Knowledge Encryption & DPDP Act 2023 Compliance',
+      text: `When evaluating solutions for ${pk} in India, data security and compliance with the Digital Personal Data Protection (DPDP) Act 2023 are non-negotiable. Legacy document sharing platforms decrypt files on their central cloud servers, exposing confidential client data to third-party breaches and unauthorized access. DocTransfer resolves this through client-side Zero-Knowledge encryption using Web Crypto APIs (AES-256-GCM) directly in your browser. Files are cryptographically sealed before they ever touch external servers. Combined with ${tk}, senders maintain full sovereignty over documents — with the ability to revoke access instantly, set link expiration timers, and apply dynamic watermarks containing the viewer's contact details.`
+    },
+    {
+      title: '3. Second-by-Second Engagement Analytics & Deal Intelligence',
+      text: `Beyond encryption, high-stakes ${label} transactions require real-time intelligence on how counterparties engage with your proposals. Standard file sharing leaves teams in the dark once an email is sent. DocTransfer delivers granular, page-level viewing analytics down to the exact second. Whether an angel investor spends four minutes analyzing your financial unit economics or a property tenant reviews specific lease terms, you receive immediate notifications. Leveraging actionable insights from ${qk} empowers Indian professionals to follow up proactively, address concerns swiftly, and close agreements with higher confidence.`
+    },
+    {
+      title: '4. Legal Validity Under IT Act 2000 & Section 65B Court Admissibility',
+      text: `Every digital signature and agreement executed through DocTransfer is legally binding across India under the Information Technology Act 2000 (Section 5 for legal recognition of electronic signatures and Section 10A for contract enforceability) and the Indian Contract Act 1872. To ensure full court admissibility, each completed document is accompanied by a tamper-evident audit certificate complying with Section 65B of the Indian Evidence Act. This audit trail captures precise cryptographic hashes, signer IP addresses, verified email identities, and millisecond timestamps, ensuring your ${pk} agreements withstand rigorous legal scrutiny.`
+    }
+  ];
+}
+
+function genIndiaFaqs(category, pk, sk, vKey, label) {
+  return [
+    {
+      question: `Are digital signatures collected for ${pk} legally valid in India?`,
+      answer: `Yes, absolutely. Electronic signatures collected via DocTransfer are legally recognized and enforceable across India under Section 5 and Section 10A of the Information Technology (IT) Act 2000 and the Indian Contract Act 1872. Each completed document generates a court-admissible audit log adhering to Section 65B of the Indian Evidence Act.`
+    },
+    {
+      question: `How does page-level tracking benefit ${label} professionals in India?`,
+      answer: 'Page-level analytics show you precisely when a counterparty opens your document and how many seconds they spend reviewing each page or slide. This enables you to pinpoint high-interest sections (such as pricing, liability clauses, or financial models) and time your follow-up conversations for maximum impact.'
+    },
+    {
+      question: 'Is client-side end-to-end encryption compliant with the DPDP Act 2023?',
+      answer: 'Yes. With Zero-Knowledge AES-256-GCM encryption, files are encrypted directly inside your browser prior to upload. Since only you and your designated recipient hold the decryption keys, not even database administrators can access confidential client or personal data, exceeding standard DPDP Act 2023 obligations.'
+    },
+    {
+      question: 'Do Indian clients or investors need to install an app or create an account to view or sign?',
+      answer: 'No. Recipients can open secure document links on any mobile or desktop browser and tap or draw their electronic signature within seconds — with zero app downloads or account registrations required.'
+    },
+    {
+      question: `Can I prevent recipients from forwarding or taking unauthorized screenshots of my ${label} documents?`,
+      answer: 'Yes. You can disable downloads to restrict viewers to web-only viewing, require passcode or email verification, set automated link expiration dates, and apply dynamic watermarks displaying the recipient’s email address across every page.'
+    }
+  ];
+}
+
+
 // ─────────────────────────────────────────────
 // INDUSTRY PAGE GENERATOR
 // ─────────────────────────────────────────────
@@ -692,8 +1042,8 @@ function generateIndustryPages() {
         features: v.features,
         complianceNotes: v.complianceNote,
         stats: v.stats,
-        bodySections: genBodySections('industry', pk, secondaryKw(p.kw), tertiaryKw(p.kw), quaternaryKw(p.kw)),
-        faqs: genFaqs('industry', pk, secondaryKw(p.kw))
+        bodySections: vKey.startsWith('indian') ? genIndiaBodySections('industry', pk, secondaryKw(p.kw), tertiaryKw(p.kw), quaternaryKw(p.kw), vKey, v.label) : genBodySections('industry', pk, secondaryKw(p.kw), tertiaryKw(p.kw), quaternaryKw(p.kw)),
+        faqs: vKey.startsWith('indian') ? genIndiaFaqs('industry', pk, secondaryKw(p.kw), vKey, v.label) : genFaqs('industry', pk, secondaryKw(p.kw))
       });
     }
   }
@@ -729,8 +1079,8 @@ function generateHowToPages() {
           { stepNumber: 3, title: 'Share and Track', description: 'Generate a secure link and send it. Monitor viewer engagement page-by-page from your dashboard.' },
           { stepNumber: 4, title: 'Seal and Archive', description: 'Once signed, the file is sealed cryptographically and stored in your vault with a full audit trail.' }
         ],
-        bodySections: genBodySections('how-to', pk, secondaryKw(p.kw), tertiaryKw(p.kw), quaternaryKw(p.kw)),
-        faqs: genFaqs('how-to', pk, secondaryKw(p.kw))
+        bodySections: vKey.startsWith('indian') ? genIndiaBodySections('how-to', pk, secondaryKw(p.kw), tertiaryKw(p.kw), quaternaryKw(p.kw), vKey, v.label) : genBodySections('how-to', pk, secondaryKw(p.kw), tertiaryKw(p.kw), quaternaryKw(p.kw)),
+        faqs: vKey.startsWith('indian') ? genIndiaFaqs('how-to', pk, secondaryKw(p.kw), vKey, v.label) : genFaqs('how-to', pk, secondaryKw(p.kw))
       });
     }
   }
@@ -745,6 +1095,7 @@ function generateTemplatePages() {
   for (const [vKey, v] of Object.entries(VERTICALS)) {
     for (const p of v.templates) {
       const pk = primaryKw(p.kw);
+      const isIndian = vKey.startsWith('indian');
       pages[p.slug] = {
         slug: p.slug,
         templateId: p.templateId,
@@ -753,16 +1104,29 @@ function generateTemplatePages() {
         metaDescription: `Download free ${p.name} template for ${v.label.toLowerCase()}. ${pk}. Sign online instantly with DocTransfer.`,
         keywords: p.kw,
         benefits: `${v.label.toLowerCase()} compliance, easy formatting, secure signatures`,
-        introduction: `Finding a free ${pk} is crucial for ${v.industryName.toLowerCase()} who want to establish clean, legally valid commercial arrangements. A professional ${p.name} template outlines exact specifications, responsibilities, timelines, and terms. Using DocTransfer to finalize and sign this ${p.name} ensures that your transaction is backed by client-side AES-256 encryption, mobile touch signatures, and legally binding audit logs conforming to ESIGN, UETA, and eIDAS regulations.`,
+        introduction: isIndian
+          ? `Accessing a free, legally structured ${pk} is essential for ${v.industryName.toLowerCase()} who need clean, enforceable agreements under Indian law. A professional ${p.name} defines clear terms, rights, and responsibilities while adhering to statutory norms. Using DocTransfer to customize and sign this ${p.name} ensures that your transaction is safeguarded by Zero-Knowledge AES-256 encryption, mobile touch signatures, and court-admissible audit trails conforming to the IT Act 2000 (Section 65B) and Indian Contract Act 1872.`
+          : `Finding a free ${pk} is crucial for ${v.industryName.toLowerCase()} who want to establish clean, legally valid commercial arrangements. A professional ${p.name} template outlines exact specifications, responsibilities, timelines, and terms. Using DocTransfer to finalize and sign this ${p.name} ensures that your transaction is backed by client-side AES-256 encryption, mobile touch signatures, and legally binding audit logs conforming to ESIGN, UETA, and eIDAS regulations.`,
         instructions: `To customize and sign this ${p.name}, follow these steps. First, identify the parties involved. Second, define the scope, deliverables, or specifications. Third, fill in variables such as dates, amounts, and governing laws. Finally, share the customized link with the signer. They can open the document in their browser and tap to sign without creating an account.`,
         boilerplateTitle: `${p.name.toUpperCase()} AGREEMENT`,
-        boilerplateSections: [
+        boilerplateSections: isIndian ? [
+          { title: '1. Scope and Obligations', text: `The parties hereby agree to the terms, deliverables, and conditions set forth in this ${p.name}. All performance under this agreement shall conform to applicable Indian laws and professional standards.` },
+          { title: '2. Commercial Terms & Payment Obligations', text: 'All consideration, fees, or rentals specified herein shall be paid in Indian Rupees (INR) subject to applicable GST and TDS deductions under the Income Tax Act 1961. Late payments shall accrue interest as mutually agreed.' },
+          { title: '3. Confidentiality & Data Protection (DPDP Act 2023)', text: `Each party agrees to maintain strict confidentiality of proprietary records and personal information shared under this agreement in compliance with the Digital Personal Data Protection Act 2023.` },
+          { title: '4. Governing Law, Dispute Resolution & IT Act Compliance', text: 'This agreement is governed by the laws of India. Any dispute arising hereunder shall be resolved through binding arbitration in accordance with the Arbitration and Conciliation Act 1996. Electronic execution of this document is valid under Section 10A of the Information Technology Act 2000.' }
+        ] : [
           { title: '1. Scope and Purpose', text: `The parties agree to the terms, services, or guidelines outlined in this ${p.name}. All performance must meet standard professional guidelines and applicable regulatory requirements.` },
           { title: '2. Financial Obligations & Payment', text: 'Payments and financial obligations shall be made in accordance with the rates, values, and due dates agreed upon. Late balances shall accrue interest as specified by the applicable jurisdiction.' },
           { title: '3. Confidentiality and Data Protection', text: `Each party commits to keeping proprietary information confidential. All ${v.label.toLowerCase()} documents and data shared under this agreement are protected under applicable privacy regulations.` },
           { title: '4. Governing Law and Dispute Resolution', text: 'This agreement is governed by the designated state or federal law. Disputes shall be resolved through binding arbitration or mediation as specified in the terms.' }
         ],
-        faqs: [
+        faqs: isIndian ? [
+          { question: `Is this ${p.name} legally binding under Indian law?`, answer: 'Yes. When customized and signed electronically through DocTransfer, the agreement meets all requirements of the Information Technology Act 2000 (Section 5 & 10A) and the Indian Contract Act 1872, generating a Section 65B compliant audit certificate admissible in Indian courts.' },
+          { question: `How do I customize this ${p.name}?`, answer: `You can customize this ${p.name} online with your specific details, download the finalized PDF, or send a secure link to collect electronic signatures from counterparties.` },
+          { question: 'Do signers need to create an account or install software?', answer: 'No. Signers can open the secure link on any smartphone or computer, review the agreement, and sign with a finger or stylus in seconds without registering.' },
+          { question: 'Can I set access controls and security on this document?', answer: 'Yes. You can protect your document with passcodes, email verification, auto-expiration dates, and dynamic watermarks showing the recipient’s email address to prevent unauthorized leaks.' },
+          { question: 'How does the Section 65B audit log protect this document?', answer: 'Upon signing, the document is cryptographically sealed with an SHA-256 digital hash. An audit trail records verified email identities, IP addresses, and exact timestamps to prevent tampering and provide definitive legal proof.' }
+        ] : [
           { question: `How do I customize this ${p.name}?`, answer: `You can customize this ${p.name} directly online by entering your details in our form wizard. Once ready, you can download a sample PDF or send a secure link to the other party to collect digital signatures.` },
           { question: `Is this ${p.name} template legally valid?`, answer: 'Yes. When completed and signed electronically on our compliant platform, the agreement meets the criteria of the US ESIGN Act, UETA, and EU eIDAS regulations, making it fully admissible in court.' },
           { question: 'Do signers need an account?', answer: 'No. Signers do not need to sign up or install any software. They can open the secure link on their phone, draw their signature, and submit instantly.' },
@@ -818,8 +1182,8 @@ function generateComparisonPages() {
           { feature: 'Second-by-second analytics', docTransfer: true, competitor: false, notes: 'Know exact view times per page' },
           { feature: `${v.label} templates`, docTransfer: true, competitor: true, notes: `Both offer ${v.label.toLowerCase()} document support` }
         ],
-        bodySections: genBodySections('comparisons', pk, `${comp.prefix} alternative for ${vKey}`, `secure ${vKey} document transfer`, `${v.label.toLowerCase()} file sharing`),
-        faqs: genFaqs('comparisons', pk, `${comp.prefix} alternative`)
+        bodySections: vKey.startsWith('indian') ? genIndiaBodySections('comparisons', pk, `${comp.prefix} alternative for ${vKey}`, `secure ${vKey} document transfer`, `${v.label.toLowerCase()} file sharing`, vKey, v.label) : genBodySections('comparisons', pk, `${comp.prefix} alternative for ${vKey}`, `secure ${vKey} document transfer`, `${v.label.toLowerCase()} file sharing`),
+        faqs: vKey.startsWith('indian') ? genIndiaFaqs('comparisons', pk, `${comp.prefix} alternative`, vKey, v.label) : genFaqs('comparisons', pk, `${comp.prefix} alternative`)
       });
     }
   }
@@ -852,8 +1216,8 @@ function generateAlternativePages() {
           { feature: 'End-to-End Encryption', docTransfer: 'AES-256 E2EE Vault', competitor: 'Server-side standard' },
           { feature: `${v.label} Features`, docTransfer: `Built-in ${v.label.toLowerCase()} support`, competitor: 'Limited or add-on' }
         ],
-        bodySections: genBodySections('alternatives', pk, `${comp.name} replacement for ${vKey}`, `secure ${vKey} document platform`, `${v.label.toLowerCase()} file sharing solution`),
-        faqs: genFaqs('alternatives', pk, `${comp.name} replacement`)
+        bodySections: vKey.startsWith('indian') ? genIndiaBodySections('alternatives', pk, `${comp.name} replacement for ${vKey}`, `secure ${vKey} document platform`, `${v.label.toLowerCase()} file sharing solution`, vKey, v.label) : genBodySections('alternatives', pk, `${comp.name} replacement for ${vKey}`, `secure ${vKey} document platform`, `${v.label.toLowerCase()} file sharing solution`),
+        faqs: vKey.startsWith('indian') ? genIndiaFaqs('alternatives', pk, `${comp.name} replacement`, vKey, v.label) : genFaqs('alternatives', pk, `${comp.name} replacement`)
       });
     }
   }

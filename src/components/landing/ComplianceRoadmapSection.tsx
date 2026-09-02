@@ -16,6 +16,28 @@ import {
 const ComplianceRoadmapSection: React.FC = () => {
   const complianceCards = [
     {
+      title: 'DPDP Act 2023 Ready',
+      status: 'India Privacy Ready',
+      icon: ShieldCheck,
+      color: '#10b981',
+      gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.1) 100%)',
+      borderColor: 'rgba(52, 211, 153, 0.45)',
+      glowShadow: '0 0 35px rgba(16, 185, 129, 0.25)',
+      description: 'Client-side Zero-Knowledge AES-256 encryption ensures taxpayer documents, PAN, Aadhaar, and confidential IP meet India Digital Personal Data Protection standards.',
+      tags: ['Zero Server Decryption', 'DPDP Compliance', 'Local Key Storage']
+    },
+    {
+      title: 'IT Act 2000 & Sec 65B',
+      status: 'Court-Admissible',
+      icon: FileCheck,
+      color: '#6366f1',
+      gradient: 'linear-gradient(135deg, rgba(99, 102, 241, 0.22) 0%, rgba(139, 92, 246, 0.1) 100%)',
+      borderColor: 'rgba(129, 140, 248, 0.45)',
+      glowShadow: '0 0 35px rgba(99, 102, 241, 0.25)',
+      description: 'Legally binding e-signatures under Section 5 & 10A of the IT Act 2000 with tamper-evident digital audit logs compliant with Section 65B of the Indian Evidence Act.',
+      tags: ['Sec 65B Certificate', 'IT Act Section 5', 'Contract Act Sec 10A']
+    },
+    {
       title: 'SOC 2 Type II',
       status: 'Certified / In-Progress',
       icon: ShieldCheck,
@@ -27,15 +49,15 @@ const ComplianceRoadmapSection: React.FC = () => {
       tags: ['24/7 Security Audit', 'Encrypted Vaults', 'Access Logging']
     },
     {
-      title: 'HIPAA Compliant Ready',
-      status: 'Compliant Ready',
-      icon: FileCheck,
-      color: '#34d399',
-      gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(20, 184, 166, 0.08) 100%)',
-      borderColor: 'rgba(52, 211, 153, 0.4)',
-      glowShadow: '0 0 35px rgba(16, 185, 129, 0.22)',
-      description: 'Safeguards Protected Health Information (PHI) with client-side encryption, view logs, and Business Associate Agreement (BAA) support.',
-      tags: ['PHI Data Protection', 'BAA Supported', 'Audit Compliance']
+      title: 'ISO 27001 Aligned',
+      status: 'Framework Aligned',
+      icon: Server,
+      color: '#fbbf24',
+      gradient: 'linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.08) 100%)',
+      borderColor: 'rgba(251, 191, 36, 0.4)',
+      glowShadow: '0 0 35px rgba(245, 158, 11, 0.22)',
+      description: 'Structured in accordance with international Information Security Management System (ISMS) standards and continuous vulnerability assessments.',
+      tags: ['ISMS Blueprint', 'Key Management', 'Threat Prevention']
     },
     {
       title: 'GDPR Compliant',
@@ -49,15 +71,15 @@ const ComplianceRoadmapSection: React.FC = () => {
       tags: ['Data Minimization', 'DPA Available', 'Right-to-Erasure']
     },
     {
-      title: 'ISO 27001 Aligned',
-      status: 'Framework Aligned',
-      icon: Server,
-      color: '#fbbf24',
-      gradient: 'linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(217, 119, 6, 0.08) 100%)',
-      borderColor: 'rgba(251, 191, 36, 0.4)',
-      glowShadow: '0 0 35px rgba(245, 158, 11, 0.22)',
-      description: 'Structured in accordance with international Information Security Management System (ISMS) standards and continuous vulnerability assessments.',
-      tags: ['ISMS Blueprint', 'Key Management', 'Threat Prevention']
+      title: 'HIPAA Compliant Ready',
+      status: 'Compliant Ready',
+      icon: FileCheck,
+      color: '#34d399',
+      gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(20, 184, 166, 0.08) 100%)',
+      borderColor: 'rgba(52, 211, 153, 0.4)',
+      glowShadow: '0 0 35px rgba(16, 185, 129, 0.22)',
+      description: 'Safeguards Protected Health Information (PHI) with client-side encryption, view logs, and Business Associate Agreement (BAA) support.',
+      tags: ['PHI Data Protection', 'BAA Supported', 'Audit Compliance']
     }
   ];
 

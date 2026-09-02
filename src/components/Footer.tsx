@@ -15,7 +15,11 @@ import {
   Droplets,
   Sparkles,
   ArrowRight,
-  ExternalLink
+  ExternalLink,
+  MessageCircle,
+  CheckCircle2,
+  Scale,
+  ShieldCheck
 } from 'lucide-react';
 
 interface FooterProps {
@@ -30,7 +34,7 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
       background: light ? '#f8fafc' : '#0a0f1d',
       color: light ? '#1e293b' : '#f8fafc',
       borderTop: light ? '1px solid #e2e8f0' : '1px solid rgba(255, 255, 255, 0.08)',
-      padding: '5rem 2rem 2rem',
+      padding: '5rem 2rem 2.5rem',
       fontFamily: 'system-ui, -apple-system, sans-serif'
     }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
@@ -59,7 +63,7 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '0.95rem', color: light ? '#0f172a' : 'white' }}>Page-by-Page Tracking</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Real-time dwell time & engagement</div>
+              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Real-time dwell time & open alerts</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -68,16 +72,16 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
             </div>
             <div>
               <div style={{ fontWeight: 700, fontSize: '0.95rem', color: light ? '#0f172a' : 'white' }}>Legally Binding E-Sign</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>eIDAS & ESIGN compliant signatures</div>
+              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>ESIGN, eIDAS & IT Act 2000 valid</div>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ background: 'rgba(236, 72, 153, 0.15)', color: '#f472b6', padding: '0.75rem', borderRadius: '12px' }}>
-              <Droplets size={22} />
+            <div style={{ background: 'rgba(14, 165, 233, 0.15)', color: '#38bdf8', padding: '0.75rem', borderRadius: '12px' }}>
+              <MessageCircle size={22} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.95rem', color: light ? '#0f172a' : 'white' }}>Dynamic Watermarking</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Traceable recipient email overlays</div>
+              <div style={{ fontWeight: 700, fontSize: '0.95rem', color: light ? '#0f172a' : 'white' }}>WhatsApp & Mobile Sign</div>
+              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Instant link sharing & mobile touch sign</div>
             </div>
           </div>
         </div>
@@ -96,12 +100,11 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               Product
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
-              <li><Link to="/pricing" style={linkStyle(light)}>Pricing Plans</Link></li>
+              <li><Link to="/pricing" style={linkStyle(light)}>Pricing Plans ($0 / ₹0 Free Tier)</Link></li>
               <li><Link to="/dataroom" style={linkStyle(light)}>Virtual Data Room</Link></li>
               <li><Link to="/document-sharing" style={linkStyle(light)}>Document Sharing</Link></li>
               <li><Link to="/security" style={{ ...linkStyle(light), color: '#818cf8', fontWeight: 600 }}>Trust & Security Hub</Link></li>
               <li><Link to="/transparency" style={{ ...linkStyle(light), color: '#38bdf8', fontWeight: 600 }}>Public Transparency Report</Link></li>
-              <li><Link to="/security" style={linkStyle(light)}>Compliance & Audit</Link></li>
               <li><Link to="/integrations" style={linkStyle(light)}>Integrations</Link></li>
             </ul>
           </div>
@@ -115,8 +118,8 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               <li><Link to="/docsend-alternative" style={linkStyle(light)}>DocSend Alternative</Link></li>
               <li><Link to="/alternatives/docusign-alternative" style={linkStyle(light)}>DocuSign Alternative</Link></li>
               <li><Link to="/alternatives/pandadoc-alternative" style={linkStyle(light)}>PandaDoc Alternative</Link></li>
-              <li><Link to="/comparisons/docsend-vs-doctransfer" style={linkStyle(light)}>DocSend vs DocTransfer</Link></li>
-              <li><Link to="/comparisons/docusign-vs-doctransfer" style={linkStyle(light)}>DocuSign vs DocTransfer</Link></li>
+              <li><Link to="/alternatives/leegality-alternative-indianLegal" style={linkStyle(light)}>Leegality Alternative</Link></li>
+              <li><Link to="/alternatives/spotdraft-alternative-indianLegal" style={linkStyle(light)}>SpotDraft Alternative</Link></li>
               <li><Link to="/alternatives" style={{ ...linkStyle(light), color: '#818cf8', fontWeight: 600 }}>Browse All Alternatives →</Link></li>
             </ul>
           </div>
@@ -131,21 +134,23 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               <li><Link to="/tools/nda-generator" style={linkStyle(light)}>Free NDA Generator</Link></li>
               <li><Link to="/tools/vdr-cost-calculator" style={linkStyle(light)}>VDR Cost Calculator</Link></li>
               <li><Link to="/tools/pdf-watermarking-tool" style={linkStyle(light)}>PDF Watermark Tool</Link></li>
+              <li><Link to="/tools/esign-compliance-checker" style={linkStyle(light)}>E-Sign Compliance Checker</Link></li>
               <li><Link to="/tools" style={{ ...linkStyle(light), color: '#34d399', fontWeight: 600 }}>Explore All Free Tools →</Link></li>
             </ul>
           </div>
 
-          {/* Col 4: Popular Templates */}
+          {/* Col 4: Legal Templates (Global & India) */}
           <div>
             <h4 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#fbbf24', marginBottom: '1.25rem' }}>
               Legal Templates
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
-              <li><Link to="/templates/nda" style={linkStyle(light)}>Standard NDA Template</Link></li>
-              <li><Link to="/templates/offer-letter" style={linkStyle(light)}>Employment Offer Letter</Link></li>
-              <li><Link to="/templates/llc-operating" style={linkStyle(light)}>LLC Operating Agreement</Link></li>
-              <li><Link to="/templates/sublease" style={linkStyle(light)}>Commercial Sublease</Link></li>
-              <li><Link to="/templates/sales-contract" style={linkStyle(light)}>Sales Contract Template</Link></li>
+              <li><Link to="/templates/nda-format-india-template" style={linkStyle(light)}>Mutual NDA Agreement</Link></li>
+              <li><Link to="/templates/safe-note-india-template" style={linkStyle(light)}>Startup SAFE Note</Link></li>
+              <li><Link to="/templates/freelancer-contract-india-template" style={linkStyle(light)}>Contractor & IP Agreement</Link></li>
+              <li><Link to="/templates/rent-agreement-india-template" style={linkStyle(light)}>11-Month Rent Agreement</Link></li>
+              <li><Link to="/templates/offer-letter-india-ctc-template" style={linkStyle(light)}>CTC Offer Letter Template</Link></li>
+              <li><Link to="/templates/ca-engagement-letter-india-template" style={linkStyle(light)}>CA Audit Engagement Letter</Link></li>
               <li><Link to="/templates" style={{ ...linkStyle(light), color: '#fbbf24', fontWeight: 600 }}>View 100+ Templates →</Link></li>
             </ul>
           </div>
@@ -156,26 +161,27 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               Solutions
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
-              <li><Link to="/solutions/fundraising" style={linkStyle(light)}>Startups & VC Fundraising</Link></li>
-              <li><Link to="/solutions/legal" style={linkStyle(light)}>Law Firms & Legal Intake</Link></li>
-              <li><Link to="/solutions/real-estate" style={linkStyle(light)}>Real Estate Closings</Link></li>
-              <li><Link to="/solutions/healthcare" style={linkStyle(light)}>Healthcare HIPAA Sharing</Link></li>
+              <li><Link to="/industry/startup-pitch-deck-tracking-india" style={linkStyle(light)}>Indian Startups & VC</Link></li>
+              <li><Link to="/industry/chartered-accountant-document-portal-india" style={linkStyle(light)}>Chartered Accountants & Tax</Link></li>
+              <li><Link to="/industry/rent-agreement-india-online" style={linkStyle(light)}>Legal & Real Estate</Link></li>
+              <li><Link to="/industry/offer-letter-format-india-ctc" style={linkStyle(light)}>HR & Employee Onboarding</Link></li>
+              <li><Link to="/solutions/fundraising" style={linkStyle(light)}>M&A & Deal Rooms</Link></li>
               <li><Link to="/solutions" style={{ ...linkStyle(light), color: '#f472b6', fontWeight: 600 }}>Browse All Solutions →</Link></li>
             </ul>
           </div>
 
-          {/* Col 6: Resources & Directory */}
+          {/* Col 6: Company & Legal */}
           <div>
             <h4 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#a78bfa', marginBottom: '1.25rem' }}>
-              Resources & SEO
+              Company & Legal
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
+              <li><Link to="/privacy" style={linkStyle(light)}>Privacy Policy (DPDP Act)</Link></li>
+              <li><Link to="/terms" style={linkStyle(light)}>Terms of Service (IT Act)</Link></li>
+              <li><Link to="/refund-policy" style={linkStyle(light)}>Refund & Cancellation</Link></li>
+              <li><Link to="/contact" style={{ ...linkStyle(light), color: '#34d399', fontWeight: 600 }}>Contact & Grievance</Link></li>
               <li><Link to="/sitemap-directory" style={{ ...linkStyle(light), fontWeight: 700, color: '#818cf8' }}>📁 Master Site Directory</Link></li>
-              <li><Link to="/comparisons" style={linkStyle(light)}>Comparisons Hub</Link></li>
-              <li><Link to="/glossary" style={linkStyle(light)}>Glossary of Terms (50+)</Link></li>
               <li><Link to="/blog" style={linkStyle(light)}>Document Security Blog</Link></li>
-              <li><Link to="/research" style={linkStyle(light)}>Research & Benchmarks</Link></li>
-              <li><Link to="/press" style={linkStyle(light)}>Press Kit & Trust Badges</Link></li>
             </ul>
           </div>
         </div>
@@ -186,7 +192,7 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
           border: light ? '1px solid #e2e8f0' : '1px solid rgba(255, 255, 255, 0.08)',
           borderRadius: '16px',
           padding: '1.5rem 2rem',
-          marginBottom: '3.5rem',
+          marginBottom: '3rem',
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
@@ -198,7 +204,7 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               Looking for a specific agreement, competitor comparison, or compliance hub?
             </div>
             <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
-              Explore our complete indexed directory of 500+ free resources, legal templates, and comparison matrices.
+              Explore our complete indexed directory of 1,500+ free resources, legal templates, and comparison matrices.
             </div>
           </div>
           <Link
@@ -217,8 +223,27 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
               boxShadow: '0 4px 12px rgba(99, 102, 241, 0.25)'
             }}
           >
-            Open Resource Directory <ArrowRight size={16} />
+            Open Resource Directory (1,500+ Pages) <ArrowRight size={16} />
           </Link>
+        </div>
+
+        {/* Global Security Standards & Dual Compliance Box */}
+        <div style={{
+          background: light ? '#f1f5f9' : 'rgba(15, 23, 42, 0.6)',
+          border: light ? '1px solid #cbd5e1' : '1px solid rgba(255, 255, 255, 0.06)',
+          borderRadius: '12px',
+          padding: '1.25rem 1.75rem',
+          marginBottom: '2.5rem',
+          fontSize: '0.82rem',
+          color: '#94a3b8',
+          lineHeight: '1.6'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: light ? '#1e293b' : '#f8fafc', fontWeight: 700, marginBottom: '0.5rem' }}>
+            <span>🌐</span> Global Security Standards & Statutory Compliance (GDPR, DPDP Act, ESIGN & IT Act)
+          </div>
+          <div>
+            Electronic signatures and audit trails executed via DocTransfer conform to the US ESIGN Act (2000), EU eIDAS Regulation 910/2014, UK Electronic Communications Act, and Section 5, 10A, and 65B of the Indian IT Act 2000. Browser-side Zero-Knowledge AES-256 encryption protects user confidentiality in compliance with GDPR, CCPA, and the Digital Personal Data Protection (DPDP) Act 2023. Compliance & India Grievance Officer: Roushan Kumar (<a href="mailto:roushan@doctransfer.online" style={{ color: '#818cf8' }}>roushan@doctransfer.online</a>). Response SLA: 24-48 hours.
+          </div>
         </div>
 
         {/* Bottom Social & Copyright Bar */}
@@ -234,14 +259,17 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
             <Logo size={28} light={!light} />
             <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
-              © {currentYear} DocTransfer Inc. All rights reserved. Secure, private & client-encrypted.
+              © {currentYear} DocTransfer Inc. All rights reserved. Zero-knowledge encrypted.
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.85rem', color: '#94a3b8' }}>
-            <a href="mailto:roushan@doctransfer.online" style={{ color: 'inherit', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <Mail size={14} /> roushan@doctransfer.online
-            </a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.85rem', color: '#94a3b8', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <Link to="/privacy" style={{ color: '#94a3b8', textDecoration: 'none' }}>Privacy</Link>
+              <Link to="/terms" style={{ color: '#94a3b8', textDecoration: 'none' }}>Terms</Link>
+              <Link to="/refund-policy" style={{ color: '#94a3b8', textDecoration: 'none' }}>Refunds</Link>
+              <Link to="/contact" style={{ color: '#94a3b8', textDecoration: 'none' }}>Contact</Link>
+            </div>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <a href="https://x.com/Roushan71262" target="_blank" rel="noopener noreferrer" style={socialIconStyle}><Twitter size={15} /></a>
               <a href="https://www.linkedin.com/in/doctransfer-0a2291314/" target="_blank" rel="noopener noreferrer" style={socialIconStyle}><Linkedin size={15} /></a>

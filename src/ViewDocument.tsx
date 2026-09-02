@@ -1,9 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import * as pdfjsLib from 'pdfjs-dist';
 import { supabase } from './lib/supabase';
 import { comparePassword, rateLimiter } from './lib/security';
-import { FileText, Download, AlertCircle, Lock as LockIcon, Package, ArrowRight, ExternalLink, Flame, ShieldCheck, Video, Music, Image as ImageIcon, Table, Archive, Mail } from 'lucide-react';
+import {
+    FileText,
+    Download,
+    AlertCircle,
+    Lock as LockIcon,
+    Package,
+    ArrowRight,
+    ExternalLink,
+    Flame,
+    ShieldCheck,
+    Video,
+    Music,
+    Image as ImageIcon,
+    Table,
+    Archive,
+    Mail,
+    MessageCircle,
+    ZoomIn,
+    ZoomOut,
+    RotateCcw,
+    Loader2
+} from 'lucide-react';
 import { logDocumentView, logDocumentDownload, logPasswordVerification, logEmailVerification, getGeolocation } from './lib/auditLogger';
 import WatermarkOverlay from './components/WatermarkOverlay';
 import { applyPdfWatermark, applyImageWatermark } from './lib/watermarkGenerator';
@@ -12,7 +34,11 @@ import { getPreviewType, getExtension } from './lib/fileTypes';
 import { decryptFile } from './lib/encryption';
 import SEO from './components/SEO';
 import { BASE_URL } from './lib/seo';
+import { formatWhatsAppShareUrl } from './lib/shareUrl';
 import DocTransferViewerBadge from './components/DocTransferViewerBadge';
+
+// Initialize PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 interface DocumentData {
     id: string;
@@ -116,6 +142,12 @@ const ViewDocument: React.FC = () => {
     const [decryptedUrl, setDecryptedUrl] = useState<string | null>(null);
     const [isDecrypting, setIsDecrypting] = useState(false);
 
+    // Mobile-Responsive PDF Rendering State
+    const [pdfPages, setPdfPages] = useState<string[]>([]);
+    const [isLoadingPdf, setIsLoadingPdf] = useState(false);
+    const [pdfError, setPdfError] = useState<string | null>(null);
+    const [pdfScale, setPdfScale] = useState(1.0);
+
     useEffect(() => {
         // Reset tracking state when loading a new shareLink
         hasTracked.current = false;
@@ -141,6 +173,73 @@ const ViewDocument: React.FC = () => {
             handleDecryption();
         }
     }, [document, decryptionKey, isAuthenticated, isEmailVerified, isSnapshotVerified]);
+
+    // Load PDF using PDF.js when document is authenticated & previewable
+    useEffect(() => {
+        if (!document) return;
+        const fileExt = getExtension(document.name);
+        const previewType = getPreviewType(fileExt);
+
+        const canPreview = isAuthenticated &&
+            (document.email_verification ? isEmailVerified : true) &&
+            (document.require_snapshot ? isSnapshotVerified : true) &&
+            (!document.is_encrypted || (document.is_encrypted && !!decryptedUrl));
+
+        if (canPreview && previewType === 'pdf') {
+            loadPdfDocument();
+        }
+    }, [document, isAuthenticated, isEmailVerified, isSnapshotVerified, decryptedUrl, watermarkedUrl]);
+
+    const loadPdfDocument = async () => {
+        if (!document) return;
+        setIsLoadingPdf(true);
+        setPdfError(null);
+
+        try {
+            let pdfData: ArrayBuffer | null = null;
+
+            if (watermarkedUrl) {
+                const res = await fetch(watermarkedUrl);
+                pdfData = await res.arrayBuffer();
+            } else if (decryptedUrl) {
+                const res = await fetch(decryptedUrl);
+                pdfData = await res.arrayBuffer();
+            } else if (document.file_path) {
+                const { data, error } = await supabase.storage
+                    .from('documents')
+                    .download(document.file_path);
+                if (error) throw error;
+                pdfData = await data.arrayBuffer();
+            }
+
+            if (!pdfData) throw new Error('No PDF content available');
+
+            const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+            const pages: string[] = [];
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                // Scale 1.8 for crisp rendering on retina mobile viewports
+                const viewport = page.getViewport({ scale: 1.8 });
+                const canvas = window.document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                if (context) {
+                    await page.render({ canvasContext: context, canvas, viewport }).promise;
+                    pages.push(canvas.toDataURL('image/jpeg', 0.9));
+                }
+            }
+
+            setPdfPages(pages);
+        } catch (err: any) {
+            console.error('PDF.js rendering error:', err);
+            setPdfError('Failed to load PDF pages in browser. You can download the file below.');
+        } finally {
+            setIsLoadingPdf(false);
+        }
+    };
 
     const handleDecryption = async () => {
         if (!document || !decryptionKey || !document.encryption_iv || decryptedUrl) return;
@@ -1019,14 +1118,16 @@ const ViewDocument: React.FC = () => {
 
                     {/* Header */}
                     <div style={{
-                        padding: '1.5rem 2rem',
+                        padding: '1.25rem 1.5rem',
                         borderBottom: '1px solid #f3f4f6',
                         display: 'flex',
+                        flexWrap: 'wrap',
                         justifyContent: 'space-between',
                         alignItems: 'center',
+                        gap: '1rem',
                         background: 'white'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: '200px' }}>
                             {branding?.logo_url ? (
                                 <img src={branding.logo_url} alt="Logo" style={{ height: '32px' }} />
                             ) : (
@@ -1037,52 +1138,77 @@ const ViewDocument: React.FC = () => {
                                     borderRadius: '10px',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    flexShrink: 0
                                 }}>
                                     <FileText size={20} color="white" />
                                 </div>
                             )}
-                            <div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <h2 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#111827', margin: 0 }}>
-                                        {document.name}
-                                    </h2>
-
-                                </div>
-                                <p style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                            <div style={{ overflow: 'hidden' }}>
+                                <h2 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#111827', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '300px' }}>
+                                    {document.name}
+                                </h2>
+                                <p style={{ fontSize: '0.78rem', color: '#6b7280', margin: '0.2rem 0 0 0' }}>
                                     {(document.file_size / 1024 / 1024).toFixed(2)} MB • {document.file_type}
                                 </p>
                             </div>
                         </div>
 
-                        {document.allow_download && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                            {/* WhatsApp Share Quick Button */}
                             <button
-                                onClick={handleDownloadClick}
-                                disabled={downloading || isWatermarking}
+                                onClick={() => {
+                                    const shareUrl = window.location.href;
+                                    window.open(formatWhatsAppShareUrl(shareUrl, document.name), '_blank');
+                                }}
                                 style={{
-                                    padding: '0.75rem 1.5rem',
-                                    background: (downloading || isWatermarking) ? '#9ca3af' : (branding?.brand_color || '#4f46e5'),
+                                    padding: '0.65rem 1rem',
+                                    background: '#25D366',
                                     color: 'white',
                                     border: 'none',
-                                    borderRadius: '10px',
-                                    fontWeight: '600',
-                                    fontSize: '0.9rem',
-                                    cursor: (downloading || isWatermarking) ? 'not-allowed' : 'pointer',
+                                    borderRadius: '8px',
+                                    fontWeight: 600,
+                                    fontSize: '0.85rem',
+                                    cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    transition: 'all 0.2s',
-                                    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)'
+                                    gap: '0.4rem',
+                                    boxShadow: '0 2px 6px rgba(37, 211, 102, 0.25)',
+                                    transition: 'all 0.2s'
                                 }}
+                                title="Share this document on WhatsApp"
                             >
-                                {downloading ? 'Downloading...' : isWatermarking ? 'Applying Watermark...' : (
-                                    <>
-                                        <Download size={18} />
-                                        Download File
-                                    </>
-                                )}
+                                <MessageCircle size={16} /> Share
                             </button>
-                        )}
+
+                            {document.allow_download && (
+                                <button
+                                    onClick={handleDownloadClick}
+                                    disabled={downloading || isWatermarking}
+                                    style={{
+                                        padding: '0.65rem 1.25rem',
+                                        background: (downloading || isWatermarking) ? '#9ca3af' : (branding?.brand_color || '#4f46e5'),
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        fontWeight: '600',
+                                        fontSize: '0.85rem',
+                                        cursor: (downloading || isWatermarking) ? 'not-allowed' : 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.4rem',
+                                        transition: 'all 0.2s',
+                                        boxShadow: '0 2px 6px rgba(79, 70, 229, 0.2)'
+                                    }}
+                                >
+                                    {downloading ? 'Downloading...' : isWatermarking ? 'Watermarking...' : (
+                                        <>
+                                            <Download size={16} /> Download
+                                        </>
+                                    )}
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     {/* Snapshot Gate */}
@@ -1094,9 +1220,12 @@ const ViewDocument: React.FC = () => {
                             />
                         </div>
                     ) : (() => {
-                        /* Document Preview Area - Determine preview type */
+                        /* Document Preview Area */
                         const fileExt = getExtension(document.name);
                         const previewType = getPreviewType(fileExt);
+                        const activePreviewUrl = watermarkedUrl || decryptedUrl || (document.file_path ? supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl : null);
+                        const isPreviewSupported = ['pdf', 'image', 'video', 'audio'].includes(previewType);
+                        const showInlinePreview = isPreviewSupported && (!document.is_encrypted || (document.is_encrypted && !!decryptedUrl));
 
                         // Get file icon based on type
                         const getFileIconForType = () => {
@@ -1112,63 +1241,175 @@ const ViewDocument: React.FC = () => {
                             }
                         };
 
-                        // For encrypted files or non-Google Drive storage, show icon
-                        // Show inline preview for PDF if watermarked
-                        const showInlinePreview = !!watermarkedUrl;
-
                         return (
                             <div style={{
                                 background: '#f8fafc',
-                                padding: showInlinePreview ? '2rem' : '4rem 2rem',
+                                padding: showInlinePreview ? '1.5rem 1rem' : '4rem 2rem',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                minHeight: '400px',
-                                position: 'relative',
-                                overflow: 'hidden'
+                                minHeight: '450px',
+                                position: 'relative'
                             }}>
-                                <style>
-                                    {`
-                                        @keyframes float {
-                                            0% { transform: translateY(0px) rotate(0deg); }
-                                            50% { transform: translateY(-20px) rotate(2deg); }
-                                            100% { transform: translateY(0px) rotate(0deg); }
-                                        }
-                                        @keyframes pulse-glow {
-                                            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.2); }
-                                            70% { box-shadow: 0 0 0 20px rgba(99, 102, 241, 0); }
-                                            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
-                                        }
-                                    `}
-                                </style>
+                                {/* Multi-Page PDF Canvas Preview */}
+                                {showInlinePreview && previewType === 'pdf' && (
+                                    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                        
+                                        {/* Zoom & Page Count Toolbar */}
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            width: '100%',
+                                            maxWidth: '900px',
+                                            background: '#ffffff',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '10px',
+                                            padding: '0.5rem 1rem',
+                                            marginBottom: '1.25rem',
+                                            boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                                            flexWrap: 'wrap',
+                                            gap: '0.5rem'
+                                        }}>
+                                            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#475569' }}>
+                                                {isLoadingPdf ? 'Loading PDF pages...' : `${pdfPages.length} Pages • Multi-Page Reader`}
+                                            </span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                <button
+                                                    onClick={() => setPdfScale(prev => Math.max(0.7, prev - 0.15))}
+                                                    disabled={isLoadingPdf || pdfScale <= 0.7}
+                                                    style={{ padding: '0.35rem 0.6rem', border: '1px solid #cbd5e1', background: 'white', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                                    title="Zoom Out"
+                                                >
+                                                    <ZoomOut size={14} />
+                                                </button>
+                                                <span style={{ fontSize: '0.78rem', fontWeight: 700, minWidth: '42px', textAlign: 'center', color: '#1e293b' }}>
+                                                    {Math.round(pdfScale * 100)}%
+                                                </span>
+                                                <button
+                                                    onClick={() => setPdfScale(prev => Math.min(1.6, prev + 0.15))}
+                                                    disabled={isLoadingPdf || pdfScale >= 1.6}
+                                                    style={{ padding: '0.35rem 0.6rem', border: '1px solid #cbd5e1', background: 'white', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                                                    title="Zoom In"
+                                                >
+                                                    <ZoomIn size={14} />
+                                                </button>
+                                                <button
+                                                    onClick={() => setPdfScale(1.0)}
+                                                    style={{ padding: '0.35rem 0.5rem', border: '1px solid #cbd5e1', background: 'white', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: '0.72rem', color: '#64748b' }}
+                                                    title="Reset Scale"
+                                                >
+                                                    <RotateCcw size={12} />
+                                                </button>
+                                            </div>
+                                        </div>
 
-                                {/* Inline Preview for supported types */}
-                                {showInlinePreview && previewType === 'image' && (
-                                    <div style={{ maxWidth: '100%', maxHeight: '500px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
+                                        {/* Loading State */}
+                                        {isLoadingPdf && (
+                                            <div style={{ padding: '4rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', color: '#6366f1' }}>
+                                                <Loader2 size={36} className="animate-spin" />
+                                                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#475569' }}>
+                                                    Rendering high-resolution document pages for mobile & web...
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {/* Rendered Canvas Pages */}
+                                        {!isLoadingPdf && pdfPages.length > 0 && (
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: '1.5rem' }}>
+                                                {pdfPages.map((pageDataUrl, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        style={{
+                                                            width: '100%',
+                                                            maxWidth: `${Math.min(900 * pdfScale, 1100)}px`,
+                                                            position: 'relative',
+                                                            transition: 'max-width 0.2s ease',
+                                                            borderRadius: '8px',
+                                                            overflow: 'hidden'
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={pageDataUrl}
+                                                            alt={`Page ${idx + 1}`}
+                                                            style={{
+                                                                width: '100%',
+                                                                height: 'auto',
+                                                                display: 'block',
+                                                                borderRadius: '8px',
+                                                                boxShadow: '0 6px 20px rgba(0,0,0,0.08)',
+                                                                border: '1px solid #e2e8f0',
+                                                                background: 'white'
+                                                            }}
+                                                        />
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            bottom: '10px',
+                                                            right: '10px',
+                                                            background: 'rgba(15, 23, 42, 0.75)',
+                                                            color: 'white',
+                                                            fontSize: '0.7rem',
+                                                            fontWeight: 700,
+                                                            padding: '2px 8px',
+                                                            borderRadius: '4px',
+                                                            backdropFilter: 'blur(4px)'
+                                                        }}>
+                                                            Page {idx + 1} of {pdfPages.length}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* PDF Error Fallback */}
+                                        {!isLoadingPdf && pdfPages.length === 0 && (
+                                            <div style={{ width: '100%', maxWidth: '900px', height: '650px', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0', background: 'white' }}>
+                                                {activePreviewUrl ? (
+                                                    <iframe
+                                                        src={activePreviewUrl}
+                                                        style={{ width: '100%', height: '100%', border: 'none' }}
+                                                        title={document.name}
+                                                    />
+                                                ) : (
+                                                    <div style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>
+                                                        <AlertCircle size={36} color="#ef4444" style={{ marginBottom: '0.5rem' }} />
+                                                        <p>Preview unavailable. Click download to view.</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Image Preview */}
+                                {showInlinePreview && previewType === 'image' && activePreviewUrl && (
+                                    <div style={{ maxWidth: '100%', maxHeight: '600px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>
                                         <img
-                                            src={watermarkedUrl || decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={activePreviewUrl}
                                             alt={document.name}
-                                            style={{ maxWidth: '100%', maxHeight: '500px', objectFit: 'contain' }}
+                                            style={{ maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }}
                                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                                         />
                                     </div>
                                 )}
 
-                                {showInlinePreview && previewType === 'video' && (
-                                    <div style={{ width: '100%', maxWidth: '800px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
+                                {/* Video Preview */}
+                                {showInlinePreview && previewType === 'video' && activePreviewUrl && (
+                                    <div style={{ width: '100%', maxWidth: '800px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>
                                         <video
                                             controls
                                             style={{ width: '100%', maxHeight: '500px' }}
-                                            src={decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={activePreviewUrl}
                                         >
                                             Your browser does not support video playback.
                                         </video>
                                     </div>
                                 )}
 
-                                {showInlinePreview && previewType === 'audio' && (
-                                    <div style={{ width: '100%', maxWidth: '500px', padding: '2rem', background: 'white', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
+                                {/* Audio Preview */}
+                                {showInlinePreview && previewType === 'audio' && activePreviewUrl && (
+                                    <div style={{ width: '100%', maxWidth: '500px', padding: '2rem', background: 'white', borderRadius: '16px', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                                             <div style={{ padding: '1rem', background: '#f3f4f6', borderRadius: '12px' }}>
                                                 <Music size={32} color="#4f46e5" />
@@ -1181,89 +1422,45 @@ const ViewDocument: React.FC = () => {
                                         <audio
                                             controls
                                             style={{ width: '100%' }}
-                                            src={decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+                                            src={activePreviewUrl}
                                         >
                                             Your browser does not support audio playback.
                                         </audio>
                                     </div>
                                 )}
 
-                                {showInlinePreview && previewType === 'pdf' && (
-                                    <div style={{ width: '100%', height: '800px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}>
-                                        <iframe
-                                            src={watermarkedUrl || decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
-                                            style={{ width: '100%', height: '100%', border: 'none' }}
-                                            title={document.name}
-                                        />
-                                    </div>
-                                )}
-
                                 {/* Icon display for non-previewable types */}
                                 {!showInlinePreview && (
                                     <div style={{
-                                        position: 'relative',
-                                        animation: 'float 6s ease-in-out infinite'
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: '1rem'
                                     }}>
-                                        {/* Glow Effect */}
                                         <div style={{
-                                            position: 'absolute',
-                                            top: '50%',
-                                            left: '50%',
-                                            transform: 'translate(-50%, -50%)',
-                                            width: '120px',
-                                            height: '120px',
-                                            background: 'rgba(99, 102, 241, 0.15)',
-                                            borderRadius: '50%',
-                                            filter: 'blur(20px)',
-                                            animation: 'pulse-glow 3s infinite'
-                                        }} />
-
-                                        {/* Icon Container */}
-                                        <div style={{
-                                            width: '100px',
-                                            height: '100px',
+                                            width: '90px',
+                                            height: '90px',
                                             background: 'white',
-                                            borderRadius: '24px',
+                                            borderRadius: '20px',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                                            position: 'relative',
-                                            zIndex: 10,
+                                            boxShadow: '0 12px 24px rgba(0, 0, 0, 0.08)',
                                             border: '1px solid #e0e7ff'
                                         }}>
                                             {getFileIconForType()}
                                         </div>
-
-                                        {/* Floating Elements */}
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: -10,
-                                            right: -10,
-                                            background: '#ecfdf5',
-                                            borderRadius: '50%',
-                                            padding: '8px',
-                                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                                            animation: 'float 4s ease-in-out infinite reverse',
-                                            zIndex: 11
-                                        }}>
-                                            <ShieldCheck size={16} color="#059669" />
-                                        </div>
+                                        <p style={{ fontSize: '0.88rem', color: '#64748b', textAlign: 'center', margin: 0 }}>
+                                            {document.is_encrypted
+                                                ? 'Secure encrypted file • Download to access'
+                                                : `${fileExt.toUpperCase()} file • Click download to open`}
+                                        </p>
                                     </div>
-                                )}
-
-                                {/* File type label for non-previewable */}
-                                {!showInlinePreview && (
-                                    <p style={{ marginTop: '1.5rem', fontSize: '0.875rem', color: '#6b7280', textAlign: 'center' }}>
-                                        {document.is_encrypted
-                                            ? 'Secure encrypted file - Download to view'
-                                            : `${fileExt.toUpperCase()} file - Click download to access`}
-                                    </p>
                                 )}
 
                                 {/* Decrypting Overlay */}
                                 {isDecrypting && (
-                                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.8)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 50, backdropFilter: 'blur(4px)' }}>
+                                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.85)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 50, backdropFilter: 'blur(4px)' }}>
                                         <div className="animate-spin" style={{ width: '32px', height: '32px', border: '3px solid #e5e7eb', borderTopColor: '#4f46e5', borderRadius: '50%', marginBottom: '1rem' }}></div>
                                         <p style={{ fontWeight: '600', color: '#4f46e5' }}>Decrypting secure content...</p>
                                     </div>

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface UpgradePromptProps {
     feature: string;
-    requiredPlan: 'standard' | 'business';
+    requiredPlan: 'pro' | 'standard' | 'business' | 'dataroom';
     onClose: () => void;
 }
 

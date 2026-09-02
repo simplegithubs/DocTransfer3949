@@ -26,7 +26,8 @@ import {
     Plus,
     Shield,
     Sparkles,
-    Loader2
+    Loader2,
+    MessageCircle
 } from 'lucide-react';
 import Skeleton from './components/ui/Skeleton';
 import { hashPassword, generateSecureToken } from './lib/security';
@@ -42,6 +43,7 @@ import useSubscription from './hooks/useSubscription';
 import PremiumBadge from './components/PremiumBadge';
 import UpgradeModal from './components/UpgradeModal';
 import UsageLimitBanner from './components/UsageLimitBanner';
+import { formatWhatsAppShareUrl, buildShareUrl } from './lib/shareUrl';
 import TrialTrackingBar from './components/TrialTrackingBar';
 import SelfDestructSettings from './components/SelfDestructSettings';
 import SEO from './components/SEO';
@@ -568,6 +570,16 @@ const DataRoom: React.FC = () => {
         setTimeout(() => setCopiedId(null), 2000);
     };
 
+    const shareOnWhatsApp = (link: string, title?: string) => {
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        let targetUrl = link;
+        if (isLocalhost && link.includes('localhost')) {
+            const sharePath = new URL(link).pathname;
+            targetUrl = buildShareUrl(sharePath, true);
+        }
+        window.open(formatWhatsAppShareUrl(targetUrl, title), '_blank');
+    };
+
     const handlePreview = async () => {
         if (!uploadedDoc) return;
 
@@ -751,7 +763,7 @@ const DataRoom: React.FC = () => {
                                 </div>
                                 <h2 style={{ fontSize: '1.875rem', fontWeight: '800', color: '#111827', marginBottom: '1rem' }}>Audit Trail is Locked</h2>
                                 <p style={{ fontSize: '1.125rem', color: '#6b7280', marginBottom: '2.5rem', maxWidth: '500px', margin: '0 auto 2.5rem' }}>
-                                    Track every document interaction with a compliance-ready activity log. Available on Standard and Business plans.
+                                    Track every document interaction with a compliance-ready activity log. Available on Pro, Business, and Data Room plans.
                                 </p>
                                 <button
                                     onClick={() => handleLockedFeatureClick('Audit Trail')}
@@ -848,18 +860,31 @@ const DataRoom: React.FC = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    // Copy link logic
-                                                    navigator.clipboard.writeText(doc.link);
-                                                    setCopiedId(doc.id);
-                                                    setTimeout(() => setCopiedId(null), 2000);
-                                                }}
-                                                style={{ padding: '0.5rem', background: 'transparent', border: 'none', cursor: 'pointer', color: copiedId === doc.id ? '#10b981' : '#9ca3af' }}
-                                            >
-                                                {copiedId === doc.id ? <Check size={18} /> : <Copy size={18} />}
-                                            </button>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        shareOnWhatsApp(doc.link, doc.name);
+                                                    }}
+                                                    style={{ padding: '0.5rem', background: 'transparent', border: 'none', cursor: 'pointer', color: '#25D366' }}
+                                                    title="Share on WhatsApp"
+                                                >
+                                                    <MessageCircle size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        // Copy link logic
+                                                        navigator.clipboard.writeText(doc.link);
+                                                        setCopiedId(doc.id);
+                                                        setTimeout(() => setCopiedId(null), 2000);
+                                                    }}
+                                                    style={{ padding: '0.5rem', background: 'transparent', border: 'none', cursor: 'pointer', color: copiedId === doc.id ? '#10b981' : '#9ca3af' }}
+                                                    title="Copy Link"
+                                                >
+                                                    {copiedId === doc.id ? <Check size={18} /> : <Copy size={18} />}
+                                                </button>
+                                            </div>
                                         </div>
                                         <div style={{ padding: '1rem', background: '#f9fafb', display: 'flex', gap: '0.5rem' }}>
                                             <a
@@ -1496,45 +1521,89 @@ const DataRoom: React.FC = () => {
                                         {/* Bundle Link Display */}
                                         {!isUploading && uploadedBundleLink && (
                                             <div style={{ padding: '1.5rem', background: '#ecfdf5', borderRadius: '12px', border: '1px solid #a7f3d0' }}>
-                                                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#065f46' }}>📦 Bundle Share Link</h3>
-                                                <p style={{ fontSize: '0.875rem', color: '#047857', marginBottom: '1rem' }}>
-                                                    Share this link to give access to all {uploadedDoc ? 'uploaded files' : 'files'}.
+                                                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.5rem', color: '#065f46' }}>📦 Bundle Share Link Ready</h3>
+                                                <p style={{ fontSize: '0.85rem', color: '#047857', marginBottom: '1rem' }}>
+                                                    Share this link to give instant access to all uploaded documents.
                                                 </p>
-                                                <div style={{ width: '100%', padding: '0.75rem', background: 'white', border: '1px solid #d1d5db', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                <div style={{ width: '100%', padding: '0.75rem', background: 'white', border: '1px solid #d1d5db', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
                                                     <input
                                                         type="text"
                                                         value={uploadedBundleLink}
                                                         readOnly
-                                                        style={{ fontSize: '0.875rem', flex: 1, border: 'none', background: 'transparent', outline: 'none', color: '#374151' }}
+                                                        style={{ fontSize: '0.85rem', flex: 1, border: 'none', background: 'transparent', outline: 'none', color: '#374151' }}
                                                     />
                                                     <button
                                                         onClick={() => copyLink(uploadedBundleLink)}
-                                                        style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '6px', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                                        style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '6px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                                        title="Copy Link"
                                                     >
                                                         {copiedId === 'link' ? <Check size={16} color="#16a34a" /> : <Copy size={16} color="#6b7280" />}
                                                     </button>
                                                 </div>
+                                                <button
+                                                    onClick={() => shareOnWhatsApp(uploadedBundleLink, 'Document Bundle')}
+                                                    style={{
+                                                        width: '100%',
+                                                        background: '#25D366',
+                                                        color: 'white',
+                                                        border: 'none',
+                                                        padding: '0.65rem 1rem',
+                                                        borderRadius: '8px',
+                                                        fontWeight: 600,
+                                                        fontSize: '0.88rem',
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        gap: '0.5rem',
+                                                        boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
+                                                    }}
+                                                >
+                                                    <MessageCircle size={17} /> Share Bundle on WhatsApp
+                                                </button>
                                             </div>
                                         )}
 
                                         {/* Single Doc Link Display */}
                                         {!isUploading && uploadedDoc && !uploadedBundleLink && (
                                             <div style={{ padding: '1.5rem', background: '#f9fafb', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
-                                                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#111827' }}>Public Share Link</h3>
-                                                <div style={{ width: '100%', padding: '0.75rem', background: 'white', border: '1px solid #d1d5db', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.5rem', color: '#111827' }}>Public Share Link Ready</h3>
+                                                <div style={{ width: '100%', padding: '0.75rem', background: 'white', border: '1px solid #d1d5db', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
                                                     <input
                                                         type="text"
                                                         value={uploadedDoc.link}
                                                         readOnly
-                                                        style={{ fontSize: '0.875rem', flex: 1, border: 'none', background: 'transparent', outline: 'none', color: '#374151' }}
+                                                        style={{ fontSize: '0.85rem', flex: 1, border: 'none', background: 'transparent', outline: 'none', color: '#374151' }}
                                                     />
                                                     <button
                                                         onClick={() => copyLink(uploadedDoc.link)}
-                                                        style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '6px', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                                        style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '6px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                                        title="Copy Link"
                                                     >
                                                         {copiedId === 'link' ? <Check size={16} color="#16a34a" /> : <Copy size={16} color="#6b7280" />}
                                                     </button>
                                                 </div>
+                                                <button
+                                                    onClick={() => shareOnWhatsApp(uploadedDoc.link, uploadedDoc.name)}
+                                                    style={{
+                                                        width: '100%',
+                                                        background: '#25D366',
+                                                        color: 'white',
+                                                        border: 'none',
+                                                        padding: '0.65rem 1rem',
+                                                        borderRadius: '8px',
+                                                        fontWeight: 600,
+                                                        fontSize: '0.88rem',
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        gap: '0.5rem',
+                                                        boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
+                                                    }}
+                                                >
+                                                    <MessageCircle size={17} /> Share Document on WhatsApp
+                                                </button>
                                             </div>
                                         )}
 

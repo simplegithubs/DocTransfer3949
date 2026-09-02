@@ -13,9 +13,9 @@ i18n
     .init({
         resources,
         fallbackLng: 'en',
-        lng: 'en', // Force English
+        lng: 'en',
         interpolation: {
-            escapeValue: false // react already safes from xss
+            escapeValue: false
         },
         detection: {
             order: ['localStorage', 'navigator'],

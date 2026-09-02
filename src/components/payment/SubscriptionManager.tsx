@@ -41,17 +41,21 @@ const SubscriptionManager: React.FC = () => {
 
     const getPlanColor = (plan: string) => {
         switch (plan) {
-            case 'business': return 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
-            case 'standard': return 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
-            default: return 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            case 'dataroom': return 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            case 'business': return 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)';
+            case 'pro':
+            case 'standard': return 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)';
+            default: return 'linear-gradient(135deg, #64748b 0%, #475569 100%)';
         }
     };
 
     const getPlanName = (plan: string) => {
         switch (plan) {
-            case 'business': return 'Business Plan';
-            case 'standard': return 'Standard Plan';
-            default: return 'Free Plan';
+            case 'dataroom': return 'Virtual Data Room (VDR)';
+            case 'business': return 'Business CA Suite';
+            case 'pro': return 'Pro Plan';
+            case 'standard': return 'Standard Pro';
+            default: return 'Free Forever';
         }
     };
 

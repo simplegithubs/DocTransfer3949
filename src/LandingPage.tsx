@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { SignedIn, SignedOut, SignInButton, UserButton } from './components/auth';
 import Logo from './components/Logo';
 import SEO from './components/SEO';
 import UseCaseCards from './components/UseCaseCards';
-import TestimonialsSection from './components/landing/TestimonialsSection';
 import ComplianceRoadmapSection from './components/landing/ComplianceRoadmapSection';
 import CryptographicSecurityHighlight from './components/landing/CryptographicSecurityHighlight';
 import Footer from './components/Footer';
@@ -57,41 +57,41 @@ const LandingPage: React.FC = () => {
 
   const faqs = [
     {
-      question: "Is DocTransfer really free?",
-      answer: "Yes, absolutely! We've made the strategic decision to unlock all our premium, professional, and enterprise features for everyone. No credit card, no subscriptions, just world-class security at no cost."
+      question: "Is DocTransfer really free globally and in India?",
+      answer: "Yes, absolutely! We've made the strategic decision to unlock all core deal room, virtual data room, and document tracking features for free. No credit card required, zero monthly paywalls, just world-class AES-256 client-side security at $0 and ₹0."
     },
     {
-      question: "How does End-to-End (E2E) Encryption protect my files?",
-      answer: "With our 'Vault Mode', your files are encrypted directly in your browser using AES-256 before they are uploaded. This means only you and your authorized recipients hold the decryption keys. Even DocTransfer cannot access the content of your encrypted files."
+      question: "Are digital signatures legally binding globally and under Indian law?",
+      answer: "Yes. Electronic signatures collected through DocTransfer are legally recognized and enforceable across the US (ESIGN Act 2000), EU (eIDAS Regulation 910/2014), UK (Electronic Communications Act), and India (Section 5 & 10A of the IT Act 2000 and Indian Contract Act 1872). Every signed agreement includes a cryptographic tamper-evident Section 65B & eIDAS audit certificate."
+    },
+    {
+      question: "Can I share documents directly over WhatsApp, Email, or Slack with view tracking?",
+      answer: "Yes! You can copy your secure DocTransfer link and share it directly on WhatsApp, Email, Slack, LinkedIn, or SMS. You get instant real-time alerts the second someone opens your link and second-by-second analytics on which pages they read."
+    },
+    {
+      question: "How does End-to-End (E2E) Encryption comply with GDPR & DPDP Act 2023?",
+      answer: "With our Zero-Knowledge 'Vault Mode', files are encrypted directly in your browser using AES-256-GCM before upload. Since only you and your designated recipient hold the decryption keys, not even database administrators can access confidential client financials or personal data, fully exceeding GDPR, CCPA, and DPDP Act 2023 data fiduciary obligations."
+    },
+    {
+      question: "How does DocTransfer protect sensitive pitch decks, cap tables, and financial records?",
+      answer: "Beyond client-side encryption, you can enable dynamic watermarking displaying the viewer's email/IP and timestamp, require passcode or email verification, set automated link expiry timers, and disable downloading for view-only security."
     },
     {
       question: "What is 'Burn After Reading'?",
-      answer: "This feature allows you to set documents to automatically delete themselves after a single view or a specific number of views, ensuring your sensitive data doesn't persist longer than necessary."
+      answer: "This feature allows you to set documents to automatically self-destruct after a single view or a specific number of views, ensuring confidential deal memos, salary figures, or trade secrets never linger online."
     },
     {
-      question: "Is DocTransfer compliant with industry standards?",
-      answer: "Yes! We provide features like comprehensive Audit Trails, E2E encryption, and secure storage that help businesses maintain compliance with standards like HIPAA, GDPR, and NIST."
-    },
-    {
-      question: "Can I add my own branding to the documents?",
-      answer: "Absolutely. Our White-Labeling feature allows you to remove DocTransfer branding and add your own company logo and colors, providing a professional and seamless experience for your clients."
-    },
-    {
-      question: "Are E-Signatures legally binding?",
-      answer: "Yes, our E-Signature feature is designed to be legally binding and compliant with major electronic signature laws. Every signed document is accompanied by a detailed digital certificate and audit trail."
-    },
-    {
-      question: "What makes file transfers on DocTransfer 'Secure'?",
-      answer: "Beyond encryption, we provide granular access controls. You can set expiration dates, limit the number of views, password-protect links, and even restrict access to specific email domains or IP addresses, ensuring your files never fall into the wrong hands."
+      question: "Can I customize legal templates like NDAs, SAFE Notes, and Rent Agreements?",
+      answer: "Yes! Browse our free Template Hub to draft and e-sign standard international Mutual NDAs, YC SAFE Notes, Contractor Agreements, 11-Month Rent Agreements (India), and CTC Offer Letters in under 5 minutes."
     }
   ];
 
   return (
     <div className="landing-page">
       <SEO
-        title="DocTransfer - Free DocSend Alternative with E2E Encryption"
-        description="Stop paying for DocSend. Get professional document sharing, page-by-page analytics, and dynamic watermarking for free. Secure, encrypted, and legally binding."
-        keywords="DocSend alternatives, free DocSend alternative, secure document sharing, virtual data room, pitch deck tracking, document analytics"
+        title="DocTransfer — Global Virtual Data Room & Legal E-Signatures | Free DocSend Alternative for Global & India"
+        description="The #1 secure deal room for global startups, enterprises, CAs, advocates & MSMEs. Share pitch decks, NDAs, and contracts with page-by-page analytics, WhatsApp/Email sharing, and legally binding e-signatures worldwide."
+        keywords="DocSend alternative, free pitch deck tracking, virtual data room free, secure document sharing, ESIGN eIDAS e-signature, IT Act 2000 electronic signature, DocSend alternative India, global deal room"
       />
       <header className="header">
         <Logo size={32} />
@@ -267,12 +267,29 @@ const LandingPage: React.FC = () => {
             <div className="floating-orb orb-3"></div>
           </div>
 
-          <h1 className="hero-title-animated">The secure deal room for sharing, tracking & signing sensitive documents.</h1>
-          <p className="hero-subtitle-animated">Share confidential documents with complete control. Track every viewer, protect every page, and collect signatures — all in one place.</p>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            background: 'rgba(99, 102, 241, 0.1)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
+            padding: '0.45rem 1.25rem',
+            borderRadius: '30px',
+            color: '#4f46e5',
+            fontWeight: 700,
+            fontSize: '0.9rem',
+            marginBottom: '1.25rem',
+            boxShadow: '0 2px 8px rgba(99, 102, 241, 0.15)'
+          }}>
+            <span>🌐</span> Built for Global Startups & Indian Enterprises • 100% Free Core Tier
+          </div>
+
+          <h1 className="hero-title-animated">The secure deal room for sharing, tracking & signing sensitive documents worldwide.</h1>
+          <p className="hero-subtitle-animated">Share confidential pitch decks, NDAs, contracts, and financial records with complete control. Track every viewer page-by-page, share via email or WhatsApp, and collect legally binding e-signatures across global jurisdictions — free forever.</p>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2rem' }}>
             <div className="hero-actions" style={{ marginBottom: '0.75rem' }}>
               <Link to="/dataroom">
-                <button className="hero-btn-primary">Create a Deal Room — Free</button>
+                <button className="hero-btn-primary">Create a Deal Room — Free ($0 / ₹0)</button>
               </Link>
               <Link to="/pricing">
                 <button className="hero-btn-secondary">View Pricing</button>
@@ -285,8 +302,40 @@ const LandingPage: React.FC = () => {
               margin: 0,
               textAlign: 'center'
             }}>
-              No credit card required.
+              No credit card or expensive monthly subscription required.
             </p>
+
+            {/* Global & India Feature Pills */}
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '0.75rem',
+              marginTop: '1.25rem'
+            }}>
+              {[
+                { icon: '🌐', text: 'ESIGN, eIDAS & IT Act 2000 Valid' },
+                { icon: '🔒', text: 'Zero-Knowledge AES-256 Vault' },
+                { icon: '📊', text: 'Real-Time Page Dwell Analytics' },
+                { icon: '💬', text: 'WhatsApp, Email & Slack Sharing' },
+                { icon: '🛡️', text: 'GDPR, CCPA & DPDP Act 2023 Ready' }
+              ].map((pill, i) => (
+                <span key={i} style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  background: '#f1f5f9',
+                  border: '1px solid #e2e8f0',
+                  padding: '0.35rem 0.85rem',
+                  borderRadius: '20px',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  color: '#334155'
+                }}>
+                  <span>{pill.icon}</span> {pill.text}
+                </span>
+              ))}
+            </div>
           </div>
 
           {/* Hero Feature Navigation Bar */}
@@ -824,11 +873,11 @@ const LandingPage: React.FC = () => {
                       eventBg: '#d1fae5',
                       eventBorder: '#a7f3d0',
                       eventText: 'Document Downloaded',
-                      user: 'Anonymous User',
-                      device: 'Chrome',
-                      location: 'Patna, India',
-                      ip: '106.214.9.54',
-                      doc: 'Screenshot 2023-09-24 220453.png',
+                      user: 'Investor Partner (US)',
+                      device: 'Chrome on MacOS',
+                      location: 'San Francisco, US',
+                      ip: '104.28.19.42',
+                      doc: 'Series-A-PitchDeck-Final.pdf',
                       details: null
                     },
                     {
@@ -839,12 +888,12 @@ const LandingPage: React.FC = () => {
                       eventBg: '#dbeafe',
                       eventBorder: '#bfdbfe',
                       eventText: 'Document Viewed',
-                      user: 'Anonymous User',
-                      device: 'Chrome',
-                      location: 'Patna, India',
-                      ip: '106.214.9.54',
-                      doc: 'Screenshot 2023-09-24 220453.png',
-                      details: 'viewer_agent: Mozilla/5.0 (Windows NT 10.0; Win64;...'
+                      user: 'General Partner (UK)',
+                      device: 'Safari on iPad',
+                      location: 'London, UK',
+                      ip: '185.125.190.24',
+                      doc: 'M&A-Due-Diligence-Memo.pdf',
+                      details: 'viewer_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...'
                     },
                     {
                       date: 'Feb 16',
@@ -854,12 +903,12 @@ const LandingPage: React.FC = () => {
                       eventBg: '#dbeafe',
                       eventBorder: '#bfdbfe',
                       eventText: 'Document Viewed',
-                      user: 'Anonymous User',
-                      device: 'Chrome',
-                      location: 'Patna, India',
+                      user: 'Lead Syndicate Partner',
+                      device: 'Chrome on Windows',
+                      location: 'Bengaluru, India',
                       ip: '106.214.9.54',
-                      doc: 'Screenshot 2023-09-24 220453.png',
-                      details: 'viewer_agent: Mozilla/5.0 (Windows NT 10.0; Win64;...'
+                      doc: 'CapTable-Valuation-Q1.pdf',
+                      details: 'viewer_agent: Mozilla/5.0 (Windows NT 10.0; Win64)...'
                     },
                     {
                       date: 'Feb 16',
@@ -869,12 +918,12 @@ const LandingPage: React.FC = () => {
                       eventBg: '#f3e8ff',
                       eventBorder: '#e9d5ff',
                       eventText: 'Document Uploaded',
-                      user: 'Anonymous User',
-                      device: 'Chrome',
-                      location: 'Patna, India',
-                      ip: '106.214.9.54',
-                      doc: 'Screenshot 2023-09-24 220453.png',
-                      details: 'bundleId: null, fileName: Screenshot 2023-09-24 22...'
+                      user: 'Deal Room Admin',
+                      device: 'Chrome on MacOS',
+                      location: 'Singapore',
+                      ip: '165.225.112.90',
+                      doc: 'Cross-Border-NDA-Executed.pdf',
+                      details: 'bundleId: vdr_global_09, fileName: Cross-Border-NDA...'
                     }
                   ].map((row, i) => (
                     <div key={i} style={{ display: 'grid', gridTemplateColumns: 'minmax(100px, 1fr) minmax(180px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(280px, 2.5fr)', padding: '1.25rem 2rem', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none', alignItems: 'start' }}>
@@ -1017,33 +1066,56 @@ const LandingPage: React.FC = () => {
                     overflow: 'hidden'
                   }}>
                     <div style={{ maxWidth: '600px', margin: '0 auto', color: '#374151', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                      <p style={{ marginBottom: '1.25rem' }}>
-                        JavaScript is used to add behaviour and interactivity to the web page. It is also possible to manipulate the web page using JavaScript.
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #4f46e5', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+                        <div>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.05em' }}>GLOBAL & INDIA ENFORCEABLE</span>
+                          <h2 style={{ color: '#111827', fontSize: '1.3rem', fontWeight: 800, margin: '0.2rem 0 0' }}>
+                            MUTUAL NON-DISCLOSURE AGREEMENT
+                          </h2>
+                        </div>
+                        <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1d4ed8', fontSize: '0.72rem', fontWeight: 700, padding: '0.25rem 0.6rem', borderRadius: '6px' }}>
+                          ESIGN • eIDAS • IT ACT 2000
+                        </div>
+                      </div>
+
+                      <p style={{ marginBottom: '1.25rem', fontSize: '0.9rem', color: '#4b5563' }}>
+                        This Mutual Non-Disclosure Agreement is executed on <strong>16th February 2026</strong> under applicable commercial contract laws, between the Disclosing Party and the Receiving Party for evaluating confidential business transactions, fundraising, and strategic partnerships.
                       </p>
 
-                      <p style={{ marginBottom: '1.25rem' }}>
-                        Simply we can say that JavaScript can manipulate the HTML & CSS of a web page, and this manipulation is done using <strong style={{ color: '#111827' }}>DOM (Document Object Model)</strong>.
+                      <h3 style={{ color: '#1f2937', fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                        1. Confidential Information & Scope
+                      </h3>
+                      <p style={{ marginBottom: '1.25rem', fontSize: '0.88rem', color: '#4b5563' }}>
+                        Proprietary information includes all commercial terms, software source code, financial projections, customer data, and trade secrets shared electronically via DocTransfer's zero-knowledge encrypted vault.
                       </p>
 
-                      <p style={{ marginBottom: '2.5rem' }}>
-                        JavaScript <strong style={{ color: '#111827' }}>access the DOM to manipulate the web page</strong>. Using DOM, the JavaScript gets access to <strong style={{ color: '#111827' }}>HTML as well as CSS</strong> of the web page and can also add behaviour to the HTML elements.
+                      <h3 style={{ color: '#1f2937', fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                        2. Global Privacy & Statutory Protection (GDPR & DPDP Act 2023)
+                      </h3>
+                      <p style={{ marginBottom: '1.25rem', fontSize: '0.88rem', color: '#4b5563' }}>
+                        The Receiving Party agrees to safeguard confidential materials with reasonable security precautions and strictly adhere to the EU/UK GDPR, US state privacy laws, and the Digital Personal Data Protection Act 2023.
                       </p>
 
-                      <h2 style={{ color: '#b91c1c', fontSize: '1.4rem', fontWeight: 700, marginBottom: '1rem' }}>
-                        DOM(Document Object Model)
-                      </h2>
-
-                      <p style={{ marginBottom: '2.5rem' }}>
-                        Document Object Model is an <strong style={{ color: '#111827' }}>API</strong> that represents and <strong style={{ color: '#111827' }}>interacts with HTML document</strong>. When a page is loaded, the browser creates the DOM for the web page. The DOM represents the document as a node tree, where each node represents part of the document. It can be an element, text, etc., just how that web page was written.
+                      <h3 style={{ color: '#1f2937', fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                        3. Governing Law & Electronic Evidence Admissibility
+                      </h3>
+                      <p style={{ marginBottom: '1.5rem', fontSize: '0.88rem', color: '#4b5563' }}>
+                        Digital execution through DocTransfer is enforceable under the US ESIGN Act, EU eIDAS, UK ECA, and Section 10A of the IT Act 2000, generating a tamper-evident court-admissible audit certificate.
                       </p>
 
-                      <h2 style={{ color: '#b91c1c', fontSize: '1.4rem', fontWeight: 700, marginBottom: '1rem' }}>
-                        API( Application programming interface )
-                      </h2>
-
-                      <p>
-                        In simple terms, API is an easy way by which you can use code written by somebody else in your own code.
-                      </p>
+                      {/* Signature Placement Mockup */}
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px dashed #cbd5e1' }}>
+                        <div style={{ border: '2px dashed #6366f1', background: '#f5f3ff', borderRadius: '8px', padding: '1rem', textAlign: 'center' }}>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6366f1', textTransform: 'uppercase' }}>SIGN HERE</span>
+                          <div style={{ fontFamily: 'cursive', fontSize: '1.3rem', color: '#4338ca', marginTop: '0.25rem' }}>Alex Rivera</div>
+                          <span style={{ fontSize: '0.7rem', color: '#6b7280' }}>Disclosing Party • Founder (US)</span>
+                        </div>
+                        <div style={{ border: '2px dashed #94a3b8', background: '#f8fafc', borderRadius: '8px', padding: '1rem', textAlign: 'center' }}>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>RECIPIENT SIGNATURE</span>
+                          <div style={{ fontFamily: 'cursive', fontSize: '1.3rem', color: '#059669', marginTop: '0.25rem' }}>Rohan Sharma</div>
+                          <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Receiving Party • Managing Partner (India)</span>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Fake scrollbar track */}
@@ -1160,6 +1232,107 @@ const LandingPage: React.FC = () => {
         </section>
 
         <UseCaseCards />
+
+        {/* Global Security & Multi-Jurisdictional Legal Standards Showcase */}
+        <section style={{
+          padding: '4.5rem 2rem',
+          background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+          borderTop: '1px solid #e2e8f0',
+          borderBottom: '1px solid #e2e8f0'
+        }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: '#eff6ff',
+              color: '#3b82f6',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              padding: '0.35rem 0.85rem',
+              borderRadius: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: '1rem'
+            }}>
+              Global Security & Legal Standards
+            </span>
+            <h2 style={{ fontSize: '2.2rem', fontWeight: 800, color: '#0f172a', margin: '0 0 1rem', letterSpacing: '-0.02em' }}>
+              Engineered for Global Startups, Cross-Border Deals & Indian Enterprises
+            </h2>
+            <p style={{ maxWidth: '680px', margin: '0 auto 3rem', color: '#64748b', fontSize: '1.05rem', lineHeight: '1.6' }}>
+              DocTransfer is built to satisfy international legal frameworks (US ESIGN, EU eIDAS) and Indian statutory laws while eliminating costly $45/user/mo SaaS fees.
+            </p>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: '1.75rem',
+              textAlign: 'left'
+            }}>
+              {[
+                {
+                  badge: 'ESIGN, eIDAS & IT ACT 2000',
+                  title: 'Globally Enforceable E-Signatures',
+                  desc: 'Legally binding under the US ESIGN Act, EU eIDAS, and India IT Act 2000 (Section 5 & 10A). Includes court-admissible audit trails and forensic logs.',
+                  color: '#4f46e5',
+                  bg: '#eef2ff'
+                },
+                {
+                  badge: 'GDPR & DPDP ACT 2023',
+                  title: 'Zero-Knowledge Privacy Vaults',
+                  desc: 'Browser-side AES-256-GCM encryption ensures pitch decks, cap tables, PAN/SSN, and financial records stay unreadable to server hosts.',
+                  color: '#059669',
+                  bg: '#ecfdf5'
+                },
+                {
+                  badge: 'CROSS-BORDER & MULTI-CHANNEL',
+                  title: 'Instant Link Sharing & Tracking',
+                  desc: 'Share pitch decks and agreements directly via WhatsApp, Email, or Slack. Track viewer engagement page-by-page across international time zones.',
+                  color: '#0284c7',
+                  bg: '#f0f9ff'
+                },
+                {
+                  badge: '100% FREE CORE TIER ($0 / ₹0)',
+                  title: 'Zero Expensive SaaS Paywalls',
+                  desc: 'Stop paying $15-$45/user/month for DocSend or DocuSign. Get unlimited pitch deck tracking, page dwell analytics, and e-signatures for free.',
+                  color: '#d97706',
+                  bg: '#fffbeb'
+                }
+              ].map((card, i) => (
+                <div key={i} style={{
+                  background: '#ffffff',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '16px',
+                  padding: '2rem',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem'
+                }}>
+                  <span style={{
+                    display: 'inline-block',
+                    background: card.bg,
+                    color: card.color,
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    padding: '0.25rem 0.6rem',
+                    borderRadius: '6px',
+                    width: 'fit-content'
+                  }}>
+                    {card.badge}
+                  </span>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1e293b', margin: 0 }}>
+                    {card.title}
+                  </h3>
+                  <p style={{ fontSize: '0.9rem', color: '#64748b', lineHeight: '1.6', margin: 0 }}>
+                    {card.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Key Features Section */}
         <section className="features-section" id="features">
@@ -1318,9 +1491,6 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Loved by the busiest people - Testimonials & Customer Stories */}
-        <TestimonialsSection />
-
         {/* Popular Document Templates Section */}
         <section className="popular-templates-section">
           <div className="container">
@@ -1332,16 +1502,16 @@ const LandingPage: React.FC = () => {
             
             <div className="templates-grid">
               {[
-                { name: 'Offer Letter Template', slug: 'offer-letter', desc: 'Professional employee job offer letter with standard terms.', category: 'HR' },
-                { name: 'Non-Disclosure Agreement', slug: 'nda', desc: 'Secure unilateral confidentiality agreement to protect trade secrets.', category: 'Legal' },
-                { name: 'W-4 Form', slug: 'w4-form', desc: 'IRS Employee withholding certificate helper and signing.', category: 'Finance' },
-                { name: 'I-9 Form', slug: 'i9-form', desc: 'Employment eligibility verification helper and signature.', category: 'HR' },
-                { name: 'LLC Operating Agreement', slug: 'llc-operating', desc: 'Comprehensive multi-member or single-member LLC agreement.', category: 'Corporate' },
-                { name: 'Sublease Agreement', slug: 'sublease', desc: 'Standard sublease contract for residential or office spaces.', category: 'Real Estate' },
-                { name: 'Liability Release', slug: 'liability-release', desc: 'Standard waiver of liability and hold harmless agreement.', category: 'Legal' },
-                { name: 'Statement of Work (SOW)', slug: 'sow', desc: 'Detailed scope of work template for contractors and clients.', category: 'Operations' },
-                { name: 'Purchase Order', slug: 'purchase-order', desc: 'Standard commercial purchase order template with terms.', category: 'Finance' },
-                { name: 'Sales Contract', slug: 'sales-contract', desc: 'Goods and services sales agreement with payment clauses.', category: 'Corporate' }
+                { name: 'Mutual Non-Disclosure Agreement', slug: 'nda-format-india-template', desc: 'Standard mutual NDA compliant with US ESIGN, eIDAS, and Indian commercial contract laws.', category: 'Legal' },
+                { name: 'Standard Seed SAFE Note', slug: 'safe-note-india-template', desc: 'Convertible equity instrument for early-stage startup fundraising across global syndicates.', category: 'Startups' },
+                { name: 'Independent Contractor Agreement', slug: 'freelancer-contract-india-template', desc: 'Cross-border contractor scope of work, milestone deliverables, and IP assignment deed.', category: 'Operations' },
+                { name: '11-Month Rent Agreement (India)', slug: 'rent-agreement-india-template', desc: 'Standard residential and commercial 11-month lease contract for Indian landlords and tenants.', category: 'Real Estate' },
+                { name: 'Offer Letter with CTC Breakup', slug: 'offer-letter-india-ctc-template', desc: 'Professional Indian job offer letter with detailed salary components (Basic, HRA, PF, Gratuity).', category: 'HR' },
+                { name: 'Co-Founder Equity & Vesting Deed', slug: 'founder-agreement-india-template', desc: 'Co-founder partnership and equity lock-in contract with 4-year reverse vesting schedule.', category: 'Startups' },
+                { name: 'CA Audit Engagement Letter', slug: 'ca-engagement-letter-india-template', desc: 'Statutory and tax audit engagement letter format compliant with ICAI guidelines.', category: 'Finance' },
+                { name: 'Bangalore Rental Agreement', slug: 'rent-agreement-bangalore-template', desc: 'Karnataka Stamp Act compliant 11-month house and flat rental agreement format.', category: 'Real Estate' },
+                { name: 'Employee Relieving & Experience Letter', slug: 'relieving-letter-india-template', desc: 'Formal employee exit relieving certificate with service tenure verification.', category: 'HR' },
+                { name: 'Property Sale Agreement Deed', slug: 'sale-agreement-property-india-template', desc: 'Agreement to sell immovable property and land with clear title transfer clauses.', category: 'Legal' }
               ].map((template) => (
                 <Link to={`/templates/${template.slug}`} key={template.slug} className="template-card">
                   <div className="template-card-header">

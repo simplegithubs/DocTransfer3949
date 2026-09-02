@@ -126,10 +126,11 @@ DocTransfer uses Supabase for database tables, Row Level Security (RLS) policies
 | `VITE_SUPABASE_ANON_KEY` | **Yes** | Supabase anonymous / public API key |
 | `VITE_GOOGLE_CLIENT_ID` | Optional | Google OAuth client ID for Google Drive file picker |
 | `VITE_GOOGLE_API_KEY` | Optional | Google Cloud API key with Drive API enabled |
-| `VITE_PAYPAL_STANDARD_PLAN_ID` | Optional | PayPal Standard subscription plan ID |
-| `VITE_PAYPAL_BUSINESS_PLAN_ID` | Optional | PayPal Business subscription plan ID |
-| `VITE_PAYPAL_STANDARD_PAYMENT_LINK` | Optional | PayPal Standard one-time / direct checkout link |
-| `VITE_PAYPAL_BUSINESS_PAYMENT_LINK` | Optional | PayPal Business one-time / direct checkout link |
+| `VITE_RAZORPAY_KEY_ID` | **Yes** | Razorpay Key ID (e.g. `rzp_live_...` or `rzp_test_...`) |
+| `VITE_RAZORPAY_PRO_PLAN_ID` | **Yes** | Razorpay Pro subscription plan ID |
+| `VITE_RAZORPAY_BUSINESS_PLAN_ID` | **Yes** | Razorpay Business subscription plan ID |
+| `VITE_RAZORPAY_DATAROOM_PLAN_ID` | **Yes** | Razorpay Virtual Data Room subscription plan ID |
+| `RAZORPAY_KEY_SECRET` | **Yes (Backend)** | Razorpay Secret Key (set in Supabase Secrets for signature verification) |
 
 ---
 

@@ -24,118 +24,141 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    id: 'elena-rostova',
-    name: 'Elena Rostova',
-    role: 'Partner & Deal Lead',
-    company: 'Horizon Capital',
-    category: 'vc',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80',
-    fallbackInitials: 'ER',
-    quote: 'Pitch decks used to get forwarded to competitors without our knowledge. With DocTransfer’s dynamic watermarking and real-time alerts, we control every single view.',
-    metric: '100% leak-proof deck distribution',
-    metricIcon: Shield,
-    caseStudy: {
-      title: 'How Horizon Capital Eliminated Deal Memo Leaks Across 40+ Portfolio Deals',
-      challenge: 'Confidential investment memos and cap tables were frequently shared outside authorized investor syndicate circles without audit trails.',
-      solution: 'Implemented DocTransfer dynamic recipient watermarking, email verification gates, and instant remote link revocation.',
-      results: [
-        'Zero unauthorized document leaks across 40+ investment rounds',
-        'Real-time notifications whenever LP partners opened quarterly reports',
-        'Complete forensic audit trails for SEC compliance records'
-      ],
-      timeframe: 'Over 18 months of active dealmaking'
-    }
-  },
-  {
-    id: 'marcus-chen',
-    name: 'Marcus Chen',
+    id: 'marcus-vance',
+    name: 'Marcus Vance',
     role: 'Founder & CEO',
-    company: 'Novaflow AI',
+    company: 'AetherFlow AI (San Francisco)',
     category: 'founders',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
-    fallbackInitials: 'MC',
-    quote: 'Founders remember who got back to them first, but we also remember who actually read our deck. DocTransfer’s tracking helped us close our $14M Series A in 3 weeks.',
-    metric: 'Closed $14M Series A in 3 wks',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
+    fallbackInitials: 'MV',
+    quote: 'Pitching US and global VCs used to be a black box. With DocTransfer’s slide-by-slide dwell time tracking, we knew down to the second when tier-1 partners were reading our unit economics, helping us close our $1.2M seed round in 14 days.',
+    metric: 'Closed $1.2M Seed in 14 days',
     metricIcon: Zap,
     caseStudy: {
-      title: 'Accelerating a Competitive $14M Series A with Page-by-Page Pitch Deck Analytics',
-      challenge: 'Founders had zero visibility into partner deck engagement and wasted critical pitch meetings guessing which slides investors cared about.',
-      solution: 'Used DocTransfer to track page-by-page dwell time, jump rates, and forward activity across 35 tier-1 venture funds.',
+      title: 'Accelerating a $1.2M Seed Round with Real-Time Pitch Deck Engagement Analytics',
+      challenge: 'Pitching 40+ US and cross-border VC funds with zero visibility into partner engagement or slide drop-off rates.',
+      solution: 'Shared trackable pitch deck links with dynamic recipient watermarking, real-time Slack/Email alerts, and instant mobile viewing.',
       results: [
-        'Identified high-conviction lead investors within 24 hours of deck dispatch',
-        'Customized follow-up pitch meetings targeting the exact slides investors reviewed longest',
-        'Secured 4 competing term sheets in 21 days'
+        'Identified high-conviction partner leads within 12 hours of link dispatch',
+        'Tailored pitch calls around the specific financial slides investors reviewed longest',
+        'Executed convertible SAFE notes online with full ESIGN Act and Delaware legal validity'
       ],
-      timeframe: '3-week fundraising cycle'
+      timeframe: '14-day seed round across SF & New York'
     }
   },
   {
-    id: 'sarah-jenkins',
-    name: 'Sarah Jenkins, Esq.',
+    id: 'rohan-sharma',
+    name: 'Rohan Sharma',
+    role: 'Founder & CEO',
+    company: 'BharatPulse AI (Bengaluru)',
+    category: 'founders',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+    fallbackInitials: 'RS',
+    quote: 'Indian founders used to waste hours guessing if VCs read our pitch deck. With DocTransfer, we knew down to the second which partner read our unit economics, helping us close our $850K seed round in 18 days.',
+    metric: 'Closed $850K Seed in 18 days',
+    metricIcon: Zap,
+    caseStudy: {
+      title: 'Accelerating an $850K Seed Round with Page-by-Page Pitch Deck Analytics',
+      challenge: 'Pitching 30+ Indian angel syndicates and VC funds with zero visibility into partner engagement or slide drop-off rates.',
+      solution: 'Shared pitch deck links with dynamic recipient watermarks, slide dwell-time tracking, and instant WhatsApp link delivery.',
+      results: [
+        'Identified high-conviction lead angels within 24 hours of pitch link dispatch',
+        'Tailored partner pitch calls focusing on the exact financial slides investors reviewed longest',
+        'Signed iSAFE investment notes online with 100% legal validity under IT Act 2000'
+      ],
+      timeframe: '18-day fundraising cycle across Bengaluru & Mumbai'
+    }
+  },
+  {
+    id: 'elena-rostova',
+    name: 'Elena Rostova',
+    role: 'Cross-Border M&A Partner',
+    company: 'Vanguard Legal LLP (London)',
+    category: 'legal',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80',
+    fallbackInitials: 'ER',
+    quote: 'Managing multi-jurisdiction M&A data rooms across London, Frankfurt, and Singapore used to be painfully complex on legacy VDRs. DocTransfer’s zero-knowledge vaults and eIDAS-admissible audit logs made our due diligence seamless.',
+    metric: '$42M Cross-Border Deal Closed',
+    metricIcon: Shield,
+    caseStudy: {
+      title: 'Executing a $42M Cross-Border Tech Acquisition Under eIDAS & GDPR Standards',
+      challenge: 'Coordinating multi-party due diligence across UK, EU, and US buyers with strict cross-border data privacy regulations.',
+      solution: 'Deployed DocTransfer virtual data rooms with granular viewer permissions, dynamic watermarking, and eIDAS & GDPR compliance.',
+      results: [
+        'Reduced deal due diligence turnaround by 40%',
+        'Maintained 100% tamper-evident audit trails compliant with EU/UK eIDAS standards',
+        'Zero unauthorized document leaks across 12 participating buyer entities'
+      ],
+      timeframe: 'Across a 60-day cross-border acquisition process'
+    }
+  },
+  {
+    id: 'ananya-iyer',
+    name: 'CA Ananya Iyer',
     role: 'Managing Partner',
-    company: 'Apex Legal Counsel',
+    company: 'Iyer & Associates Tax Firm (Mumbai)',
     category: 'legal',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80',
-    fallbackInitials: 'SJ',
-    quote: 'The built-in NDA gate and tamper-proof audit trails replaced three separate expensive SaaS subscriptions for our cross-border M&A transactions.',
-    metric: '$45K/yr saved on legacy data rooms',
+    fallbackInitials: 'AI',
+    quote: 'Collecting Form 16, GST returns, and bank statements from 400+ clients during tax audit season was chaos over WhatsApp. DocTransfer’s zero-knowledge client vaults cut our collection time by 75%.',
+    metric: '75% faster ITR document collection',
     metricIcon: FileText,
     caseStudy: {
-      title: 'Streamlining $120M in Cross-Border M&A Due Diligence and E-Signatures',
-      challenge: 'Legacy virtual data rooms cost tens of thousands per deal, had clumsy user interfaces, and required disconnected e-signature tools.',
-      solution: 'Standardized client deal rooms on DocTransfer with automated NDA gates, role-based download controls, and legally binding e-signatures.',
+      title: 'Streamlining 400+ Tax Audits and Statutory Filings Under ICAI & DPDP Guidelines',
+      challenge: 'Unsecured client transmissions of PAN and Aadhaar files over email with no confidentiality safeguards or tracking.',
+      solution: 'Created dedicated client data rooms with AES-256 client-side encryption and automated link expiration for tax computation sheets.',
       results: [
-        'Reduced client data room setup time from 3 days to under 10 minutes',
-        'Saved over $45,000 annually compared to traditional legacy data room providers',
-        'Accelerated transaction sign-off velocity by 60%'
+        'Collected 100% of audit working papers securely before statutory MCA and ITR deadlines',
+        'Eliminated risk of client financial data leaks complying with DPDP Act 2023 norms',
+        'Executed CA engagement letters and representation certificates with instant mobile e-signing'
       ],
-      timeframe: 'Across 14 M&A transactions'
+      timeframe: 'During July-September busy tax season'
     }
   },
   {
-    id: 'viraj-ala',
-    name: 'Viraj Ala',
-    role: 'Creative Director & Producer',
-    company: 'StudioKinetix',
-    category: 'creative',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80',
-    fallbackInitials: 'VA',
-    quote: 'I can’t have an interview with a billionaire or a film treatment leak because of an unsecured attachment. DocTransfer makes sure nothing slips.',
-    metric: '500+ secure creative transfers',
-    metricIcon: Film,
+    id: 'arjun-mehta',
+    name: 'Arjun Mehta',
+    role: 'General Partner',
+    company: 'Indus & Pacific Ventures (Singapore)',
+    category: 'vc',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80',
+    fallbackInitials: 'AM',
+    quote: 'Confidential deal memos and cap tables used to leak into syndicate investor channels. DocTransfer’s dynamic recipient watermarking and remote link kill-switch completely solved our leak problem across cross-border investments.',
+    metric: '100% leak-proof LP deal rooms',
+    metricIcon: Shield,
     caseStudy: {
-      title: 'Protecting Unreleased Creative Treatments & High-Stakes Talent Proposals',
-      challenge: 'High-profile commercial video treatments and sensitive celebrity interview briefs were vulnerable to unauthorized downloads and forwarding.',
-      solution: 'Deployed DocTransfer’s ‘Burn After Reading’ links, DRM view-only mode, and automated time-based access expiration.',
+      title: 'How Indus & Pacific Eliminated Deal Memo Leaks Across 35+ Portfolio Investments',
+      challenge: 'Confidential term sheets and startup cap tables were frequently shared outside authorized investor syndicates across US, India, and SEA.',
+      solution: 'Implemented DocTransfer dynamic recipient watermarking, email verification gates, and instant remote link revocation.',
       results: [
-        '100% confidential delivery of unreleased scripts and storyboard decks',
-        'Automated document self-destruct after verified client review',
-        'Zero leaks across 500+ high-profile creative productions'
+        'Zero unauthorized document leaks across 35+ investment rounds in US, SEA, and India',
+        'Real-time notifications whenever LP partners opened quarterly MIS reports',
+        'Complete forensic audit trails conforming to international electronic evidence standards'
       ],
-      timeframe: 'Over 2 years of studio productions'
+      timeframe: 'Over 2 years of active venture investing'
     }
   },
   {
-    id: 'amara-okafor',
-    name: 'Amara Okafor',
-    role: 'Head of Information Security',
-    company: 'CloudScale Global',
+    id: 'david-chen',
+    name: 'David Chen',
+    role: 'VP of Information Security',
+    company: 'ApexCloud Technologies (New York)',
     category: 'security',
     avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&auto=format&fit=crop&q=80',
-    fallbackInitials: 'AO',
-    quote: 'Zero-knowledge client-side encryption and instant remote access revocation made compliance approval effortless across our international deal teams.',
-    metric: 'SOC-2 & HIPAA audit ready',
+    fallbackInitials: 'DC',
+    quote: 'Zero-knowledge browser-side encryption, granular domain access controls, and instant remote link revocation made SOC-2, GDPR, and DPDP Act compliance effortless across our enterprise deal teams.',
+    metric: 'SOC-2 Type II & GDPR Compliant',
     metricIcon: Lock,
     caseStudy: {
       title: 'Enterprise-Wide Zero-Knowledge Document Governance & Instant Revocation',
-      challenge: 'Strict HIPAA and SOC-2 requirements required that enterprise data never rest unencrypted on third-party cloud infrastructure.',
+      challenge: 'Strict international enterprise privacy mandates required that customer data and vendor contracts never rest unencrypted on third-party cloud hosts.',
       solution: 'Adopted DocTransfer’s Vault Mode client-side AES-256-GCM encryption with granular IP and domain whitelisting.',
       results: [
-        'Passed rigorous third-party SOC-2 Type II audit with zero findings',
-        'Instant remote revocation of terminated contractor file access with one click',
-        'Complete end-to-end zero-knowledge encryption verified directly in the browser'
+        'Passed enterprise SOC-2 Type II, GDPR, and DPDP Act compliance audits with zero data exposure findings',
+        'Instant remote revocation of vendor document links with one click',
+        'Complete end-to-end cryptographic verification directly in the browser'
       ],
-      timeframe: 'Global enterprise rollout to 1,200+ employees'
+      timeframe: 'Rollout across 1,200+ employees and external enterprise vendors'
     }
   }
 ];

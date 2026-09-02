@@ -16,7 +16,8 @@ import {
     X,
     Shield,
     Mail,
-    Loader2
+    Loader2,
+    MessageCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from './lib/supabase';
@@ -26,6 +27,7 @@ import UpgradeModal from './components/UpgradeModal';
 import PremiumBadge from './components/PremiumBadge';
 import TrialTrackingBar from './components/TrialTrackingBar';
 import UsageLimitBanner from './components/UsageLimitBanner';
+import { formatWhatsAppShareUrl, buildShareUrl } from './lib/shareUrl';
 
 interface Document {
     id: string;
@@ -237,6 +239,17 @@ const DocumentSharing: React.FC = () => {
         navigator.clipboard.writeText(text);
         setCopiedLink(true);
         setTimeout(() => setCopiedLink(false), 2000);
+    };
+
+    const shareOnWhatsApp = (url: string, docName?: string) => {
+        // If url is a relative path or on localhost, ensure it's converted to an accessible URL
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        let targetUrl = url;
+        if (isLocalhost && url.includes('localhost')) {
+            const sharePath = new URL(url).pathname;
+            targetUrl = buildShareUrl(sharePath, true);
+        }
+        window.open(formatWhatsAppShareUrl(targetUrl, docName), '_blank');
     };
 
     const deleteDoc = async (id: string) => {
@@ -545,25 +558,45 @@ const DocumentSharing: React.FC = () => {
 
                     {/* Generate Button / Link Display */}
                     {generatedLink ? (
-                        <div style={{ marginTop: '3rem', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '16px', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ marginTop: '3rem', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '16px', padding: '1.5rem', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem' }}>
                             <div style={{ background: '#22c55e', padding: '0.5rem', borderRadius: '8px', color: 'white' }}>
                                 <Check size={24} />
                             </div>
-                            <div style={{ flex: 1 }}>
+                            <div style={{ flex: 1, minWidth: '200px' }}>
                                 <h4 style={{ color: '#15803d', marginBottom: '0.25rem' }}>Secure Link Generated!</h4>
                                 <p style={{ color: '#16a34a', fontSize: '0.9rem', wordBreak: 'break-all' }}>{generatedLink}</p>
                             </div>
-                            <button
-                                onClick={() => copyToClipboard(generatedLink)}
-                                className="btn-primary"
-                                style={{ padding: '0.75rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                            >
-                                {copiedLink ? <Check size={18} /> : <Copy size={18} />}
-                                {copiedLink ? 'Copied' : 'Copy'}
-                            </button>
-                            <button onClick={() => setGeneratedLink(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
-                                <X size={20} />
-                            </button>
+                            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                <button
+                                    onClick={() => shareOnWhatsApp(generatedLink, uploadedFile?.name)}
+                                    style={{
+                                        background: '#25D366',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '0.75rem 1.25rem',
+                                        borderRadius: '8px',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.4rem',
+                                        boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
+                                    }}
+                                >
+                                    <MessageCircle size={18} /> Share on WhatsApp
+                                </button>
+                                <button
+                                    onClick={() => copyToClipboard(generatedLink)}
+                                    className="btn-primary"
+                                    style={{ padding: '0.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+                                >
+                                    {copiedLink ? <Check size={18} /> : <Copy size={18} />}
+                                    {copiedLink ? 'Copied' : 'Copy'}
+                                </button>
+                                <button onClick={() => setGeneratedLink(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', padding: '0.5rem' }}>
+                                    <X size={20} />
+                                </button>
+                            </div>
                         </div>
                     ) : (
                         <button
@@ -615,7 +648,10 @@ const DocumentSharing: React.FC = () => {
                                 <div className="link-box">
                                     <LinkIcon size={16} className="text-gray-400" />
                                     <input type="text" value={doc.link} readOnly className="link-url" />
-                                    <button onClick={() => copyToClipboard(doc.link)} className="btn-copy">
+                                    <button onClick={() => shareOnWhatsApp(doc.link, doc.name)} title="Share on WhatsApp" style={{ background: '#25D366', color: 'white', border: 'none', padding: '0.4rem', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <MessageCircle size={15} />
+                                    </button>
+                                    <button onClick={() => copyToClipboard(doc.link)} className="btn-copy" title="Copy Link">
                                         <Copy size={16} />
                                     </button>
                                 </div>

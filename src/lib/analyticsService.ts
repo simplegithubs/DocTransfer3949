@@ -51,18 +51,22 @@ export interface ReceiverDownload {
     user_agent: string;
 }
 
-/** Returns true if the error is a "table/view/function not found" (42P01) or a generic 404 */
+/** Returns true if the error is a table/view missing, permission error, or not found error */
 const isMissingResource = (error: any): boolean => {
     if (!error) return false;
     const code = error.code ?? '';
     const message = (error.message ?? '').toLowerCase();
     return (
         code === 'PGRST116' ||   // no rows — treat as empty
-        code === '42P01'   ||   // undefined table/view in PostgREST
-        code === 'PGRST200' ||  // foreign key / schema cache miss
+        code === '42P01'    ||   // undefined table/view in PostgREST
+        code === '42501'    ||   // permission denied
+        code === 'PGRST200' ||   // foreign key / schema cache miss
+        code === 'PGRST204' ||   // columns not found in cache
+        code === 'PGRST301' ||   // JWT/auth issue
         message.includes('not found') ||
         message.includes('does not exist') ||
         message.includes('relation') ||
+        message.includes('permission denied') ||
         (error.status === 404)
     );
 };
@@ -83,11 +87,8 @@ export const analyticsService = {
             .order('stat_date', { ascending: true });
 
         if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] daily_document_stats view not found — run the SQL migration. Returning empty data.');
-                return [];
-            }
-            throw error;
+            console.warn('[Analytics] Query error:', error?.message || error);
+            return [];
         }
         return data || [];
     },
@@ -96,75 +97,83 @@ export const analyticsService = {
      * Get page attention heatmap data
      */
     async getPageAttention(documentId: string): Promise<PageAttention[]> {
-        const { data, error } = await supabase
-            .from('page_attention_stats')
-            .select('*')
-            .eq('document_id', documentId)
-            .order('page_number', { ascending: true });
+        try {
+            const { data, error } = await supabase
+                .from('page_attention_stats')
+                .select('*')
+                .eq('document_id', documentId)
+                .order('page_number', { ascending: true });
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] page_attention_stats view not found — run the SQL migration. Returning empty data.');
+            if (error) {
+                console.warn('[Analytics] page_attention_stats warning:', error.message);
                 return [];
             }
-            throw error;
+            return data || [];
+        } catch (err) {
+            console.warn('[Analytics] Failed to fetch page attention:', err);
+            return [];
         }
-        return data || [];
     },
 
     /**
      * Get geographic distribution of viewers
      */
     async getGeoStats(documentId: string): Promise<GeoStat[]> {
-        const { data, error } = await supabase
-            .from('viewer_geo_stats')
-            .select('*')
-            .eq('document_id', documentId);
+        try {
+            const { data, error } = await supabase
+                .from('viewer_geo_stats')
+                .select('*')
+                .eq('document_id', documentId);
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] viewer_geo_stats view not found — run the SQL migration. Returning empty data.');
+            if (error) {
+                console.warn('[Analytics] viewer_geo_stats warning:', error.message);
                 return [];
             }
-            throw error;
+            return data || [];
+        } catch (err) {
+            console.warn('[Analytics] Failed to fetch geo stats:', err);
+            return [];
         }
-        return data || [];
     },
 
     /**
      * Get device and browser statistics
      */
     async getDeviceStats(documentId: string): Promise<DeviceStat[]> {
-        const { data, error } = await supabase
-            .from('device_analytics_stats')
-            .select('*')
-            .eq('document_id', documentId);
+        try {
+            const { data, error } = await supabase
+                .from('device_analytics_stats')
+                .select('*')
+                .eq('document_id', documentId);
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] device_analytics_stats view not found — run the SQL migration. Returning empty data.');
+            if (error) {
+                console.warn('[Analytics] device_analytics_stats warning:', error.message);
                 return [];
             }
-            throw error;
+            return data || [];
+        } catch (err) {
+            console.warn('[Analytics] Failed to fetch device stats:', err);
+            return [];
         }
-        return data || [];
     },
 
     /**
      * Get conversion funnel data
      */
     async getConversionFunnel(documentId: string): Promise<FunnelStep[]> {
-        const { data, error } = await supabase
-            .rpc('get_document_conversion_funnel', { p_document_id: documentId });
+        try {
+            const { data, error } = await supabase
+                .rpc('get_document_conversion_funnel', { p_document_id: documentId });
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] get_document_conversion_funnel RPC not found — run the SQL migration. Returning empty data.');
+            if (error) {
+                console.warn('[Analytics] get_document_conversion_funnel warning:', error.message);
                 return [];
             }
-            throw error;
+            return data || [];
+        } catch (err) {
+            console.warn('[Analytics] Failed to fetch funnel:', err);
+            return [];
         }
-        return data || [];
     },
 
     /**
@@ -209,20 +218,22 @@ export const analyticsService = {
      * Get receiver download records for a document
      */
     async getReceiverDownloads(documentId: string): Promise<ReceiverDownload[]> {
-        const { data, error } = await supabase
-            .from('document_downloads')
-            .select('*')
-            .eq('document_id', documentId)
-            .order('downloaded_at', { ascending: false });
+        try {
+            const { data, error } = await supabase
+                .from('document_downloads')
+                .select('*')
+                .eq('document_id', documentId)
+                .order('downloaded_at', { ascending: false });
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] document_downloads table not found — run the SQL migration. Returning empty data.');
+            if (error) {
+                console.warn('[Analytics] document_downloads warning:', error.message);
                 return [];
             }
-            throw error;
+            return data || [];
+        } catch (err) {
+            console.warn('[Analytics] Failed to fetch receiver downloads:', err);
+            return [];
         }
-        return data || [];
     },
 
     /**
@@ -248,19 +259,21 @@ export const analyticsService = {
      * Get total download count for a document (efficient count-only query)
      */
     async getDownloadCount(documentId: string): Promise<number> {
-        const { count, error } = await supabase
-            .from('document_downloads')
-            .select('*', { count: 'exact', head: true })
-            .eq('document_id', documentId);
+        try {
+            const { count, error } = await supabase
+                .from('document_downloads')
+                .select('*', { count: 'exact', head: true })
+                .eq('document_id', documentId);
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] document_downloads table not found — returning 0.');
+            if (error) {
+                console.warn('[Analytics] document_downloads count warning:', error.message);
                 return 0;
             }
-            throw error;
+            return count || 0;
+        } catch (err) {
+            console.warn('[Analytics] Failed to fetch download count:', err);
+            return 0;
         }
-        return count || 0;
     },
 
     /**
@@ -274,55 +287,59 @@ export const analyticsService = {
             engagement_score: 0
         };
 
-        const { data, error } = await supabase
-            .rpc('get_realtime_document_stats', { p_document_id: documentId });
+        try {
+            const { data, error } = await supabase
+                .rpc('get_realtime_document_stats', { p_document_id: documentId });
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] get_realtime_document_stats RPC not found — run the SQL migration. Returning defaults.');
+            if (error) {
                 return defaultStats;
             }
-            throw error;
+            return data && data[0] ? data[0] : defaultStats;
+        } catch (err) {
+            return defaultStats;
         }
-        return data && data[0] ? data[0] : defaultStats;
     },
 
     /**
      * Get hourly views statistics for a document
      */
     async getHourlyStats(documentId: string): Promise<{ hour_label: string; view_count: number }[]> {
-        const { data, error } = await supabase
-            .from('document_hourly_stats')
-            .select('*')
-            .eq('document_id', documentId)
-            .order('hour_label', { ascending: true });
+        try {
+            const { data, error } = await supabase
+                .from('document_hourly_stats')
+                .select('*')
+                .eq('document_id', documentId)
+                .order('hour_label', { ascending: true });
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] document_hourly_stats view not found — run the SQL migration. Returning empty data.');
+            if (error) {
+                console.warn('[Analytics] document_hourly_stats warning:', error.message);
                 return [];
             }
-            throw error;
+            return data || [];
+        } catch (err) {
+            console.warn('[Analytics] Failed to fetch hourly stats:', err);
+            return [];
         }
-        return data || [];
     },
 
     /**
      * Get completion status stats for a document
      */
     async getCompletionStats(documentId: string): Promise<{ completion_status: string; status_count: number }[]> {
-        const { data, error } = await supabase
-            .from('document_completion_summary')
-            .select('*')
-            .eq('document_id', documentId);
+        try {
+            const { data, error } = await supabase
+                .from('document_completion_summary')
+                .select('*')
+                .eq('document_id', documentId);
 
-        if (error) {
-            if (isMissingResource(error)) {
-                console.warn('[Analytics] document_completion_summary view not found — run the SQL migration. Returning empty data.');
+            if (error) {
+                console.warn('[Analytics] document_completion_summary warning:', error.message);
                 return [];
             }
-            throw error;
+            return data || [];
+        } catch (err) {
+            console.warn('[Analytics] Failed to fetch completion stats:', err);
+            return [];
         }
-        return data || [];
     }
 };

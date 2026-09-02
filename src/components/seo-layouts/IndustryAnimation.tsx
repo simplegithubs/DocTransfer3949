@@ -28,13 +28,13 @@ const IndustryAnimation: React.FC<IndustryAnimationProps> = ({ slug }) => {
       setAnimType('realestate');
     } else if (s.includes('hipaa') || s.includes('medical') || s.includes('patient') || s.includes('healthcare') || s.includes('dental') || s.includes('pharmacy') || s.includes('mental-health') || s.includes('telehealth') || s.includes('clinical')) {
       setAnimType('healthcare');
-    } else if (s.includes('accounting') || s.includes('tax-') || s.includes('1099') || s.includes('bookkeeper') || s.includes('cpa') || s.includes('payroll') || s.includes('financial-audit') || s.includes('quarterly-financial')) {
+    } else if (s.includes('accounting') || s.includes('tax-') || s.includes('1099') || s.includes('bookkeeper') || s.includes('cpa') || s.includes('payroll') || s.includes('financial-audit') || s.includes('quarterly-financial') || s.includes('pitch-deck') || s.includes('startup') || s.includes('fundraising') || s.includes('angel-investor') || s.includes('safe-note') || s.includes('term-sheet') || s.includes('cap-table') || s.includes('chartered-accountant') || s.includes('itr-') || s.includes('gst-') || s.includes('tds-') || s.includes('ca-') || s.includes('mca-filing')) {
       setAnimType('finance');
-    } else if (s.includes('hr-') || s.includes('onboarding') || s.includes('employee') || s.includes('performance-review') || s.includes('exit-interview') || s.includes('workplace') || s.includes('background-check') || s.includes('training-certification')) {
+    } else if (s.includes('hr-') || s.includes('onboarding') || s.includes('employee') || s.includes('performance-review') || s.includes('exit-interview') || s.includes('workplace') || s.includes('background-check') || s.includes('training-certification') || s.includes('offer-letter') || s.includes('relieving') || s.includes('experience-certificate') || s.includes('appraisal-letter') || s.includes('kyc-') || s.includes('pf-') || s.includes('esic')) {
       setAnimType('hr');
     } else if (s.includes('construction') || s.includes('subcontractor') || s.includes('building-permit') || s.includes('blueprint') || s.includes('rfi-') || s.includes('punch-list') || s.includes('lien')) {
       setAnimType('construction');
-    } else if (s.includes('law-firm') || s.includes('litigation') || s.includes('legal') || s.includes('estate-planning') || s.includes('patent') || s.includes('arbitration') || s.includes('immigration') || s.includes('family-law') || s.includes('compliance-legal') || s.includes('gdpr')) {
+    } else if (s.includes('law-firm') || s.includes('litigation') || s.includes('legal') || s.includes('estate-planning') || s.includes('patent') || s.includes('arbitration') || s.includes('immigration') || s.includes('family-law') || s.includes('compliance-legal') || s.includes('gdpr') || s.includes('rent-agreement') || s.includes('advocate') || s.includes('sale-deed') || s.includes('legal-notice') || s.includes('court-filing') || s.includes('affidavit') || s.includes('power-of-attorney')) {
       setAnimType('legal');
     } else if (s.includes('university') || s.includes('student') || s.includes('academic') || s.includes('scholarship') || s.includes('school') || s.includes('faculty') || s.includes('study-abroad') || s.includes('admissions') || s.includes('alumni') || s.includes('research-paper')) {
       setAnimType('education');

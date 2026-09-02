@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 interface UsageLimitBannerProps {
     currentUploads: number;
     maxUploads: number;
-    planType: 'free' | 'standard' | 'business';
+    planType: 'free' | 'pro' | 'standard' | 'business' | 'dataroom';
     type?: 'uploads' | 'signatures';
 }
 
@@ -23,7 +23,7 @@ const UsageLimitBanner: React.FC<UsageLimitBannerProps> = ({
     const isNearLimit = percentage >= 80;
     const isAtLimit = currentUploads >= maxUploads;
     const isYearly = maxUploads === 30;
-    const isDaily = maxUploads === 10;
+    const isDaily = maxUploads <= 3;
 
     // Determine colors based on usage
     const getColors = () => {

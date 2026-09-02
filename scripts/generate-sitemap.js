@@ -69,6 +69,11 @@ async function generateSitemap() {
         { loc: `${BASE_URL}/templates`, priority: '0.95', changefreq: 'weekly' },
         { loc: `${BASE_URL}/docsend-alternative`, priority: '0.95', changefreq: 'weekly' },
         { loc: `${BASE_URL}/press`, priority: '0.85', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/tools/rent-agreement-generator`, priority: '0.95', changefreq: 'weekly' },
+        { loc: `${BASE_URL}/privacy`, priority: '0.8', changefreq: 'monthly' },
+        { loc: `${BASE_URL}/terms`, priority: '0.8', changefreq: 'monthly' },
+        { loc: `${BASE_URL}/refund-policy`, priority: '0.8', changefreq: 'monthly' },
+        { loc: `${BASE_URL}/contact`, priority: '0.8', changefreq: 'monthly' },
         { loc: `${BASE_URL}/sitemap-directory`, priority: '0.9', changefreq: 'weekly' }
     ];
 

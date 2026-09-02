@@ -21,6 +21,7 @@ import ResearchDetail from './pages/ResearchDetail'
 import ToolsHub from './pages/tools/ToolsHub'
 import PitchDeckAnalyzer from './pages/tools/PitchDeckAnalyzer'
 import NDAGenerator from './pages/tools/NDAGenerator'
+import RentAgreementGenerator from './pages/tools/RentAgreementGenerator'
 import VDRCostCalculator from './pages/tools/VDRCostCalculator'
 import PDFWatermarkTool from './pages/tools/PDFWatermarkTool'
 import ESignComplianceChecker from './pages/tools/ESignComplianceChecker'
@@ -39,6 +40,10 @@ import TemplatesHub from './pages/TemplatesHub'
 import PressAndBadges from './pages/PressAndBadges'
 import SecurityPage from './pages/SecurityPage'
 import TransparencyPage from './pages/TransparencyPage'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsOfService from './pages/TermsOfService'
+import RefundPolicy from './pages/RefundPolicy'
+import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -48,6 +53,10 @@ function App() {
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/security" element={<SecurityPage />} />
       <Route path="/transparency" element={<TransparencyPage />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfService />} />
+      <Route path="/refund-policy" element={<RefundPolicy />} />
+      <Route path="/contact" element={<ContactPage />} />
       <Route path="/payment-success" element={<PaymentSuccess />} />
       <Route
         path="/checkout"
@@ -85,6 +94,7 @@ function App() {
 
       {/* Free Tools Routes */}
       <Route path="/tools" element={<ToolsHub />} />
+      <Route path="/tools/rent-agreement-generator" element={<RentAgreementGenerator />} />
       <Route path="/tools/pitch-deck-analyzer" element={<PitchDeckAnalyzer />} />
       <Route path="/tools/nda-generator" element={<NDAGenerator />} />
       <Route path="/tools/vdr-cost-calculator" element={<VDRCostCalculator />} />

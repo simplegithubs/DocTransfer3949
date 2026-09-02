@@ -17,6 +17,40 @@ export interface ToolMetadata {
 
 export const toolsList: ToolMetadata[] = [
   {
+    slug: 'rent-agreement-generator',
+    name: '11-Month Rent Agreement Online Maker (India)',
+    tagline: 'Draft legally compliant 11-month residential and commercial rental agreements for Bangalore, Mumbai, Delhi & all Indian cities.',
+    metaTitle: '11-Month Rent Agreement Online Maker (India) — Free PDF & E-Sign | DocTransfer',
+    metaDescription: 'Create custom 11-month rental agreements online with state stamp duty calculations for Bangalore, Mumbai, Delhi, Hyderabad. Download PDF and tap to e-sign.',
+    keywords: 'rent agreement generator online India, 11 month rent agreement format, rent agreement Bangalore, rental agreement Mumbai, rent agreement online maker free',
+    category: 'legal',
+    icon: 'FileCheck',
+    popular: true,
+    estimatedTime: '2 mins',
+    features: [
+      'Pre-formatted for Karnataka, Maharashtra, Delhi, Telangana & all Indian states',
+      'Automatic Stamp Duty & Security Deposit calculation',
+      'Includes mandatory lock-in period, maintenance & eviction clauses',
+      'Download court-admissible PDF or share via WhatsApp for mobile e-signing'
+    ],
+    ctaText: 'Create Rent Agreement Free',
+    ctaRoute: '/tools/rent-agreement-generator',
+    faqs: [
+      {
+        question: 'Why are rental agreements in India typically drafted for 11 months?',
+        answer: 'Under the Registration Act 1908 (Section 17), leases exceeding 11 months require mandatory government sub-registrar registration. An 11-month agreement on appropriate stamp paper is legally valid and binding under the Indian Contract Act 1872 without cumbersome sub-registrar visits.'
+      },
+      {
+        question: 'Is an online e-signed rent agreement valid in Indian courts?',
+        answer: 'Yes. E-signatures executed on rental agreements are legally enforceable under Section 5 and Section 10A of the Information Technology Act 2000 when accompanied by tamper-proof Section 65B electronic audit certificates.'
+      },
+      {
+        question: 'How much stamp paper value is required for an 11-month lease?',
+        answer: 'Stamp duty varies by state. In Karnataka, a ₹100 or ₹200 e-stamp is standard for 11-month leases; Maharashtra uses a 0.25% calculation; Delhi typically utilizes ₹100 e-stamp paper.'
+      }
+    ]
+  },
+  {
     slug: 'pitch-deck-analyzer',
     name: 'Free Pitch Deck Analyzer & Grader',
     tagline: 'Instant slide count, section analysis, and investor engagement score for your pitch deck.',

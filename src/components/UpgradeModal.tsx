@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Crown, Check, Zap, Briefcase } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Crown, Check, Zap, Briefcase, FolderLock, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface UpgradeModalProps {
@@ -10,13 +10,86 @@ interface UpgradeModalProps {
 
 const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, featureName }) => {
     const navigate = useNavigate();
+    const [currency, setCurrency] = useState<'INR' | 'USD'>('INR');
 
     if (!isOpen) return null;
 
-    const handleSelectPlan = (plan: 'standard' | 'business') => {
+    const handleSelectPlan = (plan: 'pro' | 'business' | 'dataroom') => {
         onClose();
-        navigate(`/checkout?plan=${plan}`);
+        navigate(`/checkout?plan=${plan}&currency=${currency}`);
     };
+
+    const plans = [
+        {
+            key: 'pro' as const,
+            name: 'Pro Plan',
+            tagline: 'Forensic analytics, watermarks & e-signatures',
+            icon: Zap,
+            priceINR: '₹699',
+            priceUSD: '$19',
+            color: '#3b82f6',
+            accentBg: '#eff6ff',
+            gradient: 'linear-gradient(180deg, #ffffff 0%, #eff6ff 100%)',
+            borderColor: '#93c5fd',
+            badge: '🔥 POPULAR',
+            features: [
+                'Unlimited Document Uploads',
+                '50MB File Size Limit',
+                '5 Active Deal Rooms',
+                'Page-by-Page Dwell Forensics',
+                'Dynamic Anti-Leak Watermark',
+                'Unlimited E-Signatures (IT Act 2000)',
+                'Sec 65B Court-Admissible Audit Trail',
+                'Remote Self-Destruct Kill Switch'
+            ]
+        },
+        {
+            key: 'business' as const,
+            name: 'Business CA Suite',
+            tagline: 'Zero-knowledge vault, client portals & GST invoicing',
+            icon: Briefcase,
+            priceINR: '₹1,799',
+            priceUSD: '$49',
+            color: '#8b5cf6',
+            accentBg: '#f5f3ff',
+            gradient: 'linear-gradient(180deg, #ffffff 0%, #faf5ff 100%)',
+            borderColor: '#a855f7',
+            badge: 'BEST FOR TEAMS',
+            features: [
+                'Everything in Pro Plan',
+                '500MB File Size Limit',
+                'Unlimited Deal Rooms & Folders',
+                'Zero-Knowledge Vault (AES-256 E2EE)',
+                'Custom Domain & Full Branding',
+                'Client Intake Portals',
+                'GST Tax Invoicing with ITC Credit',
+                '3 Team Member Seats Included'
+            ]
+        },
+        {
+            key: 'dataroom' as const,
+            name: 'Virtual Data Room',
+            tagline: 'M&A diligence, multi-party bidding & archives',
+            icon: FolderLock,
+            priceINR: '₹4,999',
+            priceUSD: '$129',
+            color: '#10b981',
+            accentBg: '#ecfdf5',
+            gradient: 'linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%)',
+            borderColor: '#34d399',
+            badge: 'ENTERPRISE M&A',
+            features: [
+                'Everything in Business Suite',
+                '2GB File Size Limit Per Upload',
+                'Multi-Party Isolated Bidder Rooms',
+                'Due Diligence Q&A with Approvals',
+                'Bates Numbering & Auto-Index',
+                '1-Click Compliance ZIP Archive',
+                '10 Team Seats + Unlimited Guests',
+                'Dedicated Deal Room Concierge'
+            ]
+        }
+    ];
 
     return (
         <div style={{
@@ -29,7 +102,7 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, featureNam
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '2rem',
+            padding: '1.5rem',
             background: 'rgba(15, 23, 42, 0.65)',
             backdropFilter: 'blur(12px)',
             animation: 'fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
@@ -39,28 +112,28 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, featureNam
         >
             <div style={{
                 background: 'white',
-                borderRadius: '32px',
+                borderRadius: '28px',
                 width: '100%',
-                maxWidth: '920px',
+                maxWidth: '1100px',
                 boxShadow: '0 30px 70px -10px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(15, 23, 42, 0.05)',
                 position: 'relative',
                 overflow: 'hidden',
                 animation: 'scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
-                maxHeight: 'calc(100vh - 4rem)',
+                maxHeight: 'calc(100vh - 3rem)',
                 display: 'flex',
                 flexDirection: 'column'
             }}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Visual Header Background Pattern */}
+                {/* Decorative gradient */}
                 <div style={{
                     position: 'absolute',
-                    top: '-150px',
+                    top: '-120px',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     width: '600px',
                     height: '250px',
-                    background: 'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%)',
                     pointerEvents: 'none',
                     zIndex: 0
                 }}></div>
@@ -70,10 +143,10 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, featureNam
                     onClick={onClose}
                     style={{
                         position: 'absolute',
-                        top: '1.5rem',
-                        right: '1.5rem',
-                        width: '40px',
-                        height: '40px',
+                        top: '1.25rem',
+                        right: '1.25rem',
+                        width: '36px',
+                        height: '36px',
                         borderRadius: '50%',
                         border: '1px solid #f1f5f9',
                         background: 'white',
@@ -97,29 +170,29 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, featureNam
                         e.currentTarget.style.transform = 'rotate(0deg)';
                     }}
                 >
-                    <X size={20} />
+                    <X size={18} />
                 </button>
 
-                {/* Content Container (Scrollable if viewport is tiny) */}
-                <div style={{ padding: '3.5rem 3rem 3rem 3rem', zIndex: 1, overflowY: 'auto' }}>
+                {/* Scrollable Content */}
+                <div style={{ padding: '2.75rem 2.5rem 2.5rem', zIndex: 1, overflowY: 'auto' }}>
                     {/* Header */}
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                         <div style={{
                             display: 'inline-flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            width: '64px',
-                            height: '64px',
+                            width: '56px',
+                            height: '56px',
                             background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-                            borderRadius: '20px',
+                            borderRadius: '18px',
                             color: '#d97706',
-                            marginBottom: '1.5rem',
-                            boxShadow: '0 10px 20px -5px rgba(217, 119, 6, 0.2)'
+                            marginBottom: '1.25rem',
+                            boxShadow: '0 8px 20px -5px rgba(217, 119, 6, 0.2)'
                         }}>
-                            <Crown size={32} fill="currentColor" strokeWidth={1.5} />
+                            <Crown size={28} fill="currentColor" strokeWidth={1.5} />
                         </div>
                         <h2 style={{
-                            fontSize: '2.25rem',
+                            fontSize: '2rem',
                             fontWeight: 800,
                             color: '#0f172a',
                             marginBottom: '0.5rem',
@@ -129,257 +202,217 @@ const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose, featureNam
                         </h2>
                         <p style={{
                             color: '#64748b',
-                            fontSize: '1.1rem',
+                            fontSize: '1rem',
                             maxWidth: '560px',
-                            margin: '0 auto',
+                            margin: '0 auto 1.25rem',
                             lineHeight: 1.5
                         }}>
                             {featureName ? (
                                 <span>
-                                    ✨ <strong style={{ color: '#4f46e5' }}>{featureName}</strong> is a premium feature. Upgrade to standard or business to unlock it instantly.
+                                    ✨ <strong style={{ color: '#4f46e5' }}>{featureName}</strong> is a premium feature. Upgrade to Pro, Business, or Data Room to unlock it instantly.
                                 </span>
                             ) : (
-                                "Unlock ultimate security, custom branding, unlimited transfers, and advanced compliance options."
+                                "Unlock forensic analytics, e-signatures, zero-knowledge vault, and advanced compliance."
                             )}
                         </p>
+
+                        {/* Currency Toggle */}
+                        <div style={{
+                            display: 'inline-flex',
+                            background: '#f1f5f9',
+                            padding: '0.3rem',
+                            borderRadius: '12px'
+                        }}>
+                            <button
+                                onClick={() => setCurrency('INR')}
+                                style={{
+                                    padding: '0.4rem 1rem',
+                                    borderRadius: '9px',
+                                    border: 'none',
+                                    background: currency === 'INR' ? 'white' : 'transparent',
+                                    color: currency === 'INR' ? '#0f172a' : '#64748b',
+                                    fontWeight: 700,
+                                    fontSize: '0.8rem',
+                                    cursor: 'pointer',
+                                    boxShadow: currency === 'INR' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                🇮🇳 INR (₹)
+                            </button>
+                            <button
+                                onClick={() => setCurrency('USD')}
+                                style={{
+                                    padding: '0.4rem 1rem',
+                                    borderRadius: '9px',
+                                    border: 'none',
+                                    background: currency === 'USD' ? 'white' : 'transparent',
+                                    color: currency === 'USD' ? '#0f172a' : '#64748b',
+                                    fontWeight: 700,
+                                    fontSize: '0.8rem',
+                                    cursor: 'pointer',
+                                    boxShadow: currency === 'USD' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                🌐 USD ($)
+                            </button>
+                        </div>
                     </div>
 
-                    {/* Comparative Cards */}
+                    {/* 3 Plan Cards Grid */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-                        gap: '2rem',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                        gap: '1.5rem',
                         justifyContent: 'center'
                     }}>
-                        {/* Standard Plan Card */}
-                        <div style={{
-                            background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '24px',
-                            padding: '2.5rem',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                            position: 'relative'
-                        }}
-                            className="plan-card-hover"
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-6px)';
-                                e.currentTarget.style.boxShadow = '0 20px 40px -15px rgba(59, 130, 246, 0.12)';
-                                e.currentTarget.style.borderColor = '#93c5fd';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = 'none';
-                                e.currentTarget.style.borderColor = '#e2e8f0';
-                            }}
-                        >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                                <div style={{
-                                    width: '44px',
-                                    height: '44px',
-                                    borderRadius: '12px',
-                                    background: '#eff6ff',
-                                    color: '#3b82f6',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}>
-                                    <Zap size={22} fill="currentColor" />
-                                </div>
-                                <div>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>Standard</h3>
-                                    <p style={{ color: '#64748b', fontSize: '0.8rem', margin: 0 }}>Best for growing professional needs</p>
-                                </div>
-                            </div>
+                        {plans.map((p) => {
+                            const PlanIcon = p.icon;
+                            return (
+                                <div
+                                    key={p.key}
+                                    style={{
+                                        background: p.gradient,
+                                        border: `1.5px solid ${p.borderColor}`,
+                                        borderRadius: '22px',
+                                        padding: '2rem 1.75rem',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                                        position: 'relative'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(-5px)';
+                                        e.currentTarget.style.boxShadow = `0 20px 40px -15px ${p.color}25`;
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = 'translateY(0)';
+                                        e.currentTarget.style.boxShadow = 'none';
+                                    }}
+                                >
+                                    {/* Badge */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '1rem',
+                                        right: '1rem',
+                                        background: p.color,
+                                        color: 'white',
+                                        padding: '0.2rem 0.6rem',
+                                        borderRadius: '100px',
+                                        fontSize: '0.62rem',
+                                        fontWeight: 800,
+                                        letterSpacing: '0.04em'
+                                    }}>
+                                        {p.badge}
+                                    </div>
 
-                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem', marginBottom: '1.5rem' }}>
-                                <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#0f172a' }}>$25</span>
-                                <span style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: 500 }}>/month</span>
-                            </div>
-
-                            {/* Features list */}
-                            <div style={{ flex: 1, marginBottom: '2rem' }}>
-                                {[
-                                    'Unlimited Secure Transfers',
-                                    'Up to 50MB file size limit',
-                                    'Advanced Password Protection',
-                                    'Time/View Link Expirations',
-                                    'Require Email Verification',
-                                    'Dynamic Forensic Watermarking',
-                                    'Interactive E-Signatures (5/mo)'
-                                ].map((feat, idx) => (
-                                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                                    {/* Plan Header */}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.25rem' }}>
                                         <div style={{
-                                            width: '18px',
-                                            height: '18px',
-                                            borderRadius: '50%',
-                                            background: '#dcfce7',
-                                            color: '#15803d',
+                                            width: '42px',
+                                            height: '42px',
+                                            borderRadius: '12px',
+                                            background: p.accentBg,
+                                            color: p.color,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <PlanIcon size={22} />
+                                        </div>
+                                        <div>
+                                            <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>{p.name}</h3>
+                                            <p style={{ color: '#64748b', fontSize: '0.72rem', margin: 0 }}>{p.tagline}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Price */}
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem', marginBottom: '1.25rem' }}>
+                                        <span style={{ fontSize: '2.25rem', fontWeight: 800, color: '#0f172a' }}>
+                                            {currency === 'INR' ? p.priceINR : p.priceUSD}
+                                        </span>
+                                        <span style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: 500 }}>/month</span>
+                                    </div>
+
+                                    {/* Features list */}
+                                    <div style={{ flex: 1, marginBottom: '1.75rem' }}>
+                                        {p.features.map((feat, idx) => (
+                                            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.65rem' }}>
+                                                <div style={{
+                                                    width: '17px',
+                                                    height: '17px',
+                                                    borderRadius: '50%',
+                                                    background: idx === 0 ? p.color : '#dcfce7',
+                                                    color: idx === 0 ? 'white' : '#15803d',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0
+                                                }}>
+                                                    <Check size={10} strokeWidth={3.5} />
+                                                </div>
+                                                <span style={{
+                                                    fontSize: '0.82rem',
+                                                    color: '#334155',
+                                                    fontWeight: idx === 0 ? 700 : 500
+                                                }}>{feat}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* CTA */}
+                                    <button
+                                        onClick={() => handleSelectPlan(p.key)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.9rem',
+                                            borderRadius: '14px',
+                                            border: 'none',
+                                            background: p.color,
+                                            color: 'white',
+                                            fontWeight: 700,
+                                            fontSize: '0.92rem',
+                                            cursor: 'pointer',
+                                            boxShadow: `0 8px 18px -4px ${p.color}45`,
+                                            transition: 'all 0.2s',
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            flexShrink: 0
-                                        }}>
-                                            <Check size={12} strokeWidth={3} />
-                                        </div>
-                                        <span style={{ fontSize: '0.875rem', color: '#334155', fontWeight: 500 }}>{feat}</span>
-                                    </div>
-                                ))}
-                            </div>
+                                            gap: '0.5rem'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.filter = 'brightness(1.08)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(1)'}
+                                    >
+                                        Upgrade to {p.name.split(' ')[0]} <ArrowRight size={16} />
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
 
-                            <button
-                                onClick={() => handleSelectPlan('standard')}
-                                style={{
-                                    width: '100%',
-                                    padding: '1rem',
-                                    borderRadius: '14px',
-                                    border: 'none',
-                                    background: '#3b82f6',
-                                    color: 'white',
-                                    fontWeight: 700,
-                                    fontSize: '0.95rem',
-                                    cursor: 'pointer',
-                                    boxShadow: '0 8px 16px -4px rgba(59, 130, 246, 0.3)',
-                                    transition: 'all 0.2s',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '0.5rem'
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.style.filter = 'brightness(1.08)'}
-                                onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(1)'}
-                            >
-                                Get Standard Plan <Zap size={16} fill="currentColor" />
-                            </button>
-                        </div>
-
-                        {/* Business Plan Card */}
-                        <div style={{
-                            background: 'linear-gradient(180deg, #ffffff 0%, #faf5ff 100%)',
-                            border: '2px solid #a855f7',
-                            borderRadius: '24px',
-                            padding: '2.5rem',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                            position: 'relative'
-                        }}
-                            className="plan-card-hover"
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-6px)';
-                                e.currentTarget.style.boxShadow = '0 20px 45px -12px rgba(168, 85, 247, 0.18)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = 'none';
+                    {/* Footer link */}
+                    <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+                        <button
+                            onClick={() => { onClose(); navigate('/pricing'); }}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                color: '#3b82f6',
+                                fontSize: '0.88rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                textDecoration: 'underline',
+                                textUnderlineOffset: '3px'
                             }}
                         >
-                            {/* POPULAR BADGE */}
-                            <div style={{
-                                position: 'absolute',
-                                top: '1.25rem',
-                                right: '1.25rem',
-                                background: 'linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)',
-                                color: 'white',
-                                padding: '0.25rem 0.75rem',
-                                borderRadius: '100px',
-                                fontSize: '0.7rem',
-                                fontWeight: 800,
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.05em'
-                            }}>
-                                Best Value
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                                <div style={{
-                                    width: '44px',
-                                    height: '44px',
-                                    borderRadius: '12px',
-                                    background: '#faf5ff',
-                                    color: '#a855f7',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }}>
-                                    <Briefcase size={22} />
-                                </div>
-                                <div>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>Business</h3>
-                                    <p style={{ color: '#64748b', fontSize: '0.8rem', margin: 0 }}>Ultimate security and branding suite</p>
-                                </div>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem', marginBottom: '1.5rem' }}>
-                                <span style={{ fontSize: '2.5rem', fontWeight: 800, color: '#0f172a' }}>$39</span>
-                                <span style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: 500 }}>/month</span>
-                            </div>
-
-                            {/* Features list */}
-                            <div style={{ flex: 1, marginBottom: '2rem' }}>
-                                {[
-                                    'Everything in Standard, plus:',
-                                    'Up to 500MB file size limit',
-                                    'Full Custom Domain & Branding',
-                                    'E2E Vault Encryption Mode',
-                                    'SSO Integration Support',
-                                    'Compliance-Ready Audit Trails',
-                                    'Unlimited E-Signatures'
-                                ].map((feat, idx) => (
-                                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                                        <div style={{
-                                            width: '18px',
-                                            height: '18px',
-                                            borderRadius: '50%',
-                                            background: '#f3e8ff',
-                                            color: '#6b21a8',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            flexShrink: 0
-                                        }}>
-                                            <Check size={12} strokeWidth={3} />
-                                        </div>
-                                        <span style={{
-                                            fontSize: '0.875rem',
-                                            color: '#334155',
-                                            fontWeight: idx === 0 ? 700 : 500
-                                        }}>{feat}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <button
-                                onClick={() => handleSelectPlan('business')}
-                                style={{
-                                    width: '100%',
-                                    padding: '1rem',
-                                    borderRadius: '14px',
-                                    border: 'none',
-                                    background: 'linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)',
-                                    color: 'white',
-                                    fontWeight: 700,
-                                    fontSize: '0.95rem',
-                                    cursor: 'pointer',
-                                    boxShadow: '0 8px 20px -4px rgba(168, 85, 247, 0.4)',
-                                    transition: 'all 0.2s',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '0.5rem'
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.style.filter = 'brightness(1.08)'}
-                                onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(1)'}
-                            >
-                                Get Business Plan <Briefcase size={16} />
-                            </button>
-                        </div>
+                            Compare all plans in detail →
+                        </button>
                     </div>
                 </div>
             </div>
 
-            {/* Injected CSS keyframes */}
+            {/* CSS keyframes */}
             <style>
                 {`
                     @keyframes fadeIn {

@@ -498,6 +498,25 @@ const SignDocument: React.FC = () => {
                             A confirmation will be sent to <span style={{ color: '#a5b4fc', fontWeight: '600' }}>{signer?.signer_email}</span> once all parties have completed signing.
                         </p>
 
+                        {/* Section 65B Legal Certificate Box */}
+                        <div style={{
+                            background: 'rgba(16, 185, 129, 0.08)',
+                            border: '1px solid rgba(52, 211, 153, 0.25)',
+                            borderRadius: '14px',
+                            padding: '1rem 1.25rem',
+                            marginBottom: '1.5rem',
+                            textAlign: 'left',
+                            fontSize: '0.82rem',
+                            color: '#cbd5e1'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#34d399', fontWeight: 700, marginBottom: '0.35rem' }}>
+                                <span>📜</span> IT Act 2000 & Section 65B Admissible Certificate
+                            </div>
+                            <div style={{ color: '#94a3b8', fontSize: '0.78rem', lineHeight: '1.5' }}>
+                                Cryptographic audit log recorded with signer email, IP address, and SHA-256 digital signature stamp conforming to Section 5, 10A of Information Technology Act & Section 65B of Indian Evidence Act.
+                            </div>
+                        </div>
+
                         {/* Divider */}
                         <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', marginBottom: '1.75rem' }} />
 
@@ -540,7 +559,7 @@ const SignDocument: React.FC = () => {
                                 letterSpacing: '-0.01em',
                                 lineHeight: '1.3'
                             }}>
-                                Need to send or track your own documents?
+                                Need to send, track or e-sign your own documents?
                             </h2>
                             <p style={{
                                 fontSize: '0.82rem',
@@ -548,15 +567,16 @@ const SignDocument: React.FC = () => {
                                 lineHeight: '1.55',
                                 margin: '0 0 1.25rem 0'
                             }}>
-                                Create contracts, send legally-binding signature requests, and track views with military-grade security.
+                                Send pitch decks, agreements, and tax forms with 1-click WhatsApp sharing and instant mobile tap-to-sign.
                             </p>
 
                             {/* Feature checklist */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '1.35rem' }}>
                                 {[
-                                    'Send 3 free document requests/month',
-                                    'Compliant with ESIGN & eIDAS',
-                                    'Real-time access & download analytics'
+                                    '100% Free Core Tier (₹0) with unlimited deal rooms',
+                                    'IT Act 2000 & Section 65B court-admissible certificate',
+                                    '1-Click WhatsApp link sharing & mobile touch sign',
+                                    'Real-time page dwell time and reader open alerts'
                                 ].map((feature, i) => (
                                     <div
                                         key={i}
