@@ -231,13 +231,14 @@ const SolutionsHub: React.FC = () => {
                         fontWeight: '700',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
-                        color: '#4f46e5',
-                        background: '#eef2ff',
+                        color: solution.slug === 'indian-real-estate' ? '#047857' : '#4f46e5',
+                        background: solution.slug === 'indian-real-estate' ? '#d1fae5' : '#eef2ff',
                         padding: '0.25rem 0.6rem',
-                        borderRadius: '6px'
+                        borderRadius: '6px',
+                        border: solution.slug === 'indian-real-estate' ? '1px solid #a7f3d0' : 'none'
                       }}
                     >
-                      {categoryLabels[solution.category] || solution.category}
+                      {solution.slug === 'indian-real-estate' ? '🇮🇳 India PropTech' : (categoryLabels[solution.category] || solution.category)}
                     </span>
                   </div>
 

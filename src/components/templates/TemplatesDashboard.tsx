@@ -72,7 +72,8 @@ const TemplatesDashboard: React.FC<TemplatesDashboardProps> = ({ onBackToDocumen
         category: ct.category || 'custom',
         categoryLabel: ct.category === 'hr' ? 'Employment & HR' :
                        ct.category === 'legal' ? 'Legal & Liability' :
-                       ct.category === 'sales' ? 'Sales & Finance' : 'Custom Template',
+                       ct.category === 'sales' ? 'Sales & Finance' :
+                       ct.category === 'real-estate' ? 'Real Estate & PropTech' : 'Custom Template',
         description: ct.description || 'No description provided.',
         estimatedTime: '2 mins',
         pagesCount: 1,

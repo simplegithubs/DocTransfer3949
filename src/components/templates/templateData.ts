@@ -21,7 +21,7 @@ export interface DocumentSection {
 export interface Template {
     id: string;
     name: string;
-    category: 'hr' | 'legal' | 'sales';
+    category: 'hr' | 'legal' | 'sales' | 'real-estate';
     categoryLabel: string;
     description: string;
     estimatedTime: string;
@@ -33,6 +33,7 @@ export interface Template {
 
 export const TEMPLATE_CATEGORIES = [
     { id: 'all', label: 'All Templates', color: '#6366f1' },
+    { id: 'real-estate', label: 'Real Estate & PropTech', color: '#059669' },
     { id: 'hr', label: 'Employment & HR', color: '#ec4899' },
     { id: 'legal', label: 'Legal & Liability', color: '#ef4444' },
     { id: 'sales', label: 'Sales & Finance', color: '#10b981' }
@@ -996,6 +997,130 @@ export const TEMPLATES: Template[] = [
             { type: 'header', text: '3. Governing Law' },
             { type: 'paragraph', text: `This Agreement shall be governed by and construed in accordance with the laws of the State of ${val.governingState || '[Governing State]'}.` },
             { type: 'signature-block', text: 'SIGNATURES' }
+        ]
+    },
+
+    // =====================================================
+    // REAL ESTATE & PROPTECH (INDIA)
+    // =====================================================
+    {
+        id: 'rera-allotment-letter',
+        name: 'RERA Builder Allotment Letter',
+        category: 'real-estate',
+        categoryLabel: 'Real Estate & PropTech',
+        description: 'Official builder allotment letter under RERA with carpet area, unit specifications, milestone payment schedule, and APF details.',
+        estimatedTime: '3 mins',
+        pagesCount: 2,
+        popularity: 5,
+        fields: [
+            { id: 'builderName', label: 'Developer / Company Name', type: 'text', placeholder: 'Prestige Estates Projects Ltd', required: true, defaultValue: '', step: 1 },
+            { id: 'projectName', label: 'Project Name & Phase', type: 'text', placeholder: 'Prestige Falcon City - Phase 2', required: true, defaultValue: '', step: 1 },
+            { id: 'reraNumber', label: 'RERA Registration Number', type: 'text', placeholder: 'PRM/KA/RERA/1251/310/PR/170915/000234', required: true, defaultValue: '', step: 1, helpText: 'State RERA registration number' },
+            { id: 'allotteeName', label: 'Allottee Full Name', type: 'text', placeholder: 'Rahul & Priya Sharma', required: true, defaultValue: '', step: 1 },
+            { id: 'unitNumber', label: 'Unit / Flat No. & Tower', type: 'text', placeholder: 'Tower B, Flat 1404 (3BHK)', required: true, defaultValue: '', step: 2 },
+            { id: 'carpetArea', label: 'RERA Carpet Area (sq. ft.)', type: 'number', placeholder: '1450', required: true, defaultValue: '', step: 2 },
+            { id: 'totalConsideration', label: 'Total Purchase Consideration (₹)', type: 'number', placeholder: '16500000', required: true, defaultValue: '', step: 2 },
+            { id: 'bookingAmount', label: 'Booking Amount Paid (₹)', type: 'number', placeholder: '500000', required: true, defaultValue: '', step: 2 },
+            { id: 'possessionDate', label: 'Anticipated Possession Date', type: 'date', required: true, defaultValue: '', step: 3 },
+            { id: 'bankApfCode', label: 'Approved Project Bank / APF Code', type: 'text', placeholder: 'HDFC Bank APF: BLR/PRESTIGE/2024/991', required: false, defaultValue: '', step: 3 }
+        ],
+        generateContent: (val) => [
+            { type: 'title', text: `${val.builderName || '[Developer Name]'}` },
+            { type: 'subtitle', text: 'PROVISIONAL ALLOTMENT LETTER' },
+            { type: 'paragraph', text: `RERA Registration No: ${val.reraNumber || '[RERA Reg No]'} • Date: ${new Date().toLocaleDateString('en-IN')}` },
+            { type: 'paragraph', text: `To: ${val.allotteeName || '[Allottee Name]'}\nSubject: Provisional Allotment of Apartment in Project "${val.projectName || '[Project Name]'}"` },
+            { type: 'paragraph', text: `Dear Sir/Madam,\nWe are pleased to provisionally allot you the following residential apartment subject to the terms and conditions outlined herein and the forthcoming Agreement for Sale:` },
+            { type: 'header', text: '1. Allotted Apartment Details' },
+            { type: 'bullet', items: [
+                `Project: ${val.projectName || '[Project Name]'}`,
+                `Unit Number: ${val.unitNumber || '[Unit Number]'}`,
+                `RERA Net Carpet Area: ${val.carpetArea || '0'} sq. ft. (plus exclusive balcony/verandah area)`,
+                `Approved Bank Funding: ${val.bankApfCode || 'SBI, HDFC, ICICI APF approved'}`
+            ]},
+            { type: 'header', text: '2. Financial Consideration & Payment Schedule' },
+            { type: 'paragraph', text: `Total Sale Price: ₹${Number(val.totalConsideration || 0).toLocaleString('en-IN')} (excluding applicable GST, stamp duty, and registration charges). Earnest Booking Amount Received: ₹${Number(val.bookingAmount || 0).toLocaleString('en-IN')}.` },
+            { type: 'table', headers: ['Milestone Stage', 'Percentage (%)', 'Payment Status'], rows: [
+                ['On Booking / Allotment Token', '10%', `Received (₹${Number(val.bookingAmount || 0).toLocaleString('en-IN')})`],
+                ['Execution of Agreement for Sale (BBA)', '10%', 'Due within 30 days'],
+                ['Completion of Foundation / Plinth', '15%', 'As per construction milestone'],
+                ['Completion of Respective Floor Slab', '25%', 'As per construction milestone'],
+                ['Completion of Finishing & MEP', '30%', 'As per construction milestone'],
+                ['On Notice of Possession / Occupancy Certificate', '10%', `Target: ${val.possessionDate ? new Date(val.possessionDate).toLocaleDateString('en-IN') : '[Possession Date]'}`]
+            ]},
+            { type: 'header', text: '3. Terms and Conditions' },
+            { type: 'paragraph', text: `This allotment is governed strictly by the provisions of the Real Estate (Regulation and Development) Act, 2016 (RERA) and state rules. The Allottee agrees to execute the formal Agreement for Sale within 30 days from the date hereof. Any delayed payment shall attract interest at the rate prescribed under RERA rules.` },
+            { type: 'paragraph', text: `For and on behalf of ${val.builderName || '[Developer Name]'}:` },
+            { type: 'signature-block', text: 'DEVELOPER & ALLOTTEE SIGNATURES' }
+        ]
+    },
+    {
+        id: 'channel-partner-agreement',
+        name: 'Real Estate Channel Partner Agreement',
+        category: 'real-estate',
+        categoryLabel: 'Real Estate & PropTech',
+        description: 'Developer-broker mandate covering RERA agent ID, commission slabs, client registration exclusivity, and marketing guidelines.',
+        estimatedTime: '2 mins',
+        pagesCount: 2,
+        popularity: 5,
+        fields: [
+            { id: 'developerName', label: 'Developer / Promoter Name', type: 'text', placeholder: 'Godrej Properties Ltd', required: true, defaultValue: '', step: 1 },
+            { id: 'partnerName', label: 'Channel Partner / Broker Agency', type: 'text', placeholder: 'Apex Realty Advisory LLP', required: true, defaultValue: '', step: 1 },
+            { id: 'reraAgentNumber', label: 'RERA Real Estate Agent Reg. No.', type: 'text', placeholder: 'A51800012345', required: true, defaultValue: '', step: 1, helpText: 'Mandatory RERA Broker ID' },
+            { id: 'projectName', label: 'Authorized Project(s)', type: 'text', placeholder: 'Godrej Woodsman Estate', required: true, defaultValue: '', step: 1 },
+            { id: 'commissionRate', label: 'Commission Rate (%)', type: 'text', placeholder: '2.5% on Agreement Value', required: true, defaultValue: '2%', step: 2 },
+            { id: 'leadValidityDays', label: 'Client Registration Validity (Days)', type: 'number', placeholder: '60', required: true, defaultValue: '60', step: 2, helpText: 'Protection window for registered client leads' },
+            { id: 'effectiveDate', label: 'Agreement Date', type: 'date', required: true, defaultValue: '', step: 3 }
+        ],
+        generateContent: (val) => [
+            { type: 'title', text: `${val.developerName || '[Developer Name]'}` },
+            { type: 'subtitle', text: 'REAL ESTATE CHANNEL PARTNER MANDATE' },
+            { type: 'paragraph', text: `This Channel Partner Agreement is entered into on ${val.effectiveDate ? new Date(val.effectiveDate).toLocaleDateString('en-IN') : '[Date]'} between ${val.developerName || '[Developer Name]'} ("Developer") and ${val.partnerName || '[Partner Name]'} ("Channel Partner", RERA Reg: ${val.reraAgentNumber || '[RERA Reg]'}).` },
+            { type: 'header', text: '1. Appointment and Authorization' },
+            { type: 'paragraph', text: `The Developer hereby authorizes the Channel Partner to market, promote, and procure prospective buyers for the project "${val.projectName || '[Project Name]'}" in accordance with RERA advertising guidelines.` },
+            { type: 'header', text: '2. Commission and Payout Terms' },
+            { type: 'paragraph', text: `The Channel Partner shall be entitled to a brokerage commission of ${val.commissionRate || '2%'} on the net basic agreement value of each unit successfully booked through the Channel Partner and upon receipt of the minimum threshold booking milestone (typically 10% or execution of Agreement for Sale). All payments are subject to applicable TDS.` },
+            { type: 'header', text: '3. Lead Registration & Anti-Poaching Rule' },
+            { type: 'paragraph', text: `The Channel Partner must officially register each prospective client via the Developer portal or written notice. The Channel Partner’s lead protection shall remain in effect for ${val.leadValidityDays || '60'} days from the date of registration. The Channel Partner strictly agrees not to circulate unauthorized price concessions, altered rate sheets, or non-RERA approved collaterals.` },
+            { type: 'header', text: '4. Confidentiality & Rate Integrity' },
+            { type: 'paragraph', text: `All project rate cards, floor plans, and investor presentations shared through DocTransfer are confidential. Unauthorized forwarding, rate tampering, or misrepresentation will result in immediate termination of channel partner status and forfeiture of accrued commissions.` },
+            { type: 'signature-block', text: 'DEVELOPER & CHANNEL PARTNER SIGNATURES' }
+        ]
+    },
+    {
+        id: 'indian-lease-agreement',
+        name: '11-Month Residential Rent Agreement (India)',
+        category: 'real-estate',
+        categoryLabel: 'Real Estate & PropTech',
+        description: 'Standardized 11-month residential lease agreement under the Indian Contract Act 1872 with deposit refund and maintenance terms.',
+        estimatedTime: '2 mins',
+        pagesCount: 2,
+        popularity: 5,
+        fields: [
+            { id: 'landlordName', label: 'Landlord / Lessor Full Name', type: 'text', placeholder: 'Suresh Kumar Gupta', required: true, defaultValue: '', step: 1 },
+            { id: 'tenantName', label: 'Tenant / Lessee Full Name', type: 'text', placeholder: 'Aditya Verma', required: true, defaultValue: '', step: 1 },
+            { id: 'propertyAddress', label: 'Full Property Address', type: 'text', placeholder: 'Flat 402, Tower 3, Prestige Falcon City, Kanakapura Road, Bangalore - 560062', required: true, defaultValue: '', step: 1 },
+            { id: 'monthlyRent', label: 'Monthly Rent (₹)', type: 'number', placeholder: '35000', required: true, defaultValue: '', step: 2 },
+            { id: 'securityDeposit', label: 'Refundable Security Deposit (₹)', type: 'number', placeholder: '150000', required: true, defaultValue: '', step: 2 },
+            { id: 'maintenanceCharges', label: 'Monthly Society Maintenance (₹)', type: 'number', placeholder: '3500', required: true, defaultValue: '', step: 2 },
+            { id: 'commencementDate', label: 'Lease Start Date', type: 'date', required: true, defaultValue: '', step: 3 },
+            { id: 'lockInMonths', label: 'Lock-in Period (Months)', type: 'number', placeholder: '6', required: true, defaultValue: '6', step: 3 },
+            { id: 'noticeDays', label: 'Notice Period (Days)', type: 'number', placeholder: '30', required: true, defaultValue: '30', step: 3 }
+        ],
+        generateContent: (val) => [
+            { type: 'title', text: '11-MONTH RESIDENTIAL LEASE AGREEMENT' },
+            { type: 'subtitle', text: `Governed under Indian Contract Act, 1872 • Commencing: ${val.commencementDate ? new Date(val.commencementDate).toLocaleDateString('en-IN') : '[Start Date]'}` },
+            { type: 'paragraph', text: `This Lease Agreement is made between ${val.landlordName || '[Landlord Name]'} ("Lessor / Landlord") and ${val.tenantName || '[Tenant Name]'} ("Lessee / Tenant") for the residential premises situated at: ${val.propertyAddress || '[Property Address]'}.` },
+            { type: 'header', text: '1. Term of Lease' },
+            { type: 'paragraph', text: `The lease shall be for an initial period of 11 months commencing from ${val.commencementDate ? new Date(val.commencementDate).toLocaleDateString('en-IN') : '[Start Date]'}. Both parties observe a mandatory lock-in period of ${val.lockInMonths || '6'} months.` },
+            { type: 'header', text: '2. Rent & Security Deposit' },
+            { type: 'bullet', items: [
+                `Monthly Rent: ₹${Number(val.monthlyRent || 0).toLocaleString('en-IN')} payable on or before the 5th day of every calendar month.`,
+                `Monthly Society Maintenance: ₹${Number(val.maintenanceCharges || 0).toLocaleString('en-IN')} payable directly to the Apartment Owners Association.`,
+                `Interest-Free Refundable Security Deposit: ₹${Number(val.securityDeposit || 0).toLocaleString('en-IN')} paid via bank transfer, refundable at the time of vacating subject to deductions for damages or unpaid utilities.`
+            ]},
+            { type: 'header', text: '3. Notice Period & Termination' },
+            { type: 'paragraph', text: `After the lock-in period, either party may terminate this agreement by giving ${val.noticeDays || '30'} days written notice. The Tenant shall deliver vacant possession of the premises in good and tenable condition, fair wear and tear excepted.` },
+            { type: 'signature-block', text: 'LESSOR & LESSEE SIGNATURES' }
         ]
     }
 ];

@@ -525,6 +525,67 @@ export const solutionsData: SolutionPage[] = [
     faqs: [
       { question: 'Is DocTransfer safe for sharing tax returns and bank statements?', answer: 'Yes! DocTransfer utilizes bank-grade AES-256 encryption, password protection, and automated link expiration.' }
     ]
+  },
+  {
+    slug: 'indian-real-estate',
+    title: 'Document Tracking & Deal Rooms for Indian Real Estate',
+    headline: 'Sell Faster. Stop Rate Leaks. Run RERA-Compliant Deal Rooms.',
+    subheadline: 'The secure document tracking and Virtual Data Room platform built for Indian builders, channel partners, property advocates, and REITs. Share brochures on WhatsApp without leak risk.',
+    category: 'industry',
+    metaTitle: 'Indian Real Estate Document Tracking & RERA Deal Rooms | DocTransfer',
+    metaDescription: 'Secure document sharing, VDR, and WhatsApp link tracking for Indian real estate developers and brokers. Prevent rate leaks, track floor plan views, and manage 30-year title diligence.',
+    keywords: 'Indian real estate data room, RERA document sharing, proptech India, channel partner brochure tracking, title due diligence software India, 7/12 extract data room, builder buyer agreement tracker, prevent broker price leak',
+    heroGradient: 'linear-gradient(135deg, #065f46 0%, #0d9488 50%, #0891b2 100%)',
+    icon: 'Home',
+    painPoints: [
+      { title: 'WhatsApp Brochure & Rate Card Leaks', description: 'Brochures and confidential price lists sent as raw WhatsApp PDFs get forwarded to rival brokers, unauthorized agents, and competitor projects with zero control.' },
+      { title: 'Chaotic 30-Year Title Search Diligence', description: 'Title search reports require organizing 100-500 page bundles of 7/12 extracts, Khata certificates, Patta/Chitta, and Encumbrance Certificates (EC) without version control or watermarks.' },
+      { title: 'RERA Compliance & Buyer Disputes', description: 'Lack of tamper-proof audit trails creates legal vulnerability under RERA Section 4 & 11 when buyers dispute floor specifications, carpet area disclosures, or payment milestone dates.' },
+      { title: 'NRI Buyer Trust & Cross-Border Friction', description: 'High-ticket NRI investors in UAE, US, and Singapore struggle with unverified email attachments, lack of transparency on allotment letters, and slow physical couriers.' }
+    ],
+    features: [
+      { title: '1-Click WhatsApp Tracked Links', description: 'Generate branded, auto-shortened document links that open smoothly on mobile with zero app installation needed for buyers or channel partners.', icon: 'MessageCircle' },
+      { title: 'Anti-Leak Recipient Watermarking', description: 'Overlay the viewer\'s mobile number or email diagonally across rate cards and unit layouts to prevent unauthorized forwarding and screenshot leaks.', icon: 'ShieldCheck' },
+      { title: 'Page-by-Page Buyer Dwell Analytics', description: 'See exactly how many seconds an investor spends reviewing the master plan, 3BHK layout, or payment milestone schedule before you call.', icon: 'BarChart2' },
+      { title: 'Pre-Configured Indian Title Diligence Rooms', description: 'Organize land records, Khata/Patta, RERA sanctions, OC/CC, and bank APF codes in structured, permission-gated Virtual Data Rooms.', icon: 'FolderLock' },
+      { title: 'RERA Builder-Buyer & Allotment E-Signatures', description: 'Execute allotment letters, channel partner agreements, and rent agreements with legally admissible audit trails compliant with IT Act 2000.', icon: 'FileSignature' },
+      { title: 'Instant Access Revocation', description: 'Withdraw outdated price lists or expired festival discount sheets in real time across all circulated links with a single click.', icon: 'Lock' }
+    ],
+    stats: [
+      { value: '85%', label: 'Reduction in Rate Card Leaks' },
+      { value: '3.4x', label: 'Faster Broker Follow-Ups' },
+      { value: '₹0', label: 'Free Tier to Start Sharing Today' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Upload Project Collaterals or Title Dossiers', description: 'Drag and drop project brochures, rate lists, RERA certificates, or title deed scans into DocTransfer.' },
+      { step: 2, title: 'Send Tracked Links via WhatsApp or Email', description: 'Create dedicated links for prospective buyers, channel partner groups, or bank legal counsels.' },
+      { step: 3, title: 'Track Interest & Close Sales Faster', description: 'Receive real-time alerts when clients view your proposal and review which unit plans captured their attention.' }
+    ],
+    relatedTemplates: [
+      { name: 'RERA Allotment Letter', slug: 'rera-allotment-letter' },
+      { name: 'Channel Partner Mandate', slug: 'channel-partner-agreement' },
+      { name: 'Rent Agreement (India)', slug: 'rent-agreement-generator' }
+    ],
+    relatedTools: [
+      { name: 'Rent Agreement Generator', slug: 'rent-agreement-generator' },
+      { name: 'PDF Watermark Tool', slug: 'pdf-watermarking-tool' },
+      { name: 'VDR Cost Calculator', slug: 'vdr-cost-calculator' }
+    ],
+    relatedGlossary: [
+      { name: 'Virtual Data Room (VDR)', slug: 'virtual-data-room' },
+      { name: 'Due Diligence', slug: 'due-diligence' },
+      { name: 'Audit Trail', slug: 'audit-trail' }
+    ],
+    relatedIntegrations: [
+      { name: 'Google Drive', slug: 'google-drive' },
+      { name: 'Gmail', slug: 'gmail' }
+    ],
+    faqs: [
+      { question: 'How does DocTransfer stop brokers from leaking confidential builder price sheets?', answer: 'DocTransfer dynamically embeds the recipient’s phone number or email, timestamp, and IP address as a transparent watermark across every page. Additionally, you can disable downloads, disable printing, and revoke access instantly if rates change.' },
+      { question: 'Is DocTransfer e-signature valid under Indian law?', answer: 'Yes, electronic agreements such as Allotment Letters, Channel Partner Mandates, NDAs, and 11-Month Lease Agreements executed on DocTransfer carry tamper-evident digital audit certificates compliant with the Indian Contract Act 1872 and Section 65B of the Indian Evidence Act.' },
+      { question: 'Can I share DocTransfer links on WhatsApp instead of email?', answer: 'Yes! DocTransfer has native 1-click WhatsApp link generation. When shared, recipients see a clean, professional preview card and can view the document in any mobile browser with zero app installation.' },
+      { question: 'Can we organize 30-year property title documents for banks and legal advocates?', answer: 'Absolutely. DocTransfer Virtual Data Rooms (VDR) include pre-structured folders for 7/12 extracts, Encumbrance Certificates (EC), Khata/Patta, RERA sanctions, and Bank APF approval documents.' }
+    ]
   }
 ];
 

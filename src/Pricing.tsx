@@ -117,7 +117,7 @@ const Pricing: React.FC = () => {
             name: 'Free Forever',
             planType: 'free',
             icon: Rocket,
-            tagline: 'Essential document tracking for early founders & solo advisors.',
+            tagline: 'Essential document tracking for early consultants & solo property advisors.',
             price: getPriceInfo('free').display,
             period: '/month',
             subText: getPriceInfo('free').billed,
@@ -142,21 +142,21 @@ const Pricing: React.FC = () => {
             name: 'Pro Plan',
             planType: 'pro',
             icon: Zap,
-            tagline: 'Forensic slide analytics, dynamic watermarks & e-signatures.',
+            tagline: 'For Channel Partners & Brokers: WhatsApp brochure tracking, dwell time alerts & anti-leak watermarks.',
             price: getPriceInfo('pro').display,
             period: '/month',
             subText: getPriceInfo('pro').billed,
-            badge: '🔥 MOST POPULAR',
+            badge: '🔥 POPULAR FOR BROKERS',
             features: [
                 { text: 'Unlimited Document Uploads', enabled: true, highlight: true },
-                { text: '50MB File size limit', enabled: true },
-                { text: '5 Active Virtual Deal Rooms', enabled: true },
-                { text: 'Page-by-page dwell time forensics', enabled: true, highlight: true },
-                { text: 'Dynamic anti-leak watermark (Email & IP)', enabled: true, highlight: true },
-                { text: 'Unlimited E-Signatures (IT Act 2000 & ESIGN)', enabled: true },
-                { text: 'Court-admissible Sec 65B audit trail', enabled: true },
-                { text: 'Password protection & email verification', enabled: true },
-                { text: 'Remote self-destruct / kill switch', enabled: true },
+                { text: '50MB File size limit (High-res brochures)', enabled: true },
+                { text: '5 Active Virtual Deal Rooms & Project Kits', enabled: true },
+                { text: 'Page-by-page floor plan & payment dwell analytics', enabled: true, highlight: true },
+                { text: 'Anti-leak watermark with Recipient Phone & Email', enabled: true, highlight: true },
+                { text: 'RERA Allotment Letters & 11-Month Leases', enabled: true },
+                { text: 'Court-admissible Sec 65B electronic audit trail', enabled: true },
+                { text: 'Password protection & instant link revocation', enabled: true },
+                { text: 'View-only mode (Disable download & printing)', enabled: true },
                 { text: 'Remove DocTransfer branding', enabled: true }
             ],
             cta: 'Upgrade to Pro',
@@ -165,24 +165,24 @@ const Pricing: React.FC = () => {
             accentBg: '#eff6ff'
         },
         {
-            name: 'Business CA Suite',
+            name: 'Business & Broker Agency',
             planType: 'business',
             icon: Briefcase,
-            tagline: 'Zero-knowledge vault, client intake portals & GST invoicing.',
+            tagline: 'For Broker Agencies & Sales Teams: 3 seats, agency branding, lead protection & GST ITC.',
             price: getPriceInfo('business').display,
             period: '/month',
             subText: getPriceInfo('business').billed,
-            badge: 'BEST FOR TEAMS & CAs',
+            badge: 'BEST FOR AGENCIES & TEAMS',
             features: [
                 { text: 'Everything in Pro Plan', enabled: true },
                 { text: '500MB File size limit', enabled: true },
-                { text: 'Unlimited Deal Rooms & folders', enabled: true, highlight: true },
+                { text: 'Unlimited Project Deal Rooms & folders', enabled: true, highlight: true },
                 { text: 'Zero-Knowledge Vault (AES-256 E2EE)', enabled: true, highlight: true },
-                { text: 'Custom domain & full brand white-labeling', enabled: true },
-                { text: 'Client intake portals & secure dropboxes', enabled: true },
-                { text: 'GST Tax Invoicing with ITC eligibility', enabled: true, highlight: true },
-                { text: '3 Team member seats included', enabled: true },
-                { text: 'View & print DRM restriction controls', enabled: true },
+                { text: 'Custom agency branding & white-label viewer', enabled: true },
+                { text: 'Client intake portals for buyer KYC & documents', enabled: true },
+                { text: 'B2B GST Tax Invoicing with 18% ITC eligibility', enabled: true, highlight: true },
+                { text: '3 Team member seats for sales managers', enabled: true },
+                { text: 'Lead registration protection & DRM controls', enabled: true },
                 { text: 'Priority WhatsApp & phone assistance', enabled: true }
             ],
             cta: 'Upgrade to Business',
@@ -190,25 +190,25 @@ const Pricing: React.FC = () => {
             accentBg: '#f5f3ff'
         },
         {
-            name: 'Virtual Data Room',
+            name: 'Virtual Data Room (VDR)',
             planType: 'dataroom',
             icon: FolderLock,
-            tagline: 'Enterprise M&A diligence, multi-party bidding & audit archives.',
+            tagline: 'For Builders, Land M&A, REITs & Title Advocates: 30-year property title scrutiny & Bank APF rooms.',
             price: getPriceInfo('dataroom').display,
             period: '/month',
             subText: getPriceInfo('dataroom').billed,
-            badge: 'M&A & VC/PE DEALS',
+            badge: 'BUILDERS & RERA DEALS',
             features: [
                 { text: 'Everything in Business Suite', enabled: true },
-                { text: '2GB File size limit per upload', enabled: true, highlight: true },
-                { text: 'Multi-party isolated bidder deal rooms', enabled: true, highlight: true },
-                { text: 'Due diligence Q&A workflow with approvals', enabled: true },
-                { text: 'Bates numbering & auto-numbered index', enabled: true },
-                { text: '1-Click compliance ZIP / DVD archive', enabled: true },
-                { text: '10 Team seats + unlimited guest reviewers', enabled: true, highlight: true },
-                { text: 'Granular folder & file permission matrix', enabled: true },
-                { text: 'Tamper-proof cryptographic audit log', enabled: true },
-                { text: 'Dedicated deal room account concierge', enabled: true }
+                { text: '2GB File size limit per upload (Heavy scans & blueprints)', enabled: true, highlight: true },
+                { text: '30-Year Title Search Dossier Rooms (7/12, Khata, Patta, EC)', enabled: true, highlight: true },
+                { text: 'Bank APF File Submission Rooms (SBI, HDFC, ICICI)', enabled: true, highlight: true },
+                { text: 'Multi-party isolated bidder deal rooms', enabled: true },
+                { text: 'Due diligence Q&A module with approvals', enabled: true },
+                { text: 'Bates numbering & auto-numbered index tree', enabled: true },
+                { text: '1-Click compliance ZIP / DVD archive export', enabled: true },
+                { text: '10 Team seats + unlimited guest reviewers & banks', enabled: true, highlight: true },
+                { text: 'Dedicated real estate deal room account concierge', enabled: true }
             ],
             cta: 'Upgrade to Data Room',
             color: '#10b981',
@@ -217,6 +217,13 @@ const Pricing: React.FC = () => {
     ];
 
     const comparisons = [
+        { category: 'Indian Real Estate & PropTech Workflows' },
+        { feature: '1-Click WhatsApp Tracked Link Sharing', free: true, pro: true, business: true, dataroom: true },
+        { feature: 'Anti-Rate-Leak Recipient Mobile Watermark', free: false, pro: 'Phone & Email', business: 'Custom Logo & Phone', dataroom: 'Forensic DRM' },
+        { feature: 'RERA Allotment & Broker Mandate E-Signs', free: 'Sign Only', pro: 'Unlimited', business: 'Unlimited', dataroom: 'Unlimited' },
+        { feature: '30-Year Title Search Dossier Rooms (7/12, EC)', free: false, pro: '5 Rooms', business: 'Unlimited', dataroom: 'Bank APF Certified' },
+        { feature: '18% GST Invoicing with B2B Input Tax Credit (ITC)', free: false, pro: 'Standard', business: 'Automated ITC', dataroom: 'Corporate Tax Package' },
+
         { category: 'Document Sharing & Limits' },
         { feature: 'Active Documents in Account', free: '3 Documents', pro: 'Unlimited', business: 'Unlimited', dataroom: 'Unlimited' },
         { feature: 'File Size Limit per Upload', free: '5 MB', pro: '50 MB', business: '500 MB', dataroom: '2,048 MB (2 GB)' },
@@ -249,6 +256,18 @@ const Pricing: React.FC = () => {
     ];
 
     const faqs = [
+        {
+            q: 'Can real estate builders and channel partner firms claim 18% GST Input Tax Credit (ITC)?',
+            a: 'Yes! All Pro, Business, and Virtual Data Room subscriptions include automated GST-compliant B2B tax invoices. Simply enter your company GSTIN and billing address at checkout to claim 18% Input Tax Credit as an allowable business operating expense.'
+        },
+        {
+            q: 'How does the anti-leak watermark stop brokers from leaking confidential builder price sheets?',
+            a: 'DocTransfer dynamically embeds the viewer’s mobile number or email, timestamp, and IP address as a transparent diagonal watermark across every page. Additionally, downloads and printing are disabled, and you can revoke access or set auto-expiration instantly if rates change.'
+        },
+        {
+            q: 'Can we organize 30-year property title records for bank APF and legal due diligence?',
+            a: 'Yes. Our Virtual Data Room (VDR) plan includes pre-configured folders for 7/12 extracts, Encumbrance Certificates (EC), Khata/Patta, RERA sanctions, and Bank APF approval codes (SBI, HDFC, ICICI). You can grant granular view-only permissions to bank advocates and legal counsels with full Section 65B electronic audit logs.'
+        },
         {
             q: 'Which payment methods do you accept via Razorpay?',
             a: 'Through Razorpay, we accept all Indian payment methods including UPI (Google Pay, PhonePe, Paytm, BHIM, Cred), RuPay, Visa, Mastercard, American Express cards, NetBanking from 50+ banks, Wallets, and international credit/debit cards.'
@@ -327,16 +346,16 @@ const Pricing: React.FC = () => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        background: '#eff6ff',
-                        color: '#1d4ed8',
-                        padding: '0.4rem 1.1rem',
+                        background: '#ecfdf5',
+                        color: '#065f46',
+                        padding: '0.45rem 1.25rem',
                         borderRadius: '100px',
                         fontSize: '0.85rem',
                         fontWeight: 700,
                         marginBottom: '1.25rem',
-                        border: '1px solid #bfdbfe'
+                        border: '1px solid #a7f3d0'
                     }}>
-                        <Sparkles size={16} /> Instant Razorpay Activation • UPI, Cards & NetBanking • GST Invoicing
+                        <Sparkles size={16} /> 🏢 Built for Indian Real Estate • WhatsApp Tracking • Anti-Rate-Leak Watermarking • 18% GST ITC
                     </div>
                     <h1 style={{
                         fontSize: 'clamp(2.4rem, 4.5vw, 3.75rem)',
@@ -346,16 +365,16 @@ const Pricing: React.FC = () => {
                         letterSpacing: '-0.025em',
                         lineHeight: 1.15
                     }}>
-                        Predictable, High-Impact <span style={{ color: '#3b82f6' }}>Pricing</span>
+                        Predictable, High-Impact <span style={{ color: '#059669' }}>Pricing</span>
                     </h1>
                     <p style={{
                         fontSize: '1.15rem',
                         color: '#64748b',
-                        maxWidth: '750px',
+                        maxWidth: '780px',
                         margin: '0 auto',
                         lineHeight: 1.6
                     }}>
-                        Designed for founders, dealmakers, CA firms, and enterprise M&A teams. Start free with zero credit card required, or upgrade to unleash full diligence power.
+                        Tailored for Indian builders, channel partner brokers, real estate advocates, and enterprise dealmakers. Start free with zero credit card required, or upgrade to run full-fledged RERA and title diligence deal rooms.
                     </p>
 
                     {/* Dual-Currency & Billing Cycle Switchers */}

@@ -7,6 +7,7 @@ import SEO from './components/SEO';
 import UseCaseCards from './components/UseCaseCards';
 import ComplianceRoadmapSection from './components/landing/ComplianceRoadmapSection';
 import CryptographicSecurityHighlight from './components/landing/CryptographicSecurityHighlight';
+import RealEstateShowcaseSection from './components/landing/RealEstateShowcaseSection';
 import Footer from './components/Footer';
 import {
   Shield,
@@ -192,6 +193,8 @@ const LandingPage: React.FC = () => {
               )}
             </div>
 
+            <Link to="/solutions" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Solutions</Link>
+            <Link to="/templates" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Templates</Link>
             <Link to="/pricing" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Pricing</Link>
             <Link to="/comparisons" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Comparisons</Link>
             <Link to="/blog" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Blog</Link>
@@ -267,25 +270,29 @@ const LandingPage: React.FC = () => {
             <div className="floating-orb orb-3"></div>
           </div>
 
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            background: 'rgba(99, 102, 241, 0.1)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
-            padding: '0.45rem 1.25rem',
-            borderRadius: '30px',
-            color: '#4f46e5',
-            fontWeight: 700,
-            fontSize: '0.9rem',
-            marginBottom: '1.25rem',
-            boxShadow: '0 2px 8px rgba(99, 102, 241, 0.15)'
-          }}>
-            <span>🌐</span> Built for Global Startups & Indian Enterprises • 100% Free Core Tier
-          </div>
+          <Link to="/solutions/indian-real-estate" style={{ textDecoration: 'none' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.08) 100%)',
+              border: '1px solid rgba(16, 185, 129, 0.35)',
+              padding: '0.45rem 1.25rem',
+              borderRadius: '30px',
+              color: '#065f46',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              marginBottom: '1.25rem',
+              boxShadow: '0 2px 8px rgba(16, 185, 129, 0.15)',
+              cursor: 'pointer',
+              transition: 'transform 0.2s'
+            }}>
+              <span>🏢</span> <strong>New:</strong> Indian Real Estate & PropTech Suite — RERA Diligence & WhatsApp Tracking →
+            </div>
+          </Link>
 
           <h1 className="hero-title-animated">The secure deal room for sharing, tracking & signing sensitive documents worldwide.</h1>
-          <p className="hero-subtitle-animated">Share confidential pitch decks, NDAs, contracts, and financial records with complete control. Track every viewer page-by-page, share via email or WhatsApp, and collect legally binding e-signatures across global jurisdictions — free forever.</p>
+          <p className="hero-subtitle-animated">Share confidential pitch decks, real estate brochures, RERA agreements, and financial records with complete control. Track every viewer page-by-page, share via WhatsApp or Email, and execute legally binding agreements across India and global jurisdictions — free forever.</p>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2rem' }}>
             <div className="hero-actions" style={{ marginBottom: '0.75rem' }}>
               <Link to="/dataroom">
@@ -315,6 +322,7 @@ const LandingPage: React.FC = () => {
             }}>
               {[
                 { icon: '🌐', text: 'ESIGN, eIDAS & IT Act 2000 Valid' },
+                { icon: '🏢', text: 'RERA & PropTech Diligence' },
                 { icon: '🔒', text: 'Zero-Knowledge AES-256 Vault' },
                 { icon: '📊', text: 'Real-Time Page Dwell Analytics' },
                 { icon: '💬', text: 'WhatsApp, Email & Slack Sharing' },
@@ -1233,6 +1241,9 @@ const LandingPage: React.FC = () => {
 
         <UseCaseCards />
 
+        {/* Indian Real Estate & PropTech Suite Interactive Showcase */}
+        <RealEstateShowcaseSection />
+
         {/* Global Security & Multi-Jurisdictional Legal Standards Showcase */}
         <section style={{
           padding: '4.5rem 2rem',
@@ -1502,6 +1513,8 @@ const LandingPage: React.FC = () => {
             
             <div className="templates-grid">
               {[
+                { name: 'RERA Builder Allotment Letter', slug: 'rera-allotment-letter', desc: 'RERA-compliant provisional builder allotment letter with carpet area, installment milestones, and bank APF codes.', category: 'Real Estate' },
+                { name: 'Real Estate Channel Partner Agreement', slug: 'channel-partner-agreement', desc: 'Developer-broker mandate agreement covering RERA agent ID, commission slabs, and 60-day client exclusivity.', category: 'Real Estate' },
                 { name: 'Mutual Non-Disclosure Agreement', slug: 'nda-format-india-template', desc: 'Standard mutual NDA compliant with US ESIGN, eIDAS, and Indian commercial contract laws.', category: 'Legal' },
                 { name: 'Standard Seed SAFE Note', slug: 'safe-note-india-template', desc: 'Convertible equity instrument for early-stage startup fundraising across global syndicates.', category: 'Startups' },
                 { name: 'Independent Contractor Agreement', slug: 'freelancer-contract-india-template', desc: 'Cross-border contractor scope of work, milestone deliverables, and IP assignment deed.', category: 'Operations' },

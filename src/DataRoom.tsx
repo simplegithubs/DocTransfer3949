@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useUser, useAuth } from './components/auth';
 import { supabase, createSupabaseClient, getSafeSupabaseToken } from './lib/supabase';
 import {
@@ -949,6 +949,87 @@ const DataRoom: React.FC = () => {
                                             maxUploads={10}
                                         />
                                     ) : null}
+
+                                    {/* Indian Real Estate Quick Presets */}
+                                    <div style={{
+                                        marginBottom: '1.5rem',
+                                        padding: '0.875rem 1rem',
+                                        background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
+                                        border: '1px solid #a7f3d0',
+                                        borderRadius: '12px',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '0.6rem'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <span style={{ fontSize: '1.1rem' }}>🏢</span>
+                                                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#065f46' }}>Indian Real Estate & PropTech Suite</span>
+                                            </div>
+                                            <Link to="/solutions/indian-real-estate" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#059669', textDecoration: 'none' }}>
+                                                Learn More →
+                                            </Link>
+                                        </div>
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=rera-allotment-letter'); }}
+                                                style={{
+                                                    padding: '0.35rem 0.65rem',
+                                                    background: 'white',
+                                                    border: '1px solid #6ee7b7',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '600',
+                                                    color: '#047857',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.3rem'
+                                                }}
+                                            >
+                                                📄 RERA Allotment Letter
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=channel-partner-agreement'); }}
+                                                style={{
+                                                    padding: '0.35rem 0.65rem',
+                                                    background: 'white',
+                                                    border: '1px solid #6ee7b7',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '600',
+                                                    color: '#047857',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.3rem'
+                                                }}
+                                            >
+                                                🤝 Broker Mandate
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=indian-lease-agreement'); }}
+                                                style={{
+                                                    padding: '0.35rem 0.65rem',
+                                                    background: 'white',
+                                                    border: '1px solid #6ee7b7',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '600',
+                                                    color: '#047857',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.3rem'
+                                                }}
+                                            >
+                                                📜 11-Month Lease
+                                            </button>
+                                        </div>
+                                    </div>
 
                                     {/* Upload Area */}
                                     <div
