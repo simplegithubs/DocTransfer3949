@@ -51,6 +51,66 @@ export const toolsList: ToolMetadata[] = [
     ]
   },
   {
+    slug: 'stamp-duty-calculator',
+    name: 'India Stamp Duty & Registration Fee Calculator',
+    tagline: 'Calculate property stamp duty, metro cess, and sub-registrar registration charges for all Indian states.',
+    metaTitle: 'India Stamp Duty & Property Registration Calculator (2026) | DocTransfer',
+    metaDescription: 'Calculate state property stamp duty and registration fees for Maharashtra, Karnataka, Delhi, Haryana, UP, Telangana, Tamil Nadu. Free PDF download.',
+    keywords: 'stamp duty calculator India, property registration charges Bangalore, stamp duty Mumbai, stamp duty Delhi, RERA property calculator, DocTransfer PropTech',
+    category: 'calculators',
+    icon: 'Building2',
+    popular: true,
+    estimatedTime: '< 1 min',
+    features: [
+      'State-by-state calculation for Maharashtra, Karnataka, Delhi, Haryana, UP, Telangana & TN',
+      'Automatic female home buyer rebate calculation',
+      'Local body tax (LBT) & Metro Cess inclusion',
+      'Download branded Sub-Registrar Estimate PDF & share via WhatsApp'
+    ],
+    ctaText: 'Calculate Stamp Duty Free',
+    ctaRoute: '/tools/stamp-duty-calculator',
+    faqs: [
+      {
+        question: 'Do women home buyers get stamp duty concessions in India?',
+        answer: 'Yes! In Maharashtra, women receive a 1% concession; in Delhi NCR, women pay 4% compared to 6% for men; in Haryana, urban women pay 5% compared to 7%; and in UP, women receive a ₹10,000 rebate.'
+      },
+      {
+        question: 'Is registration fee separate from stamp duty?',
+        answer: 'Yes. Stamp duty is a state tax on the transaction value, while the registration charge (typically 1% or capped) covers government recording in sub-registrar books under the Registration Act 1908.'
+      }
+    ]
+  },
+  {
+    slug: 'rera-carpet-area-calculator',
+    name: 'RERA Carpet Area vs Super Built-up Calculator',
+    tagline: 'Uncover true cost per usable square foot and evaluate builder loading factor percentage.',
+    metaTitle: 'RERA Carpet Area to Super Built-up Calculator (India) | DocTransfer',
+    metaDescription: 'Convert RERA carpet area to super built-up area, calculate space loading percentage, and reveal true cost per usable square foot. Download area audit PDF.',
+    keywords: 'RERA carpet area calculator, super built up to carpet area converter, property loading percentage India, real estate carpet area formula',
+    category: 'calculators',
+    icon: 'Maximize2',
+    popular: true,
+    estimatedTime: '< 1 min',
+    features: [
+      'Accurate RERA Net Carpet Area to Super Built-up conversion',
+      'Loading factor analysis (20% to 40% benchmarks)',
+      'True cost per usable square foot reality check',
+      'Export official Space Efficiency Audit PDF'
+    ],
+    ctaText: 'Calculate Carpet Area',
+    ctaRoute: '/tools/rera-carpet-area-calculator',
+    faqs: [
+      {
+        question: 'What is RERA Net Carpet Area?',
+        answer: 'Under Section 2(k) of RERA Act 2016, carpet area is defined as the net usable floor area of an apartment, excluding external walls, service shafts, and common balconies, but including internal partition walls.'
+      },
+      {
+        question: 'Why do builders quote rates on Super Built-up Area?',
+        answer: 'Super Built-up includes common amenities, corridors, and clubhouses. By spreading cost over a larger nominal area, the quoted rate per sq. ft. appears artificially lower. Our tool calculates the true cost per usable square foot.'
+      }
+    ]
+  },
+  {
     slug: 'pitch-deck-analyzer',
     name: 'Free Pitch Deck Analyzer & Grader',
     tagline: 'Instant slide count, section analysis, and investor engagement score for your pitch deck.',

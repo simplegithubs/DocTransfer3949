@@ -43,7 +43,7 @@ import useSubscription from './hooks/useSubscription';
 import PremiumBadge from './components/PremiumBadge';
 import UpgradeModal from './components/UpgradeModal';
 import UsageLimitBanner from './components/UsageLimitBanner';
-import { formatWhatsAppShareUrl, buildShareUrl } from './lib/shareUrl';
+import { formatWhatsAppShareUrl, formatRealEstateWhatsAppShareUrl, buildShareUrl } from './lib/shareUrl';
 import TrialTrackingBar from './components/TrialTrackingBar';
 import SelfDestructSettings from './components/SelfDestructSettings';
 import SEO from './components/SEO';
@@ -570,14 +570,18 @@ const DataRoom: React.FC = () => {
         setTimeout(() => setCopiedId(null), 2000);
     };
 
-    const shareOnWhatsApp = (link: string, title?: string) => {
+    const shareOnWhatsApp = (link: string, title?: string, isRealEstate = false) => {
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         let targetUrl = link;
         if (isLocalhost && link.includes('localhost')) {
             const sharePath = new URL(link).pathname;
             targetUrl = buildShareUrl(sharePath, true);
         }
-        window.open(formatWhatsAppShareUrl(targetUrl, title), '_blank');
+        if (isRealEstate) {
+            window.open(formatRealEstateWhatsAppShareUrl({ url: targetUrl, projectName: title }), '_blank');
+        } else {
+            window.open(formatWhatsAppShareUrl(targetUrl, title), '_blank');
+        }
     };
 
     const handlePreview = async () => {
@@ -1028,6 +1032,80 @@ const DataRoom: React.FC = () => {
                                             >
                                                 📜 11-Month Lease
                                             </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=rera-agreement-for-sale'); }}
+                                                style={{
+                                                    padding: '0.35rem 0.65rem',
+                                                    background: 'white',
+                                                    border: '1px solid #6ee7b7',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '600',
+                                                    color: '#047857',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.3rem'
+                                                }}
+                                            >
+                                                📑 Agreement for Sale (RERA)
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=title-search-report'); }}
+                                                style={{
+                                                    padding: '0.35rem 0.65rem',
+                                                    background: 'white',
+                                                    border: '1px solid #6ee7b7',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '600',
+                                                    color: '#047857',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.3rem'
+                                                }}
+                                            >
+                                                ⚖️ 30-Yr Title Report
+                                            </button>
+                                            <Link
+                                                to="/tools/stamp-duty-calculator"
+                                                style={{
+                                                    padding: '0.35rem 0.65rem',
+                                                    background: '#ecfdf5',
+                                                    border: '1px solid #a7f3d0',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '700',
+                                                    color: '#059669',
+                                                    textDecoration: 'none',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.3rem'
+                                                }}
+                                            >
+                                                🧮 Stamp Duty Calc
+                                            </Link>
+                                            <Link
+                                                to="/tools/rera-carpet-area-calculator"
+                                                style={{
+                                                    padding: '0.35rem 0.65rem',
+                                                    background: '#ecfdf5',
+                                                    border: '1px solid #a7f3d0',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '700',
+                                                    color: '#059669',
+                                                    textDecoration: 'none',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.3rem'
+                                                }}
+                                            >
+                                                📐 RERA Carpet Calc
+                                            </Link>
                                         </div>
                                     </div>
 
@@ -1315,7 +1393,7 @@ const DataRoom: React.FC = () => {
                                                             onChange={(e) => setWatermarkConfig({ ...watermarkConfig, text: e.target.value })}
                                                             style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '0.9rem' }}
                                                         />
-                                                        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.5rem' }}>
                                                             {['{{email}}', '{{ip}}', '{{date}}'].map(tag => (
                                                                 <button
                                                                     key={tag}
@@ -1325,6 +1403,20 @@ const DataRoom: React.FC = () => {
                                                                     + {tag}
                                                                 </button>
                                                             ))}
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setWatermarkConfig(prev => ({ ...prev, text: 'Exclusively Marketed by [Agency] • RERA Reg • Ph: +91- • Confidential • {{email}}', layout: 'tiled', opacity: 0.15 }))}
+                                                                style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: '4px', cursor: 'pointer', fontWeight: 600 }}
+                                                            >
+                                                                🛡️ Broker Anti-Bypass
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setWatermarkConfig(prev => ({ ...prev, text: 'CONFIDENTIAL RERA PROJECT DISCLOSURE • DO NOT FORWARD • {{email}}', layout: 'tiled', opacity: 0.12 }))}
+                                                                style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: '4px', cursor: 'pointer', fontWeight: 600 }}
+                                                            >
+                                                                📜 RERA Confidential
+                                                            </button>
                                                         </div>
                                                     </div>
 
@@ -1621,27 +1713,50 @@ const DataRoom: React.FC = () => {
                                                         {copiedId === 'link' ? <Check size={16} color="#16a34a" /> : <Copy size={16} color="#6b7280" />}
                                                     </button>
                                                 </div>
-                                                <button
-                                                    onClick={() => shareOnWhatsApp(uploadedBundleLink, 'Document Bundle')}
-                                                    style={{
-                                                        width: '100%',
-                                                        background: '#25D366',
-                                                        color: 'white',
-                                                        border: 'none',
-                                                        padding: '0.65rem 1rem',
-                                                        borderRadius: '8px',
-                                                        fontWeight: 600,
-                                                        fontSize: '0.88rem',
-                                                        cursor: 'pointer',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '0.5rem',
-                                                        boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
-                                                    }}
-                                                >
-                                                    <MessageCircle size={17} /> Share Bundle on WhatsApp
-                                                </button>
+                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                                                    <button
+                                                        onClick={() => shareOnWhatsApp(uploadedBundleLink, 'Document Bundle')}
+                                                        style={{
+                                                            width: '100%',
+                                                            background: '#25D366',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            padding: '0.65rem 0.75rem',
+                                                            borderRadius: '8px',
+                                                            fontWeight: 600,
+                                                            fontSize: '0.82rem',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '0.4rem',
+                                                            boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
+                                                        }}
+                                                    >
+                                                        <MessageCircle size={15} /> WhatsApp
+                                                    </button>
+                                                    <button
+                                                        onClick={() => shareOnWhatsApp(uploadedBundleLink, 'Document Bundle', true)}
+                                                        style={{
+                                                            width: '100%',
+                                                            background: '#059669',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            padding: '0.65rem 0.75rem',
+                                                            borderRadius: '8px',
+                                                            fontWeight: 600,
+                                                            fontSize: '0.82rem',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '0.4rem',
+                                                            boxShadow: '0 2px 8px rgba(5, 150, 105, 0.3)'
+                                                        }}
+                                                    >
+                                                        🏡 Property Pitch
+                                                    </button>
+                                                </div>
                                             </div>
                                         )}
 
@@ -1664,27 +1779,50 @@ const DataRoom: React.FC = () => {
                                                         {copiedId === 'link' ? <Check size={16} color="#16a34a" /> : <Copy size={16} color="#6b7280" />}
                                                     </button>
                                                 </div>
-                                                <button
-                                                    onClick={() => shareOnWhatsApp(uploadedDoc.link, uploadedDoc.name)}
-                                                    style={{
-                                                        width: '100%',
-                                                        background: '#25D366',
-                                                        color: 'white',
-                                                        border: 'none',
-                                                        padding: '0.65rem 1rem',
-                                                        borderRadius: '8px',
-                                                        fontWeight: 600,
-                                                        fontSize: '0.88rem',
-                                                        cursor: 'pointer',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '0.5rem',
-                                                        boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
-                                                    }}
-                                                >
-                                                    <MessageCircle size={17} /> Share Document on WhatsApp
-                                                </button>
+                                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                                                    <button
+                                                        onClick={() => shareOnWhatsApp(uploadedDoc.link, uploadedDoc.name)}
+                                                        style={{
+                                                            width: '100%',
+                                                            background: '#25D366',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            padding: '0.65rem 0.75rem',
+                                                            borderRadius: '8px',
+                                                            fontWeight: 600,
+                                                            fontSize: '0.82rem',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '0.4rem',
+                                                            boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
+                                                        }}
+                                                    >
+                                                        <MessageCircle size={15} /> WhatsApp
+                                                    </button>
+                                                    <button
+                                                        onClick={() => shareOnWhatsApp(uploadedDoc.link, uploadedDoc.name, true)}
+                                                        style={{
+                                                            width: '100%',
+                                                            background: '#059669',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            padding: '0.65rem 0.75rem',
+                                                            borderRadius: '8px',
+                                                            fontWeight: 600,
+                                                            fontSize: '0.82rem',
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '0.4rem',
+                                                            boxShadow: '0 2px 8px rgba(5, 150, 105, 0.3)'
+                                                        }}
+                                                    >
+                                                        🏡 Property Pitch
+                                                    </button>
+                                                </div>
                                             </div>
                                         )}
 

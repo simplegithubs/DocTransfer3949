@@ -1,7 +1,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
 
-export type StampType = 'biohazard' | 'auth-square' | 'saito' | 'auth-simple' | 'authorized' | 'approved-green' | 'confidential-red' | 'received-blue' | 'urgent-red' | 'paid-red' | 'draft-grey' | 'rejected-red' | 'copy-grey' | 'void-black' | 'completed-green';
+export type StampType = 'biohazard' | 'auth-square' | 'saito' | 'auth-simple' | 'authorized' | 'approved-green' | 'confidential-red' | 'received-blue' | 'urgent-red' | 'paid-red' | 'draft-grey' | 'rejected-red' | 'copy-grey' | 'void-black' | 'completed-green' | 'rera-registered' | 'original-verified' | 'notarized-attested' | 'bank-apf-approved' | 'title-cleared';
 
 interface StampSelectorProps {
     isOpen: boolean;
@@ -10,6 +10,115 @@ interface StampSelectorProps {
 }
 
 export const STAMPS: Record<StampType, { label: string, component: React.ReactNode, width: number, height: number, svgString: string }> = {
+    'rera-registered': {
+        label: 'RERA Registered (India)',
+        width: 170,
+        height: 65,
+        component: (
+            <svg viewBox="0 0 170 65" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+                <rect x="3" y="3" width="164" height="59" rx="5" stroke="#059669" strokeWidth="2.5" fill="none" strokeDasharray="6 3" />
+                <rect x="7" y="7" width="156" height="51" rx="3" stroke="#059669" strokeWidth="1" fill="none" />
+                <text x="85" y="24" textAnchor="middle" fill="#059669" fontSize="13" fontWeight="900" fontFamily="sans-serif" letterSpacing="0.8">RERA REGISTERED</text>
+                <line x1="20" y1="31" x2="150" y2="31" stroke="#059669" strokeWidth="1" />
+                <text x="85" y="44" textAnchor="middle" fill="#065f46" fontSize="8" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.5">COMPLIANT PROJECT / AGENT</text>
+                <text x="85" y="54" textAnchor="middle" fill="#047857" fontSize="7" fontFamily="sans-serif">REG: ..............................</text>
+            </svg>
+        ),
+        svgString: `<svg viewBox="0 0 170 65" fill="none" xmlns="http://www.w3.org/2000/svg" width="170" height="65">
+            <rect x="3" y="3" width="164" height="59" rx="5" stroke="#059669" stroke-width="2.5" fill="none" stroke-dasharray="6 3" />
+            <rect x="7" y="7" width="156" height="51" rx="3" stroke="#059669" stroke-width="1" fill="none" />
+            <text x="85" y="24" text-anchor="middle" fill="#059669" font-size="13" font-weight="900" font-family="sans-serif" letter-spacing="0.8">RERA REGISTERED</text>
+            <line x1="20" y1="31" x2="150" y2="31" stroke="#059669" stroke-width="1" />
+            <text x="85" y="44" text-anchor="middle" fill="#065f46" font-size="8" font-weight="bold" font-family="sans-serif" letter-spacing="0.5">COMPLIANT PROJECT / AGENT</text>
+            <text x="85" y="54" text-anchor="middle" fill="#047857" font-size="7" font-family="sans-serif">REG: ..............................</text>
+        </svg>`
+    },
+    'original-verified': {
+        label: 'Original Seen & Verified (Blue)',
+        width: 170,
+        height: 65,
+        component: (
+            <svg viewBox="0 0 170 65" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+                <rect x="3" y="3" width="164" height="59" rx="4" stroke="#1D4ED8" strokeWidth="2.5" fill="none" />
+                <rect x="7" y="7" width="156" height="51" rx="2" stroke="#1D4ED8" strokeWidth="0.75" fill="none" />
+                <text x="85" y="23" textAnchor="middle" fill="#1D4ED8" fontSize="11" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.6">ORIGINAL SEEN &amp; VERIFIED</text>
+                <line x1="18" y1="29" x2="152" y2="29" stroke="#1D4ED8" strokeWidth="1" />
+                <text x="85" y="42" textAnchor="middle" fill="#1E40AF" fontSize="7.5" fontWeight="600" fontFamily="sans-serif">BANK / LEGAL ADVOCATE AUDIT</text>
+                <text x="85" y="53" textAnchor="middle" fill="#1D4ED8" fontSize="7" fontFamily="sans-serif">DATE: .......... SIGN: ...........</text>
+            </svg>
+        ),
+        svgString: `<svg viewBox="0 0 170 65" fill="none" xmlns="http://www.w3.org/2000/svg" width="170" height="65">
+            <rect x="3" y="3" width="164" height="59" rx="4" stroke="#1D4ED8" stroke-width="2.5" fill="none" />
+            <rect x="7" y="7" width="156" height="51" rx="2" stroke="#1D4ED8" stroke-width="0.75" fill="none" />
+            <text x="85" y="23" text-anchor="middle" fill="#1D4ED8" font-size="11" font-weight="bold" font-family="sans-serif" letter-spacing="0.6">ORIGINAL SEEN &amp; VERIFIED</text>
+            <line x1="18" y1="29" x2="152" y2="29" stroke="#1D4ED8" stroke-width="1" />
+            <text x="85" y="42" text-anchor="middle" fill="#1E40AF" font-size="7.5" font-weight="600" font-family="sans-serif">BANK / LEGAL ADVOCATE AUDIT</text>
+            <text x="85" y="53" text-anchor="middle" fill="#1D4ED8" font-size="7" font-family="sans-serif">DATE: .......... SIGN: ...........</text>
+        </svg>`
+    },
+    'notarized-attested': {
+        label: 'Notarized & Attested (India)',
+        width: 160,
+        height: 65,
+        component: (
+            <svg viewBox="0 0 160 65" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+                <rect x="3" y="3" width="154" height="59" rx="8" stroke="#991B1B" strokeWidth="2.5" fill="none" />
+                <text x="80" y="22" textAnchor="middle" fill="#991B1B" fontSize="12" fontWeight="900" fontFamily="sans-serif" letterSpacing="1">ATTESTED</text>
+                <line x1="25" y1="28" x2="135" y2="28" stroke="#991B1B" strokeWidth="1" />
+                <text x="80" y="40" textAnchor="middle" fill="#B91C1C" fontSize="7.5" fontWeight="bold" fontFamily="sans-serif">NOTARY PUBLIC • GOVT. OF INDIA</text>
+                <text x="80" y="53" textAnchor="middle" fill="#991B1B" fontSize="7" fontFamily="sans-serif">EXPIRY / REG: ..................</text>
+            </svg>
+        ),
+        svgString: `<svg viewBox="0 0 160 65" fill="none" xmlns="http://www.w3.org/2000/svg" width="160" height="65">
+            <rect x="3" y="3" width="154" height="59" rx="8" stroke="#991B1B" stroke-width="2.5" fill="none" />
+            <text x="80" y="22" text-anchor="middle" fill="#991B1B" font-size="12" font-weight="900" font-family="sans-serif" letter-spacing="1">ATTESTED</text>
+            <line x1="25" y1="28" x2="135" y2="28" stroke="#991B1B" stroke-width="1" />
+            <text x="80" y="40" text-anchor="middle" fill="#B91C1C" font-size="7.5" font-weight="bold" font-family="sans-serif">NOTARY PUBLIC • GOVT. OF INDIA</text>
+            <text x="80" y="53" text-anchor="middle" fill="#991B1B" font-size="7" font-family="sans-serif">EXPIRY / REG: ..................</text>
+        </svg>`
+    },
+    'bank-apf-approved': {
+        label: 'Bank APF Approved (Home Loan)',
+        width: 170,
+        height: 60,
+        component: (
+            <svg viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+                <rect x="3" y="3" width="164" height="54" rx="4" stroke="#047857" strokeWidth="2" fill="none" />
+                <text x="85" y="22" textAnchor="middle" fill="#047857" fontSize="11" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.8">BANK APF APPROVED</text>
+                <line x1="20" y1="28" x2="150" y2="28" stroke="#047857" strokeWidth="1" />
+                <text x="85" y="40" textAnchor="middle" fill="#065F46" fontSize="7.5" fontFamily="sans-serif">SBI • HDFC • ICICI • AXIS • PNB</text>
+                <text x="85" y="50" textAnchor="middle" fill="#047857" fontSize="7" fontWeight="bold" fontFamily="sans-serif">SANCTION APF CODE: ...............</text>
+            </svg>
+        ),
+        svgString: `<svg viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="170" height="60">
+            <rect x="3" y="3" width="164" height="54" rx="4" stroke="#047857" stroke-width="2" fill="none" />
+            <text x="85" y="22" text-anchor="middle" fill="#047857" font-size="11" font-weight="bold" font-family="sans-serif" letter-spacing="0.8">BANK APF APPROVED</text>
+            <line x1="20" y1="28" x2="150" y2="28" stroke="#047857" stroke-width="1" />
+            <text x="85" y="40" text-anchor="middle" fill="#065F46" font-size="7.5" font-family="sans-serif">SBI • HDFC • ICICI • AXIS • PNB</text>
+            <text x="85" y="50" text-anchor="middle" fill="#047857" font-size="7" font-weight="bold" font-family="sans-serif">SANCTION APF CODE: ...............</text>
+        </svg>`
+    },
+    'title-cleared': {
+        label: 'Title Cleared & Marketable',
+        width: 170,
+        height: 60,
+        component: (
+            <svg viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: '100%' }}>
+                <rect x="3" y="3" width="164" height="54" rx="4" stroke="#4338CA" strokeWidth="2" fill="none" />
+                <text x="85" y="22" textAnchor="middle" fill="#4338CA" fontSize="10.5" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.8">30-YR TITLE DILIGENCE OK</text>
+                <line x1="20" y1="28" x2="150" y2="28" stroke="#4338CA" strokeWidth="1" />
+                <text x="85" y="39" textAnchor="middle" fill="#3730A3" fontSize="7.5" fontFamily="sans-serif">FREE FROM ALL ENCUMBRANCES</text>
+                <text x="85" y="49" textAnchor="middle" fill="#4338CA" fontSize="7" fontWeight="bold" fontFamily="sans-serif">ADVOCATE CERTIFIED TITLE</text>
+            </svg>
+        ),
+        svgString: `<svg viewBox="0 0 170 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="170" height="60">
+            <rect x="3" y="3" width="164" height="54" rx="4" stroke="#4338CA" stroke-width="2" fill="none" />
+            <text x="85" y="22" text-anchor="middle" fill="#4338CA" font-size="10.5" font-weight="bold" font-family="sans-serif" letter-spacing="0.8">30-YR TITLE DILIGENCE OK</text>
+            <line x1="20" y1="28" x2="150" y2="28" stroke="#4338CA" stroke-width="1" />
+            <text x="85" y="39" text-anchor="middle" fill="#3730A3" font-size="7.5" font-family="sans-serif">FREE FROM ALL ENCUMBRANCES</text>
+            <text x="85" y="49" text-anchor="middle" fill="#4338CA" font-size="7" font-weight="bold" font-family="sans-serif">ADVOCATE CERTIFIED TITLE</text>
+        </svg>`
+    },
     'approved-green': {
         label: 'Approved (Green)',
         width: 150,

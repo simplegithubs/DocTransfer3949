@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Wrench, ArrowRight, FileSpreadsheet, FileCheck, Calculator, ShieldCheck, CheckCircle2, Clock, Scale, FolderCheck, Lock } from 'lucide-react';
+import { Sparkles, Wrench, ArrowRight, FileSpreadsheet, FileCheck, Calculator, ShieldCheck, CheckCircle2, Clock, Scale, FolderCheck, Lock, Building2, Maximize2 } from 'lucide-react';
 import SEO from '../../components/SEO';
 import Footer from '../../components/Footer';
 import { toolsList, type ToolMetadata } from '../../data/toolsData';
@@ -13,7 +13,9 @@ const iconMap: Record<string, React.FC<{ size?: number; color?: string }>> = {
   Scale: ({ size = 24, color = '#4f46e5' }) => <Scale size={size} color={color} />,
   FolderCheck: ({ size = 24, color = '#4f46e5' }) => <FolderCheck size={size} color={color} />,
   Lock: ({ size = 24, color = '#4f46e5' }) => <Lock size={size} color={color} />,
-  Clock: ({ size = 24, color = '#4f46e5' }) => <Clock size={size} color={color} />
+  Clock: ({ size = 24, color = '#4f46e5' }) => <Clock size={size} color={color} />,
+  Building2: ({ size = 24, color = '#059669' }) => <Building2 size={size} color={color} />,
+  Maximize2: ({ size = 24, color = '#059669' }) => <Maximize2 size={size} color={color} />
 };
 
 const ToolsHub: React.FC = () => {

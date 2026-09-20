@@ -107,8 +107,8 @@ export const solutionsData: SolutionPage[] = [
     ]
   },
   {
-    slug: 'real-estate',
-    title: 'Document Management for Real Estate Closings',
+    slug: 'commercial-leasing',
+    title: 'Document Management for Commercial Leases & Closings',
     headline: 'Close Properties Faster with Secure Digital Transactions.',
     subheadline: 'Share disclosures, purchase agreements, and lease contracts with real-time signature tracking and automated client reminders.',
     category: 'industry',
@@ -230,6 +230,65 @@ export const solutionsData: SolutionPage[] = [
     relatedIntegrations: [{ name: 'Google Drive', slug: 'google-drive' }],
     faqs: [
       { question: 'Does DocTransfer encrypt medical records?', answer: 'Yes. All data transferred and stored through DocTransfer is encrypted using AES-256 and TLS 1.3 standards.' }
+    ]
+  },
+  {
+    slug: 'real-estate',
+    title: 'PropTech & Virtual Data Rooms for Indian Real Estate',
+    headline: 'Sell More Units. Stop Client Bypassing. Stay 100% RERA Compliant.',
+    subheadline: 'The end-to-end deal closing room for Indian builders, super-brokers, channel partners, property advocates, and NRI investors.',
+    category: 'industry',
+    metaTitle: 'Real Estate Virtual Data Room & Document Tracking (India) | DocTransfer',
+    metaDescription: 'Secure real estate deal rooms for Indian builders, brokers, and advocates. WhatsApp share tracking, RERA compliance, 30-year title diligence, and anti-poaching watermarks.',
+    keywords: 'real estate data room India, RERA virtual data room, channel partner document tracking, property due diligence software, 7 12 extract data room, DocTransfer PropTech',
+    heroGradient: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+    icon: 'Home',
+    painPoints: [
+      { title: 'Client Bypassing & Poaching', description: 'Brokers share high-res brochures on WhatsApp only for clients to bypass them and contact builder sales desks directly.' },
+      { title: 'Internal Rate Card & Slabs Leaking', description: 'Pre-launch discount sheets and payment milestone slabs forwarded to competitor projects and unauthorized agents.' },
+      { title: '30-Year Title Due Diligence Chaos', description: 'Scattered 200+ page scans across 7/12 extracts, Khata, Patta, and Encumbrance Certificates stalling bank APF project funding.' }
+    ],
+    features: [
+      { title: 'Channel Partner Anti-Poaching Watermark', description: 'Automatically overlay the broker’s agency name, RERA Agent ID, and contact number across all floor plans and brochures.', icon: 'ShieldCheck' },
+      { title: '1-Click WhatsApp Property Delivery', description: 'Send beautifully formatted property teaser links directly into WhatsApp with instant alerts when opened.', icon: 'Send' },
+      { title: 'RERA-Ready Deal Room Presets', description: 'Pre-configured folder structures for Sanctioned Plans, Cost Sheets, Bank APFs, and Model Agreements for Sale.', icon: 'Folder' },
+      { title: 'Blueprint & Floor Plan Dwell Analytics', description: 'Track exactly how many seconds investors spend evaluating the 3BHK penthouse layout versus payment milestone schedules.', icon: 'BarChart2' },
+      { title: 'IT Act Section 65B Certified E-Signatures', description: 'Execute provisional allotment letters, rent agreements, and CP mandates with tamper-evident digital certificates.', icon: 'FileSignature' },
+      { title: 'Bank APF Ready Dossiers', description: 'Assemble complete loan approval packets pre-formatted for SBI, HDFC, ICICI, and Axis Bank home loan desks.', icon: 'CheckCircle' }
+    ],
+    stats: [
+      { value: '100%', label: 'Broker Attribution Protection' },
+      { value: '3x', label: 'Faster Site Visit Conversion' },
+      { value: '₹0', label: 'Free Plan for Solo Consultants' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Assemble Project or Title Dossier', description: 'Upload floor plans, 7/12 extracts, RERA certificates, or cost sheets into a 1-click Deal Room.' },
+      { step: 2, title: 'Apply Dynamic Broker Watermark', description: 'Lock files with your agency RERA number and mobile number to eliminate bypass risk.' },
+      { step: 3, title: 'Share on WhatsApp & Track Leads', description: 'Receive second-by-second reading alerts and follow up right as high-ticket buyers review your pricing.' }
+    ],
+    relatedTemplates: [
+      { name: 'RERA Builder Allotment Letter', slug: 'rera-allotment-letter' },
+      { name: 'Channel Partner Agreement', slug: 'channel-partner-agreement' },
+      { name: '11-Month Rent Agreement (India)', slug: 'indian-lease-agreement' }
+    ],
+    relatedTools: [
+      { name: 'India Stamp Duty Calculator', slug: 'stamp-duty-calculator' },
+      { name: 'RERA Carpet Area Calculator', slug: 'rera-carpet-area-calculator' },
+      { name: 'Rent Agreement Generator', slug: 'rent-agreement-generator' }
+    ],
+    relatedGlossary: [
+      { name: 'Virtual Data Room (VDR)', slug: 'virtual-data-room' },
+      { name: 'Audit Trail', slug: 'audit-trail' },
+      { name: 'Zero-Knowledge Encryption', slug: 'zero-knowledge-encryption' }
+    ],
+    relatedIntegrations: [
+      { name: 'WhatsApp Web', slug: 'whatsapp' },
+      { name: 'Google Drive', slug: 'google-drive' }
+    ],
+    faqs: [
+      { question: 'How does DocTransfer protect real estate brokers from client bypassing?', answer: 'When you share property collaterals through DocTransfer, your recipient sees your branded watermark (Agency Name, RERA ID, Phone Number) prominently stamped across every page. Furthermore, downloading can be disabled so the client cannot extract the raw PDF.' },
+      { question: 'Are DocTransfer e-signed allotment letters valid under RERA and Indian Law?', answer: 'Yes. Digital signatures collected through DocTransfer are fully enforceable under Section 5 and Section 10A of the Information Technology Act 2000, accompanied by court-admissible Section 65B Electronic Audit Certificates.' },
+      { question: 'Can NRI buyers review blueprints on mobile phones without installing an app?', answer: 'Yes! DocTransfer runs seamlessly inside any mobile browser (Safari, Chrome, WhatsApp in-app browser). NRI buyers in Dubai, Singapore, or the US can view high-res blueprints and e-sign in seconds.' }
     ]
   },
   {
@@ -590,7 +649,8 @@ export const solutionsData: SolutionPage[] = [
 ];
 
 export function getSolutionBySlug(slug: string): SolutionPage | undefined {
-  return solutionsData.find(s => s.slug === slug);
+  const normalizedSlug = slug === 'indian-real-estate' ? 'real-estate' : slug;
+  return solutionsData.find(s => s.slug === normalizedSlug);
 }
 
 export function getSolutionsByCategory(category: SolutionPage['category']): SolutionPage[] {

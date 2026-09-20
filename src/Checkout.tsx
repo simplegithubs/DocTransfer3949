@@ -20,7 +20,9 @@ import {
     Sparkles,
     ShieldCheck,
     Phone,
-    AlertCircle
+    AlertCircle,
+    Building,
+    FileText
 } from 'lucide-react';
 import { supabase } from './lib/supabase';
 
@@ -213,6 +215,13 @@ const Checkout: React.FC = () => {
     const [countryCode, setCountryCode] = useState<string>(currency === 'INR' ? '+91' : '+1');
     const [phoneNumber, setPhoneNumber] = useState<string>(initialPhone.replace(/^\+\d{1,3}/, ''));
     const [phoneError, setPhoneError] = useState<string | null>(null);
+
+    // Indian B2B GST States
+    const [isB2BGst, setIsB2BGst] = useState(false);
+    const [gstin, setGstin] = useState('');
+    const [companyName, setCompanyName] = useState('');
+    const [gstError, setGstError] = useState<string | null>(null);
+
     const logoUrl = `${window.location.origin}/apple-touch-icon.png`;
 
     const handleRazorpayPayment = async () => {
@@ -233,7 +242,22 @@ const Checkout: React.FC = () => {
             return;
         }
 
+        // Validate GST if enabled
+        if (isB2BGst) {
+            const cleanGst = gstin.trim().toUpperCase();
+            const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+            if (!cleanGst || !gstRegex.test(cleanGst)) {
+                setGstError('Please enter a valid 15-character Indian GSTIN (e.g., 29AAAAA0000A1Z5).');
+                return;
+            }
+            if (!companyName.trim()) {
+                setGstError('Please enter your registered company or brokerage name.');
+                return;
+            }
+        }
+
         setPhoneError(null);
+        setGstError(null);
         setLoading(true);
         setErrorMsg(null);
 
@@ -726,6 +750,91 @@ const Checkout: React.FC = () => {
                         )}
                     </div>
 
+                    {/* B2B GST Input Tax Credit Option (India) */}
+                    {isINR && (
+                        <div style={{
+                            background: isB2BGst ? '#f0fdf4' : '#ffffff',
+                            border: isB2BGst ? '1.5px solid #10b981' : '1px solid #e2e8f0',
+                            borderRadius: '18px',
+                            padding: '1.25rem 1.5rem',
+                            marginBottom: '1.5rem',
+                            boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
+                            transition: 'all 0.2s ease'
+                        }}>
+                            <div
+                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+                                onClick={() => setIsB2BGst(!isB2BGst)}
+                            >
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                    <input
+                                        type="checkbox"
+                                        id="gstCheckbox"
+                                        checked={isB2BGst}
+                                        onChange={(e) => setIsB2BGst(e.target.checked)}
+                                        style={{ width: '18px', height: '18px', accentColor: '#059669', cursor: 'pointer' }}
+                                    />
+                                    <label htmlFor="gstCheckbox" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0f172a', cursor: 'pointer' }}>
+                                        Claim GST Input Tax Credit (18% ITC)
+                                    </label>
+                                </div>
+                                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#059669', background: '#ecfdf5', padding: '3px 8px', borderRadius: '6px' }}>
+                                    B2B INVOICE
+                                </span>
+                            </div>
+
+                            {isB2BGst && (
+                                <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#475569', marginBottom: '4px' }}>
+                                            GSTIN (15-digit GST Identification Number)
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder="29AAAAA0000A1Z5"
+                                            maxLength={15}
+                                            value={gstin}
+                                            onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.65rem 0.85rem',
+                                                borderRadius: '10px',
+                                                border: '1px solid #cbd5e1',
+                                                fontSize: '0.88rem',
+                                                fontWeight: 600,
+                                                letterSpacing: '0.05em',
+                                                boxSizing: 'border-box'
+                                            }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#475569', marginBottom: '4px' }}>
+                                            Registered Business / Firm Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder="e.g. Apex Realty Advisory LLP / Lodha Associates"
+                                            value={companyName}
+                                            onChange={(e) => setCompanyName(e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '0.65rem 0.85rem',
+                                                borderRadius: '10px',
+                                                border: '1px solid #cbd5e1',
+                                                fontSize: '0.88rem',
+                                                boxSizing: 'border-box'
+                                            }}
+                                        />
+                                    </div>
+                                    {gstError && (
+                                        <div style={{ color: '#dc2626', fontSize: '0.78rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            <AlertCircle size={13} /> {gstError}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/* Pay Button */}
                     <button
                         onClick={handleRazorpayPayment}
@@ -891,6 +1000,37 @@ const Checkout: React.FC = () => {
                                 </span>
                             </div>
 
+                            {isINR && (
+                                <>
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        padding: '0.75rem 0',
+                                        borderBottom: '1px solid #f1f5f9',
+                                        fontSize: '0.9rem',
+                                        color: '#475569'
+                                    }}>
+                                        <span>Base Price (Net of GST)</span>
+                                        <span style={{ fontWeight: 600, color: '#0f172a' }}>
+                                            ₹{Math.round(totalDueToday / 1.18).toLocaleString('en-IN')}
+                                        </span>
+                                    </div>
+                                    <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        padding: '0.75rem 0',
+                                        borderBottom: '1px solid #f1f5f9',
+                                        fontSize: '0.9rem',
+                                        color: '#475569'
+                                    }}>
+                                        <span>18% GST (Input Tax Credit)</span>
+                                        <span style={{ fontWeight: 600, color: '#059669' }}>
+                                            + ₹{(totalDueToday - Math.round(totalDueToday / 1.18)).toLocaleString('en-IN')}
+                                        </span>
+                                    </div>
+                                </>
+                            )}
+
                             <div style={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
@@ -899,11 +1039,11 @@ const Checkout: React.FC = () => {
                                 marginTop: '0.25rem'
                             }}>
                                 <span style={{ fontWeight: 800, color: '#0f172a', fontSize: '1rem' }}>
-                                    {isAnnual ? 'Total Billed Today (1 Year)' : 'Total Due Today'}
+                                    {isAnnual ? 'Total Billed Today (Incl. GST)' : 'Total Due Today (Incl. GST)'}
                                 </span>
                                 <div style={{ textAlign: 'right' }}>
                                     <span style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a' }}>
-                                        {symbol}{totalDueToday}
+                                        {symbol}{totalDueToday.toLocaleString('en-IN')}
                                     </span>
                                 </div>
                             </div>

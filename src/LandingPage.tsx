@@ -39,16 +39,21 @@ import {
   Calendar,
   CheckSquare,
   ArrowLeft,
+  ArrowRight,
   Send,
   Globe,
   Twitter,
   Instagram,
   Youtube,
-  Linkedin
+  Linkedin,
+  Menu,
+  X,
+  Sparkles
 } from 'lucide-react';
 const LandingPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showProductMenu, setShowProductMenu] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'esignature' | 'google-drive'>('upload');
 
 
@@ -94,163 +99,202 @@ const LandingPage: React.FC = () => {
         description="The #1 secure deal room for global startups, enterprises, CAs, advocates & MSMEs. Share pitch decks, NDAs, and contracts with page-by-page analytics, WhatsApp/Email sharing, and legally binding e-signatures worldwide."
         keywords="DocSend alternative, free pitch deck tracking, virtual data room free, secure document sharing, ESIGN eIDAS e-signature, IT Act 2000 electronic signature, DocSend alternative India, global deal room"
       />
-      <header className="header">
-        <Logo size={32} />
-        <nav>
-          <div className="nav-links">
-            <div
-              className="nav-item-dropdown"
-              style={{ position: 'relative', display: 'inline-block' }}
-              onMouseEnter={() => setShowProductMenu(true)}
-              onMouseLeave={() => setShowProductMenu(false)}
-            >
-              <button
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#6b7280',
-                  fontWeight: 500,
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                  padding: '0'
-                }}
+      <header className="header-wrapper">
+        <div className="header-container">
+          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+            <Logo size={32} />
+          </Link>
+
+          {/* Desktop Navigation Links */}
+          <nav className="desktop-nav">
+            <div className="nav-links">
+              <div
+                className="nav-item-dropdown"
+                style={{ position: 'relative', display: 'inline-block' }}
+                onMouseEnter={() => setShowProductMenu(true)}
+                onMouseLeave={() => setShowProductMenu(false)}
               >
-                Product <ChevronDown size={16} />
-              </button>
+                <button className="nav-dropdown-btn">
+                  Product <ChevronDown size={14} />
+                </button>
 
-              {showProductMenu && (
-                <div
-                  className="product-dropdown"
-                  style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: '-50px',
-                    width: '600px',
-                    background: 'white',
-                    borderRadius: '16px',
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                    padding: '2rem',
-                    zIndex: 1000,
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '2rem',
-                    border: '1px solid #f3f4f6'
-                  }}
-                >
-                  <div>
-                    <h4 style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '1rem', letterSpacing: '0.05em' }}>Core Security</h4>
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      {[
-                        { name: 'Secure Transfer', icon: Shield, desc: 'Encrypted document sharing' },
-                        { name: 'End-to-End Encryption', icon: Lock, desc: 'Zero-knowledge architecture' },
-                        { name: 'Password Protection', icon: Lock, desc: 'Access control with passwords' },
-                        { name: 'Email Verification', icon: Mail, desc: 'Confirm recipient identity' },
-                        { name: 'Link Expiration', icon: Clock, desc: 'Time-limited access' },
-                        { name: 'Burn After Reading', icon: Flame, desc: 'Self-destructing files' },
-                      ].map((feature, i) => (
-                        <li key={i}>
-                          <a href="#features" style={{ textDecoration: 'none', display: 'flex', alignItems: 'start', gap: '0.75rem', color: '#1f2937' }}>
-                            <div style={{ padding: '0.35rem', background: '#eff6ff', borderRadius: '6px', color: '#4f46e5' }}>
-                              <feature.icon size={16} />
-                            </div>
-                            <div>
-                              <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{feature.name}</div>
-                              <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{feature.desc}</div>
-                            </div>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                {showProductMenu && (
+                  <div
+                    className="product-dropdown"
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 8px)',
+                      left: '-20px',
+                      width: '600px',
+                      background: 'white',
+                      borderRadius: '16px',
+                      boxShadow: '0 20px 30px -5px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.04)',
+                      padding: '1.75rem',
+                      zIndex: 1000,
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: '1.75rem',
+                      border: '1px solid #e2e8f0'
+                    }}
+                  >
+                    <div>
+                      <h4 style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '0.85rem', letterSpacing: '0.05em' }}>Core Security</h4>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                        {[
+                          { name: 'Secure Transfer', icon: Shield, desc: 'Encrypted document sharing' },
+                          { name: 'End-to-End Encryption', icon: Lock, desc: 'Zero-knowledge architecture' },
+                          { name: 'Password Protection', icon: Lock, desc: 'Access control with passwords' },
+                          { name: 'Email Verification', icon: Mail, desc: 'Confirm recipient identity' },
+                          { name: 'Link Expiration', icon: Clock, desc: 'Time-limited access' },
+                          { name: 'Burn After Reading', icon: Flame, desc: 'Self-destructing files' },
+                        ].map((feature, i) => (
+                          <li key={i}>
+                            <a href="#features" style={{ textDecoration: 'none', display: 'flex', alignItems: 'start', gap: '0.65rem', color: '#1f2937' }}>
+                              <div style={{ padding: '0.35rem', background: '#eff6ff', borderRadius: '6px', color: '#4f46e5' }}>
+                                <feature.icon size={15} />
+                              </div>
+                              <div>
+                                <div style={{ fontWeight: '600', fontSize: '0.88rem' }}>{feature.name}</div>
+                                <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>{feature.desc}</div>
+                              </div>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
 
-                  <div>
-                    <h4 style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '1rem', letterSpacing: '0.05em' }}>Advanced Features</h4>
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      {[
-                        { name: 'Dynamic Watermarking', icon: Droplets, desc: 'Traceable document overlays' },
-                        { name: 'E-Signature', icon: PenTool, desc: 'Legally binding signatures' },
-                        { name: 'Deep Analytics', icon: BarChart3, desc: 'Page-level engagement tracking' },
-                        { name: 'Audit Trails', icon: FileCheck, desc: 'Complete activity logs' },
-                      ].map((feature, i) => (
-                        <li key={i}>
-                          <a href="#features" style={{ textDecoration: 'none', display: 'flex', alignItems: 'start', gap: '0.75rem', color: '#1f2937' }}>
-                            <div style={{ padding: '0.35rem', background: '#f5f3ff', borderRadius: '6px', color: '#7c3aed' }}>
-                              <feature.icon size={16} />
-                            </div>
-                            <div>
-                              <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>{feature.name}</div>
-                              <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>{feature.desc}</div>
-                            </div>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+                    <div>
+                      <h4 style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '0.85rem', letterSpacing: '0.05em' }}>Advanced Features</h4>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                        {[
+                          { name: 'Dynamic Watermarking', icon: Droplets, desc: 'Traceable document overlays' },
+                          { name: 'E-Signature', icon: PenTool, desc: 'Legally binding signatures' },
+                          { name: 'Deep Analytics', icon: BarChart3, desc: 'Page-level engagement tracking' },
+                          { name: 'Audit Trails', icon: FileCheck, desc: 'Complete activity logs' },
+                        ].map((feature, i) => (
+                          <li key={i}>
+                            <a href="#features" style={{ textDecoration: 'none', display: 'flex', alignItems: 'start', gap: '0.65rem', color: '#1f2937' }}>
+                              <div style={{ padding: '0.35rem', background: '#f5f3ff', borderRadius: '6px', color: '#7c3aed' }}>
+                                <feature.icon size={15} />
+                              </div>
+                              <div>
+                                <div style={{ fontWeight: '600', fontSize: '0.88rem' }}>{feature.name}</div>
+                                <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>{feature.desc}</div>
+                              </div>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+
+              <Link to="/solutions" className="nav-link">Solutions</Link>
+              <Link to="/templates" className="nav-link">Templates</Link>
+              <Link to="/tools" className="nav-link">
+                Tools
+                <span className="nav-badge">New</span>
+              </Link>
+              <Link to="/pricing" className="nav-link">Pricing</Link>
+              <Link to="/comparisons" className="nav-link">Comparisons</Link>
+              <Link to="/blog" className="nav-link">Blog</Link>
             </div>
+          </nav>
 
-            <Link to="/solutions" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Solutions</Link>
-            <Link to="/templates" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Templates</Link>
-            <Link to="/pricing" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Pricing</Link>
-            <Link to="/comparisons" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Comparisons</Link>
-            <Link to="/blog" style={{ marginRight: '1.5rem', textDecoration: 'none', color: '#4b5563', fontWeight: 500 }}>Blog</Link>
-          </div>
-          <SignedOut>
-            <SignInButton mode="modal">
-              <button
-                className="btn-primary"
-                style={{
-                  padding: '0.75rem 1.75rem',
-                  fontSize: '1.05rem',
-                  fontWeight: 700,
-                  borderRadius: '14px',
-                  boxShadow: '0 4px 14px 0 rgba(99, 102, 241, 0.39)',
-                  letterSpacing: '0.025em'
-                }}
-              >
-                Sign In
-              </button>
-            </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <Link to="/dataroom">
-                <button
-                  style={{
-                    padding: '0.65rem 1.25rem',
-                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                    border: 'none',
-                    borderRadius: '12px',
-                    color: 'white',
-                    fontWeight: 600,
-                    fontSize: '0.95rem',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(99, 102, 241, 0.4)',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(99, 102, 241, 0.5)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(99, 102, 241, 0.4)';
-                  }}
-                >
-                  Dashboard
+          {/* Action Buttons */}
+          <div className="header-actions">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="btn-signin-ghost">
+                  Sign In
+                </button>
+              </SignInButton>
+              <Link to="/dataroom" style={{ textDecoration: 'none' }}>
+                <button className="btn-header-cta">
+                  <span>Get Started Free</span>
+                  <ArrowRight size={14} />
+                </button>
+              </Link>
+            </SignedOut>
+
+            <SignedIn>
+              <Link to="/dataroom" style={{ textDecoration: 'none' }}>
+                <button className="btn-header-dashboard">
+                  <Sparkles size={15} />
+                  <span>Dashboard</span>
                 </button>
               </Link>
               <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+
+            {/* Mobile Menu Toggle Button */}
+            <button
+              className="mobile-menu-toggle"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="mobile-nav-menu">
+            <Link to="/solutions" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <span>Solutions (Real Estate, M&A, VC)</span>
+              <ArrowRight size={14} color="#94a3b8" />
+            </Link>
+            <Link to="/templates" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <span>Document Templates Hub</span>
+              <ArrowRight size={14} color="#94a3b8" />
+            </Link>
+            <Link to="/tools" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                Interactive Tools & Calculators
+                <span className="nav-badge">New</span>
+              </span>
+              <ArrowRight size={14} color="#94a3b8" />
+            </Link>
+            <Link to="/pricing" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <span>Pricing & Plans (INR & USD)</span>
+              <ArrowRight size={14} color="#94a3b8" />
+            </Link>
+            <Link to="/comparisons" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <span>Competitor Comparisons</span>
+              <ArrowRight size={14} color="#94a3b8" />
+            </Link>
+            <Link to="/blog" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <span>Blog & Guides</span>
+              <ArrowRight size={14} color="#94a3b8" />
+            </Link>
+
+            <div className="mobile-nav-actions">
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="btn-signin-ghost" style={{ width: '100%', justifyContent: 'center' }}>
+                    Sign In
+                  </button>
+                </SignInButton>
+                <Link to="/dataroom" style={{ textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>
+                  <button className="btn-header-cta" style={{ width: '100%', justifyContent: 'center', padding: '0.7rem' }}>
+                    <span>Get Started Free</span>
+                    <ArrowRight size={15} />
+                  </button>
+                </Link>
+              </SignedOut>
+              <SignedIn>
+                <Link to="/dataroom" style={{ textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>
+                  <button className="btn-header-dashboard" style={{ width: '100%', justifyContent: 'center', padding: '0.7rem' }}>
+                    <Sparkles size={16} />
+                    <span>Go to Dashboard</span>
+                  </button>
+                </Link>
+              </SignedIn>
             </div>
-          </SignedIn>
-        </nav>
+          </div>
+        )}
       </header>
 
       <main>

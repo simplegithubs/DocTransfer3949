@@ -546,6 +546,67 @@ export const RealEstateShowcaseSection: React.FC = () => {
           })}
         </div>
 
+        {/* Free Indian PropTech Tools Strip */}
+        <div style={{
+          background: '#ffffff',
+          borderRadius: '16px',
+          border: '1px solid #e2e8f0',
+          padding: '1.5rem 2rem',
+          marginBottom: '2.5rem',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.03)',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '1.25rem'
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+              <Sparkles size={16} color="#059669" />
+              <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#0f172a' }}>
+                Free Interactive PropTech Utilities for Builders & Brokers
+              </h4>
+            </div>
+            <p style={{ margin: 0, color: '#64748b', fontSize: '0.88rem' }}>
+              Calculate stamp duties with female concessions, verify RERA carpet area loading %, and download PDF dossiers.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <Link to="/tools/stamp-duty-calculator" style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: '#ecfdf5',
+              color: '#065f46',
+              border: '1px solid #a7f3d0',
+              padding: '0.55rem 1.1rem',
+              borderRadius: '10px',
+              fontSize: '0.85rem',
+              fontWeight: 700,
+              textDecoration: 'none',
+              transition: 'all 0.2s'
+            }}>
+              🏢 Stamp Duty Calculator →
+            </Link>
+            <Link to="/tools/rera-carpet-area-calculator" style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: '#eff6ff',
+              color: '#1e40af',
+              border: '1px solid #bfdbfe',
+              padding: '0.55rem 1.1rem',
+              borderRadius: '10px',
+              fontSize: '0.85rem',
+              fontWeight: 700,
+              textDecoration: 'none',
+              transition: 'all 0.2s'
+            }}>
+              📐 RERA Carpet Area Tool →
+            </Link>
+          </div>
+        </div>
+
         {/* Action Callout Bar */}
         <div style={{
           background: 'linear-gradient(135deg, #065f46 0%, #047857 50%, #0d9488 100%)',

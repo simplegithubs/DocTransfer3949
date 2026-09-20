@@ -36,6 +36,7 @@ import SEO from './components/SEO';
 import { BASE_URL } from './lib/seo';
 import { formatWhatsAppShareUrl } from './lib/shareUrl';
 import DocTransferViewerBadge from './components/DocTransferViewerBadge';
+import RealEstateViewerActionBar from './components/RealEstateViewerActionBar';
 
 // Initialize PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -1620,6 +1621,9 @@ const ViewDocument: React.FC = () => {
 
             {/* PLG Document Viewer Viral Badge */}
             <DocTransferViewerBadge />
+
+            {/* Indian Real Estate Broker Inquiry & Cost Calculation Bar */}
+            <RealEstateViewerActionBar documentName={documentData?.name} />
 
             {/* Modal animations */}
             <style>{`

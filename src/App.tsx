@@ -22,6 +22,8 @@ import ToolsHub from './pages/tools/ToolsHub'
 import PitchDeckAnalyzer from './pages/tools/PitchDeckAnalyzer'
 import NDAGenerator from './pages/tools/NDAGenerator'
 import RentAgreementGenerator from './pages/tools/RentAgreementGenerator'
+import StampDutyCalculator from './pages/tools/StampDutyCalculator'
+import RERACarpetAreaCalculator from './pages/tools/RERACarpetAreaCalculator'
 import VDRCostCalculator from './pages/tools/VDRCostCalculator'
 import PDFWatermarkTool from './pages/tools/PDFWatermarkTool'
 import ESignComplianceChecker from './pages/tools/ESignComplianceChecker'
@@ -95,6 +97,8 @@ function App() {
       {/* Free Tools Routes */}
       <Route path="/tools" element={<ToolsHub />} />
       <Route path="/tools/rent-agreement-generator" element={<RentAgreementGenerator />} />
+      <Route path="/tools/stamp-duty-calculator" element={<StampDutyCalculator />} />
+      <Route path="/tools/rera-carpet-area-calculator" element={<RERACarpetAreaCalculator />} />
       <Route path="/tools/pitch-deck-analyzer" element={<PitchDeckAnalyzer />} />
       <Route path="/tools/nda-generator" element={<NDAGenerator />} />
       <Route path="/tools/vdr-cost-calculator" element={<VDRCostCalculator />} />

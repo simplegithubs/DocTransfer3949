@@ -1122,5 +1122,115 @@ export const TEMPLATES: Template[] = [
             { type: 'paragraph', text: `After the lock-in period, either party may terminate this agreement by giving ${val.noticeDays || '30'} days written notice. The Tenant shall deliver vacant possession of the premises in good and tenable condition, fair wear and tear excepted.` },
             { type: 'signature-block', text: 'LESSOR & LESSEE SIGNATURES' }
         ]
+    },
+    {
+        id: 'rera-agreement-for-sale',
+        name: 'Model Agreement for Sale under RERA',
+        category: 'real-estate',
+        categoryLabel: 'Real Estate & PropTech',
+        description: 'Standard statutory Builder-Buyer Agreement (BBA) compliant with Section 13 of RERA Act 2016, covering carpet area disclosures and defect liability.',
+        estimatedTime: '4 mins',
+        pagesCount: 3,
+        popularity: 5,
+        fields: [
+            { id: 'promoterName', label: 'Promoter / Developer Name', type: 'text', placeholder: 'Lodha Group / Macrotech Developers', required: true, defaultValue: '', step: 1 },
+            { id: 'allotteeName', label: 'Allottee Full Name', type: 'text', placeholder: 'Amitabh & Jaya Verma', required: true, defaultValue: '', step: 1 },
+            { id: 'projectName', label: 'RERA Registered Project Name', type: 'text', placeholder: 'Lodha Park - Tower 2', required: true, defaultValue: '', step: 1 },
+            { id: 'reraNumber', label: 'State RERA Registration No.', type: 'text', placeholder: 'P51900001339', required: true, defaultValue: '', step: 1 },
+            { id: 'unitNumber', label: 'Apartment / Unit Details', type: 'text', placeholder: 'Unit 2402, 24th Floor (3BHK)', required: true, defaultValue: '', step: 2 },
+            { id: 'carpetArea', label: 'RERA Carpet Area (sq. ft.)', type: 'number', placeholder: '1280', required: true, defaultValue: '', step: 2 },
+            { id: 'totalPrice', label: 'Total Purchase Consideration (₹)', type: 'number', placeholder: '24000000', required: true, defaultValue: '', step: 2 },
+            { id: 'completionDate', label: 'RERA Committed Handover Date', type: 'date', required: true, defaultValue: '', step: 3 },
+            { id: 'governingState', label: 'State Jurisdiction', type: 'text', placeholder: 'Maharashtra', required: true, defaultValue: 'Maharashtra', step: 3 }
+        ],
+        generateContent: (val) => [
+            { type: 'title', text: 'AGREEMENT FOR SALE (MODEL FORM UNDER RERA)' },
+            { type: 'subtitle', text: `RERA Reg: ${val.reraNumber || '[RERA Reg]'} • State of ${val.governingState || 'India'}` },
+            { type: 'paragraph', text: `This Agreement for Sale ("Agreement") is executed on this ${new Date().toLocaleDateString('en-IN')} by and between ${val.promoterName || '[Promoter Name]'} ("Promoter") and ${val.allotteeName || '[Allottee Name]'} ("Allottee").` },
+            { type: 'header', text: '1. Allotted Unit & Carpet Area Disclosure' },
+            { type: 'paragraph', text: `The Promoter hereby agrees to sell and the Allottee agrees to purchase the residential apartment: ${val.unitNumber || '[Unit Number]'} in project "${val.projectName || '[Project Name]'}". In compliance with Section 2(k) of the Real Estate (Regulation & Development) Act, 2016, the Net Carpet Area is strictly confirmed as ${val.carpetArea || '0'} sq. ft.` },
+            { type: 'header', text: '2. Purchase Consideration & Milestone Plan' },
+            { type: 'paragraph', text: `The total agreed sale consideration is ₹${Number(val.totalPrice || 0).toLocaleString('en-IN')} (excluding stamp duty, registration charges, and GST). Payments shall be collected strictly against certified civil construction stages as approved under RERA rules.` },
+            { type: 'header', text: '3. 5-Year Structural Defect Liability' },
+            { type: 'paragraph', text: `In accordance with Section 14(3) of the Act, in case any structural defect or any other defect in workmanship, quality or provision of services is brought to the notice of the Promoter within a period of five (5) years from the date of handing over possession, it shall be the duty of the Promoter to rectify such defects without further charge within thirty (30) days.` },
+            { type: 'header', text: '4. Possession & Delay Compensation' },
+            { type: 'paragraph', text: `The Promoter agrees to deliver lawful vacant physical possession on or before ${val.completionDate ? new Date(val.completionDate).toLocaleDateString('en-IN') : '[Handover Date]'}. If the Promoter fails to complete or give possession of the apartment in accordance with the terms of this Agreement, the Promoter shall pay interest at the State RERA prescribed rate.` },
+            { type: 'signature-block', text: 'PROMOTER & ALLOTTEE SIGNATURES' }
+        ]
+    },
+    {
+        id: 'title-search-report',
+        name: '30-Year Property Title Search & Due Diligence Report',
+        category: 'real-estate',
+        categoryLabel: 'Real Estate & PropTech',
+        description: 'Standard legal title scrutiny report for advocates, banks, and buyers certifying clear, marketable, and unencumbered ownership.',
+        estimatedTime: '5 mins',
+        pagesCount: 3,
+        popularity: 5,
+        fields: [
+            { id: 'advocateName', label: 'Advocate / Law Firm Name', type: 'text', placeholder: 'K. S. Narayanan & Associates, Advocates', required: true, defaultValue: '', step: 1 },
+            { id: 'clientName', label: 'Client / Prospective Purchaser Name', type: 'text', placeholder: 'Apex Infrastructure Ventures LLP', required: true, defaultValue: '', step: 1 },
+            { id: 'propertySchedule', label: 'Property Schedule & Survey Details', type: 'text', placeholder: 'Sy No. 44/2, Bellandur Village, Varthur Hobli, Bangalore East Taluk, measuring 2 Acres 14 Guntas', required: true, defaultValue: '', step: 1 },
+            { id: 'currentOwner', label: 'Present Registered Owner(s)', type: 'text', placeholder: 'M. Muniyappa and legal heirs', required: true, defaultValue: '', step: 2 },
+            { id: 'ecYears', label: 'Encumbrance Certificate (EC) Period Scrutinized', type: 'text', placeholder: '1994 to 2026 (32 Years)', required: true, defaultValue: '30 Years', step: 2 },
+            { id: 'revenueRecords', label: 'Revenue Scrutiny (Khata / Patta / 7-12)', type: 'text', placeholder: 'BBMP A-Khata, Mutation Extract M.R. No. 12/2004-05, RTC / 7-12 verified', required: true, defaultValue: '', step: 2 },
+            { id: 'searchOpinion', label: 'Title Marketability Opinion', type: 'select', options: ['Clear, Marketable & Free from all Encumbrances', 'Conditional Title (Subject to Probate / NOC)', 'Defective / Litigated Title'], required: true, defaultValue: 'Clear, Marketable & Free from all Encumbrances', step: 3 }
+        ],
+        generateContent: (val) => [
+            { type: 'title', text: 'LEGAL SCRUTINY REPORT & TITLE OPINION' },
+            { type: 'subtitle', text: `Prepared by: ${val.advocateName || '[Advocate Name]'} • Date: ${new Date().toLocaleDateString('en-IN')}` },
+            { type: 'paragraph', text: `To: ${val.clientName || '[Client Name]'}\nSubject: Legal Scrutiny & 30-Year Search Report regarding Title to Property: ${val.propertySchedule || '[Property Description]'}` },
+            { type: 'header', text: '1. Documents Examined' },
+            { type: 'bullet', items: [
+                `Registered Parent Deeds and Chain of Title for ${val.ecYears || '30 Years'}`,
+                `Sub-Registrar Encumbrance Certificates (Form No. 15 & Form No. 16)`,
+                `Revenue Records: ${val.revenueRecords || 'Khata / Patta / 7-12 extracts & Mutation registers'}`,
+                `Layout Sanction / Conversion Order under Section 95 of Land Revenue Act`,
+                `Litigation verification through District Civil Court case search registries`
+            ]},
+            { type: 'header', text: '2. Ownership Chain & Derivation of Title' },
+            { type: 'paragraph', text: `The present registered owner ${val.currentOwner || '[Owner Name]'} acquired valid ownership through duly registered conveyance. The flow of title for the past 30 years reflects continuous, peaceful, and uninterrupted possession without adverse claims.` },
+            { type: 'header', text: '3. Encumbrance & Mortgage Verification' },
+            { type: 'paragraph', text: `Upon examination of the online and physical indexes at the Sub-Registrar Office, no existing mortgages, lis pendens attachments, court injunctions, or statutory revenue charges were found subsisting on the scheduled property.` },
+            { type: 'header', text: '4. Final Legal Title Certificate' },
+            { type: 'paragraph', text: `Based on the scrutiny of original deeds and certified revenue extracts, I am of the considered opinion that the title of the present owner is: **${val.searchOpinion || 'Clear, Marketable & Free from all Encumbrances'}**, and the property is fit for commercial transaction, bank mortgage, or development.` },
+            { type: 'signature-block', text: 'ADVOCATE & NOTARY SIGNATURE & SEAL' }
+        ]
+    },
+    {
+        id: 'property-possession-handover',
+        name: 'Property Possession & Key Handover Letter',
+        category: 'real-estate',
+        categoryLabel: 'Real Estate & PropTech',
+        description: 'Formal handover letter executed upon possession of an apartment or villa with meter readings, keys receipt, and amenity sign-off.',
+        estimatedTime: '2 mins',
+        pagesCount: 2,
+        popularity: 5,
+        fields: [
+            { id: 'builderName', label: 'Developer / Seller Entity', type: 'text', placeholder: 'Sobha Limited', required: true, defaultValue: '', step: 1 },
+            { id: 'allotteeName', label: 'Allottee / Purchaser Name', type: 'text', placeholder: 'Dr. Rajesh & Sunita Kulkarni', required: true, defaultValue: '', step: 1 },
+            { id: 'unitDetails', label: 'Unit Number & Tower', type: 'text', placeholder: 'Villa 18, Sobha Palm Meadows', required: true, defaultValue: '', step: 1 },
+            { id: 'ocDetails', label: 'Occupancy Certificate (OC) Number', type: 'text', placeholder: 'BBMP/ADDL.DIR/JD-SOUTH/OC/412/2025-26', required: true, defaultValue: '', step: 2 },
+            { id: 'electricityMeter', label: 'Electricity (BESCOM/MSEDCL) Meter Reading', type: 'text', placeholder: 'Meter No. 4410291 • Initial Reading: 0012.4 kWh', required: true, defaultValue: '', step: 2 },
+            { id: 'keysHandedOver', label: 'Number of Key Sets & Access Cards', type: 'text', placeholder: '4 Master Door Keys, 2 Mailbox Keys, 2 RFID Club Cards', required: true, defaultValue: '3 Key Sets + 2 Access Cards', step: 2 },
+            { id: 'handoverDate', label: 'Possession Date', type: 'date', required: true, defaultValue: '', step: 3 }
+        ],
+        generateContent: (val) => [
+            { type: 'title', text: `${val.builderName || '[Developer Name]'}` },
+            { type: 'subtitle', text: 'CERTIFICATE OF POSSESSION & KEY HANDOVER' },
+            { type: 'paragraph', text: `Date: ${val.handoverDate ? new Date(val.handoverDate).toLocaleDateString('en-IN') : new Date().toLocaleDateString('en-IN')}\nTo: ${val.allotteeName || '[Allottee Name]'}\nSubject: Handover of Possession for ${val.unitDetails || '[Unit Details]'}` },
+            { type: 'header', text: '1. Handover of Lawful Vacant Possession' },
+            { type: 'paragraph', text: `We are pleased to confirm that vacant, peaceful, and lawful possession of the residential property described as ${val.unitDetails || '[Unit Details]'} has been formally handed over to the Allottee pursuant to the grant of Occupancy Certificate: ${val.ocDetails || '[OC Number]'}.` },
+            { type: 'header', text: '2. Utility Meters & Inventory Confirmation' },
+            { type: 'bullet', items: [
+                `Electricity Meter Status: ${val.electricityMeter || 'Meter connected with initial reading noted'}`,
+                `Water Connection: Borewell and municipal water supply connection verified in working order`,
+                `Door Keys & Access Cards: ${val.keysHandedOver || 'All sets delivered and acknowledged'}`,
+                `Car Parking Allocation: Covered Stilt / Basement Bay No. confirmed as per agreement`
+            ]},
+            { type: 'header', text: '3. Allottee Acknowledgment' },
+            { type: 'paragraph', text: `The Allottee confirms that the apartment has been inspected, fixtures are in tenable condition, and possession has been received with complete satisfaction, reserving statutory rights under the RERA 5-year defect liability warranty.` },
+            { type: 'signature-block', text: 'DEVELOPER REPRESENTATIVE & ALLOTTEE SIGNATURES' }
+        ]
     }
 ];

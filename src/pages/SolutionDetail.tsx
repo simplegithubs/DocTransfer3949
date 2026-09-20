@@ -51,12 +51,14 @@ import {
   Trash2,
   DollarSign,
   HelpCircle,
-  ExternalLink
+  ExternalLink,
+  Home
 } from 'lucide-react';
 import SEO from '../components/SEO';
 import { getSolutionBySlug, solutionsData } from '../data/solutionsData';
 
 const iconMap: Record<string, React.FC<{ size?: number; color?: string }>> = {
+  Home: ({ size = 20, color = '#059669' }) => <Home size={size} color={color} />,
   BarChart2: ({ size = 20, color = '#4f46e5' }) => <BarChart2 size={size} color={color} />,
   ShieldCheck: ({ size = 20, color = '#4f46e5' }) => <ShieldCheck size={size} color={color} />,
   RefreshCw: ({ size = 20, color = '#4f46e5' }) => <RefreshCw size={size} color={color} />,
