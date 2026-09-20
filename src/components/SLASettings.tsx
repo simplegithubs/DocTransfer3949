@@ -10,23 +10,95 @@ const SLASettings: React.FC = () => {
 
     if (isLocked) {
         return (
-            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 text-center relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-10 opacity-50"></div>
+            <div style={{
+                padding: '3.5rem 2rem',
+                textAlign: 'center',
+                position: 'relative',
+                overflow: 'hidden',
+                background: '#ffffff',
+                borderRadius: '24px'
+            }}>
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    width: '128px',
+                    height: '128px',
+                    background: '#ecfdf5',
+                    borderRadius: '0 0 0 100%',
+                    zIndex: 0,
+                    opacity: 0.6
+                }}></div>
 
-                <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <ShieldCheck size={32} className="text-indigo-600" />
+                <div style={{
+                    width: '64px',
+                    height: '64px',
+                    background: '#ecfdf5',
+                    borderRadius: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 1.5rem',
+                    border: '1px solid #d1fae5',
+                    position: 'relative',
+                    zIndex: 1
+                }}>
+                    <ShieldCheck size={32} color="#059669" />
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Enterprise-Grade Reliability</h3>
-                <p className="text-gray-500 mb-8 max-w-sm mx-auto">
+                <h3 style={{
+                    fontSize: '1.4rem',
+                    fontWeight: 800,
+                    color: '#0f172a',
+                    marginBottom: '0.5rem',
+                    letterSpacing: '-0.02em',
+                    position: 'relative',
+                    zIndex: 1
+                }}>
+                    Enterprise-Grade Reliability
+                </h3>
+                <p style={{
+                    color: '#64748b',
+                    fontSize: '0.9rem',
+                    maxWidth: '420px',
+                    margin: '0 auto 2rem',
+                    lineHeight: 1.6,
+                    position: 'relative',
+                    zIndex: 1
+                }}>
                     Upgrade to the Business Plan to get our 99.99% Uptime SLA Guarantee and priority credit processing.
                 </p>
 
                 <button
                     onClick={() => navigate('/pricing')}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200"
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        padding: '0.875rem 2rem',
+                        backgroundColor: '#059669',
+                        color: '#ffffff',
+                        borderRadius: '12px',
+                        fontWeight: 700,
+                        fontSize: '0.95rem',
+                        border: 'none',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 14px rgba(5, 150, 105, 0.35)',
+                        transition: 'all 0.2s ease',
+                        position: 'relative',
+                        zIndex: 1
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#047857';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#059669';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                    }}
                 >
-                    <Lock size={16} />
+                    <Lock size={16} color="#ffffff" />
                     Upgrade to Unlock SLA
                 </button>
             </div>

@@ -434,7 +434,7 @@ const StampDutyCalculator: React.FC = () => {
       page.drawText('3. STATE REGULATORY & REBATE OBSERVATIONS', { x: 40, y, size: 10, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
       y -= 16;
 
-      stateRule.notes.forEach(note => {
+      (result.notes || []).forEach((note: string) => {
         page.drawText(`• ${note}`, { x: 45, y, size: 8, font: fontRegular, color: rgb(0.35, 0.35, 0.35), maxWidth: 500, lineHeight: 12 });
         y -= 15;
       });
@@ -957,7 +957,7 @@ const StampDutyCalculator: React.FC = () => {
                 <CheckCircle2 size={16} style={{ color: '#059669' }} /> {stateRule.name} Statutory Rules
               </h4>
               <ul style={{ margin: 0, paddingLeft: '1.25rem', color: '#475569', fontSize: '0.825rem', lineHeight: '1.6' }}>
-                {stateRule.notes.map((note, idx) => (
+                {(result.notes || []).map((note: string, idx: number) => (
                   <li key={idx} style={{ marginBottom: '4px' }}>{note}</li>
                 ))}
               </ul>

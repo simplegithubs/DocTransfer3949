@@ -143,11 +143,7 @@ function App() {
       />
       <Route
         path="/settings"
-        element={
-          <ProtectedRoute>
-            <SettingsPage />
-          </ProtectedRoute>
-        }
+        element={<SettingsPage />}
       />
 
       {/* Catch-all 404 */}

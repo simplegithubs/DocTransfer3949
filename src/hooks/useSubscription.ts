@@ -401,6 +401,7 @@ export const useSubscription = () => {
                 'deal_rooms',
                 'vault_mode',
                 'custom_branding',
+                'white_label',
                 'client_intake',
                 'gst_invoicing',
                 'team_seats_3'

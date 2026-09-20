@@ -136,6 +136,10 @@ const ViewDocument: React.FC = () => {
         brand_color?: string;
         site_url?: string;
         remove_branding?: boolean;
+        agency_name?: string;
+        rera_reg_no?: string;
+        whatsapp_number?: string;
+        display_rera_badge?: boolean;
     } | null>(null);
 
     // Encryption State
@@ -345,15 +349,25 @@ const ViewDocument: React.FC = () => {
 
 
     const handleDocLoaded = (data: DocumentData) => {
-        // Fetch branding settings
+        // Fetch branding settings - first check local offline/preview cache
+        const localSettingsStr = localStorage.getItem('doctransfer_branding_settings');
+        if (localSettingsStr) {
+            try {
+                const parsed = JSON.parse(localSettingsStr);
+                setBranding((prev) => ({ ...prev, ...parsed }));
+            } catch (e) {
+                console.warn('Failed to parse local branding cache:', e);
+            }
+        }
+
         if (data.user_id) {
             supabase
                 .from('branding_settings')
-                .select('logo_url, brand_color, site_url')
+                .select('logo_url, brand_color, site_url, remove_branding, agency_name, rera_reg_no, whatsapp_number, display_rera_badge')
                 .eq('user_id', data.user_id)
                 .single()
                 .then(({ data: brandingData }) => {
-                    if (brandingData) setBranding(brandingData);
+                    if (brandingData) setBranding((prev) => ({ ...prev, ...brandingData }));
                     
                     // Apply Watermarking if enabled - do it after branding fetch to ensure order
                     const previewType = getPreviewType(getExtension(data.name));
@@ -467,15 +481,25 @@ const ViewDocument: React.FC = () => {
     };
 
     const handleBundleLoaded = (data: BundleData) => {
-        // Fetch branding
+        // Fetch branding - first check local offline/preview cache
+        const localSettingsStr = localStorage.getItem('doctransfer_branding_settings');
+        if (localSettingsStr) {
+            try {
+                const parsed = JSON.parse(localSettingsStr);
+                setBranding((prev) => ({ ...prev, ...parsed }));
+            } catch (e) {
+                console.warn('Failed to parse local branding cache:', e);
+            }
+        }
+
         if (data.user_id) {
             supabase
                 .from('branding_settings')
-                .select('logo_url, brand_color, site_url')
+                .select('logo_url, brand_color, site_url, remove_branding, agency_name, rera_reg_no, whatsapp_number, display_rera_badge')
                 .eq('user_id', data.user_id)
                 .single()
                 .then(({ data: brandingData }) => {
-                    if (brandingData) setBranding(brandingData);
+                    if (brandingData) setBranding((prev) => ({ ...prev, ...brandingData }));
                 });
         }
 
@@ -1146,16 +1170,49 @@ const ViewDocument: React.FC = () => {
                                 </div>
                             )}
                             <div style={{ overflow: 'hidden' }}>
-                                <h2 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#111827', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '300px' }}>
-                                    {document.name}
-                                </h2>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                    <h2 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#111827', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '300px' }}>
+                                        {document.name}
+                                    </h2>
+                                    {branding?.display_rera_badge && branding?.rera_reg_no && (
+                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '1px 7px', borderRadius: '9999px', fontSize: '0.68rem', fontWeight: 700 }}>
+                                            <ShieldCheck size={11} /> RERA: {branding.rera_reg_no}
+                                        </span>
+                                    )}
+                                </div>
                                 <p style={{ fontSize: '0.78rem', color: '#6b7280', margin: '0.2rem 0 0 0' }}>
-                                    {(document.file_size / 1024 / 1024).toFixed(2)} MB • {document.file_type}
+                                    {branding?.agency_name ? `${branding.agency_name} • ` : ''}{(document.file_size / 1024 / 1024).toFixed(2)} MB • {document.file_type}
                                 </p>
                             </div>
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                            {branding?.whatsapp_number && (
+                                <button
+                                    onClick={() => {
+                                        const clean = branding.whatsapp_number!.replace(/[^0-9]/g, '');
+                                        const msg = encodeURIComponent(`Hi ${branding.agency_name || 'Team'}, I am reviewing "${document.name}" and have a query.`);
+                                        window.open(`https://wa.me/${clean}?text=${msg}`, '_blank');
+                                    }}
+                                    style={{
+                                        padding: '0.65rem 1rem',
+                                        background: '#047857',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        fontWeight: 600,
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.45rem',
+                                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                                    }}
+                                    title="Chat directly with broker on WhatsApp"
+                                >
+                                    <MessageCircle size={16} /> Contact Broker
+                                </button>
+                            )}
                             {/* WhatsApp Share Quick Button */}
                             <button
                                 onClick={() => {
@@ -1491,10 +1548,25 @@ const ViewDocument: React.FC = () => {
                 </div>
 
                 {/* Branding Footer */}
+                {branding?.agency_name && (
+                    <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', color: '#6b7280', flexWrap: 'wrap' }}>
+                        <span>Presented by <strong>{branding.agency_name}</strong></span>
+                        {branding.display_rera_badge && branding.rera_reg_no && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                                <ShieldCheck size={13} /> RERA: {branding.rera_reg_no}
+                            </span>
+                        )}
+                    </div>
+                )}
                 {branding?.site_url && (
-                    <a href={branding.site_url} target="_blank" rel="noopener noreferrer" style={{ marginTop: '2rem', color: '#9ca3af', textDecoration: 'none', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <a href={branding.site_url} target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.75rem', color: '#9ca3af', textDecoration: 'none', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                         Visit {new URL(branding.site_url).hostname} <ArrowRight size={14} />
                     </a>
+                )}
+                {!branding?.remove_branding && (
+                    <div style={{ marginTop: '1rem', color: '#9ca3af', fontSize: '0.75rem' }}>
+                        Secured by DocTransfer Enterprise
+                    </div>
                 )}
             </div>
 
@@ -1619,11 +1691,11 @@ const ViewDocument: React.FC = () => {
                 </div>
             )}
 
-            {/* PLG Document Viewer Viral Badge */}
-            <DocTransferViewerBadge />
+            {/* PLG Document Viewer Viral Badge (hidden if white-labeled) */}
+            {!branding?.remove_branding && <DocTransferViewerBadge />}
 
             {/* Indian Real Estate Broker Inquiry & Cost Calculation Bar */}
-            <RealEstateViewerActionBar documentName={documentData?.name} />
+            <RealEstateViewerActionBar documentName={document?.name} brokerPhone={branding?.whatsapp_number} />
 
             {/* Modal animations */}
             <style>{`
