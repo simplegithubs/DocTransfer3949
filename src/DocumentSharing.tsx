@@ -17,7 +17,8 @@ import {
     Shield,
     Mail,
     Loader2,
-    MessageCircle
+    MessageCircle,
+    Smartphone
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from './lib/supabase';
@@ -67,6 +68,8 @@ const DocumentSharing: React.FC = () => {
     const [screenshotProtection, setScreenshotProtection] = useState(false);
     const [emailVerification, setEmailVerification] = useState(false);
     const [allowedEmail, setAllowedEmail] = useState('');
+    const [requirePhoneOtp, setRequirePhoneOtp] = useState(false);
+    const [allowedPhone, setAllowedPhone] = useState('');
 
     // Subscription & Paywall
     const { subscription, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription, dailyUploadCount, yearlyUploadCount } = useSubscription();
@@ -198,25 +201,47 @@ const DocumentSharing: React.FC = () => {
 
             const shareLink = generateSecureToken(12);
 
-            const { error: dbError } = await supabase
+            const docPayload: Record<string, any> = {
+                name: uploadedFile.name,
+                file_path: filePath,
+                file_size: uploadedFile.size,
+                file_type: uploadedFile.type,
+                share_link: shareLink,
+                allow_download: allowDownloads,
+                password: passwordProtection ? await hashPassword(password) : null,
+                expires_at: linkExpiration ? expiresAt : null,
+                custom_domain: customDomain ? 'docs.company.com' : null,
+                screenshot_protection: screenshotProtection,
+                email_verification: emailVerification,
+                allowed_email: emailVerification && allowedEmail ? allowedEmail : null,
+                user_id: (await supabase.auth.getUser())?.data?.user?.id || null
+            };
+
+            // Include phone OTP settings if enabled and unlocked
+            if (requirePhoneOtp && !isFeatureLocked('phone_otp')) {
+                docPayload.require_phone_otp = true;
+                if (allowedPhone.trim()) {
+                    docPayload.allowed_phone = allowedPhone.trim();
+                }
+            }
+
+            let { error: dbError } = await supabase
                 .from('documents')
-                .insert({
-                    name: uploadedFile.name,
-                    file_path: filePath,
-                    file_size: uploadedFile.size,
-                    file_type: uploadedFile.type,
-                    share_link: shareLink,
-                    allow_download: allowDownloads,
-                    password: passwordProtection ? await hashPassword(password) : null,
-                    expires_at: linkExpiration ? expiresAt : null,
-                    custom_domain: customDomain ? 'docs.company.com' : null,
-                    screenshot_protection: screenshotProtection,
-                    email_verification: emailVerification,
-                    allowed_email: emailVerification && allowedEmail ? allowedEmail : null,
-                    user_id: (await supabase.auth.getUser())?.data?.user?.id || null
-                })
+                .insert(docPayload)
                 .select()
                 .single();
+
+            // Graceful fallback: If require_phone_otp is missing in schema cache, retry without it
+            if (dbError && dbError.message?.includes('require_phone_otp')) {
+                console.warn("Database missing 'require_phone_otp' column, retrying insert without it...");
+                delete docPayload.require_phone_otp;
+                const retryResult = await supabase
+                    .from('documents')
+                    .insert(docPayload)
+                    .select()
+                    .single();
+                dbError = retryResult.error;
+            }
 
             if (dbError) throw dbError;
 
@@ -550,6 +575,57 @@ const DocumentSharing: React.FC = () => {
                                     />
                                     <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem' }}>
                                         If set, only this email can access the file.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Mobile Number Gate (+91 OTP) */}
+                        <div className="feature-item" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                            <div className="feature-header">
+                                <div className="feature-icon-box" style={{ background: '#059669' }}>
+                                    <Smartphone size={20} />
+                                </div>
+                                <div className="feature-content" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                    <h4>Mobile Number Gate (+91 OTP)</h4>
+                                    <span style={{ fontSize: '0.65rem', padding: '1px 5px', background: '#dcfce7', color: '#15803d', borderRadius: '4px', fontWeight: 700 }}>Real Estate</span>
+                                    {isFeatureLocked('phone_otp') && <PremiumBadge size={12} />}
+                                </div>
+                                <label className="toggle-switch" style={{ marginLeft: 'auto' }}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={requirePhoneOtp} 
+                                        onChange={(e) => {
+                                            if (isFeatureLocked('phone_otp')) {
+                                                handleLockedFeatureClick('Mobile Number Gate (+91 OTP)');
+                                                return;
+                                            }
+                                            setRequirePhoneOtp(e.target.checked);
+                                        }} 
+                                    />
+                                    <span className="toggle-slider"></span>
+                                </label>
+                            </div>
+                            {requirePhoneOtp && !isFeatureLocked('phone_otp') && (
+                                <div style={{ marginTop: '1rem', paddingLeft: '3.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                                        Lock to Specific Recipient Phone (Optional)
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #d1d5db', borderRadius: '8px', overflow: 'hidden', background: '#f9fafb' }}>
+                                        <span style={{ padding: '0.5rem 0.75rem', fontSize: '0.85rem', fontWeight: 600, color: '#4b5563', background: '#f3f4f6', borderRight: '1px solid #e5e7eb', whiteSpace: 'nowrap' }}>
+                                            🇮🇳 +91
+                                        </span>
+                                        <input
+                                            type="tel"
+                                            maxLength={10}
+                                            placeholder="e.g. 9876543210 (leave blank for any visitor)"
+                                            value={allowedPhone}
+                                            onChange={(e) => setAllowedPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                            style={{ flex: 1, padding: '0.5rem 0.75rem', border: 'none', outline: 'none', fontSize: '0.875rem', background: 'transparent' }}
+                                        />
+                                    </div>
+                                    <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: '0.25rem 0 0' }}>
+                                        Leave blank for any visitor, or enter a number to restrict access exclusively.
                                     </p>
                                 </div>
                             )}

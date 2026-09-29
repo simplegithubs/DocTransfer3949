@@ -47,12 +47,15 @@ import TermsOfService from './pages/TermsOfService'
 import RefundPolicy from './pages/RefundPolicy'
 import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
+import RealEstateClosingRoom from './components/closing-rooms/RealEstateClosingRoom'
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route path="/closing-room" element={<RealEstateClosingRoom />} />
+      <Route path="/closing-room/:dealId" element={<RealEstateClosingRoom />} />
       <Route path="/security" element={<SecurityPage />} />
       <Route path="/transparency" element={<TransparencyPage />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />

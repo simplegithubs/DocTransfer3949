@@ -95,10 +95,19 @@ const SelfDestructSettings: React.FC<SelfDestructSettingsProps> = ({
                         }}
                     />
                 </div>
-                <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                         <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1f2937', margin: 0 }}>Self-Destruct Rules</h3>
-                        {isFeatureLocked?.('burn_after_reading') && <PremiumBadge size={14} />}
+                        {(isFeatureLocked?.('burn_after_reading') || isFeatureLocked?.('link_expiration')) && (
+                            <button
+                                type="button"
+                                onClick={() => handleLockedFeatureClick('Self-Destruct Rules')}
+                                style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex' }}
+                                title="Click to upgrade"
+                            >
+                                <PremiumBadge size={14} />
+                            </button>
+                        )}
                     </div>
                     <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: '0.25rem 0 0' }}>
                         Automatically expire links based on time or views
@@ -111,37 +120,49 @@ const SelfDestructSettings: React.FC<SelfDestructSettingsProps> = ({
 
                 {/* 1. Time Expiration Control */}
                 <div style={{
-                    background: linkExpiration ? 'rgba(255,255,255,0.7)' : 'transparent',
+                    background: linkExpiration && !isFeatureLocked?.('link_expiration') ? 'rgba(255,255,255,0.7)' : 'transparent',
                     backdropFilter: linkExpiration ? 'blur(8px)' : 'none',
-                    padding: linkExpiration ? '1.25rem' : '0.75rem',
+                    padding: linkExpiration && !isFeatureLocked?.('link_expiration') ? '1.25rem' : '0.75rem',
                     borderRadius: '16px',
-                    border: linkExpiration ? '1px solid rgba(253, 186, 116, 0.5)' : '1px solid transparent',
+                    border: linkExpiration && !isFeatureLocked?.('link_expiration') ? '1px solid rgba(253, 186, 116, 0.5)' : '1px solid transparent',
                     transition: 'all 0.3s ease',
-                    boxShadow: linkExpiration ? '0 4px 6px -2px rgba(0, 0, 0, 0.05)' : 'none'
+                    boxShadow: linkExpiration && !isFeatureLocked?.('link_expiration') ? '0 4px 6px -2px rgba(0, 0, 0, 0.05)' : 'none',
+                    opacity: isFeatureLocked?.('link_expiration') ? 0.85 : 1
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: linkExpiration ? '1rem' : '0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: linkExpiration && !isFeatureLocked?.('link_expiration') ? '1rem' : '0' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <div style={{ padding: '6px', background: linkExpiration ? '#ffedd5' : 'transparent', borderRadius: '8px', transition: 'all 0.3s' }}>
-                                <Clock size={18} color={linkExpiration ? '#ea580c' : '#6b7280'} />
+                            <div style={{ padding: '6px', background: linkExpiration && !isFeatureLocked?.('link_expiration') ? '#ffedd5' : 'transparent', borderRadius: '8px', transition: 'all 0.3s' }}>
+                                <Clock size={18} color={linkExpiration && !isFeatureLocked?.('link_expiration') ? '#ea580c' : '#6b7280'} />
                             </div>
                             <span style={{ fontSize: '0.95rem', color: '#374151', fontWeight: '600' }}>Time Expiration</span>
                         </div>
-                        <label className="toggle-switch">
-                            <input
-                                type="checkbox"
-                                checked={linkExpiration}
-                                onChange={(e) => {
-                                    if (isFeatureLocked?.('link_expiration')) {
-                                        e.preventDefault();
-                                        handleLockedFeatureClick('Link Expiration');
-                                    } else {
-                                        setLinkExpiration(e.target.checked);
-                                    }
-                                }}
-                                disabled={isFeatureLocked?.('link_expiration')}
-                            />
-                            <span className="toggle-slider"></span>
-                        </label>
+                        <div
+                            onClick={(e) => {
+                                if (isFeatureLocked?.('link_expiration')) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleLockedFeatureClick('Self-Destruct Rules');
+                                }
+                            }}
+                            style={{ cursor: isFeatureLocked?.('link_expiration') ? 'pointer' : 'default' }}
+                        >
+                            <label className="toggle-switch" style={{ pointerEvents: isFeatureLocked?.('link_expiration') ? 'none' : 'auto' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={linkExpiration && !isFeatureLocked?.('link_expiration')}
+                                    onChange={(e) => {
+                                        if (isFeatureLocked?.('link_expiration')) {
+                                            e.preventDefault();
+                                            handleLockedFeatureClick('Self-Destruct Rules');
+                                        } else {
+                                            setLinkExpiration(e.target.checked);
+                                        }
+                                    }}
+                                    disabled={isFeatureLocked?.('link_expiration')}
+                                />
+                                <span className="toggle-slider"></span>
+                            </label>
+                        </div>
                     </div>
 
                     {linkExpiration && (
@@ -259,40 +280,52 @@ const SelfDestructSettings: React.FC<SelfDestructSettingsProps> = ({
 
                 {/* 2. View Limit Control */}
                 <div style={{
-                    background: maxViewsEnabled ? 'rgba(255,255,255,0.7)' : 'transparent',
+                    background: maxViewsEnabled && !isFeatureLocked?.('burn_after_reading') ? 'rgba(255,255,255,0.7)' : 'transparent',
                     backdropFilter: maxViewsEnabled ? 'blur(8px)' : 'none',
-                    padding: maxViewsEnabled ? '1.25rem' : '0.75rem',
+                    padding: maxViewsEnabled && !isFeatureLocked?.('burn_after_reading') ? '1.25rem' : '0.75rem',
                     borderRadius: '16px',
-                    border: maxViewsEnabled ? '1px solid rgba(253, 186, 116, 0.5)' : '1px solid transparent',
+                    border: maxViewsEnabled && !isFeatureLocked?.('burn_after_reading') ? '1px solid rgba(253, 186, 116, 0.5)' : '1px solid transparent',
                     transition: 'all 0.3s ease',
-                    boxShadow: maxViewsEnabled ? '0 4px 6px -2px rgba(0, 0, 0, 0.05)' : 'none'
+                    boxShadow: maxViewsEnabled && !isFeatureLocked?.('burn_after_reading') ? '0 4px 6px -2px rgba(0, 0, 0, 0.05)' : 'none',
+                    opacity: isFeatureLocked?.('burn_after_reading') ? 0.85 : 1
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: maxViewsEnabled ? '1rem' : '0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: maxViewsEnabled && !isFeatureLocked?.('burn_after_reading') ? '1rem' : '0' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <div style={{ padding: '6px', background: maxViewsEnabled ? '#ffedd5' : 'transparent', borderRadius: '8px', transition: 'all 0.3s' }}>
-                                <Eye size={18} color={maxViewsEnabled ? '#ea580c' : '#6b7280'} />
+                            <div style={{ padding: '6px', background: maxViewsEnabled && !isFeatureLocked?.('burn_after_reading') ? '#ffedd5' : 'transparent', borderRadius: '8px', transition: 'all 0.3s' }}>
+                                <Eye size={18} color={maxViewsEnabled && !isFeatureLocked?.('burn_after_reading') ? '#ea580c' : '#6b7280'} />
                             </div>
                             <span style={{ fontSize: '0.95rem', color: '#374151', fontWeight: '600' }}>View Limit</span>
                         </div>
-                        <label className="toggle-switch">
-                            <input
-                                type="checkbox"
-                                checked={maxViewsEnabled}
-                                onChange={(e) => {
-                                    if (isFeatureLocked?.('burn_after_reading')) {
-                                        e.preventDefault();
-                                        handleLockedFeatureClick('Burn After Reading / View Limits');
-                                    } else {
-                                        setMaxViewsEnabled(e.target.checked);
-                                    }
-                                }}
-                                disabled={isFeatureLocked?.('burn_after_reading')}
-                            />
-                            <span className="toggle-slider"></span>
-                        </label>
+                        <div
+                            onClick={(e) => {
+                                if (isFeatureLocked?.('burn_after_reading')) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleLockedFeatureClick('Self-Destruct Rules');
+                                }
+                            }}
+                            style={{ cursor: isFeatureLocked?.('burn_after_reading') ? 'pointer' : 'default' }}
+                        >
+                            <label className="toggle-switch" style={{ pointerEvents: isFeatureLocked?.('burn_after_reading') ? 'none' : 'auto' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={maxViewsEnabled && !isFeatureLocked?.('burn_after_reading')}
+                                    onChange={(e) => {
+                                        if (isFeatureLocked?.('burn_after_reading')) {
+                                            e.preventDefault();
+                                            handleLockedFeatureClick('Self-Destruct Rules');
+                                        } else {
+                                            setMaxViewsEnabled(e.target.checked);
+                                        }
+                                    }}
+                                    disabled={isFeatureLocked?.('burn_after_reading')}
+                                />
+                                <span className="toggle-slider"></span>
+                            </label>
+                        </div>
                     </div>
 
-                    {maxViewsEnabled && (
+                    {maxViewsEnabled && !isFeatureLocked?.('burn_after_reading') && (
                         <div className="animate-fade-in" style={{
                             display: 'flex',
                             alignItems: 'center',

@@ -1,5 +1,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
+import { getComplianceSettings } from '../../hooks/useComplianceSettings';
 
 export type StampType = 'biohazard' | 'auth-square' | 'saito' | 'auth-simple' | 'authorized' | 'approved-green' | 'confidential-red' | 'received-blue' | 'urgent-red' | 'paid-red' | 'draft-grey' | 'rejected-red' | 'copy-grey' | 'void-black' | 'completed-green' | 'rera-registered' | 'original-verified' | 'notarized-attested' | 'bank-apf-approved' | 'title-cleared';
 
@@ -549,49 +550,56 @@ const StampSelector: React.FC<StampSelectorProps> = ({ isOpen, onClose, onSelect
 
                 {/* Content */}
                 <div style={{ padding: '0.5rem', overflowY: 'auto' }}>
-                    {Object.entries(STAMPS).map(([key, stamp]) => (
-                        <div
-                            key={key}
-                            onClick={() => onSelect(key as StampType)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                padding: '1.5rem',
-                                borderBottom: '1px solid #f3f4f6',
-                                cursor: 'pointer',
-                                transition: 'background 0.2s',
-                                gap: '2rem'
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'white'}
-                        >
-                            <div style={{
-                                width: '120px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}>
-                                {stamp.component}
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                {key === 'biohazard' && (
-                                    <span style={{
-                                        background: '#DC2626',
-                                        color: 'white',
-                                        fontSize: '0.7rem',
-                                        fontWeight: 'bold',
-                                        padding: '2px 6px',
-                                        borderRadius: '4px',
-                                        textTransform: 'uppercase',
-                                        marginRight: '0.75rem'
-                                    }}>Default</span>
-                                )}
-                                <span style={{ fontSize: '1rem', color: '#374151', fontWeight: '500' }}>
-                                    {stamp.label}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
+                    {(() => {
+                        const defaultStamp = getComplianceSettings().default_stamp;
+                        return Object.entries(STAMPS).map(([key, stamp]) => {
+                            const isDefault = key === defaultStamp;
+                            return (
+                                <div
+                                    key={key}
+                                    onClick={() => onSelect(key as StampType)}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        padding: '1.25rem 1.5rem',
+                                        borderBottom: '1px solid #f3f4f6',
+                                        cursor: 'pointer',
+                                        transition: 'background 0.2s',
+                                        gap: '2rem',
+                                        background: isDefault ? '#f0fdf4' : 'transparent'
+                                    }}
+                                    onMouseEnter={e => e.currentTarget.style.background = isDefault ? '#ecfdf5' : '#f9fafb'}
+                                    onMouseLeave={e => e.currentTarget.style.background = isDefault ? '#f0fdf4' : 'white'}
+                                >
+                                    <div style={{
+                                        width: '120px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        {stamp.component}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        {isDefault && (
+                                            <span style={{
+                                                background: '#059669',
+                                                color: 'white',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 'bold',
+                                                padding: '2px 8px',
+                                                borderRadius: '4px',
+                                                textTransform: 'uppercase',
+                                                marginRight: '0.75rem'
+                                            }}>Default Seal</span>
+                                        )}
+                                        <span style={{ fontSize: '1rem', color: '#374151', fontWeight: isDefault ? '700' : '500' }}>
+                                            {stamp.label}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        });
+                    })()}
                 </div>
             </div>
         </div>

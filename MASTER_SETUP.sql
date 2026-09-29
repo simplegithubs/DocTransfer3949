@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS documents (
   allow_download BOOLEAN DEFAULT true,
   email_verification BOOLEAN DEFAULT false,
   allowed_email TEXT,
+  require_phone_otp BOOLEAN DEFAULT FALSE,
+  allowed_phone TEXT,
   apply_watermark BOOLEAN DEFAULT false,
   watermark_config JSONB,
   max_views INTEGER,

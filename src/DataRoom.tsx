@@ -27,7 +27,9 @@ import {
     Shield,
     Sparkles,
     Loader2,
-    MessageCircle
+    MessageCircle,
+    Building2,
+    Smartphone
 } from 'lucide-react';
 import Skeleton from './components/ui/Skeleton';
 import { hashPassword, generateSecureToken } from './lib/security';
@@ -48,6 +50,7 @@ import TrialTrackingBar from './components/TrialTrackingBar';
 import SelfDestructSettings from './components/SelfDestructSettings';
 import SEO from './components/SEO';
 import { BASE_URL } from './lib/seo';
+import { getComplianceSettings } from './hooks/useComplianceSettings';
 
 interface Document {
     id: string;
@@ -106,17 +109,24 @@ const DataRoom: React.FC = () => {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [isLoadingDocs, setIsLoadingDocs] = useState(true);
 
-    // Settings State
+    // Settings State - Pre-populated with User's RERA Compliance & Agency Defaults
+    const complianceDefaults = getComplianceSettings();
     const [passwordProtection, setPasswordProtection] = useState(false);
-    const [linkExpiration, setLinkExpiration] = useState(false);
-    const [allowDownloads, setAllowDownloads] = useState(true);
+    const [linkExpiration, setLinkExpiration] = useState(complianceDefaults.default_expiry_days > 0);
+    const [allowDownloads, setAllowDownloads] = useState(!complianceDefaults.default_prevent_download);
     const [password, setPassword] = useState('');
-    const [expiresAt, setExpiresAt] = useState('');
+    const [expiresAt, setExpiresAt] = useState(() => {
+        const d = new Date();
+        d.setDate(d.getDate() + (complianceDefaults.default_expiry_days || 7));
+        return d.toISOString().split('T')[0];
+    });
     const [emailVerification, setEmailVerification] = useState(false);
     const [allowedEmail, setAllowedEmail] = useState('');
+    const [requirePhoneOtp, setRequirePhoneOtp] = useState(false);
+    const [allowedPhone, setAllowedPhone] = useState('');
     const [applyWatermark, setApplyWatermark] = useState(false);
     const [watermarkConfig, setWatermarkConfig] = useState<WatermarkConfig>({
-        text: 'CONFIDENTIAL {{email}}',
+        text: 'CONFIDENTIAL • FOR {{email}} • IP: {{ip}}',
         color: '#000000',
         opacity: 0.3,
         fontSize: 24,
@@ -124,13 +134,18 @@ const DataRoom: React.FC = () => {
         layout: 'tiled'
     });
 
-    const [expirationMode, setExpirationMode] = useState<'date' | 'duration'>('date');
-    const [durationValue, setDurationValue] = useState(1);
-    const [durationUnit, setDurationUnit] = useState<'hours' | 'days' | 'weeks'>('hours');
+    const [expirationMode, setExpirationMode] = useState<'date' | 'duration'>('duration');
+    const [durationValue, setDurationValue] = useState(complianceDefaults.default_expiry_days || 7);
+    const [durationUnit, setDurationUnit] = useState<'hours' | 'days' | 'weeks'>('days');
 
     const [maxViewsEnabled, setMaxViewsEnabled] = useState(false);
     const [maxViews, setMaxViews] = useState(1);
     const [aesEncryptionEnabled, setAesEncryptionEnabled] = useState(false);
+
+    // Bates Numbering & Deal Room Presets State
+    const [batesNumberingEnabled, setBatesNumberingEnabled] = useState(false);
+    const [batesPrefix, setBatesPrefix] = useState('DT-PROP');
+    const [dealRoomPreset, setDealRoomPreset] = useState<'custom' | 'title_search_30yr' | 'bank_apf_pack' | 'rera_launch_kit'>('custom');
 
     // Subscription and premium features
     const { subscription, usage, dailyUploadCount, yearlyUploadCount, isLoading: subLoading, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
@@ -355,11 +370,11 @@ const DataRoom: React.FC = () => {
                         share_link: bundleShareLink,
                         user_id: user?.id || null,
                         password: passwordProtection ? await hashPassword(password) : null,
-                        expires_at: linkExpiration ? (
+                        expires_at: (linkExpiration && !isFeatureLocked?.('link_expiration')) ? (
                             expirationMode === 'date' ? expiresAt : new Date(Date.now() + durationValue * (durationUnit === 'hours' ? 3600000 : durationUnit === 'days' ? 86400000 : 604800000)).toISOString()
                         ) : null,
-                        require_email_verification: emailVerification,
-                        allowed_email: emailVerification ? allowedEmail : null
+                        require_email_verification: emailVerification && !isFeatureLocked?.('email_verification'),
+                        allowed_email: (emailVerification && !isFeatureLocked?.('email_verification')) ? allowedEmail : null
                     })
                     .select('id')
                     .single();
@@ -421,43 +436,66 @@ const DataRoom: React.FC = () => {
                 const docShareLink = generateSecureToken(12);
 
                 // 4. Save document metadata to database
-                const { data: docData, error: dbError } = await authenticatedSupabase
+                const documentPayload: Record<string, any> = {
+                    name: file.name,
+                    file_path: sanitizedFilePath,
+                    file_size: file.size,
+                    file_type: file.type,
+                    share_link: docShareLink,
+                    bundle_id: bundleId, // Link to bundle if exists
+
+                    // Inherit settings from UI (strictly gated by plan entitlements)
+                    allow_download: allowDownloads,
+                    password: passwordProtection ? await hashPassword(password) : null,
+                    expires_at: (linkExpiration && !isFeatureLocked?.('link_expiration')) ? (
+                        expirationMode === 'date' ? expiresAt : new Date(Date.now() + durationValue * (durationUnit === 'hours' ? 3600000 : durationUnit === 'days' ? 86400000 : 604800000)).toISOString()
+                    ) : null,
+                    custom_domain: null,
+                    email_verification: emailVerification && !isFeatureLocked?.('email_verification'),
+                    allowed_email: (emailVerification && !isFeatureLocked?.('email_verification')) ? allowedEmail : null,
+                    apply_watermark: applyWatermark && !isFeatureLocked?.('watermarking'),
+                    watermark_config: (applyWatermark && !isFeatureLocked?.('watermarking')) ? watermarkConfig : null,
+                    max_views: (maxViewsEnabled && !isFeatureLocked?.('burn_after_reading')) ? maxViews : null,
+                    burn_after_reading: maxViewsEnabled && !isFeatureLocked?.('burn_after_reading'),
+
+                    // Encryption / Vault Fields
+                    is_vault_file: false,
+                    is_encrypted: isEncrypted,
+                    encryption_key: null, // Stored in URL hash only
+                    encryption_iv: encryptionIv,
+
+                    original_file_name: file.name,
+                    original_file_type: file.type,
+                    user_id: user?.id || null,
+                    scan_status: 'pending'
+                };
+
+                // Include phone OTP gate if enabled and unlocked
+                if (requirePhoneOtp && !isFeatureLocked?.('phone_otp')) {
+                    documentPayload.require_phone_otp = true;
+                    if (allowedPhone.trim()) {
+                        documentPayload.allowed_phone = allowedPhone.trim();
+                    }
+                }
+
+                let { data: docData, error: dbError } = await authenticatedSupabase
                     .from('documents')
-                    .insert({
-                        name: file.name,
-                        file_path: sanitizedFilePath,
-                        file_size: file.size,
-                        file_type: file.type,
-                        share_link: docShareLink,
-                        bundle_id: bundleId, // Link to bundle if exists
-
-                        // Inherit settings from UI
-                        allow_download: allowDownloads,
-                        password: passwordProtection ? await hashPassword(password) : null,
-                        expires_at: linkExpiration ? (
-                            expirationMode === 'date' ? expiresAt : new Date(Date.now() + durationValue * (durationUnit === 'hours' ? 3600000 : durationUnit === 'days' ? 86400000 : 604800000)).toISOString()
-                        ) : null,
-                        custom_domain: null,
-                        email_verification: emailVerification,
-                        allowed_email: emailVerification ? allowedEmail : null,
-                        apply_watermark: applyWatermark,
-                        watermark_config: applyWatermark ? watermarkConfig : null,
-                        max_views: maxViewsEnabled ? maxViews : null,
-                        burn_after_reading: maxViewsEnabled,
-
-                        // Encryption / Vault Fields
-                        is_vault_file: false,
-                        is_encrypted: isEncrypted,
-                        encryption_key: null, // Stored in URL hash only
-                        encryption_iv: encryptionIv,
-
-                        original_file_name: file.name,
-                        original_file_type: file.type,
-                        user_id: user?.id || null,
-                        scan_status: 'pending'
-                    })
+                    .insert(documentPayload)
                     .select()
                     .single();
+
+                // Graceful fallback: If require_phone_otp is missing in the schema cache, retry without it
+                if (dbError && dbError.message?.includes('require_phone_otp')) {
+                    console.warn("Database missing 'require_phone_otp' column, retrying insert without it...");
+                    delete documentPayload.require_phone_otp;
+                    const retryResult = await authenticatedSupabase
+                        .from('documents')
+                        .insert(documentPayload)
+                        .select()
+                        .single();
+                    docData = retryResult.data;
+                    dbError = retryResult.error;
+                }
 
                 if (dbError) throw new Error(`Database save failed for ${file.name}: ${dbError.message}`);
 
@@ -739,6 +777,26 @@ const DataRoom: React.FC = () => {
 
                         <button onClick={() => setActiveTab('templates')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'templates' ? '#8b5cf6' : 'transparent', color: activeTab === 'templates' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <Sparkles size={16} /> Templates
+                        </button>
+
+                        <button 
+                            onClick={() => navigate('/closing-room')}
+                            style={{
+                                padding: '0.625rem 1.25rem',
+                                background: '#059669',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                fontWeight: '700',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.45rem',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 8px rgba(5, 150, 105, 0.25)',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            <Building2 size={16} /> 🏡 Closing Room
                         </button>
                     </div>
                 </div>
@@ -1349,40 +1407,138 @@ const DataRoom: React.FC = () => {
                                             )}
                                         </div>
 
+                                        {/* Mobile Number Gate (+91 India OTP) */}
+                                        <div style={{
+                                            padding: '1rem',
+                                            border: '1px solid #f3f4f6',
+                                            borderRadius: '12px',
+                                            background: requirePhoneOtp && !isFeatureLocked?.('phone_otp') ? '#ecfdf5' : '#ffffff',
+                                            opacity: isFeatureLocked?.('phone_otp') ? 0.85 : 1,
+                                            transition: 'all 0.2s'
+                                        }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <div style={{ padding: '8px', background: '#d1fae5', borderRadius: '8px' }}>
+                                                        <Smartphone size={18} style={{ color: '#059669' }} />
+                                                    </div>
+                                                    <div>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                            <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#111827' }}>Mobile Number Gate (+91 OTP)</span>
+                                                            <span style={{ fontSize: '0.68rem', padding: '1px 6px', background: '#dcfce7', color: '#15803d', borderRadius: '4px', fontWeight: 700 }}>Real Estate</span>
+                                                            {isFeatureLocked?.('phone_otp') && <PremiumBadge size={14} />}
+                                                        </div>
+                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Require Indian phone OTP verification before viewing</span>
+                                                    </div>
+                                                </div>
+                                                <label className="toggle-switch">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={requirePhoneOtp}
+                                                        disabled={isFeatureLocked?.('phone_otp')}
+                                                        onChange={(e) => {
+                                                            if (isFeatureLocked?.('phone_otp')) {
+                                                                e.preventDefault();
+                                                                handleLockedFeatureClick('Mobile Number Gate (+91 OTP)');
+                                                                return;
+                                                            }
+                                                            setRequirePhoneOtp(e.target.checked);
+                                                            if (e.target.checked && !applyWatermark && !isFeatureLocked?.('watermarking')) {
+                                                                setApplyWatermark(true);
+                                                                setWatermarkConfig(prev => ({
+                                                                    ...prev,
+                                                                    text: prev.text.includes('{{phone}}') ? prev.text : `${prev.text} • {{phone}}`
+                                                                }));
+                                                            }
+                                                        }}
+                                                    />
+                                                    <span className="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            {requirePhoneOtp && !isFeatureLocked?.('phone_otp') && (
+                                                <div style={{ marginTop: '0.75rem', paddingLeft: '2.8rem' }}>
+                                                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                                                        Lock to Specific Recipient Phone (Optional)
+                                                    </label>
+                                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #d1d5db', borderRadius: '8px', overflow: 'hidden', background: '#f9fafb' }}>
+                                                        <span style={{ padding: '0.5rem 0.75rem', fontSize: '0.85rem', fontWeight: 600, color: '#4b5563', background: '#f3f4f6', borderRight: '1px solid #e5e7eb', whiteSpace: 'nowrap' }}>
+                                                            🇮🇳 +91
+                                                        </span>
+                                                        <input
+                                                            type="tel"
+                                                            maxLength={10}
+                                                            placeholder="e.g. 9876543210 (leave blank for any visitor)"
+                                                            value={allowedPhone}
+                                                            onChange={(e) => setAllowedPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                                            style={{ flex: 1, padding: '0.5rem 0.75rem', border: 'none', outline: 'none', fontSize: '0.875rem', background: 'transparent' }}
+                                                        />
+                                                    </div>
+                                                    <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: '0.25rem 0 0' }}>
+                                                        Leave blank to allow any visitor to verify OTP, or enter a number to restrict access exclusively to this person.
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
 
                                         {/* Watermark */}
-                                        <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: applyWatermark ? '#f5f3ff' : '#ffffff', transition: 'all 0.2s' }}>
+                                        <div style={{
+                                            padding: '1rem',
+                                            border: '1px solid #f3f4f6',
+                                            borderRadius: '12px',
+                                            background: applyWatermark && !isFeatureLocked?.('watermarking') ? '#f5f3ff' : '#ffffff',
+                                            transition: 'all 0.2s',
+                                            opacity: isFeatureLocked?.('watermarking') ? 0.85 : 1
+                                        }}>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                                     <div style={{ padding: '8px', background: '#ede9fe', borderRadius: '8px' }}>
                                                         <ImageIcon size={18} style={{ color: '#8b5cf6' }} />
                                                     </div>
                                                     <div>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                                                             <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#374151' }}>Apply Dynamic Watermark</span>
-                                                            {isFeatureLocked?.('watermarking') && <PremiumBadge size={14} />}
+                                                            {isFeatureLocked?.('watermarking') && (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleLockedFeatureClick('Dynamic Watermarking')}
+                                                                    style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', display: 'inline-flex' }}
+                                                                    title="Click to upgrade"
+                                                                >
+                                                                    <PremiumBadge size={14} />
+                                                                </button>
+                                                            )}
                                                         </div>
-                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Add overlay to documents</span>
+                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Add dynamic buyer/agency overlay</span>
                                                     </div>
                                                 </div>
-                                                <label className="toggle-switch">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={applyWatermark}
-                                                        onChange={(e) => {
-                                                            if (isFeatureLocked?.('watermarking')) {
-                                                                e.preventDefault();
-                                                                handleLockedFeatureClick('Dynamic Watermarking');
-                                                            } else {
-                                                                setApplyWatermark(e.target.checked);
-                                                            }
-                                                        }}
-                                                        disabled={isFeatureLocked?.('watermarking')}
-                                                    />
-                                                    <span className="toggle-slider"></span>
-                                                </label>
+                                                <div
+                                                    onClick={(e) => {
+                                                        if (isFeatureLocked?.('watermarking')) {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            handleLockedFeatureClick('Dynamic Watermarking');
+                                                        }
+                                                    }}
+                                                    style={{ cursor: isFeatureLocked?.('watermarking') ? 'pointer' : 'default' }}
+                                                >
+                                                    <label className="toggle-switch" style={{ pointerEvents: isFeatureLocked?.('watermarking') ? 'none' : 'auto' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={applyWatermark && !isFeatureLocked?.('watermarking')}
+                                                            onChange={(e) => {
+                                                                if (isFeatureLocked?.('watermarking')) {
+                                                                    e.preventDefault();
+                                                                    handleLockedFeatureClick('Dynamic Watermarking');
+                                                                } else {
+                                                                    setApplyWatermark(e.target.checked);
+                                                                }
+                                                            }}
+                                                            disabled={isFeatureLocked?.('watermarking')}
+                                                        />
+                                                        <span className="toggle-slider"></span>
+                                                    </label>
+                                                </div>
                                             </div>
-                                            {applyWatermark && (
+                                            {applyWatermark && !isFeatureLocked?.('watermarking') && (
                                                 <div style={{ marginTop: '1rem', padding: '1rem', background: 'white', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                                                     {/* Text Template */}
                                                     <div style={{ marginBottom: '1rem' }}>
@@ -1394,25 +1550,25 @@ const DataRoom: React.FC = () => {
                                                             style={{ width: '100%', padding: '0.5rem', border: '1px solid #cbd5e1', borderRadius: '4px', fontSize: '0.9rem' }}
                                                         />
                                                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.5rem' }}>
-                                                            {['{{email}}', '{{ip}}', '{{date}}'].map(tag => (
+                                                            {['{{phone}}', '{{rera_id}}', '{{agency}}', '{{email}}', '{{ip}}', '{{date}}'].map(tag => (
                                                                 <button
                                                                     key={tag}
                                                                     onClick={() => setWatermarkConfig(prev => ({ ...prev, text: prev.text + ' ' + tag }))}
-                                                                    style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem', background: '#e0e7ff', color: '#4338ca', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                                                                    style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem', background: '#e0e7ff', color: '#4338ca', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 600 }}
                                                                 >
                                                                     + {tag}
                                                                 </button>
                                                             ))}
                                                             <button
                                                                 type="button"
-                                                                onClick={() => setWatermarkConfig(prev => ({ ...prev, text: 'Exclusively Marketed by [Agency] • RERA Reg • Ph: +91- • Confidential • {{email}}', layout: 'tiled', opacity: 0.15 }))}
+                                                                onClick={() => setWatermarkConfig(prev => ({ ...prev, text: 'Exclusively Marketed by {{agency}} • RERA: {{rera_id}} • Buyer: {{phone}} • Confidential', layout: 'tiled', opacity: 0.18 }))}
                                                                 style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: '4px', cursor: 'pointer', fontWeight: 600 }}
                                                             >
                                                                 🛡️ Broker Anti-Bypass
                                                             </button>
                                                             <button
                                                                 type="button"
-                                                                onClick={() => setWatermarkConfig(prev => ({ ...prev, text: 'CONFIDENTIAL RERA PROJECT DISCLOSURE • DO NOT FORWARD • {{email}}', layout: 'tiled', opacity: 0.12 }))}
+                                                                onClick={() => setWatermarkConfig(prev => ({ ...prev, text: 'CONFIDENTIAL RERA PROJECT DOSSIER • ISSUED TO {{phone}} • DO NOT FORWARD', layout: 'tiled', opacity: 0.15 }))}
                                                                 style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem', background: '#ecfdf5', color: '#065f46', border: '1px solid #a7f3d0', borderRadius: '4px', cursor: 'pointer', fontWeight: 600 }}
                                                             >
                                                                 📜 RERA Confidential
@@ -1533,13 +1689,86 @@ const DataRoom: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* E-Signature */}
+                                    {/* Indian PropTech Deal Room Presets & Bates Numbering */}
+                                    <div style={{ marginTop: '1.5rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '1.25rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <Building2 size={18} color="#059669" />
+                                                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#0f172a' }}>
+                                                    🇮🇳 Indian PropTech Deal Room Presets
+                                                </span>
+                                            </div>
+                                            <span style={{ fontSize: '0.7rem', fontWeight: 800, background: '#ecfdf5', color: '#065f46', padding: '0.15rem 0.5rem', borderRadius: '4px' }}>
+                                                RERA Compliant
+                                            </span>
+                                        </div>
 
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.5rem', marginBottom: '1rem' }}>
+                                            {[
+                                                { id: 'custom', label: 'Custom Document', desc: 'Standard upload' },
+                                                { id: 'title_search_30yr', label: '30-Yr Title Dossier', desc: '7/12, EC, Khata, Patta' },
+                                                { id: 'bank_apf_pack', label: 'Bank APF Home Loan Pack', desc: 'SBI/HDFC clearance' },
+                                                { id: 'rera_launch_kit', label: 'RERA Project Launch Kit', desc: 'Floor plans & BBA' }
+                                            ].map(preset => (
+                                                <div
+                                                    key={preset.id}
+                                                    onClick={() => {
+                                                        setDealRoomPreset(preset.id as any);
+                                                        if (preset.id === 'title_search_30yr') {
+                                                            setBatesNumberingEnabled(true);
+                                                            setBatesPrefix('30YR-TITLE');
+                                                            setApplyWatermark(true);
+                                                            setWatermarkConfig(prev => ({ ...prev, text: '30-YEAR TITLE DUE DILIGENCE • CONFIDENTIAL • {{email}}', layout: 'tiled', opacity: 0.15 }));
+                                                        } else if (preset.id === 'bank_apf_pack') {
+                                                            setBatesNumberingEnabled(true);
+                                                            setBatesPrefix('APF-BANK');
+                                                            setApplyWatermark(true);
+                                                            setWatermarkConfig(prev => ({ ...prev, text: 'BANK APF SANCTION FILE • RESTRICTED AUDIT • {{email}}', layout: 'tiled', opacity: 0.15 }));
+                                                        }
+                                                    }}
+                                                    style={{
+                                                        padding: '0.75rem',
+                                                        borderRadius: '10px',
+                                                        border: `1.5px solid ${dealRoomPreset === preset.id ? '#059669' : '#cbd5e1'}`,
+                                                        background: dealRoomPreset === preset.id ? '#ecfdf5' : 'white',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.15s'
+                                                    }}
+                                                >
+                                                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: dealRoomPreset === preset.id ? '#065f46' : '#1e293b' }}>
+                                                        {preset.label}
+                                                    </div>
+                                                    <div style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '0.15rem' }}>
+                                                        {preset.desc}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
 
-
-
-                                    {/* Sharing Link Section - Integrated into Upload Card before Button */}
-
+                                        {/* Bates Numbering Toggle */}
+                                        <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.82rem', fontWeight: 600, color: '#334155', cursor: 'pointer' }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={batesNumberingEnabled}
+                                                    onChange={(e) => setBatesNumberingEnabled(e.target.checked)}
+                                                    style={{ accentColor: '#059669', width: '16px', height: '16px' }}
+                                                />
+                                                <span>Enable Bates Numbering & Auto-Index Tree</span>
+                                            </label>
+                                            {batesNumberingEnabled && (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                    <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Prefix:</span>
+                                                    <input
+                                                        type="text"
+                                                        value={batesPrefix}
+                                                        onChange={(e) => setBatesPrefix(e.target.value.toUpperCase())}
+                                                        style={{ width: '110px', padding: '0.25rem 0.5rem', fontSize: '0.78rem', border: '1px solid #cbd5e1', borderRadius: '6px', fontWeight: 700 }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
 
                                     <button
                                         onClick={() => {

@@ -20,6 +20,7 @@ import {
     Table,
     Archive,
     Mail,
+    Smartphone,
     MessageCircle,
     ZoomIn,
     ZoomOut,
@@ -37,6 +38,7 @@ import { BASE_URL } from './lib/seo';
 import { formatWhatsAppShareUrl } from './lib/shareUrl';
 import DocTransferViewerBadge from './components/DocTransferViewerBadge';
 import RealEstateViewerActionBar from './components/RealEstateViewerActionBar';
+import { dispatchLeadAlert } from './services/leadAlertService';
 
 // Initialize PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -55,6 +57,9 @@ interface DocumentData {
     screenshot_protection: boolean;
     email_verification: boolean;
     allowed_email?: string;
+    require_phone_otp?: boolean;
+    require_phone_verification?: boolean;
+    allowed_phone?: string;
     apply_watermark?: boolean;
     // Encryption fields
     is_encrypted?: boolean;
@@ -112,6 +117,14 @@ const ViewDocument: React.FC = () => {
     const [sentCode, setSentCode] = useState<string | null>(null);
     const [isEmailVerified, setIsEmailVerified] = useState(false);
     const [showCodeInput, setShowCodeInput] = useState(false);
+
+    // Phone OTP Verification State (+91 India)
+    const [phone, setPhone] = useState('');
+    const [phoneOtp, setPhoneOtp] = useState('');
+    const [sentPhoneOtp, setSentPhoneOtp] = useState<string | null>(null);
+    const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+    const [showPhoneOtpInput, setShowPhoneOtpInput] = useState(false);
+    const [phoneError, setPhoneError] = useState<string | null>(null);
 
     // Biometric/Snapshot State
     const [isSnapshotVerified, setIsSnapshotVerified] = useState(false);
@@ -174,26 +187,39 @@ const ViewDocument: React.FC = () => {
     }, [shareLink]);
 
     useEffect(() => {
-        if (document?.is_encrypted && decryptionKey && isAuthenticated && (document.email_verification ? isEmailVerified : true) && (document.require_snapshot ? isSnapshotVerified : true)) {
+        const requiresPhone = document?.require_phone_otp || (document as any)?.require_phone_verification;
+        if (document?.is_encrypted && decryptionKey && isAuthenticated && (document.email_verification ? isEmailVerified : true) && (requiresPhone ? isPhoneVerified : true) && (document.require_snapshot ? isSnapshotVerified : true)) {
             handleDecryption();
         }
-    }, [document, decryptionKey, isAuthenticated, isEmailVerified, isSnapshotVerified]);
+    }, [document, decryptionKey, isAuthenticated, isEmailVerified, isPhoneVerified, isSnapshotVerified]);
+
+    // Re-run watermarking once phone is verified to apply recipient's phone number into watermark
+    useEffect(() => {
+        if (document && document.apply_watermark && isPhoneVerified) {
+            const previewType = getPreviewType(getExtension(document.name));
+            if ((previewType === 'pdf' || previewType === 'image') && !document.is_encrypted) {
+                handleDocumentWatermarking(document);
+            }
+        }
+    }, [isPhoneVerified]);
 
     // Load PDF using PDF.js when document is authenticated & previewable
     useEffect(() => {
         if (!document) return;
         const fileExt = getExtension(document.name);
         const previewType = getPreviewType(fileExt);
+        const requiresPhone = document?.require_phone_otp || (document as any)?.require_phone_verification;
 
         const canPreview = isAuthenticated &&
             (document.email_verification ? isEmailVerified : true) &&
+            (requiresPhone ? isPhoneVerified : true) &&
             (document.require_snapshot ? isSnapshotVerified : true) &&
             (!document.is_encrypted || (document.is_encrypted && !!decryptedUrl));
 
         if (canPreview && previewType === 'pdf') {
             loadPdfDocument();
         }
-    }, [document, isAuthenticated, isEmailVerified, isSnapshotVerified, decryptedUrl, watermarkedUrl]);
+    }, [document, isAuthenticated, isEmailVerified, isPhoneVerified, isSnapshotVerified, decryptedUrl, watermarkedUrl]);
 
     const loadPdfDocument = async () => {
         if (!document) return;
@@ -417,7 +443,7 @@ const ViewDocument: React.FC = () => {
         }
 
         // Auto-authenticate logic
-        if ((!data.password || data.password === '') && !data.email_verification) {
+        if ((!data.password || data.password === '') && !data.email_verification && !data.require_phone_otp && !data.require_phone_verification) {
             setIsAuthenticated(true);
         }
     };
@@ -444,14 +470,19 @@ const ViewDocument: React.FC = () => {
             const previewType = getPreviewType(getExtension(data.name));
             let processedUrl = '';
 
+            const formattedPhone = isPhoneVerified ? (phone.startsWith('+') ? phone : `+91 ${phone.replace(/[^0-9]/g, '').slice(-10)}`) : undefined;
+
             if (previewType === 'pdf') {
                 const processedPdf = await applyPdfWatermark(
                     await fileData.arrayBuffer(),
                     watermarkConfig,
                     {
                         email: isEmailVerified ? email : undefined,
+                        phone: formattedPhone,
+                        rera_id: branding?.rera_reg_no,
+                        agency: branding?.agency_name,
                         ip: viewerIp,
-                        date: new Date().toLocaleDateString()
+                        date: new Date().toLocaleDateString('en-IN')
                     }
                 );
                 const blob = new Blob([processedPdf as BlobPart], { type: 'application/pdf' });
@@ -462,8 +493,11 @@ const ViewDocument: React.FC = () => {
                     watermarkConfig,
                     {
                         email: isEmailVerified ? email : undefined,
+                        phone: formattedPhone,
+                        rera_id: branding?.rera_reg_no,
+                        agency: branding?.agency_name,
                         ip: viewerIp,
-                        date: new Date().toLocaleDateString()
+                        date: new Date().toLocaleDateString('en-IN')
                     }
                 );
                 processedUrl = URL.createObjectURL(processedImageBlob);
@@ -574,6 +608,14 @@ const ViewDocument: React.FC = () => {
             if (sessionData) {
                 setCurrentSessionId(sessionData.id);
 
+                // Dispatch real-time open alert
+                dispatchLeadAlert({
+                    eventType: 'document_opened',
+                    documentId,
+                    documentName: document?.name || 'Property Document',
+                    viewerIp: ip || undefined
+                });
+
                 // 2. Track View (Initial Page 1)
                 const { data: viewData, error: viewError } = await supabase
                     .from('document_view_tracking')
@@ -597,6 +639,17 @@ const ViewDocument: React.FC = () => {
                                 .from('document_view_tracking')
                                 .update({ duration_seconds: duration })
                                 .eq('id', viewData.id);
+
+                            // Trigger Hot Lead Dwell Alert if threshold reached
+                            if (duration >= 60) {
+                                dispatchLeadAlert({
+                                    eventType: 'hot_lead_dwell',
+                                    documentId,
+                                    documentName: document?.name || 'Property Document',
+                                    durationSeconds: duration,
+                                    viewerIp: ip || undefined
+                                });
+                            }
                         }
                     }, 5000);
 
@@ -678,6 +731,67 @@ const ViewDocument: React.FC = () => {
         } else {
             if (document) logEmailVerification(document.id, email, false);
             alert('Invalid code');
+        }
+    };
+
+    const handleSendPhoneOtp = (e: React.FormEvent) => {
+        e.preventDefault();
+        setPhoneError(null);
+        const cleanDigits = phone.replace(/[^0-9]/g, '');
+        if (cleanDigits.length < 10) {
+            setPhoneError('Please enter a valid 10-digit Indian mobile number.');
+            return;
+        }
+
+        const validDigits = cleanDigits.slice(-10);
+        const formatted = `+91 ${validDigits}`;
+
+        // Check if document is locked to a specific phone number
+        if (document?.allowed_phone) {
+            const allowedDigits = document.allowed_phone.replace(/[^0-9]/g, '').slice(-10);
+            if (validDigits !== allowedDigits) {
+                const masked = allowedDigits.slice(-4).padStart(10, '*');
+                setPhoneError(`Access Denied: This confidential document is locked specifically for mobile number ending in ...${masked.slice(-4)}. Please contact the sender for access.`);
+                return;
+            }
+        }
+
+        const rateCheck = rateLimiter.check(formatted, 1, 30000);
+        if (!rateCheck.allowed) {
+            setPhoneError(`Please wait ${rateCheck.waitTime} seconds before requesting a new OTP.`);
+            return;
+        }
+
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        setSentPhoneOtp(code);
+        setShowPhoneOtpInput(true);
+
+        alert(`Security OTP sent to ${formatted}.\n\n[DEMO/TEST OTP]: ${code}`);
+        if (import.meta.env.DEV) {
+            console.log(`[REAL ESTATE GATE] Phone OTP for ${formatted}: ${code}`);
+        }
+    };
+
+    const handleVerifyPhoneOtp = (e: React.FormEvent) => {
+        e.preventDefault();
+        setPhoneError(null);
+        if (phoneOtp.trim() === sentPhoneOtp) {
+            setIsPhoneVerified(true);
+            const cleanDigits = phone.replace(/[^0-9]/g, '').slice(-10);
+            const formatted = `+91 ${cleanDigits}`;
+            
+            if (document) {
+                dispatchLeadAlert({
+                    eventType: 'document_opened',
+                    documentId: document.id,
+                    documentName: document.name,
+                    viewerEmail: isEmailVerified ? email : undefined,
+                    viewerPhone: formatted,
+                    viewerIp: viewerIp
+                });
+            }
+        } else {
+            setPhoneError('Invalid OTP code. Please enter the correct 6-digit verification code.');
         }
     };
 
@@ -904,90 +1018,202 @@ const ViewDocument: React.FC = () => {
     }
 
 
-    // Auth Check (Password or Email)
+    // Auth Checks (Password, Email, and Indian Phone OTP Gate)
     const requiresEmail = isBundle
         ? bundleData?.require_email_verification
         : document?.email_verification;
+    const requiresPhone = !isBundle && (document?.require_phone_otp || (document as any)?.require_phone_verification);
 
-    if ((targetData?.password && !isAuthenticated) || (requiresEmail && !isEmailVerified)) {
+    if (targetData?.password && !isAuthenticated) {
         return (
             <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9fafb', padding: '1rem' }}>
                 <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', maxWidth: '440px', width: '100%' }}>
-
-                    {/* Branding Logo */}
                     {branding?.logo_url && (
                         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
                             <img src={branding.logo_url} alt="Logo" style={{ height: '40px', objectFit: 'contain' }} />
                         </div>
                     )}
-
                     <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                         <div style={{ width: '64px', height: '64px', background: '#eff6ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
                             <LockIcon size={32} color="#3b82f6" />
                         </div>
                         <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827', marginBottom: '0.5rem' }}>
-                            {requiresEmail && !isEmailVerified ? t('view.emailTitle') : t('view.passwordTitle')}
+                            {t('view.passwordTitle')}
                         </h1>
                         <p style={{ color: '#6b7280' }}>
-                            {isBundle
-                                ? "This document bundle is secured."
-                                : t('view.passwordDesc')
-                            }
+                            {isBundle ? "This document bundle is secured." : t('view.passwordDesc')}
                         </p>
                     </div>
+                    <form onSubmit={handlePasswordSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <input
+                            type="password"
+                            value={passwordInput}
+                            onChange={(e) => setPasswordInput(e.target.value)}
+                            placeholder={t('view.passwordPlaceholder')}
+                            style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none' }}
+                            required
+                        />
+                        <button type="submit" style={{ width: '100%', padding: '0.875rem', background: branding?.brand_color || '#2563eb', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '1rem', cursor: 'pointer' }}>
+                            {t('view.unlock')}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
 
-                    {/* Email Verification UI */}
-                    {requiresEmail && !isEmailVerified ? (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {!showCodeInput ? (
-                                <form onSubmit={handleSendCode} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                    <input
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder={t('view.emailPlaceholder')}
-                                        style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none' }}
-                                        required
-                                    />
-                                    <button type="submit" style={{ width: '100%', padding: '0.875rem', background: branding?.brand_color || '#2563eb', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '1rem', cursor: 'pointer' }}>
-                                        {t('view.sendCode')}
-                                    </button>
-                                </form>
-                            ) : (
-                                <form onSubmit={handleVerifyCode} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    if (requiresEmail && !isEmailVerified) {
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9fafb', padding: '1rem' }}>
+                <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', maxWidth: '440px', width: '100%' }}>
+                    {branding?.logo_url && (
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
+                            <img src={branding.logo_url} alt="Logo" style={{ height: '40px', objectFit: 'contain' }} />
+                        </div>
+                    )}
+                    <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                        <div style={{ width: '64px', height: '64px', background: '#eff6ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                            <Mail size={32} color="#3b82f6" />
+                        </div>
+                        <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827', marginBottom: '0.5rem' }}>
+                            {t('view.emailTitle')}
+                        </h1>
+                        <p style={{ color: '#6b7280' }}>
+                            {t('view.passwordDesc')}
+                        </p>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {!showCodeInput ? (
+                            <form onSubmit={handleSendCode} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder={t('view.emailPlaceholder')}
+                                    style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none' }}
+                                    required
+                                />
+                                <button type="submit" style={{ width: '100%', padding: '0.875rem', background: branding?.brand_color || '#2563eb', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '1rem', cursor: 'pointer' }}>
+                                    {t('view.sendCode')}
+                                </button>
+                            </form>
+                        ) : (
+                            <form onSubmit={handleVerifyCode} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <input
+                                    type="text"
+                                    value={verificationCode}
+                                    onChange={(e) => setVerificationCode(e.target.value)}
+                                    placeholder="Enter 6-digit code"
+                                    style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none', textAlign: 'center', letterSpacing: '0.25rem' }}
+                                    required
+                                />
+                                <button type="submit" style={{ width: '100%', padding: '0.875rem', background: '#10b981', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '1rem', cursor: 'pointer' }}>
+                                    {t('view.verify')}
+                                </button>
+                                <button type="button" onClick={() => setShowCodeInput(false)} style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '0.875rem' }}>
+                                    {t('view.changeEmail')}
+                                </button>
+                            </form>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (requiresPhone && !isPhoneVerified) {
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', padding: '1rem' }}>
+                <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', maxWidth: '440px', width: '100%', border: '1px solid #e2e8f0' }}>
+                    {branding?.logo_url && (
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                            <img src={branding.logo_url} alt="Logo" style={{ height: '40px', objectFit: 'contain' }} />
+                        </div>
+                    )}
+                    <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                        <div style={{ width: '64px', height: '64px', background: '#ecfdf5', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                            <Smartphone size={32} color="#059669" />
+                        </div>
+                        <h1 style={{ fontSize: '1.4rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.4rem' }}>
+                            Mobile Number Gate
+                        </h1>
+                        <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.5 }}>
+                            This property dossier is confidential. Please verify your 10-digit Indian mobile number to access.
+                        </p>
+                        {branding?.display_rera_badge && branding?.rera_reg_no && (
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '3px 10px', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 700, marginTop: '0.75rem' }}>
+                                <ShieldCheck size={13} /> RERA Verified: {branding.rera_reg_no}
+                            </div>
+                        )}
+                        {document?.allowed_phone && (
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#fef3c7', color: '#92400e', border: '1px solid #fcd34d', padding: '4px 12px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, marginTop: '0.65rem' }}>
+                                🔒 Protected for +91 ******{document.allowed_phone.replace(/[^0-9]/g, '').slice(-4)}
+                            </div>
+                        )}
+                    </div>
+
+                    {phoneError && (
+                        <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.65rem 0.85rem', borderRadius: '10px', fontSize: '0.82rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <AlertCircle size={15} /> {phoneError}
+                        </div>
+                    )}
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {!showPhoneOtpInput ? (
+                            <form onSubmit={handleSendPhoneOtp} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#475569', marginBottom: '0.35rem' }}>
+                                        Indian Mobile Number (+91)
+                                    </label>
+                                    <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #cbd5e1', borderRadius: '12px', overflow: 'hidden', background: '#f8fafc' }}>
+                                        <span style={{ padding: '0.875rem 0.75rem', fontWeight: 700, fontSize: '0.95rem', color: '#334155', borderRight: '1px solid #cbd5e1', background: '#f1f5f9' }}>
+                                            🇮🇳 +91
+                                        </span>
+                                        <input
+                                            type="tel"
+                                            maxLength={10}
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                            placeholder="98765 43210"
+                                            style={{ flex: 1, padding: '0.875rem', border: 'none', fontSize: '1rem', outline: 'none', background: 'white' }}
+                                            required
+                                            autoFocus
+                                        />
+                                    </div>
+                                </div>
+                                <button type="submit" style={{ width: '100%', padding: '0.875rem', background: '#059669', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '0.95rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                                    Send Verification OTP <ArrowRight size={16} />
+                                </button>
+                            </form>
+                        ) : (
+                            <form onSubmit={handleVerifyPhoneOtp} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#475569', marginBottom: '0.35rem' }}>
+                                        Enter 6-Digit OTP sent to +91 {phone.slice(-10)}
+                                    </label>
                                     <input
                                         type="text"
-                                        value={verificationCode}
-                                        onChange={(e) => setVerificationCode(e.target.value)}
-                                        placeholder="Enter 6-digit code"
-                                        style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none', textAlign: 'center', letterSpacing: '0.25rem' }}
+                                        maxLength={6}
+                                        value={phoneOtp}
+                                        onChange={(e) => setPhoneOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                                        placeholder="0 0 0 0 0 0"
+                                        style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', border: '1px solid #cbd5e1', fontSize: '1.25rem', outline: 'none', textAlign: 'center', letterSpacing: '0.35rem', fontWeight: 700, background: '#f8fafc' }}
                                         required
+                                        autoFocus
                                     />
-                                    <button type="submit" style={{ width: '100%', padding: '0.875rem', background: '#10b981', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '1rem', cursor: 'pointer' }}>
-                                        {t('view.verify')}
-                                    </button>
-                                    <button type="button" onClick={() => setShowCodeInput(false)} style={{ background: 'transparent', border: 'none', color: '#6b7280', cursor: 'pointer', fontSize: '0.875rem' }}>
-                                        {t('view.changeEmail')}
-                                    </button>
-                                </form>
-                            )}
-                        </div>
-                    ) : (
-                        /* Password UI */
-                        <form onSubmit={handlePasswordSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <input
-                                type="password"
-                                value={passwordInput}
-                                onChange={(e) => setPasswordInput(e.target.value)}
-                                placeholder={t('view.passwordPlaceholder')}
-                                style={{ width: '100%', padding: '0.875rem', borderRadius: '12px', border: '1px solid #e5e7eb', fontSize: '1rem', outline: 'none' }}
-                                required
-                            />
-                            <button type="submit" style={{ width: '100%', padding: '0.875rem', background: branding?.brand_color || '#2563eb', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '1rem', cursor: 'pointer' }}>
-                                {t('view.unlock')}
-                            </button>
-                        </form>
-                    )}
+                                </div>
+                                <button type="submit" style={{ width: '100%', padding: '0.875rem', background: '#059669', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '600', fontSize: '0.95rem', cursor: 'pointer' }}>
+                                    Verify & Access Document
+                                </button>
+                                <button type="button" onClick={() => { setShowPhoneOtpInput(false); setPhoneError(null); }} style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: '0.82rem' }}>
+                                    Change Mobile Number
+                                </button>
+                            </form>
+                        )}
+                        <p style={{ margin: 0, fontSize: '0.72rem', color: '#94a3b8', textAlign: 'center', lineHeight: 1.4 }}>
+                            🔒 Your phone number will be dynamically embedded as a secure digital watermark on this document.
+                        </p>
+                    </div>
                 </div>
             </div>
         );
@@ -1098,6 +1324,8 @@ const ViewDocument: React.FC = () => {
     // unless loading failed (handled above) or not initialized.
     if (!document) return null;
 
+    const formattedViewerPhone = isPhoneVerified ? (phone.startsWith('+') ? phone : `+91 ${phone.replace(/[^0-9]/g, '').slice(-10)}`) : undefined;
+
     return (
         <div style={{
             minHeight: '100vh',
@@ -1116,8 +1344,11 @@ const ViewDocument: React.FC = () => {
                     config={document.watermark_config}
                     viewerInfo={{
                         email: isEmailVerified ? email : undefined,
+                        phone: formattedViewerPhone,
+                        rera_id: branding?.rera_reg_no,
+                        agency: branding?.agency_name,
                         ip: viewerIp,
-                        date: new Date().toLocaleString()
+                        date: new Date().toLocaleDateString('en-IN')
                     }}
                 />
             )}

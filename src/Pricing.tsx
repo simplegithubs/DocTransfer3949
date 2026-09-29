@@ -132,6 +132,7 @@ const Pricing: React.FC = () => {
                 { text: 'Slide-by-slide dwell analytics', enabled: false },
                 { text: 'Anti-leak dynamic watermarking', enabled: false },
                 { text: 'Legally binding e-signatures', enabled: false },
+                { text: 'Mobile Number Gate (+91 OTP)', enabled: false },
                 { text: 'Deal Room & folder creation', enabled: false }
             ],
             cta: 'Start Free Trial',
@@ -151,6 +152,7 @@ const Pricing: React.FC = () => {
                 { text: 'Unlimited Document Uploads', enabled: true, highlight: true },
                 { text: '50MB File size limit (High-res brochures)', enabled: true },
                 { text: '5 Active Virtual Deal Rooms & Project Kits', enabled: true },
+                { text: 'Mobile Number Gate (+91 Indian OTP verification)', enabled: true, highlight: true },
                 { text: 'Page-by-page floor plan & payment dwell analytics', enabled: true, highlight: true },
                 { text: 'Anti-leak watermark with Recipient Phone & Email', enabled: true, highlight: true },
                 { text: 'RERA Allotment Letters & 11-Month Leases', enabled: true },

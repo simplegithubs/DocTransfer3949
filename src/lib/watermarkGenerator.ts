@@ -14,6 +14,15 @@ export interface WatermarkConfig {
     layout: 'single' | 'tiled';
 }
 
+export interface ViewerWatermarkInfo {
+    email?: string;
+    phone?: string;
+    ip?: string;
+    date?: string;
+    rera_id?: string;
+    agency?: string;
+}
+
 /**
  * Helper to convert hex color to RGB (0-1)
  */
@@ -29,12 +38,15 @@ function hexToRgb(hex: string) {
 /**
  * Replace placeholders in watermark text
  */
-function getDynamicText(text: string, viewerInfo: { email?: string; ip?: string; date?: string }) {
+function getDynamicText(text: string, viewerInfo: ViewerWatermarkInfo) {
     let dynamicText = text;
-    dynamicText = dynamicText.replace('{{email}}', viewerInfo.email || 'Anonymous');
+    dynamicText = dynamicText.replace('{{email}}', viewerInfo.email || '');
+    dynamicText = dynamicText.replace('{{phone}}', viewerInfo.phone || '');
+    dynamicText = dynamicText.replace('{{rera_id}}', viewerInfo.rera_id || '');
+    dynamicText = dynamicText.replace('{{agency}}', viewerInfo.agency || '');
     dynamicText = dynamicText.replace('{{ip}}', viewerInfo.ip || 'Unknown IP');
-    dynamicText = dynamicText.replace('{{date}}', viewerInfo.date || new Date().toLocaleString());
-    return dynamicText;
+    dynamicText = dynamicText.replace('{{date}}', viewerInfo.date || new Date().toLocaleDateString('en-IN'));
+    return dynamicText.trim();
 }
 
 /**
@@ -43,7 +55,7 @@ function getDynamicText(text: string, viewerInfo: { email?: string; ip?: string;
 export async function applyPdfWatermark(
     pdfBuffer: ArrayBuffer,
     config: WatermarkConfig,
-    viewerInfo: { email?: string; ip?: string; date?: string }
+    viewerInfo: ViewerWatermarkInfo
 ): Promise<Uint8Array> {
     try {
         const pdfDoc = await PDFDocument.load(pdfBuffer);
@@ -99,7 +111,7 @@ export async function applyPdfWatermark(
 export async function applyImageWatermark(
     imageBlob: Blob,
     config: WatermarkConfig,
-    viewerInfo: { email?: string; ip?: string; date?: string }
+    viewerInfo: ViewerWatermarkInfo
 ): Promise<Blob> {
     return new Promise((resolve, reject) => {
         const img = new Image();

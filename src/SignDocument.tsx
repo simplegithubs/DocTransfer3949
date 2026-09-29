@@ -15,12 +15,16 @@ import {
     Briefcase,
     Stamp as StampIcon,
     ArrowRight,
-    Sparkles
+    Sparkles,
+    Download,
+    FileCheck
 } from 'lucide-react';
 import { logAuditEvent, getUserIP, getSessionId } from './lib/auditLogger';
 import SignatureCanvasComponent from './components/SignatureCanvas';
 import StampSelector, { STAMPS } from './components/esignature/StampSelector';
 import type { StampType } from './components/esignature/StampSelector';
+import { generateSec65BCertificatePdf } from './lib/sec65bGenerator';
+import { dispatchLeadAlert } from './services/leadAlertService';
 
 // Set worker source
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -73,6 +77,7 @@ const SignDocument: React.FC = () => {
     const [signatureRecords, setSignatureRecords] = useState<Record<string, string>>({}); // fieldId -> signatureData (base64)
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [downloadingCert, setDownloadingCert] = useState(false);
 
     // Initial Fetch
     useEffect(() => {
@@ -334,12 +339,52 @@ const SignDocument: React.FC = () => {
                 }
             });
 
+            // Dispatch Lead Alert
+            dispatchLeadAlert({
+                eventType: 'document_signed',
+                documentId: documentData.id,
+                documentName: documentData.name,
+                viewerEmail: signer.signer_email
+            });
+
             setSuccess(true);
         } catch (err: any) {
             console.error('Finish error:', err);
             alert('Failed to complete signing. Please try again.');
         } finally {
             setSubmitting(false);
+        }
+    };
+
+    const handleDownloadCertificate = async () => {
+        if (!documentData || !signer) return;
+        setDownloadingCert(true);
+        try {
+            const ip = await getUserIP();
+            const certBytes = await generateSec65BCertificatePdf({
+                documentName: documentData.name,
+                signerName: signer.signer_name,
+                signerEmail: signer.signer_email,
+                signedAt: new Date().toISOString(),
+                ipAddress: ip,
+                sessionId: getSessionId(),
+                stampType: 'RERA Statutory & IT Act 2000 Electronic Seal'
+            });
+
+            const blob = new Blob([certBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Section_65B_Certificate_${documentData.name.replace(/\.[^/.]+$/, '')}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error('Failed to generate Section 65B Certificate:', e);
+            alert('Could not generate statutory certificate. Please try again.');
+        } finally {
+            setDownloadingCert(false);
         }
     };
 
@@ -503,7 +548,7 @@ const SignDocument: React.FC = () => {
                             background: 'rgba(16, 185, 129, 0.08)',
                             border: '1px solid rgba(52, 211, 153, 0.25)',
                             borderRadius: '14px',
-                            padding: '1rem 1.25rem',
+                            padding: '1.25rem',
                             marginBottom: '1.5rem',
                             textAlign: 'left',
                             fontSize: '0.82rem',
@@ -512,9 +557,32 @@ const SignDocument: React.FC = () => {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#34d399', fontWeight: 700, marginBottom: '0.35rem' }}>
                                 <span>📜</span> IT Act 2000 & Section 65B Admissible Certificate
                             </div>
-                            <div style={{ color: '#94a3b8', fontSize: '0.78rem', lineHeight: '1.5' }}>
+                            <div style={{ color: '#94a3b8', fontSize: '0.78rem', lineHeight: '1.5', marginBottom: '0.85rem' }}>
                                 Cryptographic audit log recorded with signer email, IP address, and SHA-256 digital signature stamp conforming to Section 5, 10A of Information Technology Act & Section 65B of Indian Evidence Act.
                             </div>
+                            <button
+                                onClick={handleDownloadCertificate}
+                                disabled={downloadingCert}
+                                style={{
+                                    width: '100%',
+                                    background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    padding: '0.65rem 1rem',
+                                    borderRadius: '10px',
+                                    fontWeight: 700,
+                                    fontSize: '0.82rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem',
+                                    boxShadow: '0 4px 12px rgba(5, 150, 105, 0.3)'
+                                }}
+                            >
+                                {downloadingCert ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
+                                {downloadingCert ? 'Generating Certificate...' : 'Download Statutory Section 65B Certificate'}
+                            </button>
                         </div>
 
                         {/* Divider */}

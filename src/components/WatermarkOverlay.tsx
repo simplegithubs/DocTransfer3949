@@ -13,8 +13,11 @@ interface WatermarkOverlayProps {
     config: WatermarkConfig;
     viewerInfo: {
         email?: string;
+        phone?: string;
         ip?: string;
         date?: string;
+        rera_id?: string;
+        agency?: string;
     };
     width?: number;
     height?: number;
@@ -25,10 +28,13 @@ const WatermarkOverlay: React.FC<WatermarkOverlayProps> = ({ config, viewerInfo 
     // Replace placeholders with actual values
     const dynamicText = useMemo(() => {
         let text = config.text;
-        text = text.replace('{{email}}', viewerInfo.email || 'Anonymous');
+        text = text.replace('{{email}}', viewerInfo.email || '');
+        text = text.replace('{{phone}}', viewerInfo.phone || '');
+        text = text.replace('{{rera_id}}', viewerInfo.rera_id || '');
+        text = text.replace('{{agency}}', viewerInfo.agency || '');
         text = text.replace('{{ip}}', viewerInfo.ip || 'Unknown IP');
-        text = text.replace('{{date}}', viewerInfo.date || new Date().toLocaleString());
-        return text;
+        text = text.replace('{{date}}', viewerInfo.date || new Date().toLocaleDateString('en-IN'));
+        return text.trim();
     }, [config.text, viewerInfo]);
 
     const style: React.CSSProperties = {
