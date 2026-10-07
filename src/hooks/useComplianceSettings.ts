@@ -17,7 +17,7 @@ export const DEFAULT_COMPLIANCE_CONFIG: ComplianceConfig = {
     include_geo_hash: true,
     include_sha256_hash: true,
     default_expiry_days: 7,
-    default_prevent_download: true,
+    default_prevent_download: false,
     default_prevent_print: true,
     require_phone_otp: false
 };

@@ -1927,19 +1927,56 @@ const DataRoom: React.FC = () => {
                                                 <p style={{ fontSize: '0.85rem', color: '#047857', marginBottom: '1rem' }}>
                                                     Share this link to give instant access to all uploaded documents.
                                                 </p>
-                                                <div style={{ width: '100%', padding: '0.75rem', background: 'white', border: '1px solid #d1d5db', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                                                <div style={{
+                                                    width: '100%',
+                                                    padding: '0.4rem 0.5rem 0.4rem 0.85rem',
+                                                    background: 'white',
+                                                    border: copiedId === 'link' ? '1.5px solid #86efac' : '1.5px solid #cbd5e1',
+                                                    borderRadius: '10px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.5rem',
+                                                    marginBottom: '0.75rem',
+                                                    transition: 'all 0.2s ease',
+                                                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                                                }}>
                                                     <input
                                                         type="text"
                                                         value={uploadedBundleLink}
                                                         readOnly
-                                                        style={{ fontSize: '0.85rem', flex: 1, border: 'none', background: 'transparent', outline: 'none', color: '#374151' }}
+                                                        onClick={(e) => (e.target as HTMLInputElement).select()}
+                                                        onFocus={(e) => e.target.select()}
+                                                        style={{ fontSize: '0.85rem', flex: 1, border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontFamily: 'monospace' }}
                                                     />
                                                     <button
                                                         onClick={() => copyLink(uploadedBundleLink)}
-                                                        style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '6px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-                                                        title="Copy Link"
+                                                        style={{
+                                                            background: copiedId === 'link' ? '#16a34a' : '#059669',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            borderRadius: '8px',
+                                                            padding: '0.55rem 0.95rem',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.35rem',
+                                                            cursor: 'pointer',
+                                                            fontWeight: 600,
+                                                            fontSize: '0.82rem',
+                                                            transition: 'all 0.2s ease',
+                                                            flexShrink: 0,
+                                                            boxShadow: copiedId === 'link' ? '0 2px 6px rgba(22, 163, 74, 0.3)' : '0 2px 6px rgba(5, 150, 105, 0.25)'
+                                                        }}
+                                                        title="Copy Bundle Link"
                                                     >
-                                                        {copiedId === 'link' ? <Check size={16} color="#16a34a" /> : <Copy size={16} color="#6b7280" />}
+                                                        {copiedId === 'link' ? (
+                                                            <>
+                                                                <Check size={15} /> Copied!
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Copy size={15} /> Copy Link
+                                                            </>
+                                                        )}
                                                     </button>
                                                 </div>
                                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
@@ -1993,19 +2030,56 @@ const DataRoom: React.FC = () => {
                                         {!isUploading && uploadedDoc && !uploadedBundleLink && (
                                             <div style={{ padding: '1.5rem', background: '#f9fafb', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
                                                 <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.5rem', color: '#111827' }}>Public Share Link Ready</h3>
-                                                <div style={{ width: '100%', padding: '0.75rem', background: 'white', border: '1px solid #d1d5db', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                                                <div style={{
+                                                    width: '100%',
+                                                    padding: '0.4rem 0.5rem 0.4rem 0.85rem',
+                                                    background: 'white',
+                                                    border: copiedId === 'link' ? '1.5px solid #86efac' : '1.5px solid #cbd5e1',
+                                                    borderRadius: '10px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.5rem',
+                                                    marginBottom: '0.75rem',
+                                                    transition: 'all 0.2s ease',
+                                                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                                                }}>
                                                     <input
                                                         type="text"
                                                         value={uploadedDoc.link}
                                                         readOnly
-                                                        style={{ fontSize: '0.85rem', flex: 1, border: 'none', background: 'transparent', outline: 'none', color: '#374151' }}
+                                                        onClick={(e) => (e.target as HTMLInputElement).select()}
+                                                        onFocus={(e) => e.target.select()}
+                                                        style={{ fontSize: '0.85rem', flex: 1, border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontFamily: 'monospace' }}
                                                     />
                                                     <button
                                                         onClick={() => copyLink(uploadedDoc.link)}
-                                                        style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '6px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-                                                        title="Copy Link"
+                                                        style={{
+                                                            background: copiedId === 'link' ? '#16a34a' : '#4f46e5',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            borderRadius: '8px',
+                                                            padding: '0.55rem 0.95rem',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.35rem',
+                                                            cursor: 'pointer',
+                                                            fontWeight: 600,
+                                                            fontSize: '0.82rem',
+                                                            transition: 'all 0.2s ease',
+                                                            flexShrink: 0,
+                                                            boxShadow: copiedId === 'link' ? '0 2px 6px rgba(22, 163, 74, 0.3)' : '0 2px 6px rgba(79, 70, 229, 0.25)'
+                                                        }}
+                                                        title="Copy Public Link"
                                                     >
-                                                        {copiedId === 'link' ? <Check size={16} color="#16a34a" /> : <Copy size={16} color="#6b7280" />}
+                                                        {copiedId === 'link' ? (
+                                                            <>
+                                                                <Check size={15} /> Copied!
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Copy size={15} /> Copy Link
+                                                            </>
+                                                        )}
                                                     </button>
                                                 </div>
                                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>

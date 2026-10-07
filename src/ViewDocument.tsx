@@ -886,16 +886,37 @@ const ViewDocument: React.FC = () => {
                 const decryptedBuffer = await decryptFile(data, decryptionKey, document.encryption_iv);
                 blob = new Blob([decryptedBuffer], { type: document.file_type });
             } else {
-                // Standard download
-                const { data, error } = await supabase.storage
-                    .from('documents')
-                    .download(document.file_path);
+                try {
+                    const { data, error } = await supabase.storage
+                        .from('documents')
+                        .download(document.file_path);
 
-                if (error) {
-                    console.error('Storage download error:', error);
-                    throw error;
+                    if (error) {
+                        console.warn('Storage .download() error, attempting publicUrl fallback:', error);
+                        const { data: publicUrlData } = supabase.storage
+                            .from('documents')
+                            .getPublicUrl(document.file_path);
+                        if (publicUrlData?.publicUrl) {
+                            const res = await fetch(publicUrlData.publicUrl);
+                            if (!res.ok) throw new Error(`HTTP ${res.status}: Failed to download file`);
+                            blob = await res.blob();
+                        } else {
+                            throw error;
+                        }
+                    } else {
+                        blob = data;
+                    }
+                } catch (storageErr) {
+                    // Final attempt: check if active preview url can be fetched
+                    const fallbackUrl = watermarkedUrl || decryptedUrl || supabase.storage.from('documents').getPublicUrl(document.file_path).data?.publicUrl;
+                    if (fallbackUrl) {
+                        const res = await fetch(fallbackUrl);
+                        if (!res.ok) throw storageErr;
+                        blob = await res.blob();
+                    } else {
+                        throw storageErr;
+                    }
                 }
-                blob = data;
             }
 
             console.log('✓ Blob ready, size:', blob.size, 'bytes');
@@ -1470,8 +1491,9 @@ const ViewDocument: React.FC = () => {
                                 <MessageCircle size={16} /> Share
                             </button>
 
-                            {document.allow_download && (
+                            {document.allow_download !== false ? (
                                 <button
+                                    id="view-download-button"
                                     onClick={handleDownloadClick}
                                     disabled={downloading || isWatermarking}
                                     style={{
@@ -1489,12 +1511,41 @@ const ViewDocument: React.FC = () => {
                                         transition: 'all 0.2s',
                                         boxShadow: '0 2px 6px rgba(79, 70, 229, 0.2)'
                                     }}
+                                    title="Download this document"
                                 >
-                                    {downloading ? 'Downloading...' : isWatermarking ? 'Watermarking...' : (
+                                    {downloading ? (
+                                        <>
+                                            <Loader2 size={16} className="animate-spin" /> Downloading...
+                                        </>
+                                    ) : isWatermarking ? (
+                                        <>
+                                            <Loader2 size={16} className="animate-spin" /> Watermarking...
+                                        </>
+                                    ) : (
                                         <>
                                             <Download size={16} /> Download
                                         </>
                                     )}
+                                </button>
+                            ) : (
+                                <button
+                                    disabled
+                                    style={{
+                                        padding: '0.65rem 1rem',
+                                        background: '#f1f5f9',
+                                        color: '#94a3b8',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        fontWeight: '600',
+                                        fontSize: '0.82rem',
+                                        cursor: 'not-allowed',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.4rem'
+                                    }}
+                                    title="Downloads disabled by sender for security"
+                                >
+                                    <LockIcon size={14} /> Download Disabled
                                 </button>
                             )}
                         </div>
@@ -1651,7 +1702,7 @@ const ViewDocument: React.FC = () => {
                                             </div>
                                         )}
 
-                                        {/* PDF Error Fallback */}
+                                         {/* PDF Error Fallback */}
                                         {!isLoadingPdf && pdfPages.length === 0 && (
                                             <div style={{ width: '100%', maxWidth: '900px', height: '650px', borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0', background: 'white' }}>
                                                 {activePreviewUrl ? (
@@ -1661,9 +1712,32 @@ const ViewDocument: React.FC = () => {
                                                         title={document.name}
                                                     />
                                                 ) : (
-                                                    <div style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>
-                                                        <AlertCircle size={36} color="#ef4444" style={{ marginBottom: '0.5rem' }} />
-                                                        <p>Preview unavailable. Click download to view.</p>
+                                                    <div style={{ padding: '3rem', textAlign: 'center', color: '#64748b', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                                                        <AlertCircle size={40} color="#ef4444" style={{ marginBottom: '1rem' }} />
+                                                        <p style={{ fontSize: '1rem', fontWeight: 600, color: '#1e293b', marginBottom: '0.5rem' }}>Browser preview unavailable</p>
+                                                        <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1.5rem', maxWidth: '320px' }}>You can download the original file to view it on your device.</p>
+                                                        {document.allow_download !== false && (
+                                                            <button
+                                                                onClick={handleDownloadClick}
+                                                                disabled={downloading || isWatermarking}
+                                                                style={{
+                                                                    padding: '0.75rem 1.5rem',
+                                                                    background: branding?.brand_color || '#4f46e5',
+                                                                    color: 'white',
+                                                                    border: 'none',
+                                                                    borderRadius: '10px',
+                                                                    fontWeight: 600,
+                                                                    fontSize: '0.9rem',
+                                                                    cursor: 'pointer',
+                                                                    display: 'inline-flex',
+                                                                    alignItems: 'center',
+                                                                    gap: '0.5rem',
+                                                                    boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)'
+                                                                }}
+                                                            >
+                                                                <Download size={18} /> {downloading ? 'Downloading...' : 'Download Document'}
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
@@ -1724,7 +1798,7 @@ const ViewDocument: React.FC = () => {
                                         display: 'flex',
                                         flexDirection: 'column',
                                         alignItems: 'center',
-                                        gap: '1rem'
+                                        gap: '1.25rem'
                                     }}>
                                         <div style={{
                                             width: '90px',
@@ -1739,11 +1813,42 @@ const ViewDocument: React.FC = () => {
                                         }}>
                                             {getFileIconForType()}
                                         </div>
-                                        <p style={{ fontSize: '0.88rem', color: '#64748b', textAlign: 'center', margin: 0 }}>
+                                        <p style={{ fontSize: '0.92rem', color: '#64748b', textAlign: 'center', margin: 0, fontWeight: 500 }}>
                                             {document.is_encrypted
                                                 ? 'Secure encrypted file • Download to access'
-                                                : `${fileExt.toUpperCase()} file • Click download to open`}
+                                                : `${fileExt.toUpperCase()} file (${(document.file_size / 1024 / 1024).toFixed(2)} MB)`}
                                         </p>
+                                        {document.allow_download !== false && (
+                                            <button
+                                                onClick={handleDownloadClick}
+                                                disabled={downloading || isWatermarking}
+                                                style={{
+                                                    padding: '0.75rem 1.75rem',
+                                                    background: branding?.brand_color || '#4f46e5',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    borderRadius: '12px',
+                                                    fontWeight: 600,
+                                                    fontSize: '0.92rem',
+                                                    cursor: (downloading || isWatermarking) ? 'not-allowed' : 'pointer',
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.5rem',
+                                                    boxShadow: '0 4px 14px rgba(79, 70, 229, 0.3)',
+                                                    transition: 'all 0.2s'
+                                                }}
+                                            >
+                                                {downloading ? (
+                                                    <>
+                                                        <Loader2 size={18} className="animate-spin" /> Downloading...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Download size={18} /> Download Document
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
                                     </div>
                                 )}
 

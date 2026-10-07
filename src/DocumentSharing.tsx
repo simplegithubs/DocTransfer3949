@@ -634,43 +634,92 @@ const DocumentSharing: React.FC = () => {
 
                     {/* Generate Button / Link Display */}
                     {generatedLink ? (
-                        <div style={{ marginTop: '3rem', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '16px', padding: '1.5rem', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem' }}>
-                            <div style={{ background: '#22c55e', padding: '0.5rem', borderRadius: '8px', color: 'white' }}>
-                                <Check size={24} />
+                        <div style={{ marginTop: '2.5rem', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '16px', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <div style={{ background: '#22c55e', padding: '0.5rem', borderRadius: '8px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <Check size={20} />
+                                    </div>
+                                    <div>
+                                        <h4 style={{ color: '#15803d', margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>Secure Link Generated!</h4>
+                                        <p style={{ color: '#16a34a', margin: 0, fontSize: '0.85rem' }}>Your document is encrypted and ready to share</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setGeneratedLink(null)}
+                                    style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#64748b', padding: '0.5rem', borderRadius: '6px' }}
+                                    title="Close"
+                                >
+                                    <X size={20} />
+                                </button>
                             </div>
-                            <div style={{ flex: 1, minWidth: '200px' }}>
-                                <h4 style={{ color: '#15803d', marginBottom: '0.25rem' }}>Secure Link Generated!</h4>
-                                <p style={{ color: '#16a34a', fontSize: '0.9rem', wordBreak: 'break-all' }}>{generatedLink}</p>
+
+                            {/* Secure Link Input with Right-Aligned Copy Button */}
+                            <div style={{
+                                width: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                background: 'white',
+                                border: copiedLink ? '1.5px solid #86efac' : '1.5px solid #cbd5e1',
+                                borderRadius: '10px',
+                                padding: '0.4rem 0.5rem 0.4rem 0.85rem',
+                                gap: '0.5rem',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                                transition: 'all 0.2s ease'
+                            }}>
+                                <LinkIcon size={18} color="#16a34a" style={{ flexShrink: 0 }} />
+                                <input
+                                    type="text"
+                                    value={generatedLink}
+                                    readOnly
+                                    onClick={(e) => (e.target as HTMLInputElement).select()}
+                                    onFocus={(e) => e.target.select()}
+                                    style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: '0.9rem', color: '#15803d', fontWeight: 500, fontFamily: 'monospace' }}
+                                />
+                                <button
+                                    onClick={() => copyToClipboard(generatedLink)}
+                                    style={{
+                                        background: copiedLink ? '#16a34a' : '#22c55e',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '0.6rem 1.1rem',
+                                        borderRadius: '8px',
+                                        fontWeight: 600,
+                                        fontSize: '0.875rem',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.4rem',
+                                        transition: 'all 0.2s ease',
+                                        flexShrink: 0,
+                                        boxShadow: '0 2px 6px rgba(34, 197, 94, 0.3)'
+                                    }}
+                                    title="Copy Secure Link"
+                                >
+                                    {copiedLink ? <Check size={16} /> : <Copy size={16} />}
+                                    {copiedLink ? 'Copied!' : 'Copy Link'}
+                                </button>
                             </div>
-                            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+
+                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
                                 <button
                                     onClick={() => shareOnWhatsApp(generatedLink, uploadedFile?.name)}
                                     style={{
                                         background: '#25D366',
                                         color: 'white',
                                         border: 'none',
-                                        padding: '0.75rem 1.25rem',
+                                        padding: '0.65rem 1.25rem',
                                         borderRadius: '8px',
                                         fontWeight: 600,
+                                        fontSize: '0.85rem',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '0.4rem',
-                                        boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
+                                        boxShadow: '0 2px 8px rgba(37, 211, 102, 0.25)'
                                     }}
                                 >
-                                    <MessageCircle size={18} /> Share on WhatsApp
-                                </button>
-                                <button
-                                    onClick={() => copyToClipboard(generatedLink)}
-                                    className="btn-primary"
-                                    style={{ padding: '0.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
-                                >
-                                    {copiedLink ? <Check size={18} /> : <Copy size={18} />}
-                                    {copiedLink ? 'Copied' : 'Copy'}
-                                </button>
-                                <button onClick={() => setGeneratedLink(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b', padding: '0.5rem' }}>
-                                    <X size={20} />
+                                    <MessageCircle size={17} /> Share on WhatsApp
                                 </button>
                             </div>
                         </div>
