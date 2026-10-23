@@ -99,12 +99,14 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 32, light = f
                 <span style={{
                     fontWeight: 800,
                     fontSize: typeof size === 'number' ? size * 0.75 : '1.5rem',
-                    background: light ? '#ffffff' : 'linear-gradient(135deg, #06B6D4 0%, #3B82F6 50%, #8B5CF6 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
+                    background: light ? 'none' : 'linear-gradient(135deg, #06B6D4 0%, #3B82F6 50%, #8B5CF6 100%)',
+                    WebkitBackgroundClip: light ? 'unset' : 'text',
+                    WebkitTextFillColor: light ? '#ffffff' : 'transparent',
+                    color: light ? '#ffffff' : 'inherit',
+                    backgroundClip: light ? 'unset' : 'text',
                     letterSpacing: '-0.02em',
-                    fontFamily: 'var(--font-family, sans-serif)'
+                    fontFamily: 'var(--font-family, sans-serif)',
+                    textShadow: light ? '0 2px 10px rgba(0, 0, 0, 0.4)' : 'none'
                 }}>
                     DocTransfer
                 </span>

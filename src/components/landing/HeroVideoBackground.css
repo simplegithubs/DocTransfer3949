@@ -1,0 +1,104 @@
+/* Hero Video Background Styles */
+.hero-video-bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background-color: #070a14;
+}
+
+/* Video Layer Stack */
+.hero-video-layers {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-video-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 1.3s cubic-bezier(0.4, 0, 0.2, 1), transform 8s ease-out;
+  filter: contrast(1.02);
+}
+
+.hero-video-layer.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Papermark-style Light Cinematic Overlay (Clean Video Visibility) */
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: 
+    linear-gradient(
+      180deg, 
+      rgba(0, 0, 0, 0.45) 0%, 
+      rgba(0, 0, 0, 0.15) 35%, 
+      rgba(0, 0, 0, 0.28) 75%,
+      rgba(0, 0, 0, 0.6) 92%,
+      #ffffff 100%
+    ),
+    linear-gradient(
+      90deg, 
+      rgba(4, 7, 18, 0.85) 0%, 
+      rgba(4, 7, 18, 0.68) 42%, 
+      rgba(4, 7, 18, 0.28) 68%,
+      rgba(4, 7, 18, 0.05) 100%
+    );
+}
+
+/* Ambient Glow Orbs - Hidden to prevent haze over the video */
+.hero-ambient-glow {
+  display: none;
+}
+
+.hero-ambient-glow.glow-1 {
+  width: 500px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.5) 0%, transparent 70%);
+  top: 5%;
+  left: 15%;
+  animation: ambientFloat1 18s ease-in-out infinite alternate;
+}
+
+.hero-ambient-glow.glow-2 {
+  width: 450px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.45) 0%, transparent 70%);
+  top: 15%;
+  right: 15%;
+  animation: ambientFloat2 22s ease-in-out infinite alternate;
+}
+
+@keyframes ambientFloat1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(60px, 40px) scale(1.15); }
+}
+
+@keyframes ambientFloat2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-50px, 30px) scale(1.1); }
+}
+
+/* Responsive Rules */
+@media (max-width: 768px) {
+  .hero-video-layer {
+    filter: brightness(0.8) contrast(1.05);
+  }
+}

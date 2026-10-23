@@ -9,6 +9,7 @@ import ComplianceRoadmapSection from './components/landing/ComplianceRoadmapSect
 import CryptographicSecurityHighlight from './components/landing/CryptographicSecurityHighlight';
 import RealEstateShowcaseSection from './components/landing/RealEstateShowcaseSection';
 import Footer from './components/Footer';
+import HeroVideoBackground from './components/landing/HeroVideoBackground';
 import {
   Shield,
   FileText,
@@ -55,7 +56,15 @@ const LandingPage: React.FC = () => {
   const [showProductMenu, setShowProductMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'esignature' | 'google-drive'>('upload');
+  const [isScrolled, setIsScrolled] = useState(false);
 
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 30);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -99,10 +108,10 @@ const LandingPage: React.FC = () => {
         description="The #1 secure deal room for global startups, enterprises, CAs, advocates & MSMEs. Share pitch decks, NDAs, and contracts with page-by-page analytics, WhatsApp/Email sharing, and legally binding e-signatures worldwide."
         keywords="DocSend alternative, free pitch deck tracking, virtual data room free, secure document sharing, ESIGN eIDAS e-signature, IT Act 2000 electronic signature, DocSend alternative India, global deal room"
       />
-      <header className="header-wrapper">
+      <header className={`header-wrapper ${isScrolled ? 'is-scrolled' : 'is-transparent'}`}>
         <div className="header-container">
           <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-            <Logo size={32} />
+            <Logo size={32} light={true} />
           </Link>
 
           {/* Desktop Navigation Links */}
@@ -300,96 +309,46 @@ const LandingPage: React.FC = () => {
       <main>
         {/* Hero Section */}
         <section className="hero">
-          {/* Floating Background Elements */}
-          <div className="floating-elements">
-            <div className="floating-icon floating-1"><FileText size={40} /></div>
-            <div className="floating-icon floating-2"><Upload size={35} /></div>
-            <div className="floating-icon floating-3"><Download size={38} /></div>
-            <div className="floating-icon floating-4"><Share2 size={32} /></div>
-            <div className="floating-icon floating-5"><File size={36} /></div>
-            <div className="floating-icon floating-6"><FileText size={34} /></div>
+          {/* Papermark-style Background Video Carousel */}
+          <HeroVideoBackground activeFeature={activeFeature} />
 
-            <div className="floating-orb orb-1"></div>
-            <div className="floating-orb orb-2"></div>
-            <div className="floating-orb orb-3"></div>
-          </div>
+          <div className="hero-container">
+            <div className="hero-content-left">
+              <div className="hero-eyebrow-left">
+                <span>ISO 27001 certified</span>
+                <span className="dot">·</span>
+                <span>SOC 2 Type II</span>
+                <span className="dot">·</span>
+                <span>IT Act 2000</span>
+              </div>
 
-          <Link to="/solutions/indian-real-estate" style={{ textDecoration: 'none' }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.08) 100%)',
-              border: '1px solid rgba(16, 185, 129, 0.35)',
-              padding: '0.45rem 1.25rem',
-              borderRadius: '30px',
-              color: '#065f46',
-              fontWeight: 700,
-              fontSize: '0.9rem',
-              marginBottom: '1.25rem',
-              boxShadow: '0 2px 8px rgba(16, 185, 129, 0.15)',
-              cursor: 'pointer',
-              transition: 'transform 0.2s'
-            }}>
-              <span>🏢</span> <strong>New:</strong> Indian Real Estate & PropTech Suite — RERA Diligence & WhatsApp Tracking →
-            </div>
-          </Link>
+              <h1 className="hero-title-left">
+                The secure deal room for sharing, tracking & signing sensitive documents worldwide.
+              </h1>
 
-          <h1 className="hero-title-animated">The secure deal room for sharing, tracking & signing sensitive documents worldwide.</h1>
-          <p className="hero-subtitle-animated">Share confidential pitch decks, real estate brochures, RERA agreements, and financial records with complete control. Track every viewer page-by-page, share via WhatsApp or Email, and execute legally binding agreements across India and global jurisdictions — free forever.</p>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2rem' }}>
-            <div className="hero-actions" style={{ marginBottom: '0.75rem' }}>
-              <Link to="/dataroom">
-                <button className="hero-btn-primary">Create a Deal Room — Free ($0 / ₹0)</button>
-              </Link>
-              <Link to="/pricing">
-                <button className="hero-btn-secondary">View Pricing</button>
-              </Link>
-            </div>
-            <p style={{
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              color: '#475569',
-              margin: 0,
-              textAlign: 'center'
-            }}>
-              No credit card or expensive monthly subscription required.
-            </p>
+              <div className="hero-actions-left">
+                <Link to="/dataroom" style={{ textDecoration: 'none' }}>
+                  <button className="hero-btn-papermark">
+                    <span>Create a Deal Room — Free ($0 / ₹0)</span>
+                    <ArrowRight size={16} />
+                  </button>
+                </Link>
+                <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                  <button className="hero-btn-secondary-papermark">
+                    <span>View Pricing</span>
+                  </button>
+                </Link>
+              </div>
 
-            {/* Global & India Feature Pills */}
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: '0.75rem',
-              marginTop: '1.25rem'
-            }}>
-              {[
-                { icon: '🌐', text: 'ESIGN, eIDAS & IT Act 2000 Valid' },
-                { icon: '🏢', text: 'RERA & PropTech Diligence' },
-                { icon: '🔒', text: 'Zero-Knowledge AES-256 Vault' },
-                { icon: '📊', text: 'Real-Time Page Dwell Analytics' },
-                { icon: '💬', text: 'WhatsApp, Email & Slack Sharing' },
-                { icon: '🛡️', text: 'GDPR, CCPA & DPDP Act 2023 Ready' }
-              ].map((pill, i) => (
-                <span key={i} style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  background: '#f1f5f9',
-                  border: '1px solid #e2e8f0',
-                  padding: '0.35rem 0.85rem',
-                  borderRadius: '20px',
-                  fontSize: '0.82rem',
-                  fontWeight: 600,
-                  color: '#334155'
-                }}>
-                  <span>{pill.icon}</span> {pill.text}
-                </span>
-              ))}
+              <p className="hero-note-left">
+                No credit card or expensive monthly subscription required.
+              </p>
             </div>
           </div>
+        </section>
 
+        {/* Hero Feature Showcase Section (Clean White Background) */}
+        <section className="hero-showcase-section">
           {/* Hero Feature Navigation Bar */}
           <div className="hero-feature-nav">
             <button

@@ -76,9 +76,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                          rawUser.user_metadata?.name || 
                          rawUser.email?.split('@')[0] || 
                          'User';
-        const imageUrl = rawUser.user_metadata?.avatar_url || 
-                         rawUser.user_metadata?.picture || 
-                         undefined;
+        const rawAvatar = rawUser.user_metadata?.avatar_url || 
+                          rawUser.user_metadata?.picture;
+        let imageUrl: string | undefined = undefined;
+        if (typeof rawAvatar === 'string' && rawAvatar.trim() && rawAvatar !== 'null' && rawAvatar !== 'undefined') {
+            const trimmed = rawAvatar.trim();
+            if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:image/')) {
+                imageUrl = trimmed;
+            }
+        }
 
         return {
             id: rawUser.id,

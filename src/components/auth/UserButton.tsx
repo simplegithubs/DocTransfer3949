@@ -19,8 +19,14 @@ interface UserButtonProps {
 export const UserButton: React.FC<UserButtonProps> = ({ afterSignOutUrl = '/' }) => {
     const { user, signOut } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
+    const [imageError, setImageError] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
+
+    // Reset image error state whenever user imageUrl changes
+    useEffect(() => {
+        setImageError(false);
+    }, [user?.imageUrl]);
 
     // Close on outside click
     useEffect(() => {
@@ -41,17 +47,21 @@ export const UserButton: React.FC<UserButtonProps> = ({ afterSignOutUrl = '/' })
     if (!user) return null;
 
     const initials = (user.fullName || user.email || 'U')
-        .split(' ')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
         .map(n => n[0])
         .slice(0, 2)
         .join('')
-        .toUpperCase();
+        .toUpperCase() || 'U';
 
     const handleSignOut = async () => {
         setIsOpen(false);
         await signOut();
         navigate(afterSignOutUrl);
     };
+
+    const showImage = Boolean(user.imageUrl && !imageError);
 
     return (
         <div style={{ position: 'relative' }} ref={dropdownRef}>
@@ -73,17 +83,20 @@ export const UserButton: React.FC<UserButtonProps> = ({ afterSignOutUrl = '/' })
                 aria-expanded={isOpen}
                 aria-haspopup="true"
             >
-                {user.imageUrl ? (
+                {showImage ? (
                     <img
                         src={user.imageUrl}
-                        alt={user.fullName || 'User'}
+                        alt=""
+                        referrerPolicy="no-referrer"
+                        onError={() => setImageError(true)}
                         style={{
                             width: '36px',
                             height: '36px',
                             borderRadius: '50%',
                             objectFit: 'cover',
-                            border: '2px solid #e2e8f0',
-                            boxShadow: '0 2px 5px rgba(0,0,0,0.08)'
+                            border: '2px solid rgba(255, 255, 255, 0.25)',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                            display: 'block'
                         }}
                     />
                 ) : (
@@ -99,13 +112,17 @@ export const UserButton: React.FC<UserButtonProps> = ({ afterSignOutUrl = '/' })
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            boxShadow: '0 2px 8px rgba(99, 102, 241, 0.3)'
+                            boxShadow: '0 2px 8px rgba(99, 102, 241, 0.35)',
+                            border: '2px solid rgba(255, 255, 255, 0.25)',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px',
+                            userSelect: 'none'
                         }}
                     >
                         {initials}
                     </div>
                 )}
-                <ChevronDown size={14} color="#64748b" style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                <ChevronDown size={14} color="#94a3b8" style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
             </button>
 
             {isOpen && (
@@ -128,14 +145,47 @@ export const UserButton: React.FC<UserButtonProps> = ({ afterSignOutUrl = '/' })
                     <div style={{
                         padding: '1rem',
                         borderBottom: '1px solid #f1f5f9',
-                        background: '#f8fafc'
+                        background: '#f8fafc',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem'
                     }}>
-                        <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {user.fullName || 'User'}
-                        </p>
-                        <p style={{ margin: '0.2rem 0 0', fontSize: '0.8rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {user.email}
-                        </p>
+                        <div style={{
+                            width: '38px',
+                            height: '38px',
+                            borderRadius: '50%',
+                            flexShrink: 0,
+                            overflow: 'hidden',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: showImage ? '#e2e8f0' : 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+                            color: 'white',
+                            fontWeight: 700,
+                            fontSize: '0.85rem',
+                            border: '1px solid #e2e8f0',
+                            userSelect: 'none'
+                        }}>
+                            {showImage ? (
+                                <img
+                                    src={user.imageUrl}
+                                    alt=""
+                                    referrerPolicy="no-referrer"
+                                    onError={() => setImageError(true)}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                />
+                            ) : (
+                                initials
+                            )}
+                        </div>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                            <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {user.fullName || 'User'}
+                            </p>
+                            <p style={{ margin: '0.2rem 0 0', fontSize: '0.8rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {user.email}
+                            </p>
+                        </div>
                     </div>
 
                     {/* Navigation Items */}
