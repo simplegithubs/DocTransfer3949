@@ -25,9 +25,14 @@ import {
     ZoomIn,
     ZoomOut,
     RotateCcw,
-    Loader2
+    Loader2,
+    Scale,
+    FileLock,
+    ShieldAlert,
+    MapPin,
+    Globe
 } from 'lucide-react';
-import { logDocumentView, logDocumentDownload, logPasswordVerification, logEmailVerification, getGeolocation } from './lib/auditLogger';
+import { logDocumentView, logDocumentDownload, logPasswordVerification, logEmailVerification, getGeolocation, getUserIP } from './lib/auditLogger';
 import WatermarkOverlay from './components/WatermarkOverlay';
 import { applyPdfWatermark, applyImageWatermark } from './lib/watermarkGenerator';
 import WebcamGate from './components/WebcamGate';
@@ -74,6 +79,15 @@ interface DocumentData {
         fontSize: number;
         rotation: number;
         layout: 'single' | 'tiled';
+        require_nda?: boolean;
+        nda_type?: 'standard' | 'real_estate' | 'hotel_mna' | 'startup';
+        strict_drm?: boolean;
+        allowed_countries?: string[];
+        lead_alerts?: {
+            notify_on_open?: boolean;
+            notify_on_dwell?: boolean;
+        };
+        category?: string;
     };
     require_snapshot: boolean;
     scan_status?: 'pending' | 'clean' | 'infected' | 'error';
@@ -95,6 +109,15 @@ interface BundleData {
     allowed_email?: string;
     user_id?: string;
 }
+
+const PHONE_COUNTRY_CODES = [
+    { code: '+971', flag: '🇦🇪', label: 'UAE (+971)' },
+    { code: '+44', flag: '🇬🇧', label: 'UK (+44)' },
+    { code: '+1', flag: '🇺🇸', label: 'USA/CA (+1)' },
+    { code: '+65', flag: '🇸🇬', label: 'Singapore (+65)' },
+    { code: '+33', flag: '🇫🇷', label: 'France (+33)' },
+    { code: '+91', flag: '🇮🇳', label: 'India (+91)' },
+];
 
 const ViewDocument: React.FC = () => {
     const { t } = useTranslation();
@@ -120,11 +143,56 @@ const ViewDocument: React.FC = () => {
 
     // Phone OTP Verification State (+91 India)
     const [phone, setPhone] = useState('');
+    const [phoneCountryCode, setPhoneCountryCode] = useState('+971');
     const [phoneOtp, setPhoneOtp] = useState('');
+    useEffect(() => {
+        if (document?.allowed_phone) {
+            const match = PHONE_COUNTRY_CODES.find(c => document.allowed_phone?.startsWith(c.code));
+            if (match) {
+                setPhoneCountryCode(match.code);
+            }
+        }
+    }, [document?.allowed_phone]);
+
+
     const [sentPhoneOtp, setSentPhoneOtp] = useState<string | null>(null);
     const [isPhoneVerified, setIsPhoneVerified] = useState(false);
     const [showPhoneOtpInput, setShowPhoneOtpInput] = useState(false);
     const [phoneError, setPhoneError] = useState<string | null>(null);
+
+    // Pre-Flight NDA Acceptance State & Strict DRM
+    const [isNdaAccepted, setIsNdaAccepted] = useState(false);
+    const [ndaAgreedCheckbox, setNdaAgreedCheckbox] = useState(false);
+    const [geoBlocked, setGeoBlocked] = useState<{ isBlocked: boolean; detectedCountry?: string; allowedList?: string[] }>({ isBlocked: false });
+
+    // Strict DRM Defense: Blocks Print, Copy, Save, and Inspect
+    useEffect(() => {
+        if (!document?.watermark_config?.strict_drm) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (
+                (e.ctrlKey || e.metaKey) &&
+                (e.key === 'p' || e.key === 'P' || e.key === 'c' || e.key === 'C' || e.key === 's' || e.key === 'S' || e.key === 'u' || e.key === 'U')
+            ) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+        };
+
+        const handleContextMenu = (e: MouseEvent) => {
+            e.preventDefault();
+        };
+
+        window.addEventListener('keydown', handleKeyDown, true);
+        window.addEventListener('contextmenu', handleContextMenu, true);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown, true);
+            window.removeEventListener('contextmenu', handleContextMenu, true);
+        };
+    }, [document]);
 
     // Biometric/Snapshot State
     const [isSnapshotVerified, setIsSnapshotVerified] = useState(false);
@@ -188,10 +256,15 @@ const ViewDocument: React.FC = () => {
 
     useEffect(() => {
         const requiresPhone = document?.require_phone_otp || (document as any)?.require_phone_verification;
-        if (document?.is_encrypted && decryptionKey && isAuthenticated && (document.email_verification ? isEmailVerified : true) && (requiresPhone ? isPhoneVerified : true) && (document.require_snapshot ? isSnapshotVerified : true)) {
+        const requiresNda = document?.watermark_config?.require_nda;
+        if (document?.is_encrypted && decryptionKey && isAuthenticated && 
+            (document.email_verification ? isEmailVerified : true) && 
+            (requiresPhone ? isPhoneVerified : true) && 
+            (requiresNda ? isNdaAccepted : true) && 
+            (document.require_snapshot ? isSnapshotVerified : true)) {
             handleDecryption();
         }
-    }, [document, decryptionKey, isAuthenticated, isEmailVerified, isPhoneVerified, isSnapshotVerified]);
+    }, [document, decryptionKey, isAuthenticated, isEmailVerified, isPhoneVerified, isNdaAccepted, isSnapshotVerified]);
 
     // Re-run watermarking once phone is verified to apply recipient's phone number into watermark
     useEffect(() => {
@@ -210,9 +283,11 @@ const ViewDocument: React.FC = () => {
         const previewType = getPreviewType(fileExt);
         const requiresPhone = document?.require_phone_otp || (document as any)?.require_phone_verification;
 
+        const requiresNda = document?.watermark_config?.require_nda;
         const canPreview = isAuthenticated &&
             (document.email_verification ? isEmailVerified : true) &&
             (requiresPhone ? isPhoneVerified : true) &&
+            (requiresNda ? isNdaAccepted : true) &&
             (document.require_snapshot ? isSnapshotVerified : true) &&
             (!document.is_encrypted || (document.is_encrypted && !!decryptedUrl));
 
@@ -418,6 +493,25 @@ const ViewDocument: React.FC = () => {
             }
         });
 
+        // SECURITY: Check Geofencing Territory Allowlist
+        if (data.watermark_config?.allowed_countries && data.watermark_config.allowed_countries.length > 0) {
+            const allowed = data.watermark_config.allowed_countries.map(c => c.toUpperCase());
+            getUserIP().then(async (ip) => {
+                try {
+                    const geo = await getGeolocation(ip);
+                    if (geo?.countryCode && !allowed.includes(geo.countryCode.toUpperCase())) {
+                        setGeoBlocked({
+                            isBlocked: true,
+                            detectedCountry: geo.country || geo.countryCode,
+                            allowedList: data.watermark_config?.allowed_countries
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Geofencing check warning:', e);
+                }
+            });
+        }
+
         // SECURITY: Check Malware Scan Status
         if (data.scan_status === 'infected') {
             setError('This file has been flagged as malicious and cannot be accessed.');
@@ -470,7 +564,7 @@ const ViewDocument: React.FC = () => {
             const previewType = getPreviewType(getExtension(data.name));
             let processedUrl = '';
 
-            const formattedPhone = isPhoneVerified ? (phone.startsWith('+') ? phone : `+91 ${phone.replace(/[^0-9]/g, '').slice(-10)}`) : undefined;
+            const formattedPhone = isPhoneVerified ? (phone.startsWith('+') ? phone : `${phoneCountryCode} ${phone.replace(/[^0-9]/g, '')}`) : undefined;
 
             if (previewType === 'pdf') {
                 const processedPdf = await applyPdfWatermark(
@@ -738,20 +832,24 @@ const ViewDocument: React.FC = () => {
         e.preventDefault();
         setPhoneError(null);
         const cleanDigits = phone.replace(/[^0-9]/g, '');
-        if (cleanDigits.length < 10) {
-            setPhoneError('Please enter a valid 10-digit Indian mobile number.');
+        if (cleanDigits.length < 7) {
+            setPhoneError('Please enter a valid mobile number (at least 7 digits).');
             return;
         }
 
-        const validDigits = cleanDigits.slice(-10);
-        const formatted = `+91 ${validDigits}`;
+        const enteredFull = `${phoneCountryCode}${cleanDigits}`;
+        const formatted = `${phoneCountryCode} ${cleanDigits}`;
 
         // Check if document is locked to a specific phone number
         if (document?.allowed_phone) {
-            const allowedDigits = document.allowed_phone.replace(/[^0-9]/g, '').slice(-10);
-            if (validDigits !== allowedDigits) {
-                const masked = allowedDigits.slice(-4).padStart(10, '*');
-                setPhoneError(`Access Denied: This confidential document is locked specifically for mobile number ending in ...${masked.slice(-4)}. Please contact the sender for access.`);
+            const cleanAllowed = document.allowed_phone.replace(/[^0-9]/g, '');
+            const cleanEntered = enteredFull.replace(/[^0-9]/g, '');
+            const isMatch = cleanEntered === cleanAllowed ||
+                (cleanAllowed.length >= 7 && cleanEntered.endsWith(cleanAllowed.slice(-7))) ||
+                (cleanDigits.length >= 7 && cleanAllowed.endsWith(cleanDigits));
+            if (!isMatch) {
+                const masked = cleanAllowed.length >= 4 ? `...${cleanAllowed.slice(-4)}` : 'designated recipient';
+                setPhoneError(`Access Denied: This confidential document is locked specifically for mobile number ending in ${masked}. Please contact the sender for access.`);
                 return;
             }
         }
@@ -768,7 +866,7 @@ const ViewDocument: React.FC = () => {
 
         alert(`Security OTP sent to ${formatted}.\n\n[DEMO/TEST OTP]: ${code}`);
         if (import.meta.env.DEV) {
-            console.log(`[REAL ESTATE GATE] Phone OTP for ${formatted}: ${code}`);
+            console.log(`[PHONE OTP GATE] Phone OTP for ${formatted}: ${code}`);
         }
     };
 
@@ -777,8 +875,8 @@ const ViewDocument: React.FC = () => {
         setPhoneError(null);
         if (phoneOtp.trim() === sentPhoneOtp) {
             setIsPhoneVerified(true);
-            const cleanDigits = phone.replace(/[^0-9]/g, '').slice(-10);
-            const formatted = `+91 ${cleanDigits}`;
+            const cleanDigits = phone.replace(/[^0-9]/g, '');
+            const formatted = `${phoneCountryCode} ${cleanDigits}`;
             
             if (document) {
                 dispatchLeadAlert({
@@ -1038,6 +1136,43 @@ const ViewDocument: React.FC = () => {
         );
     }
 
+    if (geoBlocked.isBlocked) {
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', padding: '1.5rem' }}>
+                <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', maxWidth: '480px', width: '100%', textAlign: 'center', border: '1px solid #e2e8f0' }}>
+                    <div style={{ width: '72px', height: '72px', background: '#f0fdfa', border: '2px solid #ccfbf1', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
+                        <MapPin size={36} color="#0d9488" />
+                    </div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: '#ccfbf1', color: '#0f766e', padding: '0.2rem 0.75rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+                        <ShieldAlert size={13} />
+                        Territory Border Control Enforced
+                    </div>
+                    <h1 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.5rem' }}>
+                        Access Restricted by Jurisdiction
+                    </h1>
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+                        This confidential data room has strict geographic boundary controls enabled. Your connection originates from <strong>{geoBlocked.detectedCountry || 'an unauthorized location'}</strong>, which is not permitted.
+                    </p>
+                    <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '1.5rem', textAlign: 'left' }}>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.4rem' }}>
+                            Authorized Jurisdictions Only:
+                        </div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                            {geoBlocked.allowedList?.map(c => (
+                                <span key={c} style={{ background: '#ffffff', border: '1px solid #cbd5e1', color: '#0f172a', fontSize: '0.8rem', fontWeight: 600, padding: '0.2rem 0.6rem', borderRadius: '6px' }}>
+                                    {c}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                    <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
+                        If you represent an institutional investor or authorized diligence party, contact the deal team to whitelist your corporate IP address.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
 
     // Auth Checks (Password, Email, and Indian Phone OTP Gate)
     const requiresEmail = isBundle
@@ -1168,7 +1303,7 @@ const ViewDocument: React.FC = () => {
                         )}
                         {document?.allowed_phone && (
                             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: '#fef3c7', color: '#92400e', border: '1px solid #fcd34d', padding: '4px 12px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, marginTop: '0.65rem' }}>
-                                🔒 Protected for +91 ******{document.allowed_phone.replace(/[^0-9]/g, '').slice(-4)}
+                                🔒 Protected for recipient ending in ...{document.allowed_phone.replace(/[^0-9]/g, '').slice(-4)}
                             </div>
                         )}
                     </div>
@@ -1184,18 +1319,36 @@ const ViewDocument: React.FC = () => {
                             <form onSubmit={handleSendPhoneOtp} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#475569', marginBottom: '0.35rem' }}>
-                                        Indian Mobile Number (+91)
+                                        Mobile Number
                                     </label>
                                     <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #cbd5e1', borderRadius: '12px', overflow: 'hidden', background: '#f8fafc' }}>
-                                        <span style={{ padding: '0.875rem 0.75rem', fontWeight: 700, fontSize: '0.95rem', color: '#334155', borderRight: '1px solid #cbd5e1', background: '#f1f5f9' }}>
-                                            🇮🇳 +91
-                                        </span>
+                                        <select
+                                            value={phoneCountryCode}
+                                            onChange={(e) => setPhoneCountryCode(e.target.value)}
+                                            style={{
+                                                padding: '0.875rem 0.65rem',
+                                                fontWeight: 700,
+                                                fontSize: '0.9rem',
+                                                color: '#334155',
+                                                border: 'none',
+                                                borderRight: '1px solid #cbd5e1',
+                                                background: '#f1f5f9',
+                                                cursor: 'pointer',
+                                                outline: 'none'
+                                            }}
+                                        >
+                                            {PHONE_COUNTRY_CODES.map((item) => (
+                                                <option key={item.code} value={item.code}>
+                                                    {item.flag} {item.code}
+                                                </option>
+                                            ))}
+                                        </select>
                                         <input
                                             type="tel"
-                                            maxLength={10}
+                                            maxLength={15}
                                             value={phone}
                                             onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
-                                            placeholder="98765 43210"
+                                            placeholder="50 123 4567"
                                             style={{ flex: 1, padding: '0.875rem', border: 'none', fontSize: '1rem', outline: 'none', background: 'white' }}
                                             required
                                             autoFocus
@@ -1210,7 +1363,7 @@ const ViewDocument: React.FC = () => {
                             <form onSubmit={handleVerifyPhoneOtp} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#475569', marginBottom: '0.35rem' }}>
-                                        Enter 6-Digit OTP sent to +91 {phone.slice(-10)}
+                                        Enter 6-Digit OTP sent to {phoneCountryCode} {phone}
                                     </label>
                                     <input
                                         type="text"
@@ -1235,6 +1388,113 @@ const ViewDocument: React.FC = () => {
                             🔒 Your phone number will be dynamically embedded as a secure digital watermark on this document.
                         </p>
                     </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Pre-Flight Click-Through NDA & Confidentiality Acceptance Gate
+    const requiresNda = document?.watermark_config?.require_nda;
+    if (requiresNda && !isNdaAccepted) {
+        const ndaType = document?.watermark_config?.nda_type || 'standard';
+        let ndaTitle = 'Mutual Non-Disclosure & Confidentiality Agreement';
+        let ndaCategory = 'Global Legal Standards • eIDAS & UAE PDPL Neutral Jurisdiction';
+        let ndaClauses: string[] = [];
+
+        if (ndaType === 'real_estate') {
+            ndaTitle = 'Luxury Real Estate Off-Plan & Deal Exclusivity Disclaimer';
+            ndaCategory = 'Broker Exclusivity & Anti-Circumvention Mandate (Dubai / Global)';
+            ndaClauses = [
+                '1. PROPRIETARY DEAL DATA: The pricing models, floor plans, unreleased inventory sheets, and developer commercial concessions provided in this deal room are strictly confidential and proprietary.',
+                '2. ANTI-CIRCUMVENTION & LEAD REGISTRATION: The recipient acknowledges the disclosing broker/agency representation mandate and agrees not to circumvent, deal directly with project sponsors, or share pricing with competing brokers for a period of 90 days.',
+                '3. RECIPIENT TRACEABILITY: Access is strictly recorded. The recipient agrees that any leaked pricing sheets or screenshots will constitute immediate grounds for civil injunctive relief and liquidated damages.'
+            ];
+        } else if (ndaType === 'hotel_mna') {
+            ndaTitle = 'Hotel & Resort Asset Diligence Non-Disclosure Agreement';
+            ndaCategory = 'Institutional Hospitality M&A Standards';
+            ndaClauses = [
+                '1. EVALUATION SCOPE: All historical RevPAR metrics, trailing 12-month P&Ls, STR benchmarks, employee registers, and operator term sheets are disclosed solely for evaluating an asset acquisition.',
+                '2. PROHIBITION OF DIRECT CONTACT: The recipient agrees not to contact property on-site management, brand hotel operators, or local municipality officers without prior written consent.',
+                '3. RETURN OR DESTRUCTION: Upon termination of acquisition discussions, all electronic copies, financial models, and derivative analyses must be permanently purged.'
+            ];
+        } else if (ndaType === 'startup') {
+            ndaTitle = 'Startup Teaser & Proprietary IP Disclaimer';
+            ndaCategory = 'Cross-Border Venture Capital & Angel Syndicate Terms';
+            ndaClauses = [
+                '1. PROPRIETARY TECHNOLOGY & PROJECTIONS: This pitch deck, cap table overview, and business strategy are proprietary intellectual property of the company.',
+                '2. NON-DISCLOSURE: The investor/viewer agrees to keep all commercial discussions, valuation figures, and technical roadmaps confidential.',
+                '3. NO OFFER TO SELL: This presentation is for informational evaluation purposes only and does not constitute a public solicitation of securities in any jurisdiction.'
+            ];
+        } else {
+            ndaTitle = 'Cross-Border Mutual Non-Disclosure Agreement';
+            ndaCategory = 'Standard International Deal Room Confidentiality Terms';
+            ndaClauses = [
+                '1. DEFINITION OF CONFIDENTIAL INFORMATION: Includes all software code, financial projections, customer data, and trade secrets accessed through this DocTransfer deal room.',
+                '2. STANDARD OF CARE: The recipient agrees to protect confidential materials with the same degree of care used for its own confidential data, but not less than reasonable care.',
+                '3. GOVERNING LAW & JURISDICTION: This electronic agreement is enforceable under the US ESIGN Act, EU eIDAS regulation, and international electronic transactions frameworks.'
+            ];
+        }
+
+        return (
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc', padding: '1.5rem' }}>
+                <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', maxWidth: '580px', width: '100%', border: '1px solid #e2e8f0' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                        <div style={{ width: '60px', height: '60px', background: '#f5f3ff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', color: '#7c3aed' }}>
+                            <Scale size={30} />
+                        </div>
+                        <h1 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.4rem' }}>
+                            {ndaTitle}
+                        </h1>
+                        <span style={{ fontSize: '0.72rem', background: '#ede9fe', color: '#6d28d9', padding: '0.2rem 0.65rem', borderRadius: '6px', fontWeight: 700 }}>
+                            {ndaCategory}
+                        </span>
+                        <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '0.75rem', lineHeight: 1.5 }}>
+                            You must review and accept the confidentiality terms below before accessing <strong>{document?.name || 'this document'}</strong>.
+                        </p>
+                    </div>
+
+                    <div style={{ maxHeight: '200px', overflowY: 'auto', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1rem', fontSize: '0.8rem', color: '#334155', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+                        {ndaClauses.map((clause, i) => (
+                            <p key={i} style={{ margin: i === 0 ? 0 : '0.6rem 0 0 0' }}>{clause}</p>
+                        ))}
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem', marginBottom: '1.5rem' }}>
+                        <input
+                            type="checkbox"
+                            id="nda-agree-check"
+                            checked={ndaAgreedCheckbox}
+                            onChange={(e) => setNdaAgreedCheckbox(e.target.checked)}
+                            style={{ marginTop: '0.25rem', width: '16px', height: '16px', cursor: 'pointer' }}
+                        />
+                        <label htmlFor="nda-agree-check" style={{ fontSize: '0.82rem', color: '#475569', lineHeight: 1.4, cursor: 'pointer' }}>
+                            I confirm that I am an authorized party and agree to be legally bound by this Confidentiality & Non-Disclosure Agreement.
+                        </label>
+                    </div>
+
+                    <button
+                        onClick={() => setIsNdaAccepted(true)}
+                        disabled={!ndaAgreedCheckbox}
+                        style={{
+                            width: '100%',
+                            padding: '0.85rem',
+                            background: ndaAgreedCheckbox ? '#7c3aed' : '#cbd5e1',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '12px',
+                            fontWeight: 700,
+                            fontSize: '0.95rem',
+                            cursor: ndaAgreedCheckbox ? 'pointer' : 'not-allowed',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            boxShadow: ndaAgreedCheckbox ? '0 4px 12px rgba(124, 58, 237, 0.3)' : 'none',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        Accept Terms & Enter Deal Room <ArrowRight size={16} />
+                    </button>
                 </div>
             </div>
         );
@@ -1345,15 +1605,33 @@ const ViewDocument: React.FC = () => {
     // unless loading failed (handled above) or not initialized.
     if (!document) return null;
 
-    const formattedViewerPhone = isPhoneVerified ? (phone.startsWith('+') ? phone : `+91 ${phone.replace(/[^0-9]/g, '').slice(-10)}`) : undefined;
+    const formattedViewerPhone = isPhoneVerified ? (phone.startsWith('+') ? phone : `${phoneCountryCode} ${phone.replace(/[^0-9]/g, '')}`) : undefined;
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            background: '#f3f4f6',
-            display: 'flex',
-            flexDirection: 'column'
-        }}>
+        <div 
+            className={document?.watermark_config?.strict_drm ? 'strict-drm-active' : ''}
+            style={{
+                minHeight: '100vh',
+                background: '#f3f4f6',
+                display: 'flex',
+                flexDirection: 'column'
+            }}
+            onContextMenu={document?.watermark_config?.strict_drm ? (e) => e.preventDefault() : undefined}
+        >
+            {document?.watermark_config?.strict_drm && (
+                <style>{`
+                    @media print {
+                        body * { display: none !important; }
+                        html:after { content: "Document printing is strictly prohibited by security policy."; display: block !important; padding: 2rem; font-size: 20px; color: red; font-family: sans-serif; }
+                    }
+                    .strict-drm-active {
+                        -webkit-user-select: none !important;
+                        -moz-user-select: none !important;
+                        -ms-user-select: none !important;
+                        user-select: none !important;
+                    }
+                `}</style>
+            )}
             <SEO 
                 title={`View: ${document.name}`} 
                 description="Securely view documents shared via DocTransfer."
@@ -1429,6 +1707,21 @@ const ViewDocument: React.FC = () => {
                                     {branding?.display_rera_badge && branding?.rera_reg_no && (
                                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '1px 7px', borderRadius: '9999px', fontSize: '0.68rem', fontWeight: 700 }}>
                                             <ShieldCheck size={11} /> RERA: {branding.rera_reg_no}
+                                        </span>
+                                    )}
+                                    {document.watermark_config?.strict_drm && (
+                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', background: '#fff7ed', color: '#c2410c', border: '1px solid #ffedd5', padding: '1px 7px', borderRadius: '9999px', fontSize: '0.68rem', fontWeight: 700 }}>
+                                            <FileLock size={11} /> Strict DRM Active
+                                        </span>
+                                    )}
+                                    {document.watermark_config?.require_nda && isNdaAccepted && (
+                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', background: '#f5f3ff', color: '#6d28d9', border: '1px solid #ddd6fe', padding: '1px 7px', borderRadius: '9999px', fontSize: '0.68rem', fontWeight: 700 }}>
+                                            <Scale size={11} /> NDA Accepted
+                                        </span>
+                                    )}
+                                    {document.watermark_config?.allowed_countries && document.watermark_config.allowed_countries.length > 0 && (
+                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', background: '#f0fdfa', color: '#0f766e', border: '1px solid #ccfbf1', padding: '1px 7px', borderRadius: '9999px', fontSize: '0.68rem', fontWeight: 700 }}>
+                                            <MapPin size={11} /> Geo-Fenced
                                         </span>
                                     )}
                                 </div>

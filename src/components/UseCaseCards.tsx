@@ -42,10 +42,10 @@ const useCases: UseCase[] = [
         link: '/solutions/investor-relations'
     },
     {
-        title: 'Real Estate & PropTech',
-        description: 'Stop rate leaks, track WhatsApp brochures, and run RERA-compliant title diligence rooms.',
+        title: 'Luxury Real Estate & Resorts',
+        description: 'Protect off-plan brochures, track VIP WhatsApp pitches, and run resort acquisition data rooms.',
         image: '/real_estate_card.png',
-        tag: '🇮🇳 India PropTech',
+        tag: 'Dubai & Global Deals',
         link: '/solutions/indian-real-estate'
     },
     {

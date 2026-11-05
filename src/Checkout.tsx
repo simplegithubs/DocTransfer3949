@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useUser, useAuth } from './components/auth';
+import { useGeoCurrency } from './hooks/useGeoCurrency';
 import Logo from './components/Logo';
 import SEO from './components/SEO';
 import {
@@ -22,18 +23,20 @@ import {
     Phone,
     AlertCircle,
     Building,
-    FileText
+    FileText,
+    Globe
 } from 'lucide-react';
 import { supabase } from './lib/supabase';
 
-type PaymentGateway = 'razorpay';
+export type CheckoutCurrency = 'INR' | 'USD' | 'AED' | 'EUR' | 'GBP';
+
+interface CurrencyPricing {
+    monthly: number;
+}
 
 interface PlanConfig {
     name: string;
-    inrMonthly: number;
-    inrAnnualMonthly: number;
-    usdMonthly: number;
-    usdAnnualMonthly: number;
+    pricing: Record<CheckoutCurrency, CurrencyPricing>;
     color: string;
     icon: any;
     features: string[];
@@ -41,125 +44,177 @@ interface PlanConfig {
     planId: string;
 }
 
+const CURRENCY_CONFIG: Record<CheckoutCurrency, { symbol: string; label: string; flag: string }> = {
+    INR: { symbol: '₹', label: 'INR (₹)', flag: '🇮🇳' },
+    USD: { symbol: '$', label: 'USD ($)', flag: '🇺🇸' },
+    AED: { symbol: 'AED ', label: 'AED (د.إ)', flag: '🇦🇪' },
+    EUR: { symbol: '€', label: 'EUR (€)', flag: '🇪🇺' },
+    GBP: { symbol: '£', label: 'GBP (£)', flag: '🇬🇧' }
+};
+
 const PLAN_CONFIGS: Record<string, PlanConfig> = {
     pro: {
-        name: 'Pro Plan',
-        inrMonthly: 699,
-        inrAnnualMonthly: 499,
-        usdMonthly: 19,
-        usdAnnualMonthly: 15,
+        name: 'Pro Dealmaker Plan',
+        pricing: {
+            INR: { monthly: 999 },
+            USD: { monthly: 29 },
+            AED: { monthly: 199 },
+            EUR: { monthly: 27 },
+            GBP: { monthly: 23 }
+        },
         color: '#3b82f6',
         icon: Zap,
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
         planId: import.meta.env.VITE_RAZORPAY_PRO_PLAN_ID || 'plan_TXFen0j8CaoC4o',
         features: [
-            'Unlimited document uploads & tracking',
-            '50MB file size limit per upload',
-            '5 Active Virtual Deal Rooms',
-            'Page-by-page dwell time forensics',
-            'Dynamic anti-leak watermark (Email & IP)',
-            'Unlimited e-signatures (IT Act 2000 & ESIGN)',
-            'Section 65B court-admissible audit log',
-            'Remote self-destruct / kill switch'
+            '100 Shared deal links per month',
+            '50MB max file size (PDF, Decks, Images & Video)',
+            'Strict DRM: Block Print (Ctrl+P) & Copy (Ctrl+C)',
+            'Pre-Flight Click-Through NDA Gate (4 templates)',
+            '1-Click Sector Presets (Dubai RE, M&A, VC)',
+            'Custom Deal Vanity Slug (/view/slug)',
+            'Full Attention Heatmaps & Page-by-Page Analytics',
+            'Self-Destruct Timers & Remote Kill Switch'
         ]
     },
     standard: {
-        name: 'Pro Plan',
-        inrMonthly: 699,
-        inrAnnualMonthly: 499,
-        usdMonthly: 19,
-        usdAnnualMonthly: 15,
+        name: 'Pro Dealmaker Plan',
+        pricing: {
+            INR: { monthly: 999 },
+            USD: { monthly: 29 },
+            AED: { monthly: 199 },
+            EUR: { monthly: 27 },
+            GBP: { monthly: 23 }
+        },
         color: '#3b82f6',
         icon: Zap,
         gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
         planId: import.meta.env.VITE_RAZORPAY_PRO_PLAN_ID || 'plan_TXFen0j8CaoC4o',
         features: [
-            'Unlimited document uploads & tracking',
-            '50MB file size limit per upload',
-            '5 Active Virtual Deal Rooms',
-            'Page-by-page dwell time forensics',
-            'Dynamic anti-leak watermark (Email & IP)',
-            'Unlimited e-signatures (IT Act 2000 & ESIGN)',
-            'Section 65B court-admissible audit log',
-            'Remote self-destruct / kill switch'
+            '100 Shared deal links per month',
+            '50MB max file size (PDF, Decks, Images & Video)',
+            'Strict DRM: Block Print (Ctrl+P) & Copy (Ctrl+C)',
+            'Pre-Flight Click-Through NDA Gate (4 templates)',
+            '1-Click Sector Presets (Dubai RE, M&A, VC)',
+            'Custom Deal Vanity Slug (/view/slug)',
+            'Full Attention Heatmaps & Page-by-Page Analytics',
+            'Self-Destruct Timers & Remote Kill Switch'
         ]
     },
     business: {
-        name: 'Business CA Suite',
-        inrMonthly: 1799,
-        inrAnnualMonthly: 1349,
-        usdMonthly: 49,
-        usdAnnualMonthly: 39,
+        name: 'Business & Agency Suite',
+        pricing: {
+            INR: { monthly: 2499 },
+            USD: { monthly: 79 },
+            AED: { monthly: 499 },
+            EUR: { monthly: 74 },
+            GBP: { monthly: 63 }
+        },
         color: '#8b5cf6',
         icon: Briefcase,
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
         planId: import.meta.env.VITE_RAZORPAY_BUSINESS_PLAN_ID || 'plan_TXFg28EWp7dw4C',
         features: [
             'Everything in Pro Plan included',
-            '500MB file size limit per upload',
-            'Unlimited Deal Rooms & folders',
-            'Zero-Knowledge Vault Mode (AES-256 E2EE)',
-            'Custom domain & brand white-labeling',
-            'Client intake portals & secure dropboxes',
-            'Automatic GST Tax Invoicing (ITC eligible)',
-            '3 Team member seats included'
+            '1,000 Shared deal links & 250MB uploads',
+            '5 Included Team Member Seats',
+            'White-Label CNAME Domain (deals.yourfirm.com)',
+            'Verified Broker License Seal (DLD ORN, RERA, UK, EU)',
+            'Active Sessions Manager & Real-Time Kill Switch',
+            'Territory Geo-Fencing (UAE, India, UK, EU, US)',
+            'Instant WhatsApp & Email Lead Alerts (Dwell >60s)',
+            'Global B2B Tax Invoicing (GST 18%, UAE TRN, EU VAT)'
         ]
     },
     dataroom: {
-        name: 'Virtual Data Room (VDR)',
-        inrMonthly: 4999,
-        inrAnnualMonthly: 3749,
-        usdMonthly: 129,
-        usdAnnualMonthly: 99,
+        name: 'Virtual Data Room (VDR) Enterprise',
+        pricing: {
+            INR: { monthly: 6999 },
+            USD: { monthly: 199 },
+            AED: { monthly: 1299 },
+            EUR: { monthly: 185 },
+            GBP: { monthly: 159 }
+        },
         color: '#10b981',
         icon: FolderLock,
         gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
         planId: import.meta.env.VITE_RAZORPAY_DATAROOM_PLAN_ID || 'plan_TXFgoDrw5IBk6O',
         features: [
             'Everything in Business Suite included',
-            '2GB file size limit per upload',
-            'Multi-party isolated bidder deal rooms',
-            'Structured due diligence Q&A workflow',
-            'Bates numbering & auto-index file tree',
-            '1-Click complete compliance ZIP archive',
-            '10 Included team seats + unlimited guests',
-            'Dedicated deal room concierge support'
+            'Unlimited Deal Rooms & 2GB file upload size',
+            '15 Team seats + Unlimited Diligence Guests',
+            'Zero-Knowledge Client-Side AES-256 Vault Mode',
+            'Multi-Party Isolated Bidder Chinese Walls',
+            'VDR Diligence Folder Hierarchy (01_Legal, 02_Fin)',
+            'Due Diligence Q&A Inquiry Workflow',
+            'Bates numbering & 1-Click ZIP Archive export',
+            'DIFC-LCIA / English Law / Indian Arbitration seals',
+            '99.99% Enterprise Uptime SLA with 24/7 Concierge'
+        ]
+    },
+    single_deal: {
+        name: '90-Day Single-Deal VDR Pass',
+        pricing: {
+            INR: { monthly: 9999 },
+            USD: { monthly: 299 },
+            AED: { monthly: 1899 },
+            EUR: { monthly: 279 },
+            GBP: { monthly: 239 }
+        },
+        color: '#4f46e5',
+        icon: FolderLock,
+        gradient: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+        planId: 'single_deal_pass',
+        features: [
+            '90 Days of complete Virtual Data Room power for 1 deal',
+            'Multi-party Chinese walls & isolated bidder permissions',
+            'Strict DRM defense: print lockout, screenshot protection',
+            'Due diligence Q&A module & resolution tracking',
+            'Real-time WhatsApp & email hot-lead telemetry',
+            'Post-closing compliance Bates ZIP archive export',
+            'One-time payment — zero recurring auto-renewal'
         ]
     }
 };
 
-const RazorpayLogo: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg width="100" height="24" viewBox="0 0 100 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-        <path d="M12.5 1.5L2 22.5H7.5L11 15.5H16.5L12.5 1.5Z" fill="#0C2340" />
-        <path d="M11 15.5L7.5 22.5H18L21.5 15.5H11Z" fill="#3395FF" />
-        <text x="26" y="17" fill="#0C2340" fontFamily="sans-serif" fontWeight="800" fontSize="14" letterSpacing="0.05em">
-            Razorpay
-        </text>
-    </svg>
-);
-
 const COUNTRY_CODES = [
     { code: '+91', flag: '🇮🇳', name: 'India' },
-    { code: '+1', flag: '🇺🇸', name: 'United States / Canada' },
-    { code: '+44', flag: '🇬🇧', name: 'United Kingdom' },
     { code: '+971', flag: '🇦🇪', name: 'United Arab Emirates' },
-    { code: '+65', flag: '🇸🇬', name: 'Singapore' },
-    { code: '+61', flag: '🇦🇺', name: 'Australia' },
+    { code: '+44', flag: '🇬🇧', name: 'United Kingdom' },
+    { code: '+1', flag: '🇺🇸', name: 'United States / Canada' },
     { code: '+49', flag: '🇩🇪', name: 'Germany' },
     { code: '+33', flag: '🇫🇷', name: 'France' },
+    { code: '+65', flag: '🇸🇬', name: 'Singapore' },
+    { code: '+61', flag: '🇦🇺', name: 'Australia' },
     { code: '+81', flag: '🇯🇵', name: 'Japan' }
 ];
 
 const Checkout: React.FC = () => {
     const [searchParams] = useSearchParams();
+    const geo = useGeoCurrency();
     const rawPlan = searchParams.get('plan') || 'pro';
     const planType = rawPlan === 'standard' ? 'pro' : rawPlan;
-    const initialCurrency = (searchParams.get('currency') || 'INR').toUpperCase() as 'INR' | 'USD';
-    const initialCycle = (searchParams.get('cycle') || 'monthly').toLowerCase() as 'monthly' | 'annual';
 
-    const [currency, setCurrency] = useState<'INR' | 'USD'>(initialCurrency);
-    const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>(initialCycle);
+    const initialCurrency = geo.isUSVisitor
+        ? 'USD'
+        : (((searchParams.get('currency') || geo.currency).toUpperCase()) as CheckoutCurrency);
+    const validCurrency: CheckoutCurrency = ['INR', 'USD', 'AED', 'EUR', 'GBP'].includes(initialCurrency) ? initialCurrency : 'USD';
+
+    const [currency, setCurrency] = useState<CheckoutCurrency>(geo.isUSVisitor ? 'USD' : validCurrency);
+    const billingCycle = 'monthly';
+
+    useEffect(() => {
+        if (geo.isUSVisitor) {
+            setCurrency('USD');
+        } else if (!searchParams.get('currency')) {
+            setCurrency(geo.currency as CheckoutCurrency);
+        }
+    }, [geo.isUSVisitor, geo.currency, searchParams]);
+
+    const showCurrencySwitcher = !geo.isUSVisitor;
+
     const { user } = useUser();
+    const { openAuthModal } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [razorpayScriptLoaded, setRazorpayScriptLoaded] = useState(false);
@@ -167,14 +222,34 @@ const Checkout: React.FC = () => {
 
     const plan = PLAN_CONFIGS[planType] || PLAN_CONFIGS.pro;
     const PlanIcon = plan.icon;
+    const isSingleDeal = planType === 'single_deal';
 
-    useEffect(() => {
-        if (!user) {
-            navigate('/pricing');
-        }
-    }, [user, navigate]);
+    const cur = CURRENCY_CONFIG[currency] || CURRENCY_CONFIG.USD;
+    const isINR = currency === 'INR';
 
-    // Load Razorpay SDK dynamically
+    const planPricing = plan.pricing[currency] || plan.pricing.USD;
+    const monthlyRate = planPricing.monthly;
+    const totalDueToday = planPricing.monthly;
+
+    // User details
+    const userEmail = user?.email || user?.primaryEmailAddress?.emailAddress || user?.rawUser?.email || '';
+    const userName = user?.fullName || userEmail || 'DocTransfer User';
+    const initialPhone = (user as any)?.phone || user?.rawUser?.phone || user?.rawUser?.user_metadata?.phone || '';
+
+    const defaultCountryCode = (geo.isUSVisitor || currency === 'USD') ? '+1' : (currency === 'INR' ? '+91' : (currency === 'AED' ? '+971' : (currency === 'GBP' ? '+44' : '+1')));
+    const [countryCode, setCountryCode] = useState<string>(defaultCountryCode);
+    const [phoneNumber, setPhoneNumber] = useState<string>(initialPhone.replace(/^\+\d{1,3}/, ''));
+    const [phoneError, setPhoneError] = useState<string | null>(null);
+
+    // B2B Regional Tax States
+    const [isB2BTax, setIsB2BTax] = useState(false);
+    const [taxIdNumber, setTaxIdNumber] = useState('');
+    const [companyName, setCompanyName] = useState('');
+    const [taxError, setTaxError] = useState<string | null>(null);
+
+    const logoUrl = `${window.location.origin}/apple-touch-icon.png`;
+
+    // Load Razorpay SDK
     useEffect(() => {
         const scriptId = 'razorpay-sdk-script';
         if (document.getElementById(scriptId)) {
@@ -195,42 +270,16 @@ const Checkout: React.FC = () => {
         document.body.appendChild(script);
     }, []);
 
-    // Price calculations
-    const isINR = currency === 'INR';
-    const isAnnual = billingCycle === 'annual';
-    const monthlyRate = isINR
-        ? (isAnnual ? plan.inrAnnualMonthly : plan.inrMonthly)
-        : (isAnnual ? plan.usdAnnualMonthly : plan.usdMonthly);
-    const symbol = isINR ? '₹' : '$';
-
-    const totalDueToday = isAnnual
-        ? monthlyRate * 12
-        : monthlyRate;
-
-    // User account details
-    const userEmail = user?.email || user?.primaryEmailAddress?.emailAddress || user?.rawUser?.email || '';
-    const userName = user?.fullName || userEmail || 'DocTransfer User';
-    const initialPhone = (user as any)?.phone || user?.rawUser?.phone || user?.rawUser?.user_metadata?.phone || '';
-
-    const [countryCode, setCountryCode] = useState<string>(currency === 'INR' ? '+91' : '+1');
-    const [phoneNumber, setPhoneNumber] = useState<string>(initialPhone.replace(/^\+\d{1,3}/, ''));
-    const [phoneError, setPhoneError] = useState<string | null>(null);
-
-    // Indian B2B GST States
-    const [isB2BGst, setIsB2BGst] = useState(false);
-    const [gstin, setGstin] = useState('');
-    const [companyName, setCompanyName] = useState('');
-    const [gstError, setGstError] = useState<string | null>(null);
-
-    const logoUrl = `${window.location.origin}/apple-touch-icon.png`;
-
+    // Razorpay Checkout Execution
     const handleRazorpayPayment = async () => {
-        if (!user) return;
+        if (!user) {
+            openAuthModal('sign-in');
+            return;
+        }
 
-        // Validate phone number
         const cleanDigits = phoneNumber.replace(/\D/g, '');
         if (!cleanDigits) {
-            setPhoneError('Please enter your mobile number to proceed with payment.');
+            setPhoneError('Please enter your mobile number to proceed.');
             return;
         }
 
@@ -242,31 +291,21 @@ const Checkout: React.FC = () => {
             return;
         }
 
-        // Validate GST if enabled
-        if (isB2BGst) {
-            const cleanGst = gstin.trim().toUpperCase();
-            const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
-            if (!cleanGst || !gstRegex.test(cleanGst)) {
-                setGstError('Please enter a valid 15-character Indian GSTIN (e.g., 29AAAAA0000A1Z5).');
-                return;
-            }
-            if (!companyName.trim()) {
-                setGstError('Please enter your registered company or brokerage name.');
-                return;
-            }
+        if (isB2BTax && !taxIdNumber.trim()) {
+            setTaxError('Please enter your valid corporate Tax / VAT / GST identification number.');
+            return;
         }
 
         setPhoneError(null);
-        setGstError(null);
+        setTaxError(null);
         setLoading(true);
         setErrorMsg(null);
 
         const fullPhone = `${countryCode}${cleanDigits}`;
 
         try {
-            const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TXFmzOIjNJwVht';
+            const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TwAWmDJBUE3Si7';
 
-            // 1. Create Razorpay Subscription via Supabase Edge Function
             let subData: any = null;
             try {
                 const { data, error } = await supabase.functions.invoke('create-razorpay-subscription', {
@@ -274,6 +313,7 @@ const Checkout: React.FC = () => {
                         userId: user.id,
                         planType: planType,
                         billingCycle: billingCycle,
+                        currency: currency,
                         userEmail: userEmail,
                         userName: userName,
                         userPhone: fullPhone
@@ -281,7 +321,7 @@ const Checkout: React.FC = () => {
                 });
 
                 if (error) {
-                    console.warn("Edge function subscription call notice:", error);
+                    console.warn("Edge function subscription notice:", error);
                 }
                 subData = data;
             } catch (invokeErr) {
@@ -290,15 +330,14 @@ const Checkout: React.FC = () => {
 
             const subscriptionId = subData?.subscriptionId;
 
-            // 2. Open Razorpay Checkout Modal
             if (typeof (window as any).Razorpay === 'undefined') {
-                throw new Error('Razorpay SDK is not ready yet. Please check your internet connection and try again.');
+                throw new Error('Razorpay SDK is initializing. Please check your connection and retry.');
             }
 
             const options: any = {
                 key: keyId,
                 name: 'DocTransfer',
-                description: `${plan.name} (${billingCycle === 'annual' ? 'Annual' : 'Monthly'})`,
+                description: `${plan.name} (${isSingleDeal ? '90-Day Pass' : 'Monthly'})`,
                 image: logoUrl,
                 prefill: {
                     name: userName,
@@ -306,8 +345,8 @@ const Checkout: React.FC = () => {
                     contact: fullPhone
                 },
                 readonly: {
-                    email: true, // 🔒 Strictly locks email so Razorpay detects and preserves the logged-in DocTransfer email
-                    contact: true, // 🔒 Strictly locks phone number so Razorpay uses the user's filled number
+                    email: true,
+                    contact: true,
                     name: false
                 },
                 notes: {
@@ -315,7 +354,10 @@ const Checkout: React.FC = () => {
                     userEmail: userEmail,
                     userPhone: fullPhone,
                     planType: planType,
-                    billingCycle: billingCycle
+                    billingCycle: billingCycle,
+                    currency: currency,
+                    taxId: taxIdNumber,
+                    companyName: companyName
                 },
                 theme: {
                     color: plan.color
@@ -326,62 +368,31 @@ const Checkout: React.FC = () => {
                     }
                 },
                 handler: async function (response: any) {
-                    console.log("Razorpay payment success response:", response);
                     setLoading(true);
-
                     const transactionRef = response.razorpay_payment_id || response.razorpay_subscription_id || subscriptionId || '';
 
-                    // 3. Verify Payment Signature & Activate Subscription
-                    let activated = false;
                     try {
-                        const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-razorpay-payment', {
-                            body: {
-                                userId: user.id,
-                                planType: planType,
-                                billingCycle: billingCycle,
-                                razorpayPaymentId: response.razorpay_payment_id,
-                                razorpaySubscriptionId: response.razorpay_subscription_id || subscriptionId,
-                                razorpaySignature: response.razorpay_signature
-                            }
+                        await supabase.rpc('activate_user_subscription', {
+                            p_user_id: user.id,
+                            p_plan_type: planType,
+                            p_billing_cycle: billingCycle,
+                            p_transaction_ref: transactionRef
                         });
-
-                        if (!verifyError && verifyData?.success) {
-                            activated = true;
-                        } else {
-                            console.warn("Edge function verification notice:", verifyError);
-                        }
-                    } catch (verifyCatch) {
-                        console.warn("Edge function invoke notice:", verifyCatch);
+                    } catch (rpcErr) {
+                        console.warn("RPC activation notice:", rpcErr);
                     }
 
-                    // Fallback to direct RPC activation to guarantee unlocking
-                    if (!activated) {
-                        try {
-                            await supabase.rpc('activate_user_subscription', {
-                                p_user_id: user.id,
-                                p_plan_type: planType,
-                                p_billing_cycle: billingCycle,
-                                p_transaction_ref: transactionRef
-                            });
-                        } catch (rpcErr) {
-                            console.warn("RPC activation fallback notice:", rpcErr);
-                        }
-                    }
-
-                    // Redirect to Payment Success page
                     navigate(
                         `/payment-success?gateway=razorpay&plan=${planType}&cycle=${billingCycle}&payment_id=${response.razorpay_payment_id || ''}&subscription_id=${response.razorpay_subscription_id || subscriptionId || ''}`
                     );
                 }
             };
 
-            // If a valid recurring subscription ID was returned, attach it
-            if (subscriptionId && !subscriptionId.startsWith('sub_simulated_')) {
+            if (subscriptionId && !subscriptionId.startsWith('sub_simulated_') && !isSingleDeal) {
                 options.subscription_id = subscriptionId;
             } else {
-                // If recurring subscription is in sandbox / fallback mode, use amount checkout
-                options.amount = totalDueToday * (isINR ? 100 : 100);
-                options.currency = currency;
+                options.amount = totalDueToday * 100;
+                options.currency = currency === 'AED' ? 'AED' : (currency === 'EUR' ? 'EUR' : (currency === 'GBP' ? 'GBP' : (currency === 'INR' ? 'INR' : 'USD')));
             }
 
             const rzp = new (window as any).Razorpay(options);
@@ -408,7 +419,7 @@ const Checkout: React.FC = () => {
         }}>
             <SEO
                 title={`Checkout — ${plan.name} | DocTransfer`}
-                description={`Subscribe to DocTransfer ${plan.name} via Razorpay. Secure payments via UPI, Cards, and NetBanking.`}
+                description={`Subscribe to DocTransfer ${plan.name} via 3D Secure Credit/Debit Cards, Apple Pay or UPI.`}
                 keywords="DocTransfer checkout, Razorpay payment, secure data room checkout"
             />
 
@@ -466,7 +477,7 @@ const Checkout: React.FC = () => {
                 }}>
                     {[
                         { step: 1, label: 'Select Plan', done: true },
-                        { step: 2, label: 'Payment Method', done: false, active: true },
+                        { step: 2, label: 'Payment & Billing', done: false, active: true },
                         { step: 3, label: 'Instant Activation', done: false }
                     ].map((s, i) => (
                         <React.Fragment key={s.step}>
@@ -506,24 +517,24 @@ const Checkout: React.FC = () => {
 
             {/* Main Content */}
             <main style={{
-                maxWidth: '1120px',
+                maxWidth: '1140px',
                 margin: '0 auto',
                 padding: '3rem 1.5rem',
                 display: 'grid',
-                gridTemplateColumns: '1fr 400px',
+                gridTemplateColumns: '1fr 410px',
                 gap: '2.5rem',
                 alignItems: 'start'
             }}>
-                {/* Left Column: Payment Gateway Card */}
+                {/* Left Column: Payment Details */}
                 <div>
                     <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.5rem' }}>
                         Complete Your Subscription
                     </h1>
-                    <p style={{ color: '#64748b', fontSize: '0.95rem', marginBottom: userEmail ? '1rem' : '2rem', lineHeight: 1.6 }}>
-                        You are subscribing to <strong>{plan.name}</strong>. Transactions are processed securely via <strong>Razorpay</strong>.
+                    <p style={{ color: '#64748b', fontSize: '0.92rem', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+                        You are subscribing to <strong>{plan.name}</strong>. Powered by secure 3D-Secure card and UPI processing.
                     </p>
 
-                    {userEmail && (
+                    {userEmail ? (
                         <div style={{
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -539,6 +550,41 @@ const Checkout: React.FC = () => {
                         }}>
                             <ShieldCheck size={16} color="#2563eb" />
                             <span>Logged in as: <strong>{userEmail}</strong></span>
+                        </div>
+                    ) : (
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            gap: '0.75rem',
+                            background: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            padding: '0.75rem 1rem',
+                            borderRadius: '12px',
+                            marginBottom: '1.5rem',
+                            fontSize: '0.85rem'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#475569' }}>
+                                <Lock size={16} color="#6366f1" />
+                                <span>Sign in to link this subscription to your DocTransfer account</span>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => openAuthModal('sign-in')}
+                                style={{
+                                    padding: '0.35rem 0.85rem',
+                                    borderRadius: '8px',
+                                    background: '#4f46e5',
+                                    color: 'white',
+                                    fontWeight: 700,
+                                    fontSize: '0.8rem',
+                                    border: 'none',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Sign In / Sign Up
+                            </button>
                         </div>
                     )}
 
@@ -556,327 +602,339 @@ const Checkout: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Razorpay Gateway Box */}
-                    <div style={{
-                        border: '2px solid #3b82f6',
-                        borderRadius: '20px',
-                        padding: '1.75rem',
-                        background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, rgba(37, 99, 235, 0.08) 100%)',
-                        boxShadow: '0 12px 32px rgba(59, 130, 246, 0.12)',
-                        marginBottom: '1.5rem',
-                        position: 'relative'
-                    }}>
-                        {/* Radio select badge */}
+                    {/* Currency Selector Pill (Hidden for US Visitors who only see USD) */}
+                    {showCurrencySwitcher && (
                         <div style={{
-                            position: 'absolute',
-                            top: '1.5rem',
-                            right: '1.5rem',
-                            width: '24px',
-                            height: '24px',
-                            borderRadius: '50%',
-                            background: '#3b82f6',
+                            background: 'white',
+                            padding: '1rem 1.25rem',
+                            borderRadius: '16px',
+                            border: '1px solid #e2e8f0',
+                            marginBottom: '1.5rem',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            color: 'white'
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            gap: '0.75rem'
                         }}>
-                            <Check size={14} strokeWidth={3.5} />
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1.25rem' }}>
-                            <div style={{
-                                width: '56px',
-                                height: '56px',
-                                borderRadius: '14px',
-                                background: 'white',
-                                border: '1px solid #e2e8f0',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                boxShadow: '0 4px 10px rgba(0,0,0,0.04)'
-                            }}>
-                                <CreditCard size={26} color="#0284c7" />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <Globe size={18} color="#0284c7" />
+                                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
+                                    Billing Currency:
+                                </span>
                             </div>
-                            <div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                                        Razorpay Gateway
-                                    </h3>
-                                    <span style={{
-                                        fontSize: '0.68rem',
-                                        fontWeight: 800,
-                                        background: '#dbeafe',
-                                        color: '#1d4ed8',
-                                        padding: '3px 8px',
-                                        borderRadius: '6px'
-                                    }}>RECOMMENDED</span>
+                            <div style={{ display: 'flex', gap: '0.35rem' }}>
+                                {(['INR', 'AED', 'EUR', 'GBP', 'USD'] as CheckoutCurrency[]).map((c) => {
+                                    const isSel = currency === c;
+                                    return (
+                                        <button
+                                            key={c}
+                                            onClick={() => setCurrency(c)}
+                                            style={{
+                                                padding: '0.3rem 0.65rem',
+                                                borderRadius: '8px',
+                                                border: isSel ? '1px solid #0284c7' : '1px solid #e2e8f0',
+                                                background: isSel ? '#eff6ff' : '#ffffff',
+                                                color: isSel ? '#0284c7' : '#64748b',
+                                                fontWeight: isSel ? 800 : 600,
+                                                fontSize: '0.78rem',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.15s ease'
+                                            }}
+                                        >
+                                            {CURRENCY_CONFIG[c].flag} {c}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Unified Secure Payment Gateway Card */}
+                    <div style={{
+                        border: '2px solid #0284c7',
+                        borderRadius: '20px',
+                        padding: '1.6rem 1.75rem',
+                        background: '#ffffff',
+                        boxShadow: '0 10px 30px rgba(2, 132, 199, 0.08)',
+                        marginBottom: '1.5rem'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                                <div style={{
+                                    width: '46px',
+                                    height: '46px',
+                                    borderRadius: '12px',
+                                    background: '#f0f9ff',
+                                    border: '1px solid #bae6fd',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: '#0284c7'
+                                }}>
+                                    <CreditCard size={24} />
                                 </div>
-                                <p style={{ color: '#64748b', fontSize: '0.88rem', margin: '0.25rem 0 0' }}>
-                                    UPI, RuPay, Visa, Mastercard, NetBanking & Global Cards
-                                </p>
+                                <div>
+                                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                                        {isINR ? 'Instant UPI & RuPay / Cards' : 'Credit / Debit Card & Apple Pay'}
+                                    </h3>
+                                    <p style={{ color: '#64748b', fontSize: '0.82rem', margin: '0.2rem 0 0' }}>
+                                        {isINR
+                                            ? 'Google Pay, PhonePe, Paytm, RuPay, Indian NetBanking & 18% GST Invoicing'
+                                            : '3D-Secure 2.0 (Visa, Mastercard, American Express) with Zero Foreign Transaction Fees'}
+                                    </p>
+                                </div>
                             </div>
+                            <span style={{
+                                fontSize: '0.7rem',
+                                fontWeight: 800,
+                                background: isINR ? '#dcfce7' : '#e0f2fe',
+                                color: isINR ? '#15803d' : '#0369a1',
+                                padding: '3px 9px',
+                                borderRadius: '6px'
+                            }}>
+                                {isINR ? '18% GST ITC' : (currency === 'AED' ? 'DUBAI / UAE TRN' : (currency === 'EUR' ? 'EU 0% REVERSE' : 'GLOBAL 3D SECURE'))}
+                            </span>
                         </div>
 
-                        {/* Supported Badges */}
-                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                            {[
-                                { name: 'Google Pay', bg: '#e0f2fe', color: '#0369a1' },
-                                { name: 'PhonePe', bg: '#ede9fe', color: '#6d28d9' },
-                                { name: 'Paytm UPI', bg: '#e0f2fe', color: '#0284c7' },
-                                { name: 'RuPay', bg: '#ffedd5', color: '#c2410c' },
-                                { name: 'Visa & MC', bg: '#f1f5f9', color: '#334155' },
-                                { name: '50+ Banks', bg: '#dcfce7', color: '#15803d' }
-                            ].map(b => (
-                                <span key={b.name} style={{
+                        {/* Badges list */}
+                        <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+                            {(isINR
+                                ? ['Google Pay', 'PhonePe', 'Paytm UPI', 'RuPay', 'Indian NetBanking', '18% GST Invoicing']
+                                : ['Visa', 'Mastercard', 'American Express', 'Apple Pay', '3D Secure 2.0', 'Instant Activation']
+                            ).map(b => (
+                                <span key={b} style={{
                                     fontSize: '0.72rem',
                                     fontWeight: 700,
-                                    background: b.bg,
-                                    color: b.color,
-                                    padding: '4px 10px',
-                                    borderRadius: '8px'
-                                }}>{b.name}</span>
+                                    background: '#f8fafc',
+                                    color: '#334155',
+                                    padding: '3px 8px',
+                                    borderRadius: '6px',
+                                    border: '1px solid #e2e8f0'
+                                }}>{b}</span>
                             ))}
                         </div>
-                    </div>
 
-                    {/* Phone Number Input Card */}
-                    <div style={{
-                        background: 'white',
-                        border: phoneError ? '1.5px solid #ef4444' : '1px solid #e2e8f0',
-                        borderRadius: '18px',
-                        padding: '1.25rem 1.5rem',
-                        marginBottom: '1.5rem',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
-                        transition: 'all 0.2s ease'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                            <label style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                fontSize: '0.92rem',
-                                fontWeight: 700,
-                                color: '#0f172a'
-                            }}>
-                                <Phone size={16} color="#0284c7" />
-                                Your Mobile Number (for Razorpay)
-                            </label>
-                            <span style={{
-                                fontSize: '0.68rem',
-                                fontWeight: 800,
-                                background: '#fef3c7',
-                                color: '#b45309',
-                                padding: '2px 8px',
-                                borderRadius: '6px'
-                            }}>REQUIRED</span>
-                        </div>
-
-                        <div style={{ display: 'flex', gap: '0.6rem' }}>
-                            {/* Country Code Selector */}
-                            <select
-                                value={countryCode}
-                                onChange={(e) => setCountryCode(e.target.value)}
-                                style={{
-                                    padding: '0.75rem 0.85rem',
-                                    borderRadius: '12px',
-                                    border: '1px solid #cbd5e1',
-                                    background: '#f8fafc',
-                                    color: '#0f172a',
-                                    fontSize: '0.9rem',
-                                    fontWeight: 700,
-                                    outline: 'none',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                {COUNTRY_CODES.map((c) => (
-                                    <option key={c.code} value={c.code}>
-                                        {c.flag} {c.code}
-                                    </option>
-                                ))}
-                            </select>
-
-                            {/* Phone Input */}
-                            <input
-                                type="tel"
-                                value={phoneNumber}
-                                onChange={(e) => {
-                                    setPhoneNumber(e.target.value);
-                                    if (phoneError) setPhoneError(null);
-                                }}
-                                placeholder={countryCode === '+91' ? '98765 43210' : 'Mobile number'}
-                                style={{
-                                    flex: 1,
-                                    padding: '0.75rem 1rem',
-                                    borderRadius: '12px',
-                                    border: phoneError ? '1px solid #ef4444' : '1px solid #cbd5e1',
-                                    background: '#ffffff',
-                                    color: '#0f172a',
-                                    fontSize: '0.95rem',
-                                    fontWeight: 600,
-                                    outline: 'none',
-                                    transition: 'border 0.2s'
-                                }}
-                                onFocus={(e) => {
-                                    if (!phoneError) e.target.style.borderColor = '#0284c7';
-                                }}
-                                onBlur={(e) => {
-                                    if (!phoneError) e.target.style.borderColor = '#cbd5e1';
-                                }}
-                            />
-                        </div>
-
-                        {phoneError ? (
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.4rem',
-                                color: '#ef4444',
-                                fontSize: '0.8rem',
-                                fontWeight: 600,
-                                marginTop: '0.6rem'
-                            }}>
-                                <AlertCircle size={14} />
-                                {phoneError}
-                            </div>
-                        ) : (
-                            <p style={{
-                                margin: '0.6rem 0 0',
-                                fontSize: '0.75rem',
-                                color: '#64748b',
-                                lineHeight: 1.4
-                            }}>
-                                🔒 Razorpay uses this number for OTPs, UPI approval prompts, and GST payment receipts.
-                            </p>
-                        )}
-                    </div>
-
-                    {/* B2B GST Input Tax Credit Option (India) */}
-                    {isINR && (
+                        {/* Mobile Number Input */}
                         <div style={{
-                            background: isB2BGst ? '#f0fdf4' : '#ffffff',
-                            border: isB2BGst ? '1.5px solid #10b981' : '1px solid #e2e8f0',
-                            borderRadius: '18px',
-                            padding: '1.25rem 1.5rem',
+                            background: '#f8fafc',
+                            border: phoneError ? '1.5px solid #ef4444' : '1px solid #e2e8f0',
+                            borderRadius: '14px',
+                            padding: '1rem 1.25rem',
+                            marginBottom: '1.25rem'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
+                                    <Phone size={14} color="#0284c7" />
+                                    Mobile Phone Number (for receipt & SMS verification)
+                                </label>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 800, background: '#fef3c7', color: '#b45309', padding: '2px 7px', borderRadius: '4px' }}>
+                                    REQUIRED
+                                </span>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '0.6rem' }}>
+                                <select
+                                    value={countryCode}
+                                    onChange={(e) => setCountryCode(e.target.value)}
+                                    style={{
+                                        padding: '0.7rem 0.8rem',
+                                        borderRadius: '10px',
+                                        border: '1px solid #cbd5e1',
+                                        background: '#ffffff',
+                                        color: '#0f172a',
+                                        fontSize: '0.88rem',
+                                        fontWeight: 700,
+                                        outline: 'none',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {COUNTRY_CODES.map((c) => (
+                                        <option key={c.code} value={c.code}>
+                                            {c.flag} {c.code}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                <input
+                                    type="tel"
+                                    value={phoneNumber}
+                                    onChange={(e) => {
+                                        setPhoneNumber(e.target.value);
+                                        if (phoneError) setPhoneError(null);
+                                    }}
+                                    placeholder={countryCode === '+91' ? '98765 43210' : 'Mobile number'}
+                                    style={{
+                                        flex: 1,
+                                        padding: '0.7rem 0.95rem',
+                                        borderRadius: '10px',
+                                        border: phoneError ? '1px solid #ef4444' : '1px solid #cbd5e1',
+                                        background: '#ffffff',
+                                        color: '#0f172a',
+                                        fontSize: '0.9rem',
+                                        fontWeight: 600,
+                                        outline: 'none'
+                                    }}
+                                />
+                            </div>
+
+                            {phoneError && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#ef4444', fontSize: '0.8rem', fontWeight: 600, marginTop: '0.4rem' }}>
+                                    <AlertCircle size={14} /> {phoneError}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Regional B2B Corporate Tax Invoicing Card */}
+                        <div style={{
+                            background: isB2BTax ? '#f0fdf4' : '#f8fafc',
+                            border: isB2BTax ? '1.5px solid #10b981' : '1px solid #e2e8f0',
+                            borderRadius: '14px',
+                            padding: '1rem 1.25rem',
                             marginBottom: '1.5rem',
-                            boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
                             transition: 'all 0.2s ease'
                         }}>
                             <div
                                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
-                                onClick={() => setIsB2BGst(!isB2BGst)}
+                                onClick={() => setIsB2BTax(!isB2BTax)}
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                                     <input
                                         type="checkbox"
-                                        id="gstCheckbox"
-                                        checked={isB2BGst}
-                                        onChange={(e) => setIsB2BGst(e.target.checked)}
-                                        style={{ width: '18px', height: '18px', accentColor: '#059669', cursor: 'pointer' }}
+                                        id="taxCheckbox"
+                                        checked={isB2BTax}
+                                        onChange={(e) => setIsB2BTax(e.target.checked)}
+                                        style={{ width: '17px', height: '17px', accentColor: '#059669', cursor: 'pointer' }}
                                     />
-                                    <label htmlFor="gstCheckbox" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#0f172a', cursor: 'pointer' }}>
-                                        Claim GST Input Tax Credit (18% ITC)
+                                    <label htmlFor="taxCheckbox" style={{ fontSize: '0.88rem', fontWeight: 700, color: '#0f172a', cursor: 'pointer' }}>
+                                        {currency === 'INR' && 'Claim GST Input Tax Credit (18% ITC)'}
+                                        {currency === 'AED' && 'Add UAE Tax Registration Number (5% VAT TRN)'}
+                                        {currency === 'EUR' && 'EU Business Reverse Charge (0% VAT VIES)'}
+                                        {currency === 'GBP' && 'Add UK VAT Registration Number'}
+                                        {currency === 'USD' && 'Add Corporate Tax ID / Business Invoicing'}
                                     </label>
                                 </div>
-                                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#059669', background: '#ecfdf5', padding: '3px 8px', borderRadius: '6px' }}>
+                                <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#059669', background: '#ecfdf5', padding: '2px 7px', borderRadius: '5px' }}>
                                     B2B INVOICE
                                 </span>
                             </div>
 
-                            {isB2BGst && (
-                                <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {isB2BTax && (
+                                <div style={{ marginTop: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#475569', marginBottom: '4px' }}>
-                                            GSTIN (15-digit GST Identification Number)
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#475569', marginBottom: '3px' }}>
+                                            {currency === 'INR' && 'GSTIN (15-digit GST Identification Number)'}
+                                            {currency === 'AED' && 'UAE TRN (15-digit Tax Registration Number)'}
+                                            {currency === 'EUR' && 'EU VAT ID (e.g. DE123456789, FR12345678901)'}
+                                            {currency === 'GBP' && 'UK VAT Number (e.g. GB123456789)'}
+                                            {currency === 'USD' && 'Corporate EIN / Tax ID Number'}
                                         </label>
                                         <input
                                             type="text"
-                                            placeholder="29AAAAA0000A1Z5"
-                                            maxLength={15}
-                                            value={gstin}
-                                            onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                                            placeholder={currency === 'INR' ? '29AAAAA0000A1Z5' : currency === 'AED' ? '100XXXXXXXXX003' : currency === 'EUR' ? 'DE123456789' : 'Tax ID Number'}
+                                            value={taxIdNumber}
+                                            onChange={(e) => setTaxIdNumber(e.target.value.toUpperCase())}
                                             style={{
                                                 width: '100%',
-                                                padding: '0.65rem 0.85rem',
-                                                borderRadius: '10px',
+                                                padding: '0.6rem 0.8rem',
+                                                borderRadius: '8px',
                                                 border: '1px solid #cbd5e1',
-                                                fontSize: '0.88rem',
+                                                fontSize: '0.85rem',
                                                 fontWeight: 600,
-                                                letterSpacing: '0.05em',
                                                 boxSizing: 'border-box'
                                             }}
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#475569', marginBottom: '4px' }}>
-                                            Registered Business / Firm Name
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#475569', marginBottom: '3px' }}>
+                                            Registered Company / Brokerage Name
                                         </label>
                                         <input
                                             type="text"
-                                            placeholder="e.g. Apex Realty Advisory LLP / Lodha Associates"
+                                            placeholder="e.g. Emaar Partner Agency / Cavendish M&A Advisory LLP"
                                             value={companyName}
                                             onChange={(e) => setCompanyName(e.target.value)}
                                             style={{
                                                 width: '100%',
-                                                padding: '0.65rem 0.85rem',
-                                                borderRadius: '10px',
+                                                padding: '0.6rem 0.8rem',
+                                                borderRadius: '8px',
                                                 border: '1px solid #cbd5e1',
-                                                fontSize: '0.88rem',
+                                                fontSize: '0.85rem',
                                                 boxSizing: 'border-box'
                                             }}
                                         />
                                     </div>
-                                    {gstError && (
-                                        <div style={{ color: '#dc2626', fontSize: '0.78rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                            <AlertCircle size={13} /> {gstError}
+                                    {taxError && (
+                                        <div style={{ color: '#dc2626', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            <AlertCircle size={13} /> {taxError}
                                         </div>
                                     )}
                                 </div>
                             )}
                         </div>
-                    )}
 
-                    {/* Pay Button */}
-                    <button
-                        onClick={handleRazorpayPayment}
-                        disabled={loading}
-                        style={{
-                            width: '100%',
-                            padding: '1.25rem 2rem',
-                            borderRadius: '16px',
-                            border: 'none',
-                            background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
-                            color: 'white',
-                            fontWeight: 800,
-                            fontSize: '1.05rem',
-                            cursor: loading ? 'default' : 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.75rem',
-                            boxShadow: '0 10px 25px rgba(2, 132, 199, 0.35)',
-                            transition: 'all 0.2s',
-                            letterSpacing: '0.01em'
-                        }}
-                        onMouseEnter={(e) => {
-                            if (!loading) e.currentTarget.style.filter = 'brightness(1.06)';
-                        }}
-                        onMouseLeave={(e) => {
-                            if (!loading) e.currentTarget.style.filter = 'brightness(1)';
-                        }}
-                    >
-                        {loading ? (
-                            <>
-                                <Loader2 size={20} className="checkout-spin" />
-                                Launching Secure Razorpay Checkout...
-                            </>
-                        ) : (
-                            <>
-                                <Lock size={18} />
-                                Pay with Razorpay — {symbol}{monthlyRate}/mo
-                                <ChevronRight size={18} />
-                            </>
-                        )}
-                    </button>
+                        {/* Primary Submit Button */}
+                        <button
+                            onClick={handleRazorpayPayment}
+                            disabled={loading}
+                            style={{
+                                width: '100%',
+                                padding: '1.25rem 2rem',
+                                borderRadius: '14px',
+                                border: 'none',
+                                background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+                                color: 'white',
+                                fontWeight: 800,
+                                fontSize: '1.05rem',
+                                cursor: loading ? 'default' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.75rem',
+                                boxShadow: '0 10px 25px rgba(2, 132, 199, 0.35)',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            {loading ? (
+                                <>
+                                    <Loader2 size={20} className="checkout-spin" />
+                                    Launching Secure Checkout...
+                                </>
+                            ) : (
+                                <>
+                                    <Lock size={18} />
+                                    Pay Securely — {cur.symbol}{totalDueToday.toLocaleString()}
+                                    <ChevronRight size={18} />
+                                </>
+                            )}
+                        </button>
+                    </div>
+
+                    {/* Legal & No Refund Notice */}
+                    <div style={{
+                        marginTop: '1.25rem',
+                        padding: '0.85rem 1rem',
+                        borderRadius: '12px',
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        fontSize: '0.78rem',
+                        color: '#64748b',
+                        lineHeight: 1.5,
+                        textAlign: 'center'
+                    }}>
+                        By clicking Pay, you agree to our{' '}
+                        <Link to="/terms" target="_blank" style={{ color: '#0284c7', fontWeight: 600, textDecoration: 'underline' }}>
+                            Terms of Service
+                        </Link>{' '}
+                        and{' '}
+                        <Link to="/privacy" target="_blank" style={{ color: '#0284c7', fontWeight: 600, textDecoration: 'underline' }}>
+                            Privacy Policy
+                        </Link>
+                        . All enterprise subscriptions are subject to our{' '}
+                        <Link to="/refund-policy" target="_blank" style={{ color: '#dc2626', fontWeight: 600, textDecoration: 'underline' }}>
+                            No-Refund Policy
+                        </Link>
+                        . You can cancel auto-renewal anytime from your dashboard.
+                    </div>
 
                     {/* Trust Indicators */}
                     <div style={{
@@ -888,7 +946,7 @@ const Checkout: React.FC = () => {
                         flexWrap: 'wrap'
                     }}>
                         {[
-                            { icon: ShieldCheck, text: 'RBI & NPCI Compliant' },
+                            { icon: ShieldCheck, text: 'RBI, PCI-DSS & PSD2 Compliant' },
                             { icon: RefreshCw, text: 'Cancel Anytime' },
                             { icon: Clock, text: 'Instant Plan Activation' }
                         ].map(t => (
@@ -948,11 +1006,11 @@ const Checkout: React.FC = () => {
                                     <PlanIcon size={22} />
                                 </div>
                                 <div>
-                                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>
+                                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>
                                         {plan.name}
                                     </h3>
                                     <p style={{ margin: 0, fontSize: '0.82rem', opacity: 0.85 }}>
-                                        {isAnnual ? 'Annual billing (Save ~25%)' : 'Monthly billing'}
+                                        {isSingleDeal ? '90-Day Single Deal Access' : 'Monthly billing'}
                                     </p>
                                 </div>
                             </div>
@@ -965,7 +1023,7 @@ const Checkout: React.FC = () => {
                                 justifyContent: 'space-between',
                                 paddingBottom: '0.75rem',
                                 borderBottom: '1px solid #f1f5f9',
-                                fontSize: '0.9rem',
+                                fontSize: '0.88rem',
                                 color: '#475569'
                             }}>
                                 <span>Subscription Plan</span>
@@ -977,12 +1035,12 @@ const Checkout: React.FC = () => {
                                 justifyContent: 'space-between',
                                 padding: '0.75rem 0',
                                 borderBottom: '1px solid #f1f5f9',
-                                fontSize: '0.9rem',
+                                fontSize: '0.88rem',
                                 color: '#475569'
                             }}>
-                                <span>Billing Cycle</span>
-                                <span style={{ fontWeight: 600, color: '#0f172a' }}>
-                                    {isAnnual ? 'Annual' : 'Monthly'}
+                                <span>Payment Processing</span>
+                                <span style={{ fontWeight: 700, color: '#0284c7' }}>
+                                    Razorpay (3D Secure & UPI)
                                 </span>
                             </div>
 
@@ -991,14 +1049,30 @@ const Checkout: React.FC = () => {
                                 justifyContent: 'space-between',
                                 padding: '0.75rem 0',
                                 borderBottom: '1px solid #f1f5f9',
-                                fontSize: '0.9rem',
+                                fontSize: '0.88rem',
                                 color: '#475569'
                             }}>
-                                <span>Monthly Rate</span>
+                                <span>Billing Cycle</span>
                                 <span style={{ fontWeight: 600, color: '#0f172a' }}>
-                                    {symbol}{monthlyRate}/mo
+                                    {isSingleDeal ? '90-Day Pass' : 'Monthly'}
                                 </span>
                             </div>
+
+                            {!isSingleDeal && (
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    padding: '0.75rem 0',
+                                    borderBottom: '1px solid #f1f5f9',
+                                    fontSize: '0.88rem',
+                                    color: '#475569'
+                                }}>
+                                    <span>Rate</span>
+                                    <span style={{ fontWeight: 600, color: '#0f172a' }}>
+                                        {cur.symbol}{monthlyRate.toLocaleString()}/mo
+                                    </span>
+                                </div>
+                            )}
 
                             {isINR && (
                                 <>
@@ -1007,7 +1081,7 @@ const Checkout: React.FC = () => {
                                         justifyContent: 'space-between',
                                         padding: '0.75rem 0',
                                         borderBottom: '1px solid #f1f5f9',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.88rem',
                                         color: '#475569'
                                     }}>
                                         <span>Base Price (Net of GST)</span>
@@ -1020,7 +1094,7 @@ const Checkout: React.FC = () => {
                                         justifyContent: 'space-between',
                                         padding: '0.75rem 0',
                                         borderBottom: '1px solid #f1f5f9',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.88rem',
                                         color: '#475569'
                                     }}>
                                         <span>18% GST (Input Tax Credit)</span>
@@ -1038,14 +1112,25 @@ const Checkout: React.FC = () => {
                                 paddingTop: '1rem',
                                 marginTop: '0.25rem'
                             }}>
-                                <span style={{ fontWeight: 800, color: '#0f172a', fontSize: '1rem' }}>
-                                    {isAnnual ? 'Total Billed Today (Incl. GST)' : 'Total Due Today (Incl. GST)'}
+                                <span style={{ fontWeight: 800, color: '#0f172a', fontSize: '0.95rem' }}>
+                                    {isSingleDeal ? 'Total One-Time Due' : 'Total Due Today'}
                                 </span>
                                 <div style={{ textAlign: 'right' }}>
-                                    <span style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a' }}>
-                                        {symbol}{totalDueToday.toLocaleString('en-IN')}
+                                    <span style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0f172a' }}>
+                                        {cur.symbol}{totalDueToday.toLocaleString()}
                                     </span>
                                 </div>
+                            </div>
+
+                            <div style={{
+                                marginTop: '0.75rem',
+                                paddingTop: '0.75rem',
+                                borderTop: '1px dashed #e2e8f0',
+                                fontSize: '0.75rem',
+                                color: '#94a3b8',
+                                textAlign: 'center'
+                            }}>
+                                🔒 Final sale • Enterprise plans are non-refundable once billed
                             </div>
                         </div>
                     </div>

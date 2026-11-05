@@ -63,14 +63,7 @@ function App() {
       <Route path="/refund-policy" element={<RefundPolicy />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/payment-success" element={<PaymentSuccess />} />
-      <Route
-        path="/checkout"
-        element={
-          <ProtectedRoute>
-            <Checkout />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/checkout" element={<Checkout />} />
 
       {/* Public Routes */}
       <Route path="/view/:shareLink" element={<ViewDocument />} />

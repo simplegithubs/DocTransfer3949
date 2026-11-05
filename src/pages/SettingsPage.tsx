@@ -275,8 +275,8 @@ const SettingsPage: React.FC = () => {
                                 </h3>
                                 <p style={{ color: '#94a3b8', fontSize: '0.78rem', margin: '0 0 1rem 0', lineHeight: 1.5 }}>
                                     {planType === 'free'
-                                        ? 'Upgrade to claim 18% GST ITC, WhatsApp open tracking, and custom broker watermarking.'
-                                        : 'Includes 18% GST B2B tax invoice and unlimited client deal rooms.'}
+                                        ? 'Upgrade to unlock global B2B Tax Invoicing (UAE TRN / EU VAT), real-time investor WhatsApp alerts, and custom institutional watermarking.'
+                                        : 'Includes international VAT tax invoicing, multi-currency settlement, and unlimited client deal rooms.'}
                                 </p>
                                 <button
                                     onClick={() => navigate('/pricing')}

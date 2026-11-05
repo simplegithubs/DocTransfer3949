@@ -47,7 +47,7 @@ serve(async (req: Request) => {
 
         console.log(`Verifying Razorpay payment for user ${userId}, plan ${planType}, paymentId: ${razorpayPaymentId}`);
 
-        const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET');
+        const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET') || 'NRx02jnDLfidfvbJj1NiHejv';
         let isValid = false;
 
         if (!keySecret) {

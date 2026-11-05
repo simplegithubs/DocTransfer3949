@@ -16,26 +16,26 @@ import {
 const ComplianceRoadmapSection: React.FC = () => {
   const complianceCards = [
     {
-      title: 'DPDP Act 2023 Ready',
-      status: 'India Privacy Ready',
+      title: 'UAE PDPL & DIFC Ready',
+      status: 'UAE & GCC Validated',
       icon: ShieldCheck,
       color: '#10b981',
       gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.1) 100%)',
       borderColor: 'rgba(52, 211, 153, 0.45)',
       glowShadow: '0 0 35px rgba(16, 185, 129, 0.25)',
-      description: 'Client-side Zero-Knowledge AES-256 encryption ensures taxpayer documents, PAN, Aadhaar, and confidential IP meet India Digital Personal Data Protection standards.',
-      tags: ['Zero Server Decryption', 'DPDP Compliance', 'Local Key Storage']
+      description: 'Client-side Zero-Knowledge AES-256 encryption guarantees sovereign fund diligence, cross-border M&A, and Dubai luxury property assets meet UAE Federal Decree-Law No. 45/2021 and DIFC Law No. 5 standards.',
+      tags: ['Zero Server Decryption', 'UAE PDPL Aligned', 'DIFC Data Protection']
     },
     {
-      title: 'IT Act 2000 & Sec 65B',
-      status: 'Court-Admissible',
+      title: 'eIDAS & US ESIGN Act',
+      status: 'Global Court-Admissible',
       icon: FileCheck,
       color: '#6366f1',
       gradient: 'linear-gradient(135deg, rgba(99, 102, 241, 0.22) 0%, rgba(139, 92, 246, 0.1) 100%)',
       borderColor: 'rgba(129, 140, 248, 0.45)',
       glowShadow: '0 0 35px rgba(99, 102, 241, 0.25)',
-      description: 'Legally binding e-signatures under Section 5 & 10A of the IT Act 2000 with tamper-evident digital audit logs compliant with Section 65B of the Indian Evidence Act.',
-      tags: ['Sec 65B Certificate', 'IT Act Section 5', 'Contract Act Sec 10A']
+      description: 'Enforceable electronic agreements with tamper-evident cryptographic digital audit trails strictly compliant with EU Regulation 910/2014 (eIDAS), US 15 U.S.C. § 7001 (ESIGN Act), and UK Electronic Communications Act.',
+      tags: ['eIDAS Compliant', 'US ESIGN Admissible', 'SHA-256 Audit Trail']
     },
     {
       title: 'SOC 2 Type II',

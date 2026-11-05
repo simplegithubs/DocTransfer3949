@@ -21,14 +21,17 @@ const PaymentSuccess: React.FC = () => {
     const navigate = useNavigate();
 
     const isAnnual = cycleParam === 'annual' || cycleParam === 'yearly';
-    const durationText = isAnnual ? '1 Year' : '1 Month';
-    const daysCount = isAnnual ? 365 : 30;
+    const isSingleDeal = planParam === 'single_deal';
+    const durationText = isSingleDeal ? '90 Days' : (isAnnual ? '1 Year' : '1 Month');
+    const daysCount = isSingleDeal ? 90 : (isAnnual ? 365 : 30);
 
     const planDisplayName = planParam === 'dataroom'
-        ? 'Virtual Data Room (VDR)'
+        ? 'Virtual Data Room (VDR) Enterprise'
         : planParam === 'business'
-            ? 'Business CA Suite'
-            : 'Pro Plan';
+            ? 'Business & Agency Suite'
+            : planParam === 'single_deal'
+                ? '90-Day Single-Deal VDR Pass'
+                : 'Pro Dealmaker Plan';
 
     useEffect(() => {
         const activateAndVerify = async () => {
@@ -80,14 +83,19 @@ const PaymentSuccess: React.FC = () => {
 
                 attempts++;
 
-                // If after 2 attempts DB is not updated, trigger direct activation RPC fallback
-                if (attempts === 2) {
+                const isRealPaymentRef = Boolean(
+                    (paymentId && !paymentId.startsWith('pp_') && !paymentId.startsWith('sub_simulated_') && paymentId !== 'razorpay_paid') ||
+                    (subscriptionId && !subscriptionId.startsWith('sub_simulated_'))
+                );
+
+                // If after 2 attempts DB is not updated and we have a valid genuine payment reference, trigger RPC fallback
+                if (attempts === 2 && isRealPaymentRef) {
                     try {
                         const { data: rpcData, error: rpcError } = await supabase.rpc('activate_user_subscription', {
                             p_user_id: user.id,
                             p_plan_type: planParam,
                             p_billing_cycle: cycleParam,
-                            p_transaction_ref: paymentId || subscriptionId || 'razorpay_paid'
+                            p_transaction_ref: paymentId || subscriptionId
                         });
                         console.log("Direct activation result:", rpcData, rpcError);
                     } catch (e) {
@@ -98,8 +106,8 @@ const PaymentSuccess: React.FC = () => {
                 if (attempts < maxAttempts) {
                     setTimeout(poll, 1500);
                 } else {
-                    // Fallback to verified if paymentId exists
-                    if (paymentId) {
+                    // Only verify if genuine payment reference exists
+                    if (isRealPaymentRef) {
                         localStorage.setItem('doctransfer_active_sub', JSON.stringify({
                             user_id: user.id,
                             plan_type: planParam,

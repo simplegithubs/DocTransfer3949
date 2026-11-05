@@ -8,6 +8,7 @@ import UseCaseCards from './components/UseCaseCards';
 import ComplianceRoadmapSection from './components/landing/ComplianceRoadmapSection';
 import CryptographicSecurityHighlight from './components/landing/CryptographicSecurityHighlight';
 import RealEstateShowcaseSection from './components/landing/RealEstateShowcaseSection';
+import GlobalAgencySettingsSection from './components/landing/GlobalAgencySettingsSection';
 import Footer from './components/Footer';
 import HeroVideoBackground from './components/landing/HeroVideoBackground';
 import {
@@ -49,13 +50,160 @@ import {
   Linkedin,
   Menu,
   X,
-  Sparkles
+  Sparkles,
+  ShieldAlert,
+  Power,
+  FolderTree,
+  Zap,
+  Building2,
+  FileSpreadsheet
 } from 'lucide-react';
+const zeroTrustFeatures = [
+  {
+    name: 'Strict DRM Defense',
+    icon: ShieldAlert,
+    badge: 'Hot',
+    badgeColor: '#ea580c',
+    badgeBg: '#fff7ed',
+    badgeBorder: '#fed7aa',
+    desc: 'Screenshot blanking, DevTools kill & print lockout',
+    href: '/dataroom',
+    iconColor: '#dc2626',
+    iconBg: '#fef2f2'
+  },
+  {
+    name: 'Click-Through NDA Gate',
+    icon: ScrollText,
+    badge: 'New',
+    badgeColor: '#059669',
+    badgeBg: '#ecfdf5',
+    badgeBorder: '#a7f3d0',
+    desc: 'Mandatory legal sign-off before document opens',
+    href: '/dataroom',
+    iconColor: '#7c3aed',
+    iconBg: '#f5f3ff'
+  },
+  {
+    name: 'Active Sessions Kill Switch',
+    icon: Power,
+    badge: 'Live',
+    badgeColor: '#e11d48',
+    badgeBg: '#fff1f2',
+    badgeBorder: '#fecdd3',
+    desc: 'Instantly revoke access & sever active viewers',
+    href: '/dataroom',
+    iconColor: '#e11d48',
+    iconBg: '#fff1f2'
+  },
+  {
+    name: 'Territory Geo-Fencing',
+    icon: Globe,
+    badge: 'UAE / EU',
+    badgeColor: '#4f46e5',
+    badgeBg: '#eef2ff',
+    badgeBorder: '#c7d2fe',
+    desc: 'Restrict access by country & IP subnet',
+    href: '/dataroom',
+    iconColor: '#2563eb',
+    iconBg: '#eff6ff'
+  },
+  {
+    name: 'Dynamic Forensic Watermark',
+    icon: Droplets,
+    badge: null,
+    desc: 'Overlay viewer email, IP & exact UTC timestamp',
+    href: '#features',
+    iconColor: '#0284c7',
+    iconBg: '#f0f9ff'
+  },
+  {
+    name: 'AES-256 Vault Encryption',
+    icon: Lock,
+    badge: 'Zero-Trust',
+    badgeColor: '#475569',
+    badgeBg: '#f1f5f9',
+    badgeBorder: '#cbd5e1',
+    desc: 'Cryptographic client-side document protection',
+    href: '#security',
+    iconColor: '#4f46e5',
+    iconBg: '#eef2ff'
+  },
+];
+
+const vdrDiligenceFeatures = [
+  {
+    name: 'VDR Diligence Folders',
+    icon: FolderTree,
+    badge: 'VDR',
+    badgeColor: '#4338ca',
+    badgeBg: '#e0e7ff',
+    badgeBorder: '#c7d2fe',
+    desc: 'Structured multi-stage folders for deals & M&A',
+    href: '/dataroom',
+    iconColor: '#4f46e5',
+    iconBg: '#eef2ff'
+  },
+  {
+    name: '1-Click Sector Presets',
+    icon: Zap,
+    badge: 'Popular',
+    badgeColor: '#059669',
+    badgeBg: '#ecfdf5',
+    badgeBorder: '#a7f3d0',
+    desc: 'Instant setup for Dubai Real Estate & VC',
+    href: '/dataroom',
+    iconColor: '#059669',
+    iconBg: '#ecfdf5'
+  },
+  {
+    name: 'Real-Time WhatsApp Alerts',
+    icon: Bell,
+    badge: 'Instant',
+    badgeColor: '#16a34a',
+    badgeBg: '#f0fdf4',
+    badgeBorder: '#bbf7d0',
+    desc: 'Live buyer telemetry notifications via WhatsApp',
+    href: '/dataroom',
+    iconColor: '#16a34a',
+    iconBg: '#f0fdf4'
+  },
+  {
+    name: 'Page-by-Page Dwell Analytics',
+    icon: BarChart3,
+    badge: null,
+    desc: 'Second-by-second reader attention heatmaps',
+    href: '#features',
+    iconColor: '#7c3aed',
+    iconBg: '#f5f3ff'
+  },
+  {
+    name: 'eIDAS & DIFC Audit Logs',
+    icon: FileCheck,
+    badge: 'Legal',
+    badgeColor: '#2563eb',
+    badgeBg: '#eff6ff',
+    badgeBorder: '#bfdbfe',
+    desc: 'Court-admissible tamper-evident activity trails',
+    href: '#features',
+    iconColor: '#0891b2',
+    iconBg: '#ecfeff'
+  },
+  {
+    name: 'Self-Destruct Timers',
+    icon: Flame,
+    badge: null,
+    desc: 'Auto-wipe confidential files after viewing or expiry',
+    href: '#features',
+    iconColor: '#ea580c',
+    iconBg: '#fff7ed'
+  },
+];
+
 const LandingPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showProductMenu, setShowProductMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'esignature' | 'google-drive'>('upload');
+  const [activeFeature, setActiveFeature] = useState<'upload' | 'documents' | 'permissions' | 'analytics' | 'security' | 'google-drive'>('upload');
   const [isScrolled, setIsScrolled] = useState(false);
 
   React.useEffect(() => {
@@ -72,41 +220,41 @@ const LandingPage: React.FC = () => {
 
   const faqs = [
     {
-      question: "Is DocTransfer really free globally and in India?",
-      answer: "Yes, absolutely! We've made the strategic decision to unlock all core deal room, virtual data room, and document tracking features for free. No credit card required, zero monthly paywalls, just world-class AES-256 client-side security at $0 and ₹0."
+      question: "Is DocTransfer really free for dealmakers globally?",
+      answer: "Yes, absolutely! We've made the strategic decision to unlock all core deal room, virtual data room, and document tracking features for free. No credit card required, zero monthly paywalls, just world-class AES-256 client-side security at $0."
     },
     {
-      question: "Are digital signatures legally binding globally and under Indian law?",
-      answer: "Yes. Electronic signatures collected through DocTransfer are legally recognized and enforceable across the US (ESIGN Act 2000), EU (eIDAS Regulation 910/2014), UK (Electronic Communications Act), and India (Section 5 & 10A of the IT Act 2000 and Indian Contract Act 1872). Every signed agreement includes a cryptographic tamper-evident Section 65B & eIDAS audit certificate."
+      question: "How does DocTransfer prevent confidential leaks and unauthorized sharing?",
+      answer: "DocTransfer incorporates dynamic recipient watermarking (stamping the viewer's verified email, mobile number, and timestamp), phone OTP gates (+971 UAE, +44 UK, +1 US, +65 SG, +33 FR, +91 IN), download & print blocking, and 1-click revocation. If a document leaks, you know the exact source instantly."
     },
     {
       question: "Can I share documents directly over WhatsApp, Email, or Slack with view tracking?",
       answer: "Yes! You can copy your secure DocTransfer link and share it directly on WhatsApp, Email, Slack, LinkedIn, or SMS. You get instant real-time alerts the second someone opens your link and second-by-second analytics on which pages they read."
     },
     {
-      question: "How does End-to-End (E2E) Encryption comply with GDPR & DPDP Act 2023?",
-      answer: "With our Zero-Knowledge 'Vault Mode', files are encrypted directly in your browser using AES-256-GCM before upload. Since only you and your designated recipient hold the decryption keys, not even database administrators can access confidential client financials or personal data, fully exceeding GDPR, CCPA, and DPDP Act 2023 data fiduciary obligations."
+      question: "How does End-to-End (E2E) Encryption comply with GDPR (EU) & UAE PDPL?",
+      answer: "With our Zero-Knowledge 'Vault Mode', files are encrypted directly in your browser using AES-256-GCM before upload. Since only you and your designated recipient hold the decryption keys, not even database administrators can access confidential client financials or personal data, fully complying with EU/UK GDPR, UAE PDPL, DIFC/ADGM data protection laws, and Singapore PDPA."
     },
     {
       question: "How does DocTransfer protect sensitive pitch decks, cap tables, and financial records?",
-      answer: "Beyond client-side encryption, you can enable dynamic watermarking displaying the viewer's email/IP and timestamp, require passcode or email verification, set automated link expiry timers, and disable downloading for view-only security."
+      answer: "Beyond client-side encryption, you can enable dynamic watermarking displaying the viewer's email/IP and timestamp, require passcode or phone/email verification, set automated link expiry timers, and disable downloading for view-only security."
     },
     {
       question: "What is 'Burn After Reading'?",
       answer: "This feature allows you to set documents to automatically self-destruct after a single view or a specific number of views, ensuring confidential deal memos, salary figures, or trade secrets never linger online."
     },
     {
-      question: "Can I customize legal templates like NDAs, SAFE Notes, and Rent Agreements?",
-      answer: "Yes! Browse our free Template Hub to draft and e-sign standard international Mutual NDAs, YC SAFE Notes, Contractor Agreements, 11-Month Rent Agreements (India), and CTC Offer Letters in under 5 minutes."
+      question: "Can I customize international transaction templates like NDAs, SAFE Notes, and LOIs?",
+      answer: "Yes! Browse our free Template Hub to access standard cross-border deal templates including International Mutual NDAs, YC Post-Money SAFE Notes, Commercial Property Leases, Exclusive Broker Mandates, and Advisory Agreements."
     }
   ];
 
   return (
     <div className="landing-page">
       <SEO
-        title="DocTransfer — Global Virtual Data Room & Legal E-Signatures | Free DocSend Alternative for Global & India"
-        description="The #1 secure deal room for global startups, enterprises, CAs, advocates & MSMEs. Share pitch decks, NDAs, and contracts with page-by-page analytics, WhatsApp/Email sharing, and legally binding e-signatures worldwide."
-        keywords="DocSend alternative, free pitch deck tracking, virtual data room free, secure document sharing, ESIGN eIDAS e-signature, IT Act 2000 electronic signature, DocSend alternative India, global deal room"
+        title="DocTransfer — Global Virtual Data Room & Document Security | Dubai, Europe & Asia Deal Rooms"
+        description="The premier secure deal room for global luxury real estate, hotel acquisitions, startups, and cross-border finance in Dubai, Europe, and Asia. Share pitch decks, CIMs, and contracts with page-by-page analytics and anti-leak watermarking."
+        keywords="virtual data room Dubai, VDR Europe, real estate deal room UAE, hotel acquisition due diligence, DocSend alternative, pitch deck tracking, secure document sharing DIFC ADGM, cross-border M&A data room"
       />
       <header className={`header-wrapper ${isScrolled ? 'is-scrolled' : 'is-transparent'}`}>
         <div className="header-container">
@@ -133,67 +281,255 @@ const LandingPage: React.FC = () => {
                     style={{
                       position: 'absolute',
                       top: 'calc(100% + 8px)',
-                      left: '-20px',
-                      width: '600px',
-                      background: 'white',
+                      left: '-30px',
+                      width: '740px',
+                      background: '#ffffff',
                       borderRadius: '16px',
-                      boxShadow: '0 20px 30px -5px rgba(0, 0, 0, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.04)',
-                      padding: '1.75rem',
+                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+                      padding: '1.5rem',
                       zIndex: 1000,
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gap: '1.75rem',
-                      border: '1px solid #e2e8f0'
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '1.25rem',
+                      border: '1px solid #e2e8f0',
+                      animation: 'fadeIn 0.15s ease-out'
                     }}
                   >
-                    <div>
-                      <h4 style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '0.85rem', letterSpacing: '0.05em' }}>Core Security</h4>
-                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                        {[
-                          { name: 'Secure Transfer', icon: Shield, desc: 'Encrypted document sharing' },
-                          { name: 'End-to-End Encryption', icon: Lock, desc: 'Zero-knowledge architecture' },
-                          { name: 'Password Protection', icon: Lock, desc: 'Access control with passwords' },
-                          { name: 'Email Verification', icon: Mail, desc: 'Confirm recipient identity' },
-                          { name: 'Link Expiration', icon: Clock, desc: 'Time-limited access' },
-                          { name: 'Burn After Reading', icon: Flame, desc: 'Self-destructing files' },
-                        ].map((feature, i) => (
-                          <li key={i}>
-                            <a href="#features" style={{ textDecoration: 'none', display: 'flex', alignItems: 'start', gap: '0.65rem', color: '#1f2937' }}>
-                              <div style={{ padding: '0.35rem', background: '#eff6ff', borderRadius: '6px', color: '#4f46e5' }}>
-                                <feature.icon size={15} />
-                              </div>
-                              <div>
-                                <div style={{ fontWeight: '600', fontSize: '0.88rem' }}>{feature.name}</div>
-                                <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>{feature.desc}</div>
-                              </div>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                      {/* Column 1: Zero-Trust DRM & Access Control */}
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
+                          <h4 style={{ fontSize: '0.72rem', fontWeight: '800', textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.06em', margin: 0 }}>
+                            Zero-Trust DRM & Access
+                          </h4>
+                          <span style={{ fontSize: '0.65rem', fontWeight: '700', color: '#dc2626', background: '#fef2f2', padding: '0.1rem 0.4rem', borderRadius: '4px', border: '1px solid #fecaca' }}>
+                            Strict Defense
+                          </span>
+                        </div>
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                          {zeroTrustFeatures.map((feature, i) => (
+                            <li key={i}>
+                              {feature.href.startsWith('#') ? (
+                                <a
+                                  href={feature.href}
+                                  onClick={() => setShowProductMenu(false)}
+                                  style={{
+                                    textDecoration: 'none',
+                                    display: 'flex',
+                                    alignItems: 'start',
+                                    gap: '0.65rem',
+                                    padding: '0.45rem 0.5rem',
+                                    borderRadius: '8px',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                                >
+                                  <div style={{ padding: '0.4rem', background: feature.iconBg, borderRadius: '7px', color: feature.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
+                                    <feature.icon size={15} />
+                                  </div>
+                                  <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                      <span style={{ fontWeight: '600', fontSize: '0.85rem', color: '#1e293b' }}>{feature.name}</span>
+                                      {feature.badge && (
+                                        <span style={{ fontSize: '0.6rem', fontWeight: '700', padding: '0.06rem 0.35rem', borderRadius: '4px', background: feature.badgeBg, color: feature.badgeColor, border: `1px solid ${feature.badgeBorder}` }}>
+                                          {feature.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div style={{ fontSize: '0.74rem', color: '#64748b', lineHeight: 1.3, marginTop: '0.1rem' }}>{feature.desc}</div>
+                                  </div>
+                                </a>
+                              ) : (
+                                <Link
+                                  to={feature.href}
+                                  onClick={() => setShowProductMenu(false)}
+                                  style={{
+                                    textDecoration: 'none',
+                                    display: 'flex',
+                                    alignItems: 'start',
+                                    gap: '0.65rem',
+                                    padding: '0.45rem 0.5rem',
+                                    borderRadius: '8px',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                                >
+                                  <div style={{ padding: '0.4rem', background: feature.iconBg, borderRadius: '7px', color: feature.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
+                                    <feature.icon size={15} />
+                                  </div>
+                                  <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                      <span style={{ fontWeight: '600', fontSize: '0.85rem', color: '#1e293b' }}>{feature.name}</span>
+                                      {feature.badge && (
+                                        <span style={{ fontSize: '0.6rem', fontWeight: '700', padding: '0.06rem 0.35rem', borderRadius: '4px', background: feature.badgeBg, color: feature.badgeColor, border: `1px solid ${feature.badgeBorder}` }}>
+                                          {feature.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div style={{ fontSize: '0.74rem', color: '#64748b', lineHeight: 1.3, marginTop: '0.1rem' }}>{feature.desc}</div>
+                                  </div>
+                                </Link>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Column 2: Data Room & Due Diligence */}
+                      <div>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
+                          <h4 style={{ fontSize: '0.72rem', fontWeight: '800', textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.06em', margin: 0 }}>
+                            Data Room & Due Diligence
+                          </h4>
+                          <span style={{ fontSize: '0.65rem', fontWeight: '700', color: '#4f46e5', background: '#eef2ff', padding: '0.1rem 0.4rem', borderRadius: '4px', border: '1px solid #c7d2fe' }}>
+                            Deal Ready
+                          </span>
+                        </div>
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                          {vdrDiligenceFeatures.map((feature, i) => (
+                            <li key={i}>
+                              {feature.href.startsWith('#') ? (
+                                <a
+                                  href={feature.href}
+                                  onClick={() => setShowProductMenu(false)}
+                                  style={{
+                                    textDecoration: 'none',
+                                    display: 'flex',
+                                    alignItems: 'start',
+                                    gap: '0.65rem',
+                                    padding: '0.45rem 0.5rem',
+                                    borderRadius: '8px',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                                >
+                                  <div style={{ padding: '0.4rem', background: feature.iconBg, borderRadius: '7px', color: feature.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
+                                    <feature.icon size={15} />
+                                  </div>
+                                  <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                      <span style={{ fontWeight: '600', fontSize: '0.85rem', color: '#1e293b' }}>{feature.name}</span>
+                                      {feature.badge && (
+                                        <span style={{ fontSize: '0.6rem', fontWeight: '700', padding: '0.06rem 0.35rem', borderRadius: '4px', background: feature.badgeBg, color: feature.badgeColor, border: `1px solid ${feature.badgeBorder}` }}>
+                                          {feature.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div style={{ fontSize: '0.74rem', color: '#64748b', lineHeight: 1.3, marginTop: '0.1rem' }}>{feature.desc}</div>
+                                  </div>
+                                </a>
+                              ) : (
+                                <Link
+                                  to={feature.href}
+                                  onClick={() => setShowProductMenu(false)}
+                                  style={{
+                                    textDecoration: 'none',
+                                    display: 'flex',
+                                    alignItems: 'start',
+                                    gap: '0.65rem',
+                                    padding: '0.45rem 0.5rem',
+                                    borderRadius: '8px',
+                                    transition: 'all 0.15s ease'
+                                  }}
+                                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                                >
+                                  <div style={{ padding: '0.4rem', background: feature.iconBg, borderRadius: '7px', color: feature.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
+                                    <feature.icon size={15} />
+                                  </div>
+                                  <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                      <span style={{ fontWeight: '600', fontSize: '0.85rem', color: '#1e293b' }}>{feature.name}</span>
+                                      {feature.badge && (
+                                        <span style={{ fontSize: '0.6rem', fontWeight: '700', padding: '0.06rem 0.35rem', borderRadius: '4px', background: feature.badgeBg, color: feature.badgeColor, border: `1px solid ${feature.badgeBorder}` }}>
+                                          {feature.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div style={{ fontSize: '0.74rem', color: '#64748b', lineHeight: 1.3, marginTop: '0.1rem' }}>{feature.desc}</div>
+                                  </div>
+                                </Link>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
 
-                    <div>
-                      <h4 style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '0.85rem', letterSpacing: '0.05em' }}>Advanced Features</h4>
-                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                        {[
-                          { name: 'Dynamic Watermarking', icon: Droplets, desc: 'Traceable document overlays' },
-                          { name: 'E-Signature', icon: PenTool, desc: 'Legally binding signatures' },
-                          { name: 'Deep Analytics', icon: BarChart3, desc: 'Page-level engagement tracking' },
-                          { name: 'Audit Trails', icon: FileCheck, desc: 'Complete activity logs' },
-                        ].map((feature, i) => (
-                          <li key={i}>
-                            <a href="#features" style={{ textDecoration: 'none', display: 'flex', alignItems: 'start', gap: '0.65rem', color: '#1f2937' }}>
-                              <div style={{ padding: '0.35rem', background: '#f5f3ff', borderRadius: '6px', color: '#7c3aed' }}>
-                                <feature.icon size={15} />
-                              </div>
-                              <div>
-                                <div style={{ fontWeight: '600', fontSize: '0.88rem' }}>{feature.name}</div>
-                                <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>{feature.desc}</div>
-                              </div>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                    {/* Bottom Full-Width Strip: White-Label Agency & Diligence */}
+                    <div
+                      style={{
+                        background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)',
+                        borderRadius: '10px',
+                        padding: '0.9rem 1.15rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
+                        color: '#ffffff'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                        <div style={{ padding: '0.45rem', background: 'rgba(99, 102, 241, 0.25)', borderRadius: '7px', color: '#a5b4fc', border: '1px solid rgba(129, 140, 248, 0.3)', flexShrink: 0 }}>
+                          <Building2 size={18} />
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontWeight: '700', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                            <span>White-Label & Global Agency Suite</span>
+                            <span style={{ fontSize: '0.62rem', fontWeight: '700', background: 'rgba(16, 185, 129, 0.25)', color: '#34d399', padding: '0.08rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(52, 211, 153, 0.4)' }}>
+                              DLD / RERA / VAT Ready
+                            </span>
+                          </div>
+                          <div style={{ fontSize: '0.74rem', color: '#cbd5e1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            Custom CNAME vanity domains, broker stamps, and global multi-currency B2B tax invoicing.
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexShrink: 0 }}>
+                        <Link
+                          to="/settings"
+                          onClick={() => setShowProductMenu(false)}
+                          style={{
+                            textDecoration: 'none',
+                            fontSize: '0.76rem',
+                            fontWeight: '600',
+                            padding: '0.4rem 0.75rem',
+                            borderRadius: '6px',
+                            background: 'rgba(255, 255, 255, 0.1)',
+                            color: '#ffffff',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.3rem'
+                          }}
+                        >
+                          <span>Agency Settings</span>
+                          <ArrowRight size={12} />
+                        </Link>
+                        <Link
+                          to="/dataroom"
+                          onClick={() => setShowProductMenu(false)}
+                          style={{
+                            textDecoration: 'none',
+                            fontSize: '0.76rem',
+                            fontWeight: '600',
+                            padding: '0.4rem 0.75rem',
+                            borderRadius: '6px',
+                            background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                            color: '#ffffff',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.3rem',
+                            boxShadow: '0 4px 10px rgba(79, 70, 229, 0.4)'
+                          }}
+                        >
+                          <Sparkles size={12} />
+                          <span>Open VDR</span>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -251,6 +587,22 @@ const LandingPage: React.FC = () => {
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
           <div className="mobile-nav-menu">
+            <Link to="/dataroom" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <ShieldAlert size={16} color="#ef4444" />
+                <span>Virtual Data Room & Strict DRM</span>
+                <span className="nav-badge" style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#f87171', borderColor: 'rgba(239, 68, 68, 0.4)' }}>VDR</span>
+              </span>
+              <ArrowRight size={14} color="#94a3b8" />
+            </Link>
+            <Link to="/settings" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Building2 size={16} color="#818cf8" />
+                <span>White-Label & Agency Settings</span>
+                <span className="nav-badge" style={{ background: 'rgba(99, 102, 241, 0.2)', color: '#818cf8', borderColor: 'rgba(99, 102, 241, 0.4)' }}>Broker</span>
+              </span>
+              <ArrowRight size={14} color="#94a3b8" />
+            </Link>
             <Link to="/solutions" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
               <span>Solutions (Real Estate, M&A, VC)</span>
               <ArrowRight size={14} color="#94a3b8" />
@@ -267,7 +619,7 @@ const LandingPage: React.FC = () => {
               <ArrowRight size={14} color="#94a3b8" />
             </Link>
             <Link to="/pricing" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
-              <span>Pricing & Plans (INR & USD)</span>
+              <span>Pricing & Plans (USD, EUR, AED)</span>
               <ArrowRight size={14} color="#94a3b8" />
             </Link>
             <Link to="/comparisons" className="mobile-nav-link" onClick={() => setMobileMenuOpen(false)}>
@@ -319,17 +671,17 @@ const LandingPage: React.FC = () => {
                 <span className="dot">·</span>
                 <span>SOC 2 Type II</span>
                 <span className="dot">·</span>
-                <span>IT Act 2000</span>
+                <span>GDPR (EU) · UAE PDPL</span>
               </div>
 
               <h1 className="hero-title-left">
-                The secure deal room for sharing, tracking & signing sensitive documents worldwide.
+                The secure deal room for sharing, tracking & protecting confidential documents worldwide.
               </h1>
 
               <div className="hero-actions-left">
                 <Link to="/dataroom" style={{ textDecoration: 'none' }}>
                   <button className="hero-btn-papermark">
-                    <span>Create a Deal Room — Free ($0 / ₹0)</span>
+                    <span>Create a Deal Room — Free ($0 / No Card Required)</span>
                     <ArrowRight size={16} />
                   </button>
                 </Link>
@@ -376,10 +728,10 @@ const LandingPage: React.FC = () => {
               <BarChart3 size={18} /> Track visitor analytics
             </button>
             <button
-              className={`nav-item ${activeFeature === 'esignature' ? 'active' : ''}`}
-              onClick={() => setActiveFeature('esignature')}
+              className={`nav-item ${activeFeature === 'security' ? 'active' : ''}`}
+              onClick={() => setActiveFeature('security')}
             >
-              <PenTool size={18} /> Esignature
+              <Lock size={18} /> Anti-Leak & DRM
             </button>
           </div>
 
@@ -914,10 +1266,10 @@ const LandingPage: React.FC = () => {
                       eventBg: '#dbeafe',
                       eventBorder: '#bfdbfe',
                       eventText: 'Document Viewed',
-                      user: 'Lead Syndicate Partner',
+                      user: 'Managing Director, DIFC Fund',
                       device: 'Chrome on Windows',
-                      location: 'Bengaluru, India',
-                      ip: '106.214.9.54',
+                      location: 'Dubai, UAE',
+                      ip: '185.107.56.12',
                       doc: 'CapTable-Valuation-Q1.pdf',
                       details: 'viewer_agent: Mozilla/5.0 (Windows NT 10.0; Win64)...'
                     },
@@ -987,151 +1339,159 @@ const LandingPage: React.FC = () => {
               </div>
             )}
 
-            {activeFeature === 'esignature' && (
+            {activeFeature === 'security' && (
               <div className="dashboard-ui-mockup" style={{
                 width: '100%',
                 maxWidth: '960px',
                 borderRadius: '16px',
-                backgroundColor: '#f4f4f5',
-                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+                backgroundColor: '#0f172a',
+                boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
                 margin: '0 auto 6rem',
                 position: 'relative',
                 zIndex: 10,
                 padding: '1.5rem',
-                fontFamily: "'Inter', sans-serif"
+                fontFamily: "'Inter', sans-serif",
+                color: '#f8fafc'
               }}>
                 {/* Header Navbar */}
                 <div style={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#ffffff',
-                  padding: '1rem 1.5rem', borderRadius: '12px', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)'
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#1e293b',
+                  padding: '1rem 1.5rem', borderRadius: '12px', border: '1px solid #334155'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                    <button style={{
-                      display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#ffffff',
-                      border: '1px solid #e5e7eb', borderRadius: '8px', padding: '0.5rem 1rem',
-                      color: '#4b5563', fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer'
-                    }}>
-                      <ArrowLeft size={16} /> Back
-                    </button>
-                    <div style={{ width: '1px', height: '24px', backgroundColor: '#e5e7eb' }}></div>
-                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#111827' }}>Prepare Document</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b981' }}></div>
+                    <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f8fafc' }}>
+                      Active DRM Vault: Confidential_Acquisition_Teaser_Q4.pdf
+                    </span>
                   </div>
-
-                  <button style={{
-                    display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#4f46e5',
-                    border: 'none', borderRadius: '8px', padding: '0.6rem 1.25rem',
-                    color: '#ffffff', fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer',
-                    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.3)'
-                  }}>
-                    <Send size={16} /> Send Request
-                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ fontSize: '0.75rem', color: '#10b981', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '0.25rem 0.65rem', borderRadius: '6px', fontWeight: 700 }}>
+                      AES-256 GCM ZERO-KNOWLEDGE
+                    </span>
+                  </div>
                 </div>
 
-                {/* Main Content Area */}
-                <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1.5rem', height: '520px' }}>
-                  {/* Left Sidebar - Drag Fields */}
+                {/* Main Content Area: Document View + Live Controls */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1.35fr 1fr', gap: '1.5rem', marginTop: '1.5rem', minHeight: '480px' }}>
+                  {/* Left: Watermarked Document View */}
                   <div style={{
-                    width: '260px', backgroundColor: '#ffffff', borderRadius: '12px',
-                    padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', position: 'relative',
-                    boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)'
+                    backgroundColor: '#ffffff',
+                    borderRadius: '12px',
+                    padding: '2rem',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    color: '#1e293b',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
                   }}>
-                    <h4 style={{ margin: '0 0 1.25rem 0.5rem', fontSize: '0.75rem', fontWeight: 700, color: '#9ca3af', letterSpacing: '0.05em' }}>
-                      DRAG FIELDS
-                    </h4>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', overflowY: 'auto', paddingRight: '0.5rem' }}>
-                      {[
-                        { label: 'Signature', icon: Type, bg: '#6b46c1', color: '#ffffff' },
-                        { label: 'Initials', icon: Type, bg: '#8b5cf6', color: '#ffffff' },
-                        { label: 'Date Signed', icon: Calendar, bg: '#059669', color: '#ffffff' },
-                        { label: 'Text Box', icon: Type, bg: '#f59e0b', color: '#ffffff' },
-                        { label: 'Checkbox', icon: CheckSquare, bg: '#ef4444', color: '#ffffff' },
-                      ].map((field, i) => (
-                        <div key={i} style={{
-                          display: 'flex', alignItems: 'center', gap: '1rem',
-                          padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '8px',
-                          backgroundColor: '#ffffff', cursor: 'grab', boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
-                        }}>
-                          <div style={{
-                            width: '28px', height: '28px', borderRadius: '6px',
-                            backgroundColor: field.bg, color: field.color,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center'
-                          }}>
-                            <field.icon size={14} strokeWidth={2.5} />
-                          </div>
-                          <span style={{ fontSize: '0.9rem', fontWeight: 500, color: '#374151' }}>{field.label}</span>
-                        </div>
-                      ))}
+                    {/* Dynamic Diagonal Watermark */}
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transform: 'rotate(-25deg)',
+                      pointerEvents: 'none',
+                      zIndex: 10,
+                      opacity: 0.18,
+                      fontSize: '1rem',
+                      fontWeight: 900,
+                      color: '#dc2626',
+                      textAlign: 'center',
+                      lineHeight: 1.5,
+                      letterSpacing: '0.04em'
+                    }}>
+                      CONFIDENTIAL • VIEWED BY alex.v@apexcap.ae<br />
+                      (+971 50 123 4567) • IP: 185.107.56.12 • 14:32:09 UTC
                     </div>
 
-                    {/* Fake scrollbar track */}
-                    <div style={{ position: 'absolute', right: '0.5rem', top: '4rem', bottom: '1.5rem', width: '4px', backgroundColor: '#f1f5f9', borderRadius: '2px' }}>
-                      <div style={{ width: '100%', height: '40%', backgroundColor: '#cbd5e1', borderRadius: '2px' }}></div>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #0f172a', paddingBottom: '0.5rem', marginBottom: '1.25rem' }}>
+                        <div>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.05em' }}>RESTRICTED ACCESS MEMO</span>
+                          <h4 style={{ margin: '0.2rem 0 0', fontSize: '1.05rem', fontWeight: 800, color: '#0f172a' }}>
+                            PROJECT AZURE: $120M LUXURY RESORT ACQUISITION
+                          </h4>
+                        </div>
+                        <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>PAGE 3 OF 18</span>
+                      </div>
+
+                      <div style={{ fontSize: '0.82rem', color: '#475569', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <p style={{ margin: 0 }}>
+                          <strong>Target Asset:</strong> 180-Key Freehold Beachfront Resort & Branded Residences (Dubai / Southeast Asia). Historical ADR: $485 with 78% trailing 12-month occupancy.
+                        </p>
+                        <p style={{ margin: 0 }}>
+                          <strong>Current CapEx & Debt Structure:</strong> Unencumbered senior debt facility. Projected Year 3 stabilized NOI: $14.2M representing an 11.8% unlevered IRR.
+                        </p>
+                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '0.75rem' }}>
+                          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.35rem' }}>CONFIDENTIAL BID SUBMISSION DEADLINE:</div>
+                          <div style={{ fontSize: '0.75rem', color: '#dc2626', fontWeight: 600 }}>Strict LOI Window Closes: Friday, 17:00 Gulf Standard Time</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Watermark Security Strip */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #e2e8f0', paddingTop: '0.75rem', marginTop: '1rem', fontSize: '0.72rem', color: '#64748b' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#dc2626', fontWeight: 600 }}>
+                        <Lock size={12} /> Downloads Disabled
+                      </span>
+                      <span>Screenshots Monitored</span>
+                      <span style={{ color: '#059669', fontWeight: 600 }}>Zero-Leak DRM Enforced</span>
                     </div>
                   </div>
 
-                  {/* Right Content - Document */}
+                  {/* Right: Security Control Console */}
                   <div style={{
-                    flex: 1, backgroundColor: '#ffffff', borderRadius: '12px',
-                    padding: '3rem', position: 'relative', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)',
-                    overflow: 'hidden'
+                    backgroundColor: '#1e293b',
+                    borderRadius: '12px',
+                    padding: '1.5rem',
+                    border: '1px solid #334155',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
                   }}>
-                    <div style={{ maxWidth: '600px', margin: '0 auto', color: '#374151', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #4f46e5', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
-                        <div>
-                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.05em' }}>GLOBAL & INDIA ENFORCEABLE</span>
-                          <h2 style={{ color: '#111827', fontSize: '1.3rem', fontWeight: 800, margin: '0.2rem 0 0' }}>
-                            MUTUAL NON-DISCLOSURE AGREEMENT
-                          </h2>
-                        </div>
-                        <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1d4ed8', fontSize: '0.72rem', fontWeight: 700, padding: '0.25rem 0.6rem', borderRadius: '6px' }}>
-                          ESIGN • eIDAS • IT ACT 2000
-                        </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                        <Shield size={18} color="#10b981" />
+                        <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#f8fafc' }}>
+                          Real-Time Access Controls
+                        </h4>
                       </div>
 
-                      <p style={{ marginBottom: '1.25rem', fontSize: '0.9rem', color: '#4b5563' }}>
-                        This Mutual Non-Disclosure Agreement is executed on <strong>16th February 2026</strong> under applicable commercial contract laws, between the Disclosing Party and the Receiving Party for evaluating confidential business transactions, fundraising, and strategic partnerships.
-                      </p>
-
-                      <h3 style={{ color: '#1f2937', fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                        1. Confidential Information & Scope
-                      </h3>
-                      <p style={{ marginBottom: '1.25rem', fontSize: '0.88rem', color: '#4b5563' }}>
-                        Proprietary information includes all commercial terms, software source code, financial projections, customer data, and trade secrets shared electronically via DocTransfer's zero-knowledge encrypted vault.
-                      </p>
-
-                      <h3 style={{ color: '#1f2937', fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                        2. Global Privacy & Statutory Protection (GDPR & DPDP Act 2023)
-                      </h3>
-                      <p style={{ marginBottom: '1.25rem', fontSize: '0.88rem', color: '#4b5563' }}>
-                        The Receiving Party agrees to safeguard confidential materials with reasonable security precautions and strictly adhere to the EU/UK GDPR, US state privacy laws, and the Digital Personal Data Protection Act 2023.
-                      </p>
-
-                      <h3 style={{ color: '#1f2937', fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                        3. Governing Law & Electronic Evidence Admissibility
-                      </h3>
-                      <p style={{ marginBottom: '1.5rem', fontSize: '0.88rem', color: '#4b5563' }}>
-                        Digital execution through DocTransfer is enforceable under the US ESIGN Act, EU eIDAS, UK ECA, and Section 10A of the IT Act 2000, generating a tamper-evident court-admissible audit certificate.
-                      </p>
-
-                      {/* Signature Placement Mockup */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px dashed #cbd5e1' }}>
-                        <div style={{ border: '2px dashed #6366f1', background: '#f5f3ff', borderRadius: '8px', padding: '1rem', textAlign: 'center' }}>
-                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6366f1', textTransform: 'uppercase' }}>SIGN HERE</span>
-                          <div style={{ fontFamily: 'cursive', fontSize: '1.3rem', color: '#4338ca', marginTop: '0.25rem' }}>Alex Rivera</div>
-                          <span style={{ fontSize: '0.7rem', color: '#6b7280' }}>Disclosing Party • Founder (US)</span>
-                        </div>
-                        <div style={{ border: '2px dashed #94a3b8', background: '#f8fafc', borderRadius: '8px', padding: '1rem', textAlign: 'center' }}>
-                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>RECIPIENT SIGNATURE</span>
-                          <div style={{ fontFamily: 'cursive', fontSize: '1.3rem', color: '#059669', marginTop: '0.25rem' }}>Rohan Sharma</div>
-                          <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Receiving Party • Managing Partner (India)</span>
-                        </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                        {[
+                          { title: 'Dynamic Viewer Watermark', status: 'ACTIVE', desc: 'Overlays viewer phone, email & IP on every page', color: '#10b981' },
+                          { title: 'International Mobile Gate', status: '+971 UAE', desc: 'OTP verification required before viewing', color: '#38bdf8' },
+                          { title: 'View-Only DRM Mode', status: 'ENFORCED', desc: 'Downloads, printing & clipboard blocked', color: '#fbbf24' },
+                          { title: 'Burn-After-Reading Timer', status: '24H AUTO-REVOKE', desc: 'File automatically self-destructs', color: '#f43f5e' }
+                        ].map((ctrl, i) => (
+                          <div key={i} style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '0.75rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' }}>
+                              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#e2e8f0' }}>{ctrl.title}</span>
+                              <span style={{ fontSize: '0.68rem', fontWeight: 700, color: ctrl.color, background: 'rgba(255,255,255,0.05)', padding: '0.15rem 0.45rem', borderRadius: '4px' }}>{ctrl.status}</span>
+                            </div>
+                            <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{ctrl.desc}</div>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
-                    {/* Fake scrollbar track */}
-                    <div style={{ position: 'absolute', right: '0.5rem', top: '1rem', bottom: '1rem', width: '6px', backgroundColor: '#f8fafc', borderRadius: '3px' }}>
-                      <div style={{ width: '100%', height: '30%', backgroundColor: '#9ca3af', borderRadius: '3px', marginTop: '20%' }}></div>
+                    <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #334155', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>1-Click Emergency Kill Switch:</span>
+                      <button style={{
+                        background: '#dc2626',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.45rem 0.9rem',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        cursor: 'pointer'
+                      }}>
+                        Revoke Access Now
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -1272,10 +1632,10 @@ const LandingPage: React.FC = () => {
               Global Security & Legal Standards
             </span>
             <h2 style={{ fontSize: '2.2rem', fontWeight: 800, color: '#0f172a', margin: '0 0 1rem', letterSpacing: '-0.02em' }}>
-              Engineered for Global Startups, Cross-Border Deals & Indian Enterprises
+              Engineered for Dealmakers in Dubai, Europe, Asia & Global Hubs
             </h2>
             <p style={{ maxWidth: '680px', margin: '0 auto 3rem', color: '#64748b', fontSize: '1.05rem', lineHeight: '1.6' }}>
-              DocTransfer is built to satisfy international legal frameworks (US ESIGN, EU eIDAS) and Indian statutory laws while eliminating costly $45/user/mo SaaS fees.
+              DocTransfer is built to satisfy international data privacy and security frameworks (EU GDPR, UAE PDPL, UK Data Protection Act, Singapore PDPA) while eliminating costly $45/user/mo legacy VDR fees.
             </p>
 
             <div style={{
@@ -1286,30 +1646,30 @@ const LandingPage: React.FC = () => {
             }}>
               {[
                 {
-                  badge: 'ESIGN, eIDAS & IT ACT 2000',
-                  title: 'Globally Enforceable E-Signatures',
-                  desc: 'Legally binding under the US ESIGN Act, EU eIDAS, and India IT Act 2000 (Section 5 & 10A). Includes court-admissible audit trails and forensic logs.',
+                  badge: 'GLOBAL VDR & COMPLIANCE',
+                  title: 'Bank-Grade Virtual Deal Rooms',
+                  desc: 'Granular role-based permissions, instant link revocation, and tamper-proof access audit trails compliant with international corporate governance standards.',
                   color: '#4f46e5',
                   bg: '#eef2ff'
                 },
                 {
-                  badge: 'GDPR & DPDP ACT 2023',
+                  badge: 'GDPR (EU) & UAE PDPL',
                   title: 'Zero-Knowledge Privacy Vaults',
-                  desc: 'Browser-side AES-256-GCM encryption ensures pitch decks, cap tables, PAN/SSN, and financial records stay unreadable to server hosts.',
+                  desc: 'Browser-side AES-256-GCM encryption ensures pitch decks, cap tables, KYC passports, and financial audits stay completely unreadable to server hosts.',
                   color: '#059669',
                   bg: '#ecfdf5'
                 },
                 {
                   badge: 'CROSS-BORDER & MULTI-CHANNEL',
-                  title: 'Instant Link Sharing & Tracking',
-                  desc: 'Share pitch decks and agreements directly via WhatsApp, Email, or Slack. Track viewer engagement page-by-page across international time zones.',
+                  title: 'Instant Link Telemetry & Tracking',
+                  desc: 'Share confidential presentations directly via WhatsApp, Email, or Slack. Track investor dwell time page-by-page across London, Dubai, Singapore, and global financial centers.',
                   color: '#0284c7',
                   bg: '#f0f9ff'
                 },
                 {
-                  badge: '100% FREE CORE TIER ($0 / ₹0)',
+                  badge: '100% FREE CORE TIER ($0 / NO CARD)',
                   title: 'Zero Expensive SaaS Paywalls',
-                  desc: 'Stop paying $15-$45/user/month for DocSend or DocuSign. Get unlimited pitch deck tracking, page dwell analytics, and e-signatures for free.',
+                  desc: 'Stop paying $15-$45/user/month for DocSend or thousands for legacy VDRs. Get unlimited deal rooms, page-by-page analytics, and anti-leak watermarking free.',
                   color: '#d97706',
                   bg: '#fffbeb'
                 }
@@ -1516,19 +1876,14 @@ const LandingPage: React.FC = () => {
             
             <div className="templates-grid">
               {[
-                { name: 'RERA Builder Allotment Letter', slug: 'rera-allotment-letter', desc: 'RERA-compliant provisional builder allotment letter with carpet area, installment milestones, and bank APF codes.', category: 'Real Estate' },
-                { name: 'Real Estate Channel Partner Agreement', slug: 'channel-partner-agreement', desc: 'Developer-broker mandate agreement covering RERA agent ID, commission slabs, and 60-day client exclusivity.', category: 'Real Estate' },
-                { name: 'Mutual Non-Disclosure Agreement', slug: 'nda-format-india-template', desc: 'Standard mutual NDA compliant with US ESIGN, eIDAS, and Indian commercial contract laws.', category: 'Legal' },
-                { name: 'Standard Seed SAFE Note', slug: 'safe-note-india-template', desc: 'Convertible equity instrument for early-stage startup fundraising across global syndicates.', category: 'Startups' },
-                { name: 'Independent Contractor Agreement', slug: 'freelancer-contract-india-template', desc: 'Cross-border contractor scope of work, milestone deliverables, and IP assignment deed.', category: 'Operations' },
-                { name: '11-Month Rent Agreement (India)', slug: 'rent-agreement-india-template', desc: 'Standard residential and commercial 11-month lease contract for Indian landlords and tenants.', category: 'Real Estate' },
-                { name: 'Offer Letter with CTC Breakup', slug: 'offer-letter-india-ctc-template', desc: 'Professional Indian job offer letter with detailed salary components (Basic, HRA, PF, Gratuity).', category: 'HR' },
-                { name: 'Co-Founder Equity & Vesting Deed', slug: 'founder-agreement-india-template', desc: 'Co-founder partnership and equity lock-in contract with 4-year reverse vesting schedule.', category: 'Startups' },
-                { name: 'CA Audit Engagement Letter', slug: 'ca-engagement-letter-india-template', desc: 'Statutory and tax audit engagement letter format compliant with ICAI guidelines.', category: 'Finance' },
-                { name: 'Bangalore Rental Agreement', slug: 'rent-agreement-bangalore-template', desc: 'Karnataka Stamp Act compliant 11-month house and flat rental agreement format.', category: 'Real Estate' },
-                { name: 'Employee Relieving & Experience Letter', slug: 'relieving-letter-india-template', desc: 'Formal employee exit relieving certificate with service tenure verification.', category: 'HR' },
-                { name: 'Property Sale Agreement Deed', slug: 'sale-agreement-property-india-template', desc: 'Agreement to sell immovable property and land with clear title transfer clauses.', category: 'Legal' }
-              ].map((template) => (
+                { name: 'Cross-Border Mutual NDA', slug: 'nda-template', desc: 'Standard international mutual non-disclosure agreement protecting trade secrets, financial models, and IP.', category: 'Legal' },
+                { name: 'Commercial Property Lease Agreement', slug: 'lease-agreement-template', desc: 'Comprehensive commercial lease agreement for prime office, retail, and hospitality spaces.', category: 'Real Estate' },
+                { name: 'International Service Agreement', slug: 'service-agreement-template', desc: 'Cross-border B2B service agreement with deliverables, milestone invoicing, and dispute jurisdiction.', category: 'Operations' },
+                { name: 'Startup SAFE Investment Note', slug: 'safe-note-india-template', desc: 'Standard convertible equity instrument for early-stage startup fundraising with global angel and VC syndicates.', category: 'Startups' },
+                { name: 'Exclusive Broker Mandate Agreement', slug: 'channel-partner-agreement', desc: 'Institutional brokerage mandate covering transaction fee slabs, marketing territory, and buyer exclusivity.', category: 'Real Estate' },
+                { name: 'Cross-Border Freelance Agreement', slug: 'freelance-agreement-template', desc: 'Remote consulting and development agreement with full intellectual property assignment and confidentiality.', category: 'Operations' },
+                { name: 'Board Resolution & Governance Deed', slug: 'board-resolution-template', desc: 'Formal board resolution for corporate authorizations, banking facilities, and equity issuances.', category: 'Corporate' },
+                { name: 'Co-Founder Equity & Vesting Agreement', slug: 'founder-agreement-india-template', desc: 'Founder equity agreement with standard 4-year vesting schedule, 1-year cliff, and IP assignment.', category: 'Startups' }              ].map((template) => (
                 <Link to={`/templates/${template.slug}`} key={template.slug} className="template-card">
                   <div className="template-card-header">
                     <span className="template-category">{template.category}</span>
@@ -1544,6 +1899,9 @@ const LandingPage: React.FC = () => {
 
         {/* Cryptographic Security Architecture Highlight (AES-256, Zero-Knowledge, Client-Side Cryptography) */}
         <CryptographicSecurityHighlight />
+
+        {/* Global Agency & Enterprise Settings Suite Interactive Showcase */}
+        <GlobalAgencySettingsSection />
 
         {/* Enterprise Compliance Roadmap Section */}
         <ComplianceRoadmapSection />

@@ -17,7 +17,6 @@ import {
     BarChart2,
     Mail,
     Image as ImageIcon,
-    PenTool,
     UserPlus,
     Flame,
     Settings,
@@ -28,16 +27,25 @@ import {
     Sparkles,
     Loader2,
     MessageCircle,
-    Building2,
-    Smartphone
+    Smartphone,
+    Scale,
+    FileLock,
+    CopyCheck,
+    ShieldAlert,
+    Ban,
+    Bell,
+    Folder,
+    FolderOpen,
+    MapPin,
+    X
 } from 'lucide-react';
+import ActiveSessionsManager from './components/ActiveSessionsManager';
 import Skeleton from './components/ui/Skeleton';
 import { hashPassword, generateSecureToken } from './lib/security';
 import { encryptFile, generateEncryptionKey } from './lib/encryption';
 import AnalyticsDashboard from './components/analytics/AnalyticsDashboard';
 import DashboardAnimation from './components/DashboardAnimation';
 import AuditTrail from './components/AuditTrail';
-import ESignatureDashboard from './components/esignature/ESignatureDashboard';
 import TemplatesDashboard from './components/templates/TemplatesDashboard';
 
 import { logDocumentUpload } from './lib/auditLogger';
@@ -76,14 +84,51 @@ interface WatermarkConfig {
     fontSize: number;
     rotation: number;
     layout: 'single' | 'tiled';
+    require_nda?: boolean;
+    nda_type?: 'standard' | 'real_estate' | 'hotel_mna' | 'startup';
+    strict_drm?: boolean;
+    allowed_countries?: string[];
+    lead_alerts?: {
+        notify_on_open?: boolean;
+        notify_on_dwell?: boolean;
+    };
+    category?: 'legal' | 'financials' | 'asset' | 'teasers' | string;
 }
+
+const GEOPROTECTION_COUNTRIES = [
+    { code: 'AE', label: 'UAE 🇦🇪' },
+    { code: 'GB', label: 'UK 🇬🇧' },
+    { code: 'US', label: 'USA 🇺🇸' },
+    { code: 'SG', label: 'Singapore 🇸🇬' },
+    { code: 'FR', label: 'France 🇫🇷' },
+    { code: 'DE', label: 'Germany 🇩🇪' },
+    { code: 'CH', label: 'Switzerland 🇨🇭' },
+    { code: 'IN', label: 'India 🇮🇳' },
+];
+
+const VDR_CATEGORIES = [
+    { id: 'all', label: '📂 All Documents' },
+    { id: 'legal', label: '⚖️ 01_Legal & M&A' },
+    { id: 'financials', label: '📊 02_Financial Models' },
+    { id: 'asset', label: '🏢 03_Asset Diligence & Deeds' },
+    { id: 'teasers', label: '🚀 04_Teasers & Pitch Decks' },
+];
+
+const PHONE_COUNTRY_CODES = [
+    { code: '+971', flag: '🇦🇪', label: 'UAE (+971)' },
+    { code: '+44', flag: '🇬🇧', label: 'UK (+44)' },
+    { code: '+1', flag: '🇺🇸', label: 'USA/CA (+1)' },
+    { code: '+65', flag: '🇸🇬', label: 'Singapore (+65)' },
+    { code: '+33', flag: '🇫🇷', label: 'France (+33)' },
+    { code: '+91', flag: '🇮🇳', label: 'India (+91)' },
+];
 
 const DataRoom: React.FC = () => {
     const { user } = useUser();
     const { getToken } = useAuth();
     const [documents, setDocuments] = useState<Document[]>([]);
     const [isDragging, setIsDragging] = useState(false);
-    const [activeTab, setActiveTab] = useState<'upload' | 'documents' | 'analytics' | 'audit' | 'esignature' | 'templates'>('upload');
+    const [activeTab, setActiveTab] = useState<'upload' | 'documents' | 'analytics' | 'audit' | 'templates'>('upload');
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | undefined>(undefined);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -124,6 +169,7 @@ const DataRoom: React.FC = () => {
     const [allowedEmail, setAllowedEmail] = useState('');
     const [requirePhoneOtp, setRequirePhoneOtp] = useState(false);
     const [allowedPhone, setAllowedPhone] = useState('');
+    const [allowedPhoneCountryCode, setAllowedPhoneCountryCode] = useState('+971');
     const [applyWatermark, setApplyWatermark] = useState(false);
     const [watermarkConfig, setWatermarkConfig] = useState<WatermarkConfig>({
         text: 'CONFIDENTIAL • FOR {{email}} • IP: {{ip}}',
@@ -142,13 +188,122 @@ const DataRoom: React.FC = () => {
     const [maxViews, setMaxViews] = useState(1);
     const [aesEncryptionEnabled, setAesEncryptionEnabled] = useState(false);
 
-    // Bates Numbering & Deal Room Presets State
-    const [batesNumberingEnabled, setBatesNumberingEnabled] = useState(false);
-    const [batesPrefix, setBatesPrefix] = useState('DT-PROP');
-    const [dealRoomPreset, setDealRoomPreset] = useState<'custom' | 'title_search_30yr' | 'bank_apf_pack' | 'rera_launch_kit'>('custom');
+    // High-Demand Phase 1 Features: Sector Presets, NDA Gate, Strict DRM, Custom Slug
+    const [activePreset, setActivePreset] = useState<'dubai_re' | 'hotel_mna' | 'startup' | 'pe_finance' | null>(null);
+    const [requireNda, setRequireNda] = useState(false);
+    const [ndaType, setNdaType] = useState<'standard' | 'real_estate' | 'hotel_mna' | 'startup'>('standard');
+    const [strictDrm, setStrictDrm] = useState(false);
+    const [customSlug, setCustomSlug] = useState('');
+    const [copiedMemo, setCopiedMemo] = useState(false);
+
+    // Advanced VDR Phase 2 States: Sessions Modal, Geo-Fencing, Real-Time Lead Alerts, Folder Filter
+    const [sessionManagerDoc, setSessionManagerDoc] = useState<{ id: string; name: string } | null>(null);
+    const [geoFencingEnabled, setGeoFencingEnabled] = useState(false);
+    const [allowedCountries, setAllowedCountries] = useState<string[]>(['AE', 'GB', 'US', 'SG']);
+    const [notifyOnOpen, setNotifyOnOpen] = useState(true);
+    const [notifyOnDwell, setNotifyOnDwell] = useState(true);
+    const [selectedVdrCategory, setSelectedVdrCategory] = useState<string>('all');
+    const [uploadCategory, setUploadCategory] = useState<'legal' | 'financials' | 'asset' | 'teasers'>('legal');
+
+    const toggleAllowedCountry = (code: string) => {
+        setAllowedCountries(prev =>
+            prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]
+        );
+    };
+
+    const applySectorPreset = (preset: 'dubai_re' | 'hotel_mna' | 'startup' | 'pe_finance') => {
+        setActivePreset(preset);
+        if (preset === 'dubai_re') {
+            setRequirePhoneOtp(true);
+            setAllowedPhoneCountryCode('+971');
+            setApplyWatermark(true);
+            setWatermarkConfig(prev => ({
+                ...prev,
+                text: 'CONFIDENTIAL • DUBAI LUXURY ASSET • VIEWED BY {{phone}} • IP: {{ip}}',
+                layout: 'tiled',
+                opacity: 0.18
+            }));
+            setAllowDownloads(false);
+            setStrictDrm(true);
+            setRequireNda(false);
+            setGeoFencingEnabled(true);
+            setAllowedCountries(['AE', 'GB', 'US', 'SG']);
+            setUploadCategory('asset');
+            setLinkExpiration(true);
+            setDurationValue(14);
+            setDurationUnit('days');
+        } else if (preset === 'hotel_mna') {
+            setRequireNda(true);
+            setNdaType('hotel_mna');
+            setEmailVerification(true);
+            setApplyWatermark(true);
+            setWatermarkConfig(prev => ({
+                ...prev,
+                text: 'STRICTLY CONFIDENTIAL • FOR M&A ACQUISITION REVIEW ONLY • {{email}}',
+                layout: 'tiled',
+                opacity: 0.16
+            }));
+            setAllowDownloads(false);
+            setStrictDrm(true);
+            setGeoFencingEnabled(true);
+            setAllowedCountries(['AE', 'GB', 'US', 'FR', 'DE', 'CH']);
+            setUploadCategory('legal');
+            setLinkExpiration(true);
+            setDurationValue(30);
+            setDurationUnit('days');
+        } else if (preset === 'startup') {
+            setEmailVerification(true);
+            setRequireNda(true);
+            setNdaType('startup');
+            setApplyWatermark(true);
+            setWatermarkConfig(prev => ({
+                ...prev,
+                text: 'CONFIDENTIAL PITCH DECK • FOR {{email}} • DO NOT CIRCULATE',
+                layout: 'tiled',
+                opacity: 0.18
+            }));
+            setAllowDownloads(false);
+            setStrictDrm(true);
+            setGeoFencingEnabled(false);
+            setUploadCategory('teasers');
+            setLinkExpiration(true);
+            setDurationValue(21);
+            setDurationUnit('days');
+        } else if (preset === 'pe_finance') {
+            setAesEncryptionEnabled(true);
+            setPasswordProtection(true);
+            setRequirePhoneOtp(true);
+            setAllowedPhoneCountryCode('+971');
+            setRequireNda(true);
+            setNdaType('standard');
+            setApplyWatermark(true);
+            setWatermarkConfig(prev => ({
+                ...prev,
+                text: 'INSTITUTIONAL DUE DILIGENCE • {{email}} • {{phone}} • {{date}}',
+                layout: 'tiled',
+                opacity: 0.2
+            }));
+            setAllowDownloads(false);
+            setStrictDrm(true);
+            setGeoFencingEnabled(true);
+            setAllowedCountries(['AE', 'GB', 'US', 'SG', 'CH', 'DE']);
+            setUploadCategory('financials');
+            setLinkExpiration(true);
+            setDurationValue(7);
+            setDurationUnit('days');
+        }
+    };
+
+    const copyWhatsAppDealMemo = (link: string, docName: string) => {
+        const memo = `👋 Confidential Deal Memo\n\n📄 Document: ${docName}\n🔗 Secure Link: ${link}\n\n🔒 Protected with DocTransfer (Anti-Leak Watermarking, NDA Gate & Audit Telemetry Enforced).`;
+        navigator.clipboard.writeText(memo);
+        setCopiedMemo(true);
+        setTimeout(() => setCopiedMemo(false), 2500);
+    };
+
 
     // Subscription and premium features
-    const { subscription, usage, dailyUploadCount, yearlyUploadCount, isLoading: subLoading, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
+    const { subscription, usage, dailyUploadCount, yearlyUploadCount, activeDocCount, monthlyUploadCount, isLoading: subLoading, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription } = useSubscription();
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
     const [lockedFeatureName, setLockedFeatureName] = useState<string | undefined>();
 
@@ -233,24 +388,7 @@ const DataRoom: React.FC = () => {
         e.preventDefault();
         setIsDragging(false);
         const files = Array.from(e.dataTransfer.files);
-        
         if (files.length > 0) {
-            const remaining = getRemainingUploads();
-            const isTrial = subscription?.status === 'trialing';
-            const isFree = subscription?.plan_type === 'free';
-            if ((isFree || isTrial) && (remaining <= 0 || files.length > remaining)) {
-                if (isTrial) {
-                    if (remaining <= 0) {
-                        setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
-                    } else {
-                        setUploadError(`Daily upload limit of 10 files reached. You only have ${remaining} uploads remaining today, but selected ${files.length} files.`);
-                    }
-                } else {
-                    setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
-                }
-                handleLockedFeatureClick('Unlimited Uploads');
-                return;
-            }
             handleFileSelection(files);
         }
     };
@@ -263,27 +401,41 @@ const DataRoom: React.FC = () => {
     };
 
     const handleFileSelection = (files: File[]) => {
-        if (files.length > 1 && subscription?.plan_type === 'free') {
+        setUploadError(null);
+        const isFree = !subscription || subscription.plan_type === 'free';
+
+        // 1. Plan-based Bundling Check (Free plan allows only 1 file per upload)
+        if (files.length > 1 && (isFree || isFeatureLocked('document_bundles'))) {
             setSelectedFiles([files[0]]);
-            setUploadError("Premium plan feature. You cannot upload multiple files at one time. Please upgrade to unlock document bundling.");
+            setUploadError("Multi-file document bundling is a Pro feature. Free plan allows 1 file per upload. Please upgrade to Pro to bundle multiple files.");
             handleLockedFeatureClick('Document Bundles');
             return;
         }
 
+        // 2. Active Documents / Link Limits Check (5 active document links for Free)
         const remaining = getRemainingUploads();
-        const isTrial = subscription?.status === 'trialing';
-        const isFree = subscription?.plan_type === 'free';
-        if ((isFree || isTrial) && (remaining <= 0 || files.length > remaining)) {
-            if (isTrial) {
-                if (remaining <= 0) {
-                    setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
-                } else {
-                    setUploadError(`Daily upload limit of 10 files reached. You only have ${remaining} uploads remaining today, but selected ${files.length} files.`);
-                }
-            } else {
-                setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
-            }
+        if (isFree && (remaining <= 0 || files.length > remaining)) {
+            setUploadError(`Free tier limit reached (5 active document links). You currently have ${activeDocCount || 0} active links. Please delete an existing document or upgrade to Pro for 100 links/month.`);
             handleLockedFeatureClick('Unlimited Uploads');
+            setSelectedFiles([]);
+            return;
+        }
+
+        // 3. Strict File Size Validation (Immediate pre-upload rejection)
+        const maxSizeBytes = getMaxFileSize();
+        const oversizeFiles = files.filter(f => f.size > maxSizeBytes);
+        if (oversizeFiles.length > 0) {
+            const formatMb = (bytes: number) => (bytes / (1024 * 1024)).toFixed(0);
+            const planName = subscription?.plan_type ? subscription.plan_type.toUpperCase() : 'FREE';
+            const firstOversize = oversizeFiles[0];
+            const fileSizeMb = (firstOversize.size / (1024 * 1024)).toFixed(1);
+            setUploadError(
+                `File too large. Your ${planName} plan allows up to ${formatMb(maxSizeBytes)} MB per file. ` +
+                `Selected file "${firstOversize.name}" is ${fileSizeMb} MB. ` +
+                `Please upgrade to Pro (50MB) or Business (250MB) for larger uploads.`
+            );
+            setSelectedFiles([]);
+            handleLockedFeatureClick('File Size Limit');
             return;
         }
 
@@ -300,18 +452,9 @@ const DataRoom: React.FC = () => {
 
         // Check overall limits first
         const remainingUploads = getRemainingUploads();
-        const isTrial = subscription?.status === 'trialing';
-        const isFree = subscription?.plan_type === 'free';
-        if ((isFree || isTrial) && (remainingUploads <= 0 || selectedFiles.length > remainingUploads)) {
-            if (isTrial) {
-                if (remainingUploads <= 0) {
-                    setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
-                } else {
-                    setUploadError(`Daily upload limit of 10 files reached. You only have ${remainingUploads} uploads remaining today, but selected ${selectedFiles.length} files.`);
-                }
-            } else {
-                setUploadError("Daily upload limit reached. Please upgrade for unlimited uploads.");
-            }
+        const isFree = !subscription || subscription.plan_type === 'free';
+        if (isFree && (remainingUploads <= 0 || selectedFiles.length > remainingUploads)) {
+            setUploadError(`Free tier limit reached (5 active document links). You currently have ${activeDocCount || 0} active links. Please delete an existing document or upgrade to Pro for 100 links/month.`);
             handleLockedFeatureClick('Unlimited Uploads');
             return;
         }
@@ -321,7 +464,9 @@ const DataRoom: React.FC = () => {
         const oversizeFiles = selectedFiles.filter(f => f.size > maxSizeBytes);
         if (oversizeFiles.length > 0) {
             const formatSize = (bytes: number) => (bytes / (1024 * 1024)).toFixed(0);
-            setUploadError(`File too large. Maximum size is ${formatSize(maxSizeBytes)}MB. The following files are too large: ${oversizeFiles.map(f => f.name).join(', ')}`);
+            const planName = subscription?.plan_type ? subscription.plan_type.toUpperCase() : 'FREE';
+            setUploadError(`File too large. Your ${planName} plan allows up to ${formatSize(maxSizeBytes)} MB per file. The following files are too large: ${oversizeFiles.map(f => `${f.name} (${(f.size / (1024 * 1024)).toFixed(1)}MB)`).join(', ')}`);
+            handleLockedFeatureClick('File Size Limit');
             return;
         }
 
@@ -433,7 +578,13 @@ const DataRoom: React.FC = () => {
                 }
 
                 setUploadProgressStage('Creating access controls & tracking rules...');
-                const docShareLink = generateSecureToken(12);
+                let docShareLink = generateSecureToken(12);
+                if (customSlug.trim()) {
+                    const cleanSlug = customSlug.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '-').replace(/-+/g, '-');
+                    if (cleanSlug.length >= 3) {
+                        docShareLink = cleanSlug;
+                    }
+                }
 
                 // 4. Save document metadata to database
                 const documentPayload: Record<string, any> = {
@@ -454,7 +605,25 @@ const DataRoom: React.FC = () => {
                     email_verification: emailVerification && !isFeatureLocked?.('email_verification'),
                     allowed_email: (emailVerification && !isFeatureLocked?.('email_verification')) ? allowedEmail : null,
                     apply_watermark: applyWatermark && !isFeatureLocked?.('watermarking'),
-                    watermark_config: (applyWatermark && !isFeatureLocked?.('watermarking')) ? watermarkConfig : null,
+                    watermark_config: {
+                        ...(applyWatermark && !isFeatureLocked?.('watermarking') ? watermarkConfig : {
+                            text: 'CONFIDENTIAL',
+                            color: '#000000',
+                            opacity: 0.15,
+                            fontSize: 24,
+                            rotation: -45,
+                            layout: 'tiled' as const
+                        }),
+                        require_nda: requireNda,
+                        nda_type: ndaType,
+                        strict_drm: strictDrm,
+                        allowed_countries: geoFencingEnabled && allowedCountries.length > 0 ? allowedCountries : undefined,
+                        lead_alerts: {
+                            notify_on_open: notifyOnOpen,
+                            notify_on_dwell: notifyOnDwell
+                        },
+                        category: uploadCategory
+                    },
                     max_views: (maxViewsEnabled && !isFeatureLocked?.('burn_after_reading')) ? maxViews : null,
                     burn_after_reading: maxViewsEnabled && !isFeatureLocked?.('burn_after_reading'),
 
@@ -474,7 +643,8 @@ const DataRoom: React.FC = () => {
                 if (requirePhoneOtp && !isFeatureLocked?.('phone_otp')) {
                     documentPayload.require_phone_otp = true;
                     if (allowedPhone.trim()) {
-                        documentPayload.allowed_phone = allowedPhone.trim();
+                        const cleanDigits = allowedPhone.trim().replace(/[^0-9]/g, '');
+                        documentPayload.allowed_phone = `${allowedPhoneCountryCode}${cleanDigits}`;
                     }
                 }
 
@@ -764,40 +934,11 @@ const DataRoom: React.FC = () => {
                             <Shield size={16} /> Audit Trail
                             {isFeatureLocked('audit_trails') && <Lock size={14} />}
                         </button>
-                        <button onClick={() => {
-                            if (isFeatureLocked('esignature')) {
-                                handleLockedFeatureClick('E-Signature');
-                            } else {
-                                setActiveTab('esignature');
-                            }
-                        }} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'esignature' ? '#8b5cf6' : 'transparent', color: activeTab === 'esignature' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
-                            <PenTool size={16} /> E-Signature
-                            {isFeatureLocked('esignature') && <Lock size={14} />}
-                        </button>
 
                         <button onClick={() => setActiveTab('templates')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'templates' ? '#8b5cf6' : 'transparent', color: activeTab === 'templates' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <Sparkles size={16} /> Templates
                         </button>
 
-                        <button 
-                            onClick={() => navigate('/closing-room')}
-                            style={{
-                                padding: '0.625rem 1.25rem',
-                                background: '#059669',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontWeight: '700',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.45rem',
-                                cursor: 'pointer',
-                                boxShadow: '0 2px 8px rgba(5, 150, 105, 0.25)',
-                                transition: 'all 0.2s'
-                            }}
-                        >
-                            <Building2 size={16} /> 🏡 Closing Room
-                        </button>
                     </div>
                 </div>
             </header>
@@ -810,11 +951,25 @@ const DataRoom: React.FC = () => {
                         onBackToDocuments={() => { setActiveTab('documents'); fetchDocuments(); }} 
                     />
                 : activeTab === 'analytics' ?
-                    <AnalyticsDashboard
-                        documentId={selectedDocumentId}
-                        documentName={documents.find(d => d.id === selectedDocumentId)?.name}
-                        onBack={() => { setActiveTab('documents'); setSelectedDocumentId(undefined); }}
-                    />
+                    (isFeatureLocked('advanced_analytics') ? (
+                        <div style={{ textAlign: 'center', padding: '4rem 2rem', background: 'white', borderRadius: '16px', border: '1px solid #e2e8f0', maxWidth: '800px', margin: '2rem auto' }}>
+                            <Lock size={48} color="#6366f1" style={{ margin: '0 auto 1.5rem' }} />
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1e293b', marginBottom: '0.5rem' }}>Forensic Heatmaps & Analytics is a Pro Feature</h2>
+                            <p style={{ color: '#64748b', marginBottom: '2rem' }}>Upgrade to the Pro or Business plan to view page-by-page duration heatmaps, drop-off curves, and viewer locations.</p>
+                            <button
+                                onClick={() => handleLockedFeatureClick('Advanced Analytics')}
+                                style={{ padding: '0.75rem 2rem', background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 600, cursor: 'pointer' }}
+                            >
+                                Upgrade to Pro
+                            </button>
+                        </div>
+                    ) : (
+                        <AnalyticsDashboard
+                            documentId={selectedDocumentId}
+                            documentName={documents.find(d => d.id === selectedDocumentId)?.name}
+                            onBack={() => { setActiveTab('documents'); setSelectedDocumentId(undefined); }}
+                        />
+                    ))
                 : activeTab === 'audit' ?
 
                     <div className="animate-fade-in">
@@ -851,13 +1006,14 @@ const DataRoom: React.FC = () => {
                             <AuditTrail documentId={selectedDocumentId || documents.map(d => d.id)} />
                         )}
                     </div>
-                : activeTab === 'esignature' ?
-                    <ESignatureDashboard />
                 : activeTab === 'documents' ?
 
                     <div className="animate-fade-in">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827' }}>My Documents</h2>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <div>
+                                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827' }}>My Documents & Virtual Data Room</h2>
+                                <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: '0.2rem 0 0' }}>Manage confidential files, monitor live investor sessions, and trigger instant kill-switches</p>
+                            </div>
                             <div style={{ display: 'flex', gap: '1rem' }}>
                                 <input
                                     type="text"
@@ -865,6 +1021,41 @@ const DataRoom: React.FC = () => {
                                     style={{ padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid #d1d5db', minWidth: '250px' }}
                                 />
                             </div>
+                        </div>
+
+                        {/* VDR Diligence Folders Strip */}
+                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.75rem', paddingBottom: '0.75rem', borderBottom: '1px solid #f1f5f9' }}>
+                            {VDR_CATEGORIES.map(cat => {
+                                const isSel = selectedVdrCategory === cat.id;
+                                const count = cat.id === 'all' 
+                                    ? documents.length 
+                                    : documents.filter(d => (d.watermark_config as any)?.category === cat.id).length;
+                                return (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => setSelectedVdrCategory(cat.id)}
+                                        style={{
+                                            padding: '0.45rem 0.85rem',
+                                            borderRadius: '8px',
+                                            border: isSel ? '1.5px solid #4f46e5' : '1px solid #e2e8f0',
+                                            background: isSel ? '#eef2ff' : '#ffffff',
+                                            color: isSel ? '#4338ca' : '#475569',
+                                            fontSize: '0.82rem',
+                                            fontWeight: isSel ? 700 : 500,
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.4rem',
+                                            transition: 'all 0.15s ease'
+                                        }}
+                                    >
+                                        <span>{cat.label}</span>
+                                        <span style={{ fontSize: '0.7rem', padding: '1px 6px', borderRadius: '999px', background: isSel ? '#c7d2fe' : '#f1f5f9', color: isSel ? '#312e81' : '#64748b' }}>
+                                            {count}
+                                        </span>
+                                    </button>
+                                );
+                            })}
                         </div>
 
                         {isLoadingDocs ? (
@@ -899,7 +1090,9 @@ const DataRoom: React.FC = () => {
                             </div>
                         ) : (
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                                {documents.map(doc => (
+                                {documents
+                                    .filter(doc => selectedVdrCategory === 'all' || (doc.watermark_config as any)?.category === selectedVdrCategory)
+                                    .map(doc => (
                                     <div key={doc.id} style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', overflow: 'hidden', boxShadow: '0 1px 2px rgba(0,0,0,0.05)', transition: 'transform 0.2s', cursor: 'pointer' }}
                                         onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
                                         onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -959,16 +1152,25 @@ const DataRoom: React.FC = () => {
                                             </a>
                                             <button
                                                 onClick={() => {
+                                                    if (isFeatureLocked('advanced_analytics')) {
+                                                        handleLockedFeatureClick('Advanced Analytics');
+                                                        return;
+                                                    }
                                                     setSelectedDocumentId(doc.id);
                                                     setActiveTab('analytics');
                                                 }}
                                                 style={{ flex: 1, padding: '0.5rem', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '6px', color: '#166534', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}
                                             >
                                                 <BarChart2 size={16} /> Analytics
+                                                {isFeatureLocked('advanced_analytics') && <Lock size={12} color="#166534" />}
                                             </button>
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
+                                                    if (isFeatureLocked('audit_trails')) {
+                                                        handleLockedFeatureClick('Audit Trail');
+                                                        return;
+                                                    }
                                                     setSelectedDocumentId(doc.id);
                                                     setActiveTab('audit');
                                                 }}
@@ -976,10 +1178,84 @@ const DataRoom: React.FC = () => {
                                                 title="View Audit Trail"
                                             >
                                                 <Shield size={16} />
+                                                {isFeatureLocked('audit_trails') && <Lock size={12} color="#0369a1" />}
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (isFeatureLocked('active_sessions')) {
+                                                        handleLockedFeatureClick('Active Sessions & Kill Switch');
+                                                        return;
+                                                    }
+                                                    setSessionManagerDoc({ id: doc.id, name: doc.name });
+                                                }}
+                                                style={{ padding: '0.5rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', color: '#dc2626', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem' }}
+                                                title="Active Sessions & Kill Switch"
+                                            >
+                                                <Ban size={16} />
+                                                {isFeatureLocked('active_sessions') && <Lock size={12} color="#dc2626" />}
                                             </button>
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        )}
+
+                        {/* Active Sessions & Kill Switch Modal */}
+                        {sessionManagerDoc && (
+                            <div style={{
+                                position: 'fixed',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                background: 'rgba(15, 23, 42, 0.65)',
+                                backdropFilter: 'blur(4px)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 9999,
+                                padding: '1.5rem'
+                            }}>
+                                <div style={{
+                                    background: 'white',
+                                    borderRadius: '24px',
+                                    maxWidth: '850px',
+                                    width: '100%',
+                                    maxHeight: '90vh',
+                                    overflowY: 'auto',
+                                    position: 'relative',
+                                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                                }}>
+                                    <button
+                                        onClick={() => setSessionManagerDoc(null)}
+                                        style={{
+                                            position: 'absolute',
+                                            top: '1.25rem',
+                                            right: '1.25rem',
+                                            background: '#f1f5f9',
+                                            border: 'none',
+                                            borderRadius: '50%',
+                                            width: '36px',
+                                            height: '36px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            color: '#475569',
+                                            zIndex: 10
+                                        }}
+                                        title="Close Modal"
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                    <div style={{ padding: '0.5rem' }}>
+                                        <ActiveSessionsManager
+                                            documentId={sessionManagerDoc.id}
+                                            documentName={sessionManagerDoc.name}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -1004,168 +1280,14 @@ const DataRoom: React.FC = () => {
                                         </div>
                                     )}
 
-                                    {/* Usage Limit Banner / Trial Tracking */}
-                                    {subscription && (subscription.status === 'trialing' || subscription.plan_type === 'free') ? (
+                                    {/* Usage Limit Banner / Free Tier Tracking */}
+                                    {(!subscription || subscription.status === 'trialing' || subscription.plan_type === 'free') ? (
                                         <TrialTrackingBar
-                                            currentUploads={dailyUploadCount}
-                                            maxUploads={10}
+                                            currentUploads={activeDocCount || 0}
+                                            maxUploads={5}
+                                            label="active document links (Free Tier Limit)"
                                         />
                                     ) : null}
-
-                                    {/* Indian Real Estate Quick Presets */}
-                                    <div style={{
-                                        marginBottom: '1.5rem',
-                                        padding: '0.875rem 1rem',
-                                        background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
-                                        border: '1px solid #a7f3d0',
-                                        borderRadius: '12px',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '0.6rem'
-                                    }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <span style={{ fontSize: '1.1rem' }}>🏢</span>
-                                                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#065f46' }}>Indian Real Estate & PropTech Suite</span>
-                                            </div>
-                                            <Link to="/solutions/indian-real-estate" style={{ fontSize: '0.75rem', fontWeight: '600', color: '#059669', textDecoration: 'none' }}>
-                                                Learn More →
-                                            </Link>
-                                        </div>
-                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                            <button
-                                                type="button"
-                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=rera-allotment-letter'); }}
-                                                style={{
-                                                    padding: '0.35rem 0.65rem',
-                                                    background: 'white',
-                                                    border: '1px solid #6ee7b7',
-                                                    borderRadius: '6px',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '600',
-                                                    color: '#047857',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.3rem'
-                                                }}
-                                            >
-                                                📄 RERA Allotment Letter
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=channel-partner-agreement'); }}
-                                                style={{
-                                                    padding: '0.35rem 0.65rem',
-                                                    background: 'white',
-                                                    border: '1px solid #6ee7b7',
-                                                    borderRadius: '6px',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '600',
-                                                    color: '#047857',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.3rem'
-                                                }}
-                                            >
-                                                🤝 Broker Mandate
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=indian-lease-agreement'); }}
-                                                style={{
-                                                    padding: '0.35rem 0.65rem',
-                                                    background: 'white',
-                                                    border: '1px solid #6ee7b7',
-                                                    borderRadius: '6px',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '600',
-                                                    color: '#047857',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.3rem'
-                                                }}
-                                            >
-                                                📜 11-Month Lease
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=rera-agreement-for-sale'); }}
-                                                style={{
-                                                    padding: '0.35rem 0.65rem',
-                                                    background: 'white',
-                                                    border: '1px solid #6ee7b7',
-                                                    borderRadius: '6px',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '600',
-                                                    color: '#047857',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.3rem'
-                                                }}
-                                            >
-                                                📑 Agreement for Sale (RERA)
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => { setActiveTab('templates'); navigate('?useTemplate=title-search-report'); }}
-                                                style={{
-                                                    padding: '0.35rem 0.65rem',
-                                                    background: 'white',
-                                                    border: '1px solid #6ee7b7',
-                                                    borderRadius: '6px',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '600',
-                                                    color: '#047857',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.3rem'
-                                                }}
-                                            >
-                                                ⚖️ 30-Yr Title Report
-                                            </button>
-                                            <Link
-                                                to="/tools/stamp-duty-calculator"
-                                                style={{
-                                                    padding: '0.35rem 0.65rem',
-                                                    background: '#ecfdf5',
-                                                    border: '1px solid #a7f3d0',
-                                                    borderRadius: '6px',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '700',
-                                                    color: '#059669',
-                                                    textDecoration: 'none',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.3rem'
-                                                }}
-                                            >
-                                                🧮 Stamp Duty Calc
-                                            </Link>
-                                            <Link
-                                                to="/tools/rera-carpet-area-calculator"
-                                                style={{
-                                                    padding: '0.35rem 0.65rem',
-                                                    background: '#ecfdf5',
-                                                    border: '1px solid #a7f3d0',
-                                                    borderRadius: '6px',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '700',
-                                                    color: '#059669',
-                                                    textDecoration: 'none',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '0.3rem'
-                                                }}
-                                            >
-                                                📐 RERA Carpet Calc
-                                            </Link>
-                                        </div>
-                                    </div>
 
                                     {/* Upload Area */}
                                     <div
@@ -1232,8 +1354,8 @@ const DataRoom: React.FC = () => {
                                             )}
                                         </div>
                                         {selectedFiles.length === 0 && (
-                                            <p style={{ fontSize: '0.8rem', color: '#9ca3af', marginTop: '0.25rem' }}>
-                                                Maximum file size: 20 MB per file
+                                            <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem', fontWeight: 500 }}>
+                                                Max file size: {(getMaxFileSize() / (1024 * 1024)).toFixed(0)} MB per file {!subscription || subscription.plan_type === 'free' ? '(Free Plan)' : `(${subscription.plan_type.toUpperCase()} Plan)`}
                                             </p>
                                         )}
                                         <input
@@ -1245,6 +1367,68 @@ const DataRoom: React.FC = () => {
                                             multiple // Enable multiple selection
                                             style={{ display: 'none' }}
                                         />
+                                    </div>
+
+                                    {/* ⚡ 1-Click Sector Security Presets Strip */}
+                                    <div style={{
+                                        marginBottom: '1.5rem',
+                                        background: '#f8fafc',
+                                        padding: '1.1rem 1.25rem',
+                                        borderRadius: '14px',
+                                        border: '1px solid #e2e8f0',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
+                                                <Sparkles size={16} color="#6366f1" />
+                                                <span>1-Click Sector Deal Presets</span>
+                                                {isFeatureLocked('sector_presets') && <PremiumBadge size={13} />}
+                                            </div>
+                                            {activePreset && (
+                                                <span style={{ fontSize: '0.7rem', color: '#047857', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '0.15rem 0.6rem', borderRadius: '999px', fontWeight: 700 }}>
+                                                    Preset Active ✓
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.5rem' }}>
+                                            {[
+                                                { id: 'dubai_re', label: '🏢 Dubai Luxury Real Estate', desc: 'Phone Gate (+971) • Watermark • No Download' },
+                                                { id: 'hotel_mna', label: '🏨 Resort & Hotel Diligence', desc: 'Click-Through NDA • Email Gate • View-Only' },
+                                                { id: 'startup', label: '🚀 Startup Pitch Deck', desc: 'Email Gate • Pitch Watermark • Strict DRM' },
+                                                { id: 'pe_finance', label: '💼 Institutional M&A / PE', desc: 'AES-256 Vault • NDA • Passcode & OTP' }
+                                            ].map(item => {
+                                                const isSel = activePreset === item.id;
+                                                return (
+                                                    <button
+                                                        key={item.id}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            if (isFeatureLocked('sector_presets')) {
+                                                                handleLockedFeatureClick('1-Click Sector Presets');
+                                                                return;
+                                                            }
+                                                            applySectorPreset(item.id as any);
+                                                        }}
+                                                        style={{
+                                                            padding: '0.65rem 0.85rem',
+                                                            textAlign: 'left',
+                                                            background: isSel ? '#eff6ff' : '#ffffff',
+                                                            border: isSel ? '1.5px solid #3b82f6' : '1px solid #cbd5e1',
+                                                            borderRadius: '10px',
+                                                            cursor: 'pointer',
+                                                            transition: 'all 0.15s ease'
+                                                        }}
+                                                    >
+                                                        <div style={{ fontSize: '0.82rem', fontWeight: 700, color: isSel ? '#1d4ed8' : '#1e293b' }}>
+                                                            {item.label}
+                                                        </div>
+                                                        <div style={{ fontSize: '0.68rem', color: isSel ? '#2563eb' : '#64748b', marginTop: '0.15rem' }}>
+                                                            {item.desc}
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
 
                                     {/* Settings */}
@@ -1356,6 +1540,46 @@ const DataRoom: React.FC = () => {
                                             </div>
                                         </div>
 
+                                        {/* Strict DRM: Text Copy & Print Block */}
+                                        <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: strictDrm && !isFeatureLocked('strict_drm') ? '#fff7ed' : '#ffffff', transition: 'all 0.2s', opacity: isFeatureLocked('strict_drm') ? 0.85 : 1 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <div style={{ padding: '8px', background: '#ffedd5', borderRadius: '8px' }}>
+                                                        <FileLock size={18} style={{ color: '#ea580c' }} />
+                                                    </div>
+                                                    <div>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                            <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#374151' }}>Disable Text Copy & Print (Strict DRM)</span>
+                                                            <span style={{ fontSize: '0.65rem', padding: '1px 5px', background: '#fed7aa', color: '#9a3412', borderRadius: '4px', fontWeight: 700 }}>DRM Defense</span>
+                                                            {isFeatureLocked('strict_drm') && <PremiumBadge size={14} />}
+                                                        </div>
+                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Blocks Ctrl+P printing, right-click menu, and text clipboard copy</span>
+                                                    </div>
+                                                </div>
+                                                <div onClick={() => {
+                                                    if (isFeatureLocked('strict_drm')) {
+                                                        handleLockedFeatureClick('Strict DRM');
+                                                    }
+                                                }}>
+                                                    <label className="toggle-switch" style={{ pointerEvents: isFeatureLocked('strict_drm') ? 'none' : 'auto' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={strictDrm && !isFeatureLocked('strict_drm')}
+                                                            onChange={(e) => {
+                                                                if (isFeatureLocked('strict_drm')) {
+                                                                    handleLockedFeatureClick('Strict DRM');
+                                                                    return;
+                                                                }
+                                                                setStrictDrm(e.target.checked);
+                                                            }}
+                                                            disabled={isFeatureLocked('strict_drm')}
+                                                        />
+                                                        <span className="toggle-slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         {/* Email Verification */}
                                         <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: emailVerification ? '#f0f9ff' : '#ffffff', transition: 'all 0.2s' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: emailVerification ? '0.75rem' : '0' }}>
@@ -1407,7 +1631,79 @@ const DataRoom: React.FC = () => {
                                             )}
                                         </div>
 
-                                        {/* Mobile Number Gate (+91 India OTP) */}
+                                        {/* Pre-Flight Click-Through NDA & Disclaimer Gate */}
+                                        <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: requireNda && !isFeatureLocked('nda_gate') ? '#f5f3ff' : '#ffffff', transition: 'all 0.2s', opacity: isFeatureLocked('nda_gate') ? 0.85 : 1 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: (requireNda && !isFeatureLocked('nda_gate')) ? '0.75rem' : '0' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <div style={{ padding: '8px', background: '#ede9fe', borderRadius: '8px' }}>
+                                                        <Scale size={18} style={{ color: '#7c3aed' }} />
+                                                    </div>
+                                                    <div>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                            <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#111827' }}>Click-Through NDA & Confidentiality Gate</span>
+                                                            <span style={{ fontSize: '0.68rem', padding: '1px 6px', background: '#ede9fe', color: '#6d28d9', borderRadius: '4px', fontWeight: 700 }}>Legal Gate</span>
+                                                            {isFeatureLocked('nda_gate') && <PremiumBadge size={14} />}
+                                                        </div>
+                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Require viewers to click-accept legal terms before viewing file</span>
+                                                    </div>
+                                                </div>
+                                                <div onClick={() => {
+                                                    if (isFeatureLocked('nda_gate')) {
+                                                        handleLockedFeatureClick('Click-Through NDA Gate');
+                                                    }
+                                                }}>
+                                                    <label className="toggle-switch" style={{ pointerEvents: isFeatureLocked('nda_gate') ? 'none' : 'auto' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={requireNda && !isFeatureLocked('nda_gate')}
+                                                            onChange={(e) => {
+                                                                if (isFeatureLocked('nda_gate')) {
+                                                                    handleLockedFeatureClick('Click-Through NDA Gate');
+                                                                    return;
+                                                                }
+                                                                setRequireNda(e.target.checked);
+                                                            }}
+                                                            disabled={isFeatureLocked('nda_gate')}
+                                                        />
+                                                        <span className="toggle-slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            {requireNda && !isFeatureLocked('nda_gate') && (
+                                                <div style={{ paddingLeft: '2.8rem' }}>
+                                                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#374151', marginBottom: '0.35rem' }}>
+                                                        Select Agreement Template:
+                                                    </label>
+                                                    <select
+                                                        value={ndaType}
+                                                        onChange={(e) => setNdaType(e.target.value as any)}
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.55rem 0.75rem',
+                                                            border: '1px solid #cbd5e1',
+                                                            borderRadius: '8px',
+                                                            fontSize: '0.85rem',
+                                                            fontWeight: 600,
+                                                            color: '#334155',
+                                                            background: '#f8fafc',
+                                                            outline: 'none',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    >
+                                                        <option value="standard">⚖️ Standard Cross-Border Mutual NDA</option>
+                                                        <option value="real_estate">🏢 Luxury Real Estate Off-Plan Exclusivity Disclaimer</option>
+                                                        <option value="hotel_mna">🏨 Hotel & Resort Asset Diligence Non-Disclosure</option>
+                                                        <option value="startup">🚀 Startup Teaser & Proprietary IP Disclaimer</option>
+                                                    </select>
+                                                    <p style={{ fontSize: '0.72rem', color: '#64748b', margin: '0.35rem 0 0' }}>
+                                                        Recipients must review and agree to terms with a legal acknowledgment checkbox before viewing.
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Mobile Number Gate (Global Phone OTP) */}
                                         <div style={{
                                             padding: '1rem',
                                             border: '1px solid #f3f4f6',
@@ -1423,11 +1719,11 @@ const DataRoom: React.FC = () => {
                                                     </div>
                                                     <div>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                            <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#111827' }}>Mobile Number Gate (+91 OTP)</span>
-                                                            <span style={{ fontSize: '0.68rem', padding: '1px 6px', background: '#dcfce7', color: '#15803d', borderRadius: '4px', fontWeight: 700 }}>Real Estate</span>
+                                                            <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#111827' }}>Mobile Number Gate (Global Phone OTP)</span>
+                                                            <span style={{ fontSize: '0.68rem', padding: '1px 6px', background: '#dcfce7', color: '#15803d', borderRadius: '4px', fontWeight: 700 }}>Global Deal Gate</span>
                                                             {isFeatureLocked?.('phone_otp') && <PremiumBadge size={14} />}
                                                         </div>
-                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Require Indian phone OTP verification before viewing</span>
+                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Require phone OTP verification (+971, +44, +1, +65, +33, +91) before viewing</span>
                                                     </div>
                                                 </div>
                                                 <label className="toggle-switch">
@@ -1438,7 +1734,7 @@ const DataRoom: React.FC = () => {
                                                         onChange={(e) => {
                                                             if (isFeatureLocked?.('phone_otp')) {
                                                                 e.preventDefault();
-                                                                handleLockedFeatureClick('Mobile Number Gate (+91 OTP)');
+                                                                handleLockedFeatureClick('Mobile Number Gate (Global Phone OTP)');
                                                                 return;
                                                             }
                                                             setRequirePhoneOtp(e.target.checked);
@@ -1460,20 +1756,38 @@ const DataRoom: React.FC = () => {
                                                         Lock to Specific Recipient Phone (Optional)
                                                     </label>
                                                     <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #d1d5db', borderRadius: '8px', overflow: 'hidden', background: '#f9fafb' }}>
-                                                        <span style={{ padding: '0.5rem 0.75rem', fontSize: '0.85rem', fontWeight: 600, color: '#4b5563', background: '#f3f4f6', borderRight: '1px solid #e5e7eb', whiteSpace: 'nowrap' }}>
-                                                            🇮🇳 +91
-                                                        </span>
+                                                        <select
+                                                            value={allowedPhoneCountryCode}
+                                                            onChange={(e) => setAllowedPhoneCountryCode(e.target.value)}
+                                                            style={{
+                                                                padding: '0.5rem 0.6rem',
+                                                                fontSize: '0.82rem',
+                                                                fontWeight: 600,
+                                                                color: '#334155',
+                                                                background: '#f1f5f9',
+                                                                border: 'none',
+                                                                borderRight: '1px solid #e5e7eb',
+                                                                cursor: 'pointer',
+                                                                outline: 'none'
+                                                            }}
+                                                        >
+                                                            {PHONE_COUNTRY_CODES.map((item) => (
+                                                                <option key={item.code} value={item.code}>
+                                                                    {item.flag} {item.code} ({item.label.split(' ')[0]})
+                                                                </option>
+                                                            ))}
+                                                        </select>
                                                         <input
                                                             type="tel"
-                                                            maxLength={10}
-                                                            placeholder="e.g. 9876543210 (leave blank for any visitor)"
+                                                            maxLength={15}
+                                                            placeholder="e.g. 50 123 4567 (leave blank for any visitor)"
                                                             value={allowedPhone}
                                                             onChange={(e) => setAllowedPhone(e.target.value.replace(/[^0-9]/g, ''))}
                                                             style={{ flex: 1, padding: '0.5rem 0.75rem', border: 'none', outline: 'none', fontSize: '0.875rem', background: 'transparent' }}
                                                         />
                                                     </div>
                                                     <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: '0.25rem 0 0' }}>
-                                                        Leave blank to allow any visitor to verify OTP, or enter a number to restrict access exclusively to this person.
+                                                        Leave blank to allow any visitor from supported countries to verify OTP, or enter a number to restrict access exclusively to this person.
                                                     </p>
                                                 </div>
                                             )}
@@ -1687,86 +2001,185 @@ const DataRoom: React.FC = () => {
                                                 </div>
                                             )}
                                         </div>
-                                    </div>
 
-                                    {/* Indian PropTech Deal Room Presets & Bates Numbering */}
-                                    <div style={{ marginTop: '1.5rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '1.25rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <Building2 size={18} color="#059669" />
-                                                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#0f172a' }}>
-                                                    🇮🇳 Indian PropTech Deal Room Presets
-                                                </span>
-                                            </div>
-                                            <span style={{ fontSize: '0.7rem', fontWeight: 800, background: '#ecfdf5', color: '#065f46', padding: '0.15rem 0.5rem', borderRadius: '4px' }}>
-                                                RERA Compliant
-                                            </span>
-                                        </div>
-
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.5rem', marginBottom: '1rem' }}>
-                                            {[
-                                                { id: 'custom', label: 'Custom Document', desc: 'Standard upload' },
-                                                { id: 'title_search_30yr', label: '30-Yr Title Dossier', desc: '7/12, EC, Khata, Patta' },
-                                                { id: 'bank_apf_pack', label: 'Bank APF Home Loan Pack', desc: 'SBI/HDFC clearance' },
-                                                { id: 'rera_launch_kit', label: 'RERA Project Launch Kit', desc: 'Floor plans & BBA' }
-                                            ].map(preset => (
-                                                <div
-                                                    key={preset.id}
-                                                    onClick={() => {
-                                                        setDealRoomPreset(preset.id as any);
-                                                        if (preset.id === 'title_search_30yr') {
-                                                            setBatesNumberingEnabled(true);
-                                                            setBatesPrefix('30YR-TITLE');
-                                                            setApplyWatermark(true);
-                                                            setWatermarkConfig(prev => ({ ...prev, text: '30-YEAR TITLE DUE DILIGENCE • CONFIDENTIAL • {{email}}', layout: 'tiled', opacity: 0.15 }));
-                                                        } else if (preset.id === 'bank_apf_pack') {
-                                                            setBatesNumberingEnabled(true);
-                                                            setBatesPrefix('APF-BANK');
-                                                            setApplyWatermark(true);
-                                                            setWatermarkConfig(prev => ({ ...prev, text: 'BANK APF SANCTION FILE • RESTRICTED AUDIT • {{email}}', layout: 'tiled', opacity: 0.15 }));
-                                                        }
-                                                    }}
-                                                    style={{
-                                                        padding: '0.75rem',
-                                                        borderRadius: '10px',
-                                                        border: `1.5px solid ${dealRoomPreset === preset.id ? '#059669' : '#cbd5e1'}`,
-                                                        background: dealRoomPreset === preset.id ? '#ecfdf5' : 'white',
-                                                        cursor: 'pointer',
-                                                        transition: 'all 0.15s'
-                                                    }}
-                                                >
-                                                    <div style={{ fontSize: '0.82rem', fontWeight: 700, color: dealRoomPreset === preset.id ? '#065f46' : '#1e293b' }}>
-                                                        {preset.label}
+                                        {/* 🌐 Territory Geo-Fencing & Country Allowlist */}
+                                        <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: geoFencingEnabled && !isFeatureLocked('geo_fencing') ? '#f0fdfa' : '#ffffff', transition: 'all 0.2s', opacity: isFeatureLocked('geo_fencing') ? 0.85 : 1 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: (geoFencingEnabled && !isFeatureLocked('geo_fencing')) ? '0.75rem' : '0' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <div style={{ padding: '8px', background: '#ccfbf1', borderRadius: '8px' }}>
+                                                        <MapPin size={18} style={{ color: '#0d9488' }} />
                                                     </div>
-                                                    <div style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '0.15rem' }}>
-                                                        {preset.desc}
+                                                    <div>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                            <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#111827' }}>Territory Geo-Fencing & Country Allowlist</span>
+                                                            <span style={{ fontSize: '0.65rem', padding: '1px 6px', background: '#ccfbf1', color: '#0f766e', borderRadius: '4px', fontWeight: 700 }}>IP Border</span>
+                                                            {isFeatureLocked('geo_fencing') && <PremiumBadge size={14} />}
+                                                        </div>
+                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Restrict access strictly to viewers located in authorized countries</span>
                                                     </div>
                                                 </div>
-                                            ))}
-                                        </div>
+                                                <div onClick={() => {
+                                                    if (isFeatureLocked('geo_fencing')) {
+                                                        handleLockedFeatureClick('Territory Geo-Fencing');
+                                                    }
+                                                }}>
+                                                    <label className="toggle-switch" style={{ pointerEvents: isFeatureLocked('geo_fencing') ? 'none' : 'auto' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={geoFencingEnabled && !isFeatureLocked('geo_fencing')}
+                                                            onChange={(e) => {
+                                                                if (isFeatureLocked('geo_fencing')) {
+                                                                    handleLockedFeatureClick('Territory Geo-Fencing');
+                                                                    return;
+                                                                }
+                                                                setGeoFencingEnabled(e.target.checked);
+                                                            }}
+                                                            disabled={isFeatureLocked('geo_fencing')}
+                                                        />
+                                                        <span className="toggle-slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
 
-                                        {/* Bates Numbering Toggle */}
-                                        <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.82rem', fontWeight: 600, color: '#334155', cursor: 'pointer' }}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={batesNumberingEnabled}
-                                                    onChange={(e) => setBatesNumberingEnabled(e.target.checked)}
-                                                    style={{ accentColor: '#059669', width: '16px', height: '16px' }}
-                                                />
-                                                <span>Enable Bates Numbering & Auto-Index Tree</span>
-                                            </label>
-                                            {batesNumberingEnabled && (
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                                    <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Prefix:</span>
-                                                    <input
-                                                        type="text"
-                                                        value={batesPrefix}
-                                                        onChange={(e) => setBatesPrefix(e.target.value.toUpperCase())}
-                                                        style={{ width: '110px', padding: '0.25rem 0.5rem', fontSize: '0.78rem', border: '1px solid #cbd5e1', borderRadius: '6px', fontWeight: 700 }}
-                                                    />
+                                            {geoFencingEnabled && !isFeatureLocked('geo_fencing') && (
+                                                <div style={{ paddingLeft: '2.8rem' }}>
+                                                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
+                                                        Authorized Jurisdictions (Click to toggle):
+                                                    </label>
+                                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '0.4rem' }}>
+                                                        {GEOPROTECTION_COUNTRIES.map(c => {
+                                                            const isAllowed = allowedCountries.includes(c.code);
+                                                            return (
+                                                                <button
+                                                                    key={c.code}
+                                                                    type="button"
+                                                                    onClick={() => toggleAllowedCountry(c.code)}
+                                                                    style={{
+                                                                        padding: '0.35rem 0.65rem',
+                                                                        borderRadius: '999px',
+                                                                        fontSize: '0.78rem',
+                                                                        fontWeight: 600,
+                                                                        cursor: 'pointer',
+                                                                        border: isAllowed ? '1.5px solid #0d9488' : '1px solid #cbd5e1',
+                                                                        background: isAllowed ? '#14b8a6' : '#ffffff',
+                                                                        color: isAllowed ? '#ffffff' : '#475569',
+                                                                        transition: 'all 0.15s ease'
+                                                                    }}
+                                                                >
+                                                                    {c.label} {isAllowed ? '✓' : '+'}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <p style={{ fontSize: '0.72rem', color: '#64748b', margin: 0 }}>
+                                                        Viewers attempting access outside {allowedCountries.join(', ')} will be blocked with an IP jurisdiction alert.
+                                                    </p>
                                                 </div>
                                             )}
+                                        </div>
+
+                                        {/* 🔔 Real-Time Investor Engagement & Lead Telemetry Alerts */}
+                                        <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: '#faf5ff', transition: 'all 0.2s' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                                                <div style={{ padding: '8px', background: '#f3e8ff', borderRadius: '8px' }}>
+                                                    <Bell size={18} style={{ color: '#9333ea' }} />
+                                                </div>
+                                                <div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                        <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#111827' }}>Investor Engagement & Lead Telemetry</span>
+                                                        <span style={{ fontSize: '0.65rem', padding: '1px 6px', background: '#f3e8ff', color: '#7e22ce', borderRadius: '4px', fontWeight: 700 }}>Telemetry</span>
+                                                        {isFeatureLocked('lead_alerts') && <PremiumBadge size={14} />}
+                                                    </div>
+                                                    <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Receive high-priority alerts when investors engage with this document</span>
+                                                </div>
+                                            </div>
+                                            <div style={{ paddingLeft: '2.8rem', display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.82rem', color: '#374151', cursor: 'pointer', fontWeight: 500 }}>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={notifyOnOpen}
+                                                        onChange={(e) => setNotifyOnOpen(e.target.checked)}
+                                                        style={{ width: '15px', height: '15px', accentColor: '#9333ea' }}
+                                                    />
+                                                    <span>Instant notification the moment an investor opens this link</span>
+                                                </label>
+                                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.82rem', color: '#374151', cursor: 'pointer', fontWeight: 500 }}>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={notifyOnDwell}
+                                                        onChange={(e) => setNotifyOnDwell(e.target.checked)}
+                                                        style={{ width: '15px', height: '15px', accentColor: '#9333ea' }}
+                                                    />
+                                                    <span>🔥 Hot Lead Alert: Notify if investor studies material for &gt; 60 seconds</span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        {/* 📁 VDR Diligence Folder Category */}
+                                        <div style={{ padding: '1rem', border: '1px solid #f3f4f6', borderRadius: '12px', background: '#ffffff', transition: 'all 0.2s' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    <div style={{ padding: '8px', background: '#eff6ff', borderRadius: '8px' }}>
+                                                        <Folder size={18} style={{ color: '#2563eb' }} />
+                                                    </div>
+                                                    <div>
+                                                        <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#111827' }}>VDR Deal Room Folder</span>
+                                                        <span style={{ fontSize: '0.75rem', color: '#6b7280', display: 'block' }}>Assign document into organized diligence folder hierarchy</span>
+                                                    </div>
+                                                </div>
+                                                <select
+                                                    value={uploadCategory}
+                                                    onChange={(e) => setUploadCategory(e.target.value as any)}
+                                                    style={{
+                                                        padding: '0.45rem 0.75rem',
+                                                        border: '1px solid #cbd5e1',
+                                                        borderRadius: '8px',
+                                                        fontSize: '0.82rem',
+                                                        fontWeight: 600,
+                                                        color: '#1e293b',
+                                                        background: '#f8fafc',
+                                                        outline: 'none',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    <option value="legal">⚖️ 01_Legal & M&A</option>
+                                                    <option value="financials">📊 02_Financial Models</option>
+                                                    <option value="asset">🏢 03_Asset Diligence & Deeds</option>
+                                                    <option value="teasers">🚀 04_Teasers & Pitch Decks</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Custom Link Vanity Slug (Optional) */}
+                                    <div style={{ marginBottom: '1.25rem', padding: '0.9rem 1rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', opacity: isFeatureLocked('custom_slug') ? 0.85 : 1 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+                                            <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                                <LinkIcon size={14} color="#6366f1" /> Custom Link Slug (Optional)
+                                                {isFeatureLocked('custom_slug') && <PremiumBadge size={13} />}
+                                            </label>
+                                            <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Branded Deal Link</span>
+                                        </div>
+                                        <div 
+                                            onClick={() => {
+                                                if (isFeatureLocked('custom_slug')) {
+                                                    handleLockedFeatureClick('Custom Link Vanity Slug');
+                                                }
+                                            }}
+                                            style={{ display: 'flex', alignItems: 'center', border: '1px solid #cbd5e1', borderRadius: '8px', overflow: 'hidden', background: isFeatureLocked('custom_slug') ? '#f1f5f9' : '#ffffff', cursor: isFeatureLocked('custom_slug') ? 'pointer' : 'text' }}
+                                        >
+                                            <span style={{ padding: '0.5rem 0.65rem', fontSize: '0.8rem', background: '#f1f5f9', color: '#64748b', borderRight: '1px solid #cbd5e1', fontWeight: 600 }}>
+                                                doctransfer.com/view/
+                                            </span>
+                                            <input
+                                                type="text"
+                                                maxLength={40}
+                                                disabled={isFeatureLocked('custom_slug')}
+                                                placeholder={isFeatureLocked('custom_slug') ? "Upgrade to Pro to customize deal link slug" : "e.g. palm-skyvilla-q4"}
+                                                value={customSlug}
+                                                onChange={(e) => setCustomSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, '-'))}
+                                                style={{ flex: 1, padding: '0.5rem 0.75rem', border: 'none', outline: 'none', fontSize: '0.85rem', color: '#0f172a', fontWeight: 600, background: 'transparent', cursor: isFeatureLocked('custom_slug') ? 'pointer' : 'text' }}
+                                            />
                                         </div>
                                     </div>
 
@@ -2126,6 +2539,30 @@ const DataRoom: React.FC = () => {
                                                         🏡 Property Pitch
                                                     </button>
                                                 </div>
+
+                                                <button
+                                                    onClick={() => copyWhatsAppDealMemo(uploadedDoc.link, uploadedDoc.name)}
+                                                    style={{
+                                                        marginTop: '0.5rem',
+                                                        width: '100%',
+                                                        background: copiedMemo ? '#10b981' : '#f1f5f9',
+                                                        color: copiedMemo ? 'white' : '#334155',
+                                                        border: '1px solid #cbd5e1',
+                                                        padding: '0.6rem 0.85rem',
+                                                        borderRadius: '8px',
+                                                        fontWeight: 600,
+                                                        fontSize: '0.82rem',
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        gap: '0.4rem',
+                                                        transition: 'all 0.2s'
+                                                    }}
+                                                >
+                                                    {copiedMemo ? <Check size={14} /> : <CopyCheck size={14} color="#6366f1" />}
+                                                    {copiedMemo ? 'Deal Memo Copied to Clipboard!' : '📋 Copy WhatsApp Deal Memo'}
+                                                </button>
                                             </div>
                                         )}
 

@@ -22,6 +22,14 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#6366f1" />
+  <!-- Preconnect to Payment Gateway (Razorpay) for Instant Loading -->
+  <link rel="preconnect" href="https://checkout.razorpay.com" crossorigin />
+  <link rel="dns-prefetch" href="https://checkout.razorpay.com" />
+
+
+  <!-- High-Priority Preloads for Instant Hero Video & Poster -->
+  <link rel="preload" as="image" href="/videos/hero-1-poster.webp" fetchpriority="high" />
+  <link rel="preload" as="video" href="/videos/hero-1-pitching.mp4" type="video/mp4" fetchpriority="high" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />

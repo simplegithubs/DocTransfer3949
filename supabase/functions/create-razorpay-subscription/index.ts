@@ -28,8 +28,8 @@ serve(async (req: Request) => {
         const resolvedPlanType = planType === 'standard' ? 'pro' : planType;
         const planId = PLAN_IDS[resolvedPlanType] || PLAN_IDS.pro;
 
-        const keyId = Deno.env.get('RAZORPAY_KEY_ID') || 'rzp_live_TXFmzOIjNJwVht';
-        const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET');
+        const keyId = Deno.env.get('RAZORPAY_KEY_ID') || 'rzp_live_TwAWmDJBUE3Si7';
+        const keySecret = Deno.env.get('RAZORPAY_KEY_SECRET') || 'NRx02jnDLfidfvbJj1NiHejv';
 
         console.log(`Creating Razorpay subscription for user ${userId}, phone ${userPhone}, plan ${resolvedPlanType} (${planId}), cycle ${billingCycle}`);
 

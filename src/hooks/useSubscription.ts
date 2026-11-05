@@ -59,6 +59,8 @@ export const useSubscription = () => {
     const [usage, setUsage] = useState<SubscriptionUsage | null>(null);
     const [dailyUploadCount, setDailyUploadCount] = useState<number>(0);
     const [yearlyUploadCount, setYearlyUploadCount] = useState<number>(0);
+    const [activeDocCount, setActiveDocCount] = useState<number>(0);
+    const [monthlyUploadCount, setMonthlyUploadCount] = useState<number>(0);
     const [dailyESignatureCount, setDailyESignatureCount] = useState<number>(0);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
@@ -146,22 +148,12 @@ export const useSubscription = () => {
                     const processed = processSub(subData);
                     let finalSub = processed;
                     
-                    // If DB returned free but user recently paid, check local cache fallback
+                    // If DB returned free, purge any stale simulated or cached paid sub from localStorage
                     if (processed?.plan_type === 'free') {
                         try {
-                            const cachedStr = localStorage.getItem('doctransfer_active_sub');
-                            if (cachedStr) {
-                                const cached = JSON.parse(cachedStr);
-                                if (cached.user_id === user.id && cached.current_period_end && new Date(cached.current_period_end) > new Date()) {
-                                    finalSub = processSub({
-                                        ...subData,
-                                        plan_type: cached.plan_type,
-                                        status: 'active',
-                                        current_period_end: cached.current_period_end
-                                    });
-                                }
-                            }
+                            localStorage.removeItem('doctransfer_active_sub');
                         } catch (e) {}
+                        finalSub = processed;
                     } else if (processed?.plan_type) {
                         // Persist verified active sub
                         try {
@@ -205,6 +197,30 @@ export const useSubscription = () => {
                         storage_used: 0,
                         month: currentMonth
                     });
+                }
+
+                // Fetch Active, Monthly, Daily & Yearly document tracking
+                try {
+                    const now = new Date();
+                    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                    const startOfMonthISO = startOfMonth.toISOString();
+
+                    // Total Active Document Links (Owned by user)
+                    const { count: activeCount } = await supabase
+                        .from('documents')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('user_id', user.id);
+                    setActiveDocCount(activeCount || 0);
+
+                    // Monthly Upload Count (Created this calendar month)
+                    const { count: monthCount } = await supabase
+                        .from('documents')
+                        .select('*', { count: 'exact', head: true })
+                        .eq('user_id', user.id)
+                        .gte('created_at', startOfMonthISO);
+                    setMonthlyUploadCount(monthCount || 0);
+                } catch (e) {
+                    console.warn('Error fetching active/monthly document counts:', e);
                 }
 
                 // Fetch DAILY & YEARLY tracking
@@ -315,19 +331,26 @@ export const useSubscription = () => {
      */
     const canUpload = (): boolean => {
         if (!user) return true;
-        if (!subscription) return true;
-        if (subscription.status === 'trialing' || subscription.plan_type === 'free') {
-            return dailyUploadCount < 3; // Strict 3 documents limit for lean free tier
+        const plan = subscription?.plan_type || 'free';
+        const isPaid = isPaidActive;
+
+        if (!isPaid || plan === 'free') {
+            return (activeDocCount || 0) < 5; // Max 5 active document links for Free tier
         }
-        return true;
+        if (plan === 'pro' || plan === 'standard') {
+            return (monthlyUploadCount || 0) < 100; // 100 links/month for Pro
+        }
+        if (plan === 'business') {
+            return (monthlyUploadCount || 0) < 1000; // 1,000 links/month for Business
+        }
+        return true; // Unlimited for Data Room
     };
 
     /**
      * Check if user can create a new e-signature request
      */
     const canCreateESignature = (): boolean => {
-        if (!subscription || subscription.plan_type === 'free') return false; // Locked for free
-        // Pro, Standard, Business, and Data Room all have unlimited e-signatures
+        if (!subscription || subscription.plan_type === 'free' || !isPaidActive) return false;
         return true;
     };
 
@@ -335,32 +358,38 @@ export const useSubscription = () => {
      * Get max file size for user's plan (in bytes)
      */
     const getMaxFileSize = (): number => {
-        if (!subscription || subscription.plan_type === 'free') {
-            return 5 * 1024 * 1024; // 5MB limit for lean free tier
+        const plan = subscription?.plan_type;
+        const isPaid = isPaidActive;
+
+        if (!isPaid || !plan || plan === 'free') {
+            return 10 * 1024 * 1024; // 10MB limit for Free tier
         }
-        if (subscription.plan_type === 'pro' || subscription.plan_type === 'standard') {
+        if (plan === 'pro' || plan === 'standard') {
             return 50 * 1024 * 1024; // 50MB for Pro / Standard
         }
-        if (subscription.plan_type === 'business') {
-            return 500 * 1024 * 1024; // 500MB for Business
+        if (plan === 'business') {
+            return 250 * 1024 * 1024; // 250MB for Business (matching pricing page)
         }
-        if (subscription.plan_type === 'dataroom') {
+        if (plan === 'dataroom') {
             return 2048 * 1024 * 1024; // 2GB for Data Room / VDR
         }
-        return 50 * 1024 * 1024;
+        return 10 * 1024 * 1024; // Safe fallback MUST be 10MB (Free tier limit)
     };
 
     /**
      * Check if user has access to a specific feature
      */
     const hasFeature = (feature: string): boolean => {
-        // Free plan features (lean: basic total view count only, page-by-page dwell time locked)
-        if (!subscription || subscription.plan_type === 'free') {
-            return ['basic_view_count', 'unlimited_visitors'].includes(feature);
+        const isPaid = isPaidActive;
+        const plan = subscription?.plan_type;
+
+        // Free plan features
+        if (!isPaid || !plan || plan === 'free') {
+            return ['basic_view_count', 'unlimited_visitors', 'password_protection'].includes(feature);
         }
 
         // Pro & Standard plan features
-        if (subscription.plan_type === 'pro' || subscription.plan_type === 'standard') {
+        if (plan === 'pro' || plan === 'standard') {
             const proFeatures = [
                 'page_by_page_analytics',
                 'unlimited_visitors',
@@ -379,13 +408,17 @@ export const useSubscription = () => {
                 'burn_after_reading',
                 'document_bundles',
                 'advanced_analytics',
-                'deal_rooms'
+                'deal_rooms',
+                'strict_drm',
+                'nda_gate',
+                'sector_presets',
+                'custom_slug'
             ];
             return proFeatures.includes(feature);
         }
 
         // Business plan features
-        if (subscription.plan_type === 'business') {
+        if (plan === 'business') {
             const businessFeatures = [
                 'page_by_page_analytics',
                 'unlimited_visitors',
@@ -405,12 +438,19 @@ export const useSubscription = () => {
                 'document_bundles',
                 'advanced_analytics',
                 'deal_rooms',
-                'vault_mode',
-                'custom_branding',
+                'strict_drm',
+                'nda_gate',
+                'sector_presets',
+                'custom_slug',
+                'geo_fencing',
+                'lead_alerts',
+                'vdr_folders',
+                'active_sessions',
                 'white_label',
+                'custom_branding',
                 'client_intake',
                 'gst_invoicing',
-                'team_seats_3'
+                'team_seats'
             ];
             return businessFeatures.includes(feature);
         }
@@ -427,24 +467,30 @@ export const useSubscription = () => {
     };
 
     /**
-     * Get remaining uploads for the current period (3 for Free, Unlimited for Paid)
+     * Get remaining uploads for the current period
      */
     const getRemainingUploads = (): number => {
-        if (!user || isLoading) return Infinity; // Don't block while loading or if not logged in
-        if (!subscription) return Infinity;
+        if (!user || isLoading) return 5;
+        const plan = subscription?.plan_type || 'free';
+        const isPaid = isPaidActive;
 
-        if (subscription.status === 'trialing' || subscription.plan_type === 'free') {
-            return Math.max(0, 3 - dailyUploadCount);
+        if (!isPaid || plan === 'free') {
+            return Math.max(0, 5 - (activeDocCount || 0)); // 5 active document links
         }
-
-        return Infinity; // Unlimited for active paid plans
+        if (plan === 'pro' || plan === 'standard') {
+            return Math.max(0, 100 - (monthlyUploadCount || 0)); // 100 links/month
+        }
+        if (plan === 'business') {
+            return Math.max(0, 1000 - (monthlyUploadCount || 0)); // 1,000 links/month
+        }
+        return Infinity; // Unlimited for Data Room
     };
 
     /**
      * Get remaining e-signatures for the current period
      */
     const getRemainingESignatures = (): number => {
-        if (!subscription || subscription.plan_type === 'free') return 0; // Locked on free
+        if (!subscription || subscription.plan_type === 'free' || !isPaidActive) return 0;
         return Infinity;
     };
 
@@ -452,7 +498,7 @@ export const useSubscription = () => {
      * Get storage duration in days
      */
     const getStorageDurationDays = (): number => {
-        return 36500; // Unlimited for everyone
+        return 36500;
     };
 
     const isPaidActive = ['pro', 'standard', 'business', 'dataroom'].includes(subscription?.plan_type || '') &&
@@ -464,6 +510,8 @@ export const useSubscription = () => {
         usage,
         dailyUploadCount,
         yearlyUploadCount,
+        activeDocCount,
+        monthlyUploadCount,
         dailyESignatureCount,
         isLoading,
         error,
@@ -482,6 +530,7 @@ export const useSubscription = () => {
         isStandard: subscription?.plan_type === 'standard' && isPaidActive,
         isBusiness: subscription?.plan_type === 'business' && isPaidActive,
         isDataRoom: subscription?.plan_type === 'dataroom' && isPaidActive,
+        isSingleDeal: false,
     };
 };
 

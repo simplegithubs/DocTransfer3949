@@ -178,7 +178,7 @@ const Footer: React.FC<FooterProps> = ({ light = false }) => {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
               <li><Link to="/privacy" style={linkStyle(light)}>Privacy Policy (DPDP Act)</Link></li>
               <li><Link to="/terms" style={linkStyle(light)}>Terms of Service (IT Act)</Link></li>
-              <li><Link to="/refund-policy" style={linkStyle(light)}>Refund & Cancellation</Link></li>
+              <li><Link to="/refund-policy" style={linkStyle(light)}>Refund & Cancellation (No-Refund Policy)</Link></li>
               <li><Link to="/contact" style={{ ...linkStyle(light), color: '#34d399', fontWeight: 600 }}>Contact & Grievance</Link></li>
               <li><Link to="/sitemap-directory" style={{ ...linkStyle(light), fontWeight: 700, color: '#818cf8' }}>📁 Master Site Directory</Link></li>
               <li><Link to="/blog" style={linkStyle(light)}>Document Security Blog</Link></li>

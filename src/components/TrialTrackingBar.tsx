@@ -1,12 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface TrialTrackingBarProps {
     currentUploads: number;
     maxUploads: number;
+    label?: string;
+    showUpgradeLink?: boolean;
 }
 
-const TrialTrackingBar: React.FC<TrialTrackingBarProps> = ({ currentUploads, maxUploads }) => {
-    const percentage = Math.min((currentUploads / maxUploads) * 100, 100);
+const TrialTrackingBar: React.FC<TrialTrackingBarProps> = ({
+    currentUploads,
+    maxUploads,
+    label,
+    showUpgradeLink = true
+}) => {
+    const percentage = Math.min((currentUploads / Math.max(maxUploads, 1)) * 100, 100);
+    const isAtLimit = currentUploads >= maxUploads;
 
     return (
         <div style={{ marginBottom: '1.5rem', marginTop: '0.5rem' }}>
@@ -17,12 +26,28 @@ const TrialTrackingBar: React.FC<TrialTrackingBarProps> = ({ currentUploads, max
                 marginBottom: '0.5rem'
             }}>
                 <span style={{
-                    fontSize: '0.95rem',
-                    fontWeight: 500,
-                    color: '#0f172a' // Very dark slate color matching screenshot
+                    fontSize: '0.92rem',
+                    fontWeight: 600,
+                    color: isAtLimit ? '#dc2626' : '#0f172a'
                 }}>
-                    {currentUploads} / {maxUploads} documents every day
+                    {currentUploads} / {maxUploads} {label || 'documents every day'}
                 </span>
+                {showUpgradeLink && (
+                    <Link
+                        to="/pricing"
+                        style={{
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
+                            color: '#4f46e5',
+                            textDecoration: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.25rem'
+                        }}
+                    >
+                        Upgrade for 100 links/mo &rarr;
+                    </Link>
+                )}
             </div>
             
             {/* Minimalist Progress Bar */}
@@ -36,7 +61,7 @@ const TrialTrackingBar: React.FC<TrialTrackingBarProps> = ({ currentUploads, max
                 <div style={{
                     width: `${percentage}%`,
                     height: '100%',
-                    background: '#0f172a', // Dark filled portion
+                    background: isAtLimit ? '#dc2626' : '#0f172a', // Red when at limit, dark otherwise
                     borderRadius: '3px',
                     transition: 'width 0.3s ease'
                 }} />

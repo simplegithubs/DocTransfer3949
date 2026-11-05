@@ -52,7 +52,7 @@ export interface BrandingConfig {
 }
 
 const PRESET_THEMES = [
-    { name: 'Emerald (RERA)', color: '#059669', gradient: 'linear-gradient(135deg, #10b981 0%, #047857 100%)' },
+    { name: 'Emerald Luxury', color: '#059669', gradient: 'linear-gradient(135deg, #10b981 0%, #047857 100%)' },
     { name: 'Indigo', color: '#4f46e5', gradient: 'linear-gradient(135deg, #6366f1 0%, #4338ca 100%)' },
     { name: 'Ocean', color: '#0ea5e9', gradient: 'linear-gradient(135deg, #38bdf8 0%, #0369a1 100%)' },
     { name: 'Royal', color: '#7c3aed', gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' },
@@ -80,11 +80,11 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
         brand_color: '#059669',
         remove_branding: false,
         theme_mode: 'light',
-        agency_name: 'Apex Realty Advisory',
-        rera_reg_no: 'A51800012345',
-        whatsapp_number: '+91 98765 43210',
+        agency_name: 'Apex Luxury Advisory',
+        rera_reg_no: 'DLD ORN: 18429',
+        whatsapp_number: '+971 50 123 4567',
         display_rera_badge: true,
-        custom_watermark_pattern: 'CONFIDENTIAL • {agency} • RERA: {rera_id} • FOR {viewer}',
+        custom_watermark_pattern: 'CONFIDENTIAL • {agency} • LIC: {license_id} • FOR {viewer}',
         custom_domain: ''
     });
 
@@ -145,11 +145,11 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
                     brand_color: data.brand_color || parsedLocal?.brand_color || '#059669',
                     remove_branding: data.remove_branding ?? parsedLocal?.remove_branding ?? false,
                     theme_mode: 'light',
-                    agency_name: data.agency_name || parsedLocal?.agency_name || 'Apex Realty Advisory',
-                    rera_reg_no: data.rera_reg_no || parsedLocal?.rera_reg_no || 'A51800012345',
-                    whatsapp_number: data.whatsapp_number || parsedLocal?.whatsapp_number || '+91 98765 43210',
+                    agency_name: data.agency_name || parsedLocal?.agency_name || 'Apex Luxury Advisory',
+                    rera_reg_no: data.rera_reg_no || parsedLocal?.rera_reg_no || 'DLD ORN: 18429',
+                    whatsapp_number: data.whatsapp_number || parsedLocal?.whatsapp_number || '+971 50 123 4567',
                     display_rera_badge: data.display_rera_badge ?? parsedLocal?.display_rera_badge ?? true,
-                    custom_watermark_pattern: data.custom_watermark_pattern || parsedLocal?.custom_watermark_pattern || 'CONFIDENTIAL • {agency} • RERA: {rera_id} • FOR {viewer}',
+                    custom_watermark_pattern: data.custom_watermark_pattern || parsedLocal?.custom_watermark_pattern || 'CONFIDENTIAL • {agency} • LIC: {license_id} • FOR {viewer}',
                     custom_domain: data.custom_domain || parsedLocal?.custom_domain || ''
                 };
                 setConfig(merged);
@@ -263,15 +263,15 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
 
     const renderedWatermarkSample = config.custom_watermark_pattern
         .replace(/{agency}/g, config.agency_name || 'APEX REALTY')
-        .replace(/{rera_id}/g, config.rera_reg_no || 'RERA-A51800012345')
-        .replace(/{viewer}/g, 'rahul.investor@gmail.com')
+        .replace(/{rera_id}|{license_id}/g, config.rera_reg_no || 'ORN-18429')
+        .replace(/{viewer}/g, 'investor@sovereign-holdings.ae')
         .replace(/{date}/g, new Date().toLocaleDateString('en-IN'));
 
     const handleContactBroker = () => {
-        const rawNumber = config.whatsapp_number || '+91 98765 43210';
+        const rawNumber = config.whatsapp_number || '+971 50 123 4567';
         const cleanNumber = rawNumber.replace(/[^0-9]/g, '');
         const formattedNumber = cleanNumber.startsWith('91') || cleanNumber.length > 10 ? cleanNumber : `91${cleanNumber}`;
-        const agency = config.agency_name || 'Apex Realty Advisory';
+        const agency = config.agency_name || 'Apex Luxury Advisory';
         const text = encodeURIComponent(
             `Hi ${agency}, I am reviewing the "Godrej Sky Terraces" Cost Sheet on your investor portal. I would like to schedule a site visit and discuss payment plans.`
         );
@@ -295,7 +295,7 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
             const { width, height } = page.getSize();
 
             // 1. Watermark Layer (Rotated diagonally across page)
-            const watermarkText = renderedWatermarkSample || `CONFIDENTIAL • ${config.agency_name || 'APEX REALTY'} • RERA: ${config.rera_reg_no || 'A51800012345'}`;
+            const watermarkText = renderedWatermarkSample || `CONFIDENTIAL • ${config.agency_name || 'APEX REALTY'} • RERA: ${config.rera_reg_no || 'DLD ORN: 18429'}`;
             page.drawText(watermarkText, {
                 x: 40,
                 y: height / 2 - 50,
@@ -320,7 +320,7 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
             });
 
             // Agency & RERA Header text
-            page.drawText((config.agency_name || 'Apex Realty Advisory').toUpperCase(), {
+            page.drawText((config.agency_name || 'Apex Luxury Advisory').toUpperCase(), {
                 x: 45,
                 y: height - 42,
                 size: 17,
@@ -329,7 +329,7 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
             });
 
             if (config.display_rera_badge && config.rera_reg_no) {
-                page.drawText(`MAHARERA REGISTERED: ${config.rera_reg_no}`, {
+                page.drawText(`OFFICIALLY LICENSED BROKER: ${config.rera_reg_no}`, {
                     x: 45,
                     y: height - 62,
                     size: 9,
@@ -423,11 +423,11 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
             termsY -= 16;
             page.drawText('• Possession Timeline: Target Completion December 2026.', { x: 45, y: termsY, size: 8.5, font: fontRegular, color: rgb(0.3, 0.35, 0.4) });
             termsY -= 14;
-            page.drawText(`• Prepared Exclusively by: ${config.agency_name || 'Apex Realty'} | WhatsApp: ${config.whatsapp_number || '+91 98765 43210'}`, { x: 45, y: termsY, size: 8.5, font: fontRegular, color: rgb(0.3, 0.35, 0.4) });
+            page.drawText(`• Prepared Exclusively by: ${config.agency_name || 'Apex Realty'} | WhatsApp: ${config.whatsapp_number || '+971 50 123 4567'}`, { x: 45, y: termsY, size: 8.5, font: fontRegular, color: rgb(0.3, 0.35, 0.4) });
             termsY -= 14;
-            page.drawText(`• Verified RERA Agent Number: ${config.rera_reg_no || 'A51800012345'} — Section 10 RERA Compliant.`, { x: 45, y: termsY, size: 8.5, font: fontRegular, color: rgb(0.3, 0.35, 0.4) });
+            page.drawText(`• Verified RERA Agent Number: ${config.rera_reg_no || 'DLD ORN: 18429'} — Section 10 RERA Compliant.`, { x: 45, y: termsY, size: 8.5, font: fontRegular, color: rgb(0.3, 0.35, 0.4) });
             termsY -= 14;
-            page.drawText(`• Generated for: rahul.investor@gmail.com on ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}.`, { x: 45, y: termsY, size: 8.5, font: fontOblique, color: rgb(0.4, 0.45, 0.5) });
+            page.drawText(`• Generated for: investor@sovereign-holdings.ae on ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}.`, { x: 45, y: termsY, size: 8.5, font: fontOblique, color: rgb(0.4, 0.45, 0.5) });
 
             // Footer
             page.drawLine({
@@ -636,13 +636,13 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
 
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.825rem', fontWeight: 700, color: '#334155', marginBottom: '0.45rem' }}>
-                                    RERA Registration Number (Agent / Project)
+                                    Broker License / Regulatory Accreditation (DLD ORN, UK, EU, SG)
                                 </label>
                                 <input
                                     type="text"
                                     value={config.rera_reg_no}
                                     onChange={(e) => setConfig({ ...config, rera_reg_no: e.target.value.toUpperCase() })}
-                                    placeholder="e.g. A51800012345 (MahaRERA)"
+                                    placeholder="e.g. DLD ORN: 18429 (Dubai) or UK EA #88291"
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem 1rem',
@@ -668,7 +668,7 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
                                         type="tel"
                                         value={config.whatsapp_number}
                                         onChange={(e) => setConfig({ ...config, whatsapp_number: e.target.value })}
-                                        placeholder="+91 98765 43210"
+                                        placeholder="+971 50 123 4567"
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem 1rem 0.75rem 2.75rem',
@@ -693,7 +693,7 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
                             }}>
                                 <div>
                                     <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
-                                        Show Verified RERA Badge in Viewer
+                                        Show Verified Broker License Seal in Viewer
                                     </div>
                                     <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>
                                         Displays statutory seal beside your document title
@@ -793,7 +793,7 @@ export const BrandingSettings: React.FC<BrandingSettingsProps> = ({ userId }) =>
                                 type="text"
                                 value={config.custom_watermark_pattern}
                                 onChange={(e) => setConfig({ ...config, custom_watermark_pattern: e.target.value })}
-                                placeholder="CONFIDENTIAL • {agency} • RERA: {rera_id} • FOR {viewer}"
+                                placeholder="CONFIDENTIAL • {agency} • LIC: {license_id} • FOR {viewer}"
                                 style={{
                                     width: '100%',
                                     padding: '0.75rem 1rem',

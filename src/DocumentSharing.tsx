@@ -72,7 +72,7 @@ const DocumentSharing: React.FC = () => {
     const [allowedPhone, setAllowedPhone] = useState('');
 
     // Subscription & Paywall
-    const { subscription, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription, dailyUploadCount, yearlyUploadCount } = useSubscription();
+    const { subscription, isFeatureLocked, getRemainingUploads, getMaxFileSize, refreshSubscription, dailyUploadCount, yearlyUploadCount, activeDocCount, monthlyUploadCount } = useSubscription();
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
     const [lockedFeatureName, setLockedFeatureName] = useState<string | undefined>();
 
@@ -131,24 +131,22 @@ const DocumentSharing: React.FC = () => {
 
     const handleFileSelection = (file: File) => {
         setUploadError(null);
+        const isFree = !subscription || subscription.plan_type === 'free';
         const remaining = getRemainingUploads();
-        const isTrial = subscription?.status === 'trialing';
-        const isFree = subscription?.plan_type === 'free';
-        if ((isFree || isTrial) && remaining <= 0) {
-            if (isTrial) {
-                setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
-            } else {
-                setUploadError("Yearly link upload limit reached (30 documents per year). Please upgrade for unlimited uploads.");
-            }
+        if (isFree && remaining <= 0) {
+            setUploadError(`Free tier limit reached (5 active documents). You currently have ${activeDocCount || 0} active links. Please upgrade to Pro for 100 links per month.`);
             handleLockedFeatureClick('Unlimited Uploads');
+            setUploadedFile(null);
             return;
         }
 
         const maxSizeBytes = getMaxFileSize();
         if (file.size > maxSizeBytes) {
             const formatSize = (bytes: number) => (bytes / (1024 * 1024)).toFixed(0);
-            setUploadError(`File too large. Maximum size is ${formatSize(maxSizeBytes)}MB.`);
+            const planName = subscription?.plan_type ? subscription.plan_type.toUpperCase() : 'FREE';
+            setUploadError(`File too large. Your ${planName} plan allows up to ${formatSize(maxSizeBytes)}MB. Selected file is ${(file.size / (1024 * 1024)).toFixed(1)}MB. Please upgrade to Pro for 50MB uploads.`);
             setUploadedFile(null);
+            handleLockedFeatureClick('File Size Limit');
             return;
         }
         setUploadedFile(file);
@@ -172,15 +170,10 @@ const DocumentSharing: React.FC = () => {
     const handleUpload = async () => {
         if (!uploadedFile) return;
 
+        const isFree = !subscription || subscription.plan_type === 'free';
         const remaining = getRemainingUploads();
-        const isTrial = subscription?.status === 'trialing';
-        const isFree = subscription?.plan_type === 'free';
-        if ((isFree || isTrial) && remaining <= 0) {
-            if (isTrial) {
-                setUploadError("Daily upload limit of 10 files reached for the free trial. Please upgrade to a paid plan for unlimited uploads.");
-            } else {
-                setUploadError("Yearly link upload limit reached (30 documents per year). Please upgrade for unlimited uploads.");
-            }
+        if (isFree && remaining <= 0) {
+            setUploadError(`Free tier limit reached (5 active documents). You currently have ${activeDocCount || 0} active links. Please upgrade to Pro for 100 links per month.`);
             handleLockedFeatureClick('Unlimited Uploads');
             return;
         }
@@ -307,10 +300,11 @@ const DocumentSharing: React.FC = () => {
                     </div>
 
                     {/* Usage Limit Banner / Trial Tracking */}
-                    {subscription && (subscription.status === 'trialing' || subscription.plan_type === 'free') ? (
+                    {(!subscription || subscription.status === 'trialing' || subscription.plan_type === 'free') ? (
                         <TrialTrackingBar
-                            currentUploads={dailyUploadCount}
-                            maxUploads={10}
+                            currentUploads={activeDocCount || 0}
+                            maxUploads={5}
+                            label="active document links (Free Tier Limit)"
                         />
                     ) : null}
 
@@ -342,7 +336,7 @@ const DocumentSharing: React.FC = () => {
                                     <Upload size={48} />
                                 </div>
                                 <h3 style={{ fontSize: '1.5rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.5rem' }}>Drag & Drop or Click to Upload</h3>
-                                <p style={{ color: '#64748b' }}>PDF, DOCX, PNG, JPG (Max 20MB)</p>
+                                <p style={{ color: '#64748b' }}>PDF, DOCX, PNG, JPG (Max {(getMaxFileSize() / (1024 * 1024)).toFixed(0)}MB{!subscription || subscription.plan_type === 'free' ? ' - Free Plan' : ''})</p>
                             </>
                         )}
                         <input

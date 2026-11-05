@@ -137,10 +137,10 @@ export const NotificationSettings: React.FC = () => {
                                         value={config.whatsapp_phone}
                                         onChange={(e) => setConfig({ ...config, whatsapp_phone: e.target.value })}
                                         className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none text-sm font-medium"
-                                        placeholder="+91 98765 43210"
+                                        placeholder="+971 50 123 4567 / +44 7911 123456"
                                     />
                                 </div>
-                                <p className="text-[11px] text-gray-500 mt-1">Alert format: <em>"🔥 Lodha Heights: Buyer in Mumbai just opened Cost Sheet. Reading Page 3 (3BHK Penthouse)."</em></p>
+                                <p className="text-[11px] text-gray-500 mt-1">Alert format: <em>"🔥 Palm Jumeirah Sky Villa: Investor in Dubai just opened Deal Memo. Reading Page 4 (Financial Model)."</em></p>
                             </div>
 
                             {/* Dwell Time Trigger */}
@@ -212,7 +212,7 @@ export const NotificationSettings: React.FC = () => {
                             </button>
                         </div>
                         <p className="text-xs text-gray-500">
-                            Receive a daily snapshot of all buyer visits, hottest prospects, and uncompleted e-signatures at 9:00 AM IST.
+                            Receive a daily snapshot of all buyer visits, hottest prospects, and uncompleted e-signatures at 9:00 AM (Local Timezone).
                         </p>
 
                         <div className="flex gap-2 pt-2">
