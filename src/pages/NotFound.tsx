@@ -81,7 +81,7 @@ const NotFound: React.FC = () => {
                         Go Home
                     </Link>
                     <Link
-                        to="/dataroom"
+                        to="/dashboard"
                         style={{
                             display: 'inline-flex',
                             alignItems: 'center',

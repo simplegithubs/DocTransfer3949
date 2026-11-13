@@ -1591,8 +1591,29 @@ const ViewDocument: React.FC = () => {
                     </div>
 
                     {!branding?.remove_branding && (
-                        <div style={{ marginTop: '2rem', textAlign: 'center', color: '#9ca3af', fontSize: '0.8rem' }}>
-                            Powered by DocTransfer
+                        <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+                            <a
+                                href="https://www.doctransfer.app/?utm_source=doc_viewer&utm_medium=bundle_footer_link"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '0.45rem',
+                                    color: '#4f46e5',
+                                    fontSize: '0.8rem',
+                                    fontWeight: '600',
+                                    textDecoration: 'none',
+                                    background: 'rgba(79, 70, 229, 0.08)',
+                                    padding: '0.4rem 0.85rem',
+                                    borderRadius: '20px',
+                                    border: '1px solid rgba(79, 70, 229, 0.2)'
+                                }}
+                            >
+                                <span>Powered by <strong>DocTransfer</strong></span>
+                                <span style={{ opacity: 0.5 }}>•</span>
+                                <span>Create Deal Room Free →</span>
+                            </a>
                         </div>
                     )}
                 </div>
@@ -2193,8 +2214,24 @@ const ViewDocument: React.FC = () => {
                     </a>
                 )}
                 {!branding?.remove_branding && (
-                    <div style={{ marginTop: '1rem', color: '#9ca3af', fontSize: '0.75rem' }}>
-                        Secured by DocTransfer Enterprise
+                    <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                        <a
+                            href="https://www.doctransfer.app/?utm_source=doc_viewer&utm_medium=sidebar_secured_link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#6366f1',
+                                textDecoration: 'none',
+                                fontSize: '0.78rem',
+                                fontWeight: '600',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.35rem'
+                            }}
+                        >
+                            <span>Secured by <strong>DocTransfer</strong></span>
+                            <ArrowRight size={12} />
+                        </a>
                     </div>
                 )}
             </div>

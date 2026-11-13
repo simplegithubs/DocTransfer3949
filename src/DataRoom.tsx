@@ -30,6 +30,7 @@ import {
     Smartphone,
     Scale,
     FileLock,
+    FolderLock,
     CopyCheck,
     ShieldAlert,
     Ban,
@@ -831,7 +832,7 @@ const DataRoom: React.FC = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                             <button
-                                onClick={() => navigate('/')}
+                                onClick={() => navigate('/dashboard')}
                                 style={{
                                     padding: '0.625rem',
                                     background: 'white',
@@ -847,13 +848,13 @@ const DataRoom: React.FC = () => {
                                 }}
                                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
                                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
-                                title="Back to Home"
+                                title="Back to Command Center"
                             >
                                 <ArrowLeft size={20} />
                             </button>
                             <div>
-                                <h1 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#4f46e5', marginBottom: '0.5rem' }}>DocTransfer Dashboard</h1>
-                                <p style={{ fontSize: '0.95rem', color: '#6b7280' }}>Welcome back! Here's what's happening.</p>
+                                <h1 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.35rem' }}>Virtual Data Room & Diligence Vault</h1>
+                                <p style={{ fontSize: '0.92rem', color: '#64748b', margin: 0 }}>Institutional multi-party document hierarchy, Chinese walls, and forensic audit logs.</p>
                             </div>
                         </div>
 
@@ -900,13 +901,71 @@ const DataRoom: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Stats Grid / Animation */}
-                    <div style={{ marginBottom: '2rem' }}>
-                        <DashboardAnimation />
+                    {/* VDR Diligence Status Strip */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        background: '#ffffff',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '16px',
+                        padding: '1rem 1.5rem',
+                        marginBottom: '1.75rem',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
+                        flexWrap: 'wrap',
+                        gap: '1rem'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <div style={{
+                                width: '42px',
+                                height: '42px',
+                                borderRadius: '12px',
+                                background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                                color: 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <FolderLock size={22} />
+                            </div>
+                            <div>
+                                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: '#0f172a' }}>
+                                    Enterprise Diligence Vault Status
+                                </h3>
+                                <p style={{ margin: '0.15rem 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                                    Zero-knowledge AES-256 client vault • Multi-party bidder isolation • Bates numbering ready
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <button
+                                onClick={() => navigate('/dashboard')}
+                                style={{
+                                    padding: '0.5rem 1rem',
+                                    borderRadius: '8px',
+                                    background: '#eef2ff',
+                                    color: '#4338ca',
+                                    border: '1px solid #c7d2fe',
+                                    fontSize: '0.82rem',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.4rem'
+                                }}
+                            >
+                                <ArrowLeft size={15} /> Back to Overview
+                            </button>
+                        </div>
                     </div>
 
                     {/* Navigation Tabs */}
                     <div style={{ display: 'flex', gap: '0.5rem', background: '#f3f4f6', padding: '0.5rem', borderRadius: '12px', width: 'fit-content' }}>
+                        <button onClick={() => navigate('/dashboard')} style={{ padding: '0.625rem 1.25rem', background: 'transparent', color: '#4338ca', border: 'none', borderRadius: '8px', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
+                            <ArrowLeft size={16} /> Overview
+                        </button>
+
                         <button onClick={() => setActiveTab('upload')} style={{ padding: '0.625rem 1.5rem', background: activeTab === 'upload' ? '#8b5cf6' : 'transparent', color: activeTab === 'upload' ? 'white' : '#6b7280', border: 'none', borderRadius: '8px', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', transition: 'all 0.2s' }}>
                             <Upload size={16} /> Upload
                         </button>

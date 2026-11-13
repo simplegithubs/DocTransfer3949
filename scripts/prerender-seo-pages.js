@@ -464,7 +464,17 @@ function buildSEOBodyContent(route) {
     <article>
       <h1>${escapeHtml(title.split(' | ')[0].split(' - ')[0])}</h1>
       <p>${escapeHtml(bodyContent)}</p>
-      <p><a href="https://doctransfer.app/signup">Get Started Free</a> — No credit card required.</p>
+      <h2>Enterprise Document Security & Virtual Data Rooms</h2>
+      <p>DocTransfer delivers client-side AES-256-GCM encryption, dynamic recipient watermarking (stamping email, phone, and IP), page-by-page reader dwell time heatmaps, and court-admissible audit logs compliant with EU GDPR, DIFC, and UAE PDPL.</p>
+      <h2>Related Resources & Core Tools</h2>
+      <ul>
+        <li><a href="https://www.doctransfer.app/pricing">DocTransfer Pricing Plans (Monthly $0 Core Tier)</a></li>
+        <li><a href="https://www.doctransfer.app/dataroom">Virtual Data Room & Due Diligence Vault</a></li>
+        <li><a href="https://www.doctransfer.app/templates">100+ Free Legal & Deal Templates (NDA, SAFE, Lease)</a></li>
+        <li><a href="https://www.doctransfer.app/tools">Interactive Deal Tools (VDR Cost Calculator, PDF Watermarker)</a></li>
+        <li><a href="https://www.doctransfer.app/docsend-alternative">DocSend Alternative Migration Guide</a></li>
+      </ul>
+      <p><a href="https://www.doctransfer.app/pricing">Get Started Free</a> — Zero expensive subscriptions. No credit card required.</p>
     </article>`;
   }
   
@@ -830,11 +840,11 @@ function generateStaticHTML(template, route) {
   }
   
   // CRITICAL FIX: Inject visible, semantic SEO content inside #root for initial pass indexing.
-  // Googlebot reads and indexes clean visible HTML. React replaces #root content upon client hydration.
+  // Googlebot reads and indexes clean visible HTML without any 1-pixel hidden CSS hacks. React replaces #root content upon client hydration.
   // Match clean template, old visible article pattern, or previously hidden pattern
   html = html.replace(
-    /<div id="root">(?:<div class="seo-fallback"[^>]*>)?(?:<article>[\s\S]*?<\/article>)?(?:<\/div>)?(?:<h1[^>]*>[^<]*<\/h1>)?<\/div>/,
-    `<div id="root"><div class="seo-fallback" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://www.doctransfer.app">Visit DocTransfer</a></p></noscript>`
+    /<div id="root">(?:<div class="seo-[^"]*"[^>]*>)?(?:<article>[\s\S]*?<\/article>)?(?:<\/div>)?(?:<h1[^>]*>[^<]*<\/h1>)?<\/div>/,
+    `<div id="root"><div class="seo-prerendered-content" style="max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;line-height:1.6;">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://www.doctransfer.app">Explore DocTransfer Deal Rooms</a></p></noscript>`
   );
   
   return html;

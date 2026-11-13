@@ -3,6 +3,7 @@ import LandingPage from './LandingPage'
 import Pricing from './Pricing'
 import Checkout from './Checkout'
 import PaymentSuccess from './PaymentSuccess'
+import Dashboard from './Dashboard'
 import DataRoom from './DataRoom'
 import DocumentSharing from './DocumentSharing'
 import SettingsPage from './pages/SettingsPage'
@@ -48,10 +49,13 @@ import RefundPolicy from './pages/RefundPolicy'
 import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
 import RealEstateClosingRoom from './components/closing-rooms/RealEstateClosingRoom'
+import AnalyticsTracker from './components/AnalyticsTracker'
 
 function App() {
   return (
-    <Routes>
+    <>
+      <AnalyticsTracker />
+      <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/closing-room" element={<RealEstateClosingRoom />} />
@@ -122,6 +126,14 @@ function App() {
 
       {/* Application Routes */}
       <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/dataroom"
         element={
           <ProtectedRoute>
@@ -145,6 +157,7 @@ function App() {
       {/* Catch-all 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </>
   )
 }
 

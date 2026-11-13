@@ -200,7 +200,7 @@ const SEOCategoryPage: React.FC<SEOCategoryPageProps> = ({ category }) => {
           <Link to="/comparisons" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: 500, fontSize: '0.95rem' }}>Comparisons</Link>
           <Link to="/alternatives" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: 500, fontSize: '0.95rem' }}>Alternatives</Link>
           <Link to="/blog" style={{ textDecoration: 'none', color: '#4b5563', fontWeight: 500, fontSize: '0.95rem' }}>Blog</Link>
-          <Link to="/dataroom" style={{
+          <Link to="/dashboard" style={{
             textDecoration: 'none',
             background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
             color: 'white',

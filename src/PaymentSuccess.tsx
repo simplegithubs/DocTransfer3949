@@ -136,7 +136,7 @@ const PaymentSuccess: React.FC = () => {
                 setRedirectCountdown(prev => {
                     if (prev && prev > 1) return prev - 1;
                     clearInterval(timer);
-                    navigate('/dataroom');
+                    navigate('/dashboard');
                     return 0;
                 });
             }, 1000);
@@ -291,7 +291,7 @@ const PaymentSuccess: React.FC = () => {
 
                 {/* CTA Buttons */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    <Link to="/dataroom" style={{ textDecoration: 'none' }}>
+                    <Link to="/dashboard" style={{ textDecoration: 'none' }}>
                         <button style={{
                             width: '100%',
                             padding: '1rem 1.5rem',

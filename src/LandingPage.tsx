@@ -56,7 +56,13 @@ import {
   FolderTree,
   Zap,
   Building2,
-  FileSpreadsheet
+  FileSpreadsheet,
+  FolderLock,
+  Smartphone,
+  KeyRound,
+  ExternalLink,
+  CheckCircle2,
+  MessageCircle
 } from 'lucide-react';
 const zeroTrustFeatures = [
   {
@@ -564,7 +570,7 @@ const LandingPage: React.FC = () => {
             </SignedOut>
 
             <SignedIn>
-              <Link to="/dataroom" style={{ textDecoration: 'none' }}>
+              <Link to="/dashboard" style={{ textDecoration: 'none' }}>
                 <button className="btn-header-dashboard">
                   <Sparkles size={15} />
                   <span>Dashboard</span>
@@ -646,7 +652,7 @@ const LandingPage: React.FC = () => {
                 </Link>
               </SignedOut>
               <SignedIn>
-                <Link to="/dataroom" style={{ textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>
+                <Link to="/dashboard" style={{ textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>
                   <button className="btn-header-dashboard" style={{ width: '100%', justifyContent: 'center', padding: '0.7rem' }}>
                     <Sparkles size={16} />
                     <span>Go to Dashboard</span>
@@ -661,172 +667,348 @@ const LandingPage: React.FC = () => {
       <main>
         {/* Hero Section */}
         <section className="hero">
-          {/* Papermark-style Background Video Carousel */}
+          {/* Papermark-style Background Video Carousel - PRESERVED 100% */}
           <HeroVideoBackground activeFeature={activeFeature} />
 
           <div className="hero-container">
             <div className="hero-content-left">
-              <div className="hero-eyebrow-left">
-                <span>ISO 27001 certified</span>
-                <span className="dot">·</span>
-                <span>SOC 2 Type II</span>
-                <span className="dot">·</span>
-                <span>GDPR (EU) · UAE PDPL</span>
+              <div className="hero-eyebrow-left" style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                background: 'rgba(15, 23, 42, 0.75)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+                padding: '0.4rem 0.95rem',
+                borderRadius: '30px',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                color: '#f8fafc',
+                marginBottom: '1.35rem',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.35)'
+              }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#10b981' }}>
+                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
+                  ISO 27001 & SOC 2
+                </span>
+                <span style={{ opacity: 0.35 }}>·</span>
+                <span>Zero-Knowledge AES-256</span>
+                <span style={{ opacity: 0.35 }}>·</span>
+                <span style={{ color: '#38bdf8' }}>EU GDPR · DIFC · UAE PDPL</span>
               </div>
 
               <h1 className="hero-title-left">
-                The secure deal room for sharing, tracking & protecting confidential documents worldwide.
+                The Premier Deal Room for Sharing, Tracking & Protecting Confidential Files.
               </h1>
 
-              <div className="hero-actions-left">
+              <p style={{
+                fontSize: 'clamp(1.02rem, 1.3vw, 1.15rem)',
+                color: 'rgba(255, 255, 255, 0.88)',
+                lineHeight: 1.6,
+                maxWidth: '680px',
+                margin: '0 0 1.85rem',
+                textShadow: '0 2px 10px rgba(0, 0, 0, 0.85)'
+              }}>
+                Distribute M&A dossiers, pitch decks, and luxury real estate offerings with dynamic recipient watermarking, page-by-page dwell telemetry, and instant 1-click remote revocation.
+              </p>
+
+              <div className="hero-actions-left" style={{ marginBottom: '1.85rem' }}>
                 <Link to="/dataroom" style={{ textDecoration: 'none' }}>
                   <button className="hero-btn-papermark">
-                    <span>Create a Deal Room — Free ($0 / No Card Required)</span>
+                    <Sparkles size={16} color="#4f46e5" />
+                    <span>Create a Deal Room — Free ($0 / No Card)</span>
                     <ArrowRight size={16} />
                   </button>
                 </Link>
                 <Link to="/pricing" style={{ textDecoration: 'none' }}>
                   <button className="hero-btn-secondary-papermark">
-                    <span>View Pricing</span>
+                    <span>Explore Pricing</span>
                   </button>
                 </Link>
               </div>
 
-              <p className="hero-note-left">
-                No credit card or expensive monthly subscription required.
-              </p>
+              {/* Institutional Deal Metrics Proof Strip */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+                gap: '1rem',
+                padding: '0.95rem 1.25rem',
+                background: 'rgba(15, 23, 42, 0.72)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                borderRadius: '16px',
+                maxWidth: '660px',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.35)'
+              }}>
+                <div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>$2.4B+</div>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: '0.1rem' }}>Deal Volume Protected</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '-0.02em' }}>140+</div>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: '0.1rem' }}>Active Jurisdictions</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#10b981', letterSpacing: '-0.02em' }}>100%</div>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: '0.1rem' }}>Zero Leaks Recorded</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#a855f7', letterSpacing: '-0.02em' }}>$0 Core</div>
+                  <div style={{ fontSize: '0.68rem', color: '#94a3b8', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: '0.1rem' }}>No Card Required</div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Hero Feature Showcase Section (Clean White Background) */}
+        {/* Modernized Hero Feature Showcase Section */}
         <section className="hero-showcase-section">
+          {/* Section Subtitle & Context */}
+          <div style={{ maxWidth: '800px', margin: '0 auto 1.5rem', textAlign: 'center' }}>
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: '#eef2ff',
+              color: '#4f46e5',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              padding: '0.3rem 0.8rem',
+              borderRadius: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: '0.75rem'
+            }}>
+              <Sparkles size={13} />
+              Interactive Deal Room Showcase
+            </span>
+            <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.35rem)', fontWeight: 800, color: '#0f172a', margin: '0 0 0.5rem', letterSpacing: '-0.02em' }}>
+              The Dealmaker's Command Center in Action
+            </h2>
+            <p style={{ color: '#64748b', fontSize: '1rem', margin: 0 }}>
+              Experience bank-grade security, instant pre-flight DRM configuration, and second-by-second reader intelligence.
+            </p>
+          </div>
+
           {/* Hero Feature Navigation Bar */}
           <div className="hero-feature-nav">
             <button
               className={`nav-item ${activeFeature === 'upload' ? 'active' : ''}`}
               onClick={() => setActiveFeature('upload')}
             >
-              <Upload size={18} /> Upload documents
+              <Upload size={17} /> Deal Dispatch
             </button>
             <button
               className={`nav-item ${activeFeature === 'documents' ? 'active' : ''}`}
               onClick={() => setActiveFeature('documents')}
             >
-              <FileText size={18} /> Documents
+              <FolderTree size={17} /> VDR Diligence Vault
             </button>
             <button
               className={`nav-item ${activeFeature === 'permissions' ? 'active' : ''}`}
               onClick={() => setActiveFeature('permissions')}
             >
-              <Shield size={18} /> Audit Trail
+              <Shield size={17} /> Audit Trail & Compliance
             </button>
             <button
               className={`nav-item ${activeFeature === 'analytics' ? 'active' : ''}`}
               onClick={() => setActiveFeature('analytics')}
             >
-              <BarChart3 size={18} /> Track visitor analytics
+              <BarChart3 size={17} /> Live Telemetry Heatmap
             </button>
             <button
               className={`nav-item ${activeFeature === 'security' ? 'active' : ''}`}
               onClick={() => setActiveFeature('security')}
             >
-              <Lock size={18} /> Anti-Leak & DRM
+              <Lock size={17} /> Strict DRM & Kill Switch
             </button>
           </div>
-
 
           {/* Hero Feature Showcase Content */}
           <div className="hero-showcase-content" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
             {activeFeature === 'upload' && (
               <div className="dashboard-ui-mockup" style={{
                 width: '100%',
-                maxWidth: '900px',
-                borderRadius: '24px',
+                maxWidth: '980px',
+                borderRadius: '20px',
                 backgroundColor: '#ffffff',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
-                margin: '0 auto 6rem',
+                boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(226, 232, 240, 0.8)',
+                margin: '0 auto 2rem',
                 position: 'relative',
                 zIndex: 10,
                 overflow: 'hidden',
-                border: '1px solid #f3f4f6'
+                textAlign: 'left'
               }}>
-                <img
-                  src="/dealroom-dashboard.jpg"
-                  alt="DocTransfer Deal Room Dashboard"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'block',
-                    borderRadius: '24px'
-                  }}
-                />
-              </div>
-            )}
-
-            {activeFeature === 'google-drive' && (
-              <div className="dashboard-ui-mockup" style={{
-                width: '100%',
-                maxWidth: '900px',
-                borderRadius: '24px',
-                backgroundColor: '#ffffff',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
-                margin: '0 auto 6rem',
-                position: 'relative',
-                zIndex: 10,
-                overflow: 'hidden',
-                border: '1px solid #f3f4f6',
-                padding: '2rem'
-              }}>
+                {/* Header bar */}
                 <div style={{
-                  width: '100%',
-                  height: '400px',
-                  border: '2px dashed #4285f4',
-                  borderRadius: '16px',
+                  padding: '1.25rem 1.75rem',
+                  borderBottom: '1px solid #e2e8f0',
+                  background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)',
                   display: 'flex',
-                  flexDirection: 'column',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: '#f8faff',
-                  cursor: 'pointer'
+                  flexWrap: 'wrap',
+                  gap: '0.75rem'
                 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb' }}>
+                      <Upload size={18} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>Quick Deal Dispatch Dropzone</div>
+                      <div style={{ fontSize: '0.76rem', color: '#64748b' }}>Staged Deal: Project Azure • $120M Luxury Resort Diligence</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 700, background: '#ecfdf5', color: '#059669', padding: '0.2rem 0.6rem', borderRadius: '6px', border: '1px solid #a7f3d0' }}>
+                      AES-256 GCM Client-Side
+                    </span>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 700, background: '#eff6ff', color: '#2563eb', padding: '0.2rem 0.6rem', borderRadius: '6px', border: '1px solid #bfdbfe' }}>
+                      Zero-Knowledge
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ padding: '1.75rem' }}>
+                  {/* Dropzone Container */}
                   <div style={{
-                    width: '120px',
-                    height: '120px',
-                    borderRadius: '50%',
-                    backgroundColor: '#ffffff',
+                    border: '2px dashed #cbd5e1',
+                    borderRadius: '16px',
+                    padding: '2.5rem 2rem',
+                    textAlign: 'center',
+                    background: '#f8fafc',
+                    position: 'relative',
+                    transition: 'border-color 0.2s ease',
+                    marginBottom: '1.5rem'
+                  }}>
+                    <div style={{
+                      width: '64px',
+                      height: '64px',
+                      borderRadius: '50%',
+                      background: '#ffffff',
+                      boxShadow: '0 8px 20px rgba(0, 0, 0, 0.06)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto 1.25rem',
+                      color: '#4f46e5'
+                    }}>
+                      <Upload size={28} />
+                    </div>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0f172a', margin: '0 0 0.4rem' }}>
+                      Drag & Drop Confidential Dossiers, Pitch Decks, or CIMs
+                    </h3>
+                    <p style={{ fontSize: '0.86rem', color: '#64748b', margin: '0 0 1.25rem' }}>
+                      Supports PDF, PPTX, XLSX, DOCX up to 500 MB with automated forensic watermarking
+                    </p>
+                    <Link to="/dataroom" style={{ textDecoration: 'none' }}>
+                      <button style={{
+                        background: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '0.65rem 1.4rem',
+                        borderRadius: '10px',
+                        fontWeight: 700,
+                        fontSize: '0.88rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.45rem'
+                      }}>
+                        <Sparkles size={15} />
+                        <span>Select File to Dispatch</span>
+                      </button>
+                    </Link>
+                  </div>
+
+                  {/* Pre-flight Security Configurations Grid */}
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <div style={{ fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748b', marginBottom: '0.85rem' }}>
+                      Pre-Flight Security Checklist & Enforcement
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.85rem' }}>
+                      {[
+                        { title: 'Dynamic Recipient Watermark', desc: 'Viewer email, phone, IP & UTC timestamp stamped on every page', icon: Droplets, color: '#0284c7', bg: '#f0f9ff' },
+                        { title: 'Mandatory Click-Through NDA', desc: 'Court-admissible legal sign-off required prior to document access', icon: ScrollText, color: '#7c3aed', bg: '#f5f3ff' },
+                        { title: 'Screenshot & DevTools Shield', desc: 'Instant blank screen defense against print screen and DevTools inspection', icon: ShieldAlert, color: '#dc2626', bg: '#fef2f2' },
+                        { title: 'Real-Time WhatsApp Alerts', desc: 'Instant notification on WhatsApp the second a VIP buyer opens the teaser', icon: Bell, color: '#059669', bg: '#ecfdf5' },
+                      ].map((item, idx) => (
+                        <div key={idx} style={{
+                          background: '#ffffff',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '12px',
+                          padding: '0.9rem 1rem',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '0.75rem'
+                        }}>
+                          <div style={{ padding: '0.45rem', borderRadius: '8px', background: item.bg, color: item.color, flexShrink: 0 }}>
+                            <item.icon size={16} />
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.4rem' }}>
+                              <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#0f172a' }}>{item.title}</span>
+                              <CheckCircle size={14} color="#10b981" />
+                            </div>
+                            <div style={{ fontSize: '0.72rem', color: '#64748b', lineHeight: 1.35, marginTop: '0.2rem' }}>{item.desc}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Staged Deal Document Dispatch Card */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)',
+                    borderRadius: '14px',
+                    padding: '1.25rem 1.5rem',
+                    color: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '2rem',
-                    boxShadow: '0 4px 12px rgba(66, 133, 244, 0.2)'
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
                   }}>
-                    <Globe size={56} color="#4285f4" strokeWidth={1.5} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                      <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.25)', border: '1px solid rgba(129, 140, 248, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a5b4fc' }}>
+                        <FileText size={20} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '0.92rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <span>Project_Summit_SeriesA_Teaser_Final.pdf</span>
+                          <span style={{ fontSize: '0.65rem', fontWeight: 700, background: 'rgba(16, 185, 129, 0.25)', color: '#34d399', padding: '0.1rem 0.45rem', borderRadius: '4px', border: '1px solid rgba(52, 211, 153, 0.4)' }}>
+                            READY TO DISPATCH
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.15rem' }}>
+                          14.2 MB • Pre-flight DRM verified • 18 VIP Investors targeted
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                      <Link to="/dataroom" style={{ textDecoration: 'none' }}>
+                        <button style={{
+                          background: '#ffffff',
+                          color: '#0f172a',
+                          border: 'none',
+                          padding: '0.55rem 1.15rem',
+                          borderRadius: '8px',
+                          fontWeight: 700,
+                          fontSize: '0.82rem',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem'
+                        }}>
+                          <span>Generate Secure Deal Room</span>
+                          <ArrowRight size={13} />
+                        </button>
+                      </Link>
+                    </div>
                   </div>
-                  <h3 style={{
-                    fontSize: '1.6rem',
-                    fontWeight: 600,
-                    color: '#1e3a5f',
-                    marginBottom: '1rem',
-                    fontFamily: "'Inter', sans-serif"
-                  }}>
-                    Import from Google Drive
-                  </h3>
-                  <p style={{
-                    fontSize: '1.2rem',
-                    color: '#64748b',
-                    marginBottom: '0.8rem',
-                    fontWeight: 400
-                  }}>
-                    Connect your Drive account and share files directly
-                  </p>
-                  <p style={{
-                    fontSize: '1.2rem',
-                    color: '#94a3b8',
-                    fontWeight: 400
-                  }}>
-                    Upto 2TB file Transfer using Google Drive links
-                  </p>
                 </div>
               </div>
             )}
@@ -834,348 +1016,127 @@ const LandingPage: React.FC = () => {
             {activeFeature === 'documents' && (
               <div className="dashboard-ui-mockup" style={{
                 width: '100%',
-                maxWidth: '900px',
+                maxWidth: '980px',
                 borderRadius: '20px',
                 backgroundColor: '#ffffff',
-                boxShadow: '0 20px 40px -10px rgba(0,0,0,0.05), 0 0 0 10px rgba(255,255,255,0.5)',
-                margin: '0 auto 6rem',
+                boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(226, 232, 240, 0.8)',
+                margin: '0 auto 2rem',
                 position: 'relative',
                 zIndex: 10,
                 overflow: 'hidden',
-                border: '1px solid #f3f4f6'
+                textAlign: 'left'
               }}>
-                {/* Header/Banner Section */}
+                {/* VDR Vault Header */}
                 <div style={{
-                  background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%)',
-                  padding: '2.5rem',
-                  borderBottom: '1px solid #e5e7eb',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  minHeight: '200px'
+                  padding: '1.25rem 1.75rem',
+                  borderBottom: '1px solid #e2e8f0',
+                  background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '0.75rem'
                 }}>
-                  <div style={{ position: 'relative', zIndex: 2 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                      <div style={{ padding: '0.35rem', background: 'white', borderRadius: '8px', border: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-                      </div>
-                      <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#4f46e5', margin: 0, fontStyle: 'italic' }}>
-                        DocTransfer Dashboard
-                      </h2>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
+                      <FolderTree size={18} color="#4f46e5" />
+                      <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#0f172a', margin: 0 }}>
+                        VDR Diligence Vault: Project Azure — $120M Luxury Resort
+                      </h3>
                     </div>
-                    <p style={{ color: '#6b7280', margin: 0, fontSize: '0.9rem', marginLeft: '2.5rem' }}>Welcome back! Here's what's happening.</p>
-                  </div>
-
-                  {/* Abstract Security Icon Center */}
-                  <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '180px',
-                    height: '180px',
-                    borderRadius: '50%',
-                    border: '1px dashed rgba(99, 102, 241, 0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <div style={{
-                      width: '140px',
-                      height: '140px',
-                      borderRadius: '50%',
-                      border: '1px solid rgba(99, 102, 241, 0.1)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      <div style={{
-                        width: '80px',
-                        height: '80px',
-                        background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)',
-                        borderRadius: '20px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 10px 25px -5px rgba(139, 92, 246, 0.5)'
-                      }}>
-                        <Lock size={36} color="white" />
-                      </div>
+                    <div style={{ fontSize: '0.76rem', color: '#64748b' }}>
+                      Virtual Data Room • 4 Diligence Modules • 20 Files • AES-256 Vault Mode Active
                     </div>
                   </div>
-
-                  {/* Floating Elements */}
-                  <div style={{ position: 'absolute', top: '20%', left: '20%', background: 'white', padding: '0.75rem', borderRadius: '50%', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-                    <FileText size={20} color="#4f46e5" />
-                  </div>
-                  <div style={{ position: 'absolute', bottom: '20%', left: '30%', background: 'white', padding: '0.5rem', borderRadius: '50%', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-                    <Shield size={16} color="#10b981" />
-                  </div>
-                  <div style={{ position: 'absolute', top: '30%', right: '25%', background: 'white', padding: '0.6rem', borderRadius: '50%', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-                    <Activity size={18} color="#3b82f6" />
-                  </div>
-                  <div style={{ position: 'absolute', bottom: '25%', right: '35%', background: 'white', padding: '0.4rem', borderRadius: '50%', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-                    <CheckCircle size={14} color="#f43f5e" />
-                  </div>
-                </div>
-
-                {/* Sub-navigation bar */}
-                <div style={{ padding: '0.75rem 2rem', borderBottom: '1px solid #e5e7eb', background: '#f9fafb', display: 'flex', gap: '0.75rem', overflowX: 'auto' }}>
-                  <button onClick={() => setActiveFeature('upload')} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
-                    <Upload size={15} /> Upload
-                  </button>
-                  <button onClick={() => setActiveFeature('google-drive')} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /></svg> Google Drive
-                  </button>
-                  <button onClick={() => setActiveFeature('documents')} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: '#8b5cf6', color: 'white', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
-                    <FileText size={15} /> Documents
-                  </button>
-                  <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
-                    <BarChart3 size={15} /> Analytics <Lock size={11} opacity={0.5} />
-                  </button>
-                  <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
-                    <Shield size={15} /> Audit Trail
-                  </button>
-                  <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: 'none', background: 'transparent', color: '#6b7280', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', padding: '0.5rem 1rem', borderRadius: '8px' }}>
-                    <PenTool size={15} /> E-Signature
-                  </button>
-                </div>
-
-                {/* Main Content Area */}
-                <div style={{ padding: '1.5rem 2rem', background: '#f8fafc' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1f2937', margin: 0 }}>My Documents</h3>
-                    <input type="text" placeholder="Search documents..." readOnly style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid #e5e7eb', fontSize: '0.82rem', width: '200px', background: '#fff' }} />
-                  </div>
-
-                  {/* Documents Grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-                    {[
-                      { name: 'screencapture-doctr...', size: '970.82 KB', date: '1/29/2026' },
-                      { name: 'screencapture-doctr...', size: '970.82 KB', date: '1/29/2026' },
-                      { name: 'signed-document (...', size: '8522.10 KB', date: '1/16/2026' },
-                      { name: 'Screenshot 2023-09...', size: '902.80 KB', date: '1/3/2026' },
-                      { name: 'screencapture-local...', size: '727.36 KB', date: '12/28/2025' },
-                      { name: 'G5FREV4WkAAInHT...', size: '250.92 KB', date: '12/26/2025' },
-                      { name: 'screencapture-local...', size: '727.36 KB', date: '12/26/2025' },
-                      { name: 'test-file.txt', size: '0.05 KB', date: '12/22/2025' },
-                      { name: 'screencapture-local...', size: '727.36 KB', date: '12/16/2025' }
-                    ].map((doc, i) => (
-                      <div key={i} style={{ border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1rem', backgroundColor: '#ffffff', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', marginBottom: '1rem' }}>
-                          <div style={{ padding: '0.4rem', background: '#eff6ff', borderRadius: '8px', color: '#4f46e5', flexShrink: 0 }}>
-                            <FileText size={15} />
-                          </div>
-                          <div style={{ flex: 1, overflow: 'hidden' }}>
-                            <h4 style={{ margin: 0, fontSize: '0.8rem', fontWeight: 600, color: '#1f2937', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.name}</h4>
-                            <p style={{ margin: 0, fontSize: '0.68rem', color: '#9ca3af', marginTop: '0.15rem' }}>{doc.size} • {doc.date}</p>
-                          </div>
-                          <div style={{ color: '#d1d5db', cursor: 'pointer', flexShrink: 0 }}>
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>
-                          </div>
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.4rem' }}>
-                          <button style={{ flex: 1, padding: '0.35rem', border: '1px solid #f3f4f6', background: '#ffffff', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 600, color: '#4b5563', cursor: 'pointer' }}>View</button>
-                          <button style={{ flex: 1, padding: '0.35rem', border: '1px solid #dcfce7', background: '#f0fdf4', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 600, color: '#166534', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem' }}>
-                            <BarChart3 size={11} /> Analytics
-                          </button>
-                          <button style={{ padding: '0.35rem 0.5rem', border: '1px solid #e0e7ff', background: '#f5f3ff', borderRadius: '6px', color: '#4f46e5', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                            <Shield size={12} />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeFeature === 'analytics' && (
-              <div className="dashboard-ui-mockup" style={{
-                width: '100%',
-                maxWidth: '1000px',
-                borderRadius: '24px',
-                backgroundColor: '#f8fafc',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
-                margin: '0 auto 6rem',
-                position: 'relative',
-                zIndex: 10,
-                overflow: 'hidden',
-                border: '1px solid #f1f5f9',
-                fontFamily: "'Inter', sans-serif"
-              }}>
-                {/* Dashboard Header */}
-                <div style={{ padding: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#ffffff', borderBottom: '1px solid #f1f5f9' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', margin: 0 }}>Unified Analytics</h2>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: '1px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#16a34a', padding: '0.2rem 0.6rem', borderRadius: '16px', fontSize: '0.7rem', fontWeight: 600 }}>
-                          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#22c55e' }}></div> LIVE
-                        </span>
-                      </div>
-                      <p style={{ margin: 0, color: '#6b7280', fontSize: '0.8rem', marginTop: '0.25rem' }}>Last updated: 2:33:43 PM</p>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <button style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '0.6rem 1rem', borderRadius: '8px', fontWeight: 500, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(34, 197, 94, 0.3)' }}>
-                      <Activity size={16} /> Live Mode
-                    </button>
-                    <select disabled style={{ padding: '0.6rem 1rem', borderRadius: '8px', border: '1px solid #e5e7eb', backgroundColor: '#ffffff', color: '#4b5563', fontSize: '0.9rem', appearance: 'none', paddingRight: '2rem', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1rem' }}>
-                      <option>Last 30 Days</option>
-                    </select>
-                    <button style={{ border: 'none', background: '#8b5cf6', color: 'white', padding: '0.6rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(139, 92, 246, 0.3)' }}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Main Content Area */}
-                <div style={{ padding: '2rem' }}>
-                  {/* Stats Grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
-                    {[
-                      { label: 'Total Views', value: '4', change: '+ 12%', color: '#8b5cf6', icon: Activity },
-                      { label: 'Unique Viewers', value: '4', change: '+ 5%', color: '#10b981', icon: Fingerprint },
-                      { label: 'Avg. Time', value: '10s', change: '↓ 2%', color: '#f59e0b', icon: Clock },
-                      { label: 'Engagement', value: '2%', change: 'Scroll & time based', color: '#8b5cf6', icon: BarChart3 },
-                    ].map((stat, i) => (
-                      <div key={i} style={{ backgroundColor: stat.color, padding: '1.5rem', borderRadius: '16px', color: 'white', boxShadow: `0 10px 15px -3px ${stat.color}40` }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: 0.9, marginBottom: '1rem', fontSize: '0.9rem', fontWeight: 500 }}>
-                          <stat.icon size={16} /> {stat.label}
-                        </div>
-                        <div style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>{stat.value}</div>
-                        <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>{stat.change}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Filter Toggles */}
-                  <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
-                    {[
-                      { label: 'All Metrics', icon: BarChart3, active: true },
-                      { label: 'Views', icon: Activity },
-                      { label: 'Devices', icon: Monitor },
-                      { label: 'Pages', icon: FileText },
-                      { label: 'Locations', icon: Droplets },
-                      { label: 'By Hour', icon: Clock },
-                      { label: 'Status', icon: CheckCircle },
-                    ].map((btn, i) => (
-                      <button key={i} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        padding: '0.6rem 1.25rem',
-                        borderRadius: '24px',
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 700, background: '#eef2ff', color: '#4f46e5', padding: '0.25rem 0.65rem', borderRadius: '6px', border: '1px solid #c7d2fe' }}>
+                      42 Active Deal Viewers
+                    </span>
+                    <Link to="/dataroom" style={{ textDecoration: 'none' }}>
+                      <button style={{
+                        background: '#0f172a',
+                        color: '#ffffff',
                         border: 'none',
-                        backgroundColor: btn.active ? '#6366f1' : '#ffffff',
-                        color: btn.active ? 'white' : '#64748b',
+                        padding: '0.45rem 0.85rem',
+                        borderRadius: '6px',
+                        fontSize: '0.78rem',
                         fontWeight: 600,
-                        fontSize: '0.85rem',
-                        cursor: 'pointer',
-                        whiteSpace: 'nowrap',
-                        boxShadow: btn.active ? '0 4px 6px -1px rgba(99, 102, 241, 0.4)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)'
+                        cursor: 'pointer'
                       }}>
-                        <btn.icon size={14} /> {btn.label}
+                        Open Diligence Vault
                       </button>
+                    </Link>
+                  </div>
+                </div>
+
+                <div style={{ padding: '1.5rem 1.75rem' }}>
+                  {/* Structured Diligence Folders Grid */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '0.85rem', marginBottom: '1.5rem' }}>
+                    {[
+                      { name: '01. Financial Models & Audits', count: '4 Documents • 18.2 MB', status: 'PE LEAD UNLOCKED', color: '#059669', bg: '#ecfdf5', border: '#a7f3d0' },
+                      { name: '02. Legal, Deeds & Zoning', count: '8 Documents • 42.5 MB', status: 'MANDATORY NDA', color: '#4f46e5', bg: '#eef2ff', border: '#c7d2fe' },
+                      { name: '03. Cap Table & Valuation', count: '3 Documents • 6.8 MB', status: 'FORENSIC WATERMARK', color: '#0284c7', bg: '#f0f9ff', border: '#bae6fd' },
+                      { name: '04. Operator Term Sheets', count: '5 Documents • 21.4 MB', status: 'RESTRICTED ACCESS', color: '#dc2626', bg: '#fef2f2', border: '#fecaca' },
+                    ].map((folder, i) => (
+                      <div key={i} style={{
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '12px',
+                        padding: '1rem',
+                        transition: 'transform 0.15s ease',
+                        cursor: 'pointer'
+                      }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+                          <FolderLock size={20} color={folder.color} />
+                          <span style={{ fontSize: '0.62rem', fontWeight: 800, background: folder.bg, color: folder.color, padding: '0.1rem 0.4rem', borderRadius: '4px', border: `1px solid ${folder.border}` }}>
+                            {folder.status}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '0.86rem', fontWeight: 700, color: '#1e293b', marginBottom: '0.2rem' }}>{folder.name}</div>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{folder.count}</div>
+                      </div>
                     ))}
                   </div>
 
-                  {/* Chart Container */}
-                  <div style={{ backgroundColor: '#ffffff', borderRadius: '20px', padding: '2.5rem', border: '1px solid #f1f5f9', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.25rem' }}>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>Complete Analytics Overview</h3>
-                        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.85rem' }}>Real-time data visualization</p>
+                  {/* Active Documents Table */}
+                  <div style={{ border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '0.65rem 1rem', background: '#f8fafc', borderBottom: '1px solid #e2e8f0', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#64748b' }}>
+                      <div>Document Name</div>
+                      <div>Diligence Stage</div>
+                      <div>Telemetry & Views</div>
+                      <div>Security Enforcement</div>
+                    </div>
+                    {[
+                      { name: 'Azure_Resort_Stabilized_Projections_2026.xlsx', size: '12.4 MB', folder: '01. Financial Models', views: '18 PE Views (Avg 6m 12s)', security: 'Watermark + DevTools Shield', statusColor: '#059669' },
+                      { name: 'Project_Azure_Confidential_CIM_Dossier.pdf', size: '4.2 MB', folder: '01. Financial Models', views: '42 Institutional Views', security: 'Mandatory NDA Gate', statusColor: '#4f46e5' },
+                      { name: 'Freehold_Title_Deed_DLD_Registered.pdf', size: '1.6 MB', folder: '02. Legal & Deeds', views: '9 Diligence Reviews', security: 'View-Only DRM Enforced', statusColor: '#0284c7' },
+                      { name: 'Senior_Facility_Term_Sheet_Executed.pdf', size: '3.1 MB', folder: '03. Cap Table & Debt', views: '14 Board Reviews', security: 'Remote Kill Switch Ready', statusColor: '#dc2626' }
+                    ].map((doc, idx) => (
+                      <div key={idx} style={{
+                        display: 'grid',
+                        gridTemplateColumns: '2fr 1fr 1fr 1fr',
+                        padding: '0.85rem 1rem',
+                        borderBottom: idx < 3 ? '1px solid #f1f5f9' : 'none',
+                        alignItems: 'center',
+                        fontSize: '0.82rem',
+                        background: '#ffffff'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          <FileText size={16} color="#4f46e5" />
+                          <div>
+                            <div style={{ fontWeight: 600, color: '#0f172a' }}>{doc.name}</div>
+                            <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{doc.size}</div>
+                          </div>
+                        </div>
+                        <div style={{ fontSize: '0.78rem', color: '#475569' }}>{doc.folder}</div>
+                        <div style={{ fontSize: '0.78rem', color: '#059669', fontWeight: 600 }}>{doc.views}</div>
+                        <div>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 700, color: doc.statusColor, background: '#f8fafc', padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid #e2e8f0' }}>
+                            {doc.security}
+                          </span>
+                        </div>
                       </div>
-                      <div style={{ display: 'flex', gap: '1.5rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563' }}>
-                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#8b5cf6' }}></div> Views
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563' }}>
-                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b981' }}></div> Devices
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#4b5563' }}>
-                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#f59e0b' }}></div> Locations
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Stylized Bar Chart */}
-                    <div style={{ height: '320px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '1rem', paddingBottom: '2.5rem', position: 'relative' }}>
-                      {/* Grid Lines */}
-                      {[0, 25, 50, 75, 100].map((line, index) => (
-                        <div key={line} style={{ position: 'absolute', bottom: `calc(${line}% + 2.5rem)`, left: 0, right: 0, height: '1px', borderBottom: '1px dashed #e5e7eb', zIndex: 0, display: 'flex', alignItems: 'center' }}>
-                          <span style={{ position: 'absolute', left: '-2rem', color: '#9ca3af', fontSize: '0.75rem', transform: 'translateY(50%)' }}>{index * 6}</span>
-                        </div>
-                      ))}
-
-                      {[
-                        { label: 'Feb 14', val: 12, col: '#8b5cf6' },
-                        { label: 'Desktop', val: 24, col: '#10b981' },
-                        { label: 'Page 1', val: 82, col: '#8b5cf6' },
-                        { label: '00:00', val: 0, col: '#8b5cf6' },
-                        { label: '06:00', val: 0, col: '#8b5cf6' },
-                        { label: '12:00', val: 6, col: '#3b82f6' },
-                        { label: '18:00', val: 6, col: '#3b82f6' },
-                        { label: '21:00', val: 0, col: '#3b82f6' },
-                        { label: 'Completed', val: 6, col: '#14b8a6' },
-                        { label: 'Pending', val: 6, col: '#14b8a6' },
-                        { label: 'Dropped', val: 42, col: '#14b8a6' },
-                      ].map((bar, i) => (
-                        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: '1rem', zIndex: 1, height: '100%', position: 'relative' }}>
-                          {bar.val > 0 && (
-                            <div style={{
-                              width: '32px',
-                              height: `${bar.val}%`,
-                              backgroundColor: bar.col,
-                              borderRadius: '6px',
-                              transition: 'height 1s ease-out'
-                            }}></div>
-                          )}
-                          <span style={{ fontSize: '0.7rem', color: '#6b7280', transform: 'rotate(-45deg)', transformOrigin: 'top left', position: 'absolute', bottom: '-40px', left: '50%', whiteSpace: 'nowrap' }}>{bar.label}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Summary Footer */}
-                    <div style={{ marginTop: '3.5rem', display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-                      {[
-                        { label: 'Views Over Time', color: '#8b5cf6' },
-                        { label: 'Device Distribution', color: '#10b981' },
-                        { label: 'Page Attention', color: '#a855f7' },
-                        { label: 'Top Locations', color: '#f59e0b' },
-                        { label: 'Views by Hour', color: '#3b82f6' },
-                        { label: 'Completion Status', color: '#14b8a6' },
-                      ].map((item, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#4b5563', fontWeight: 500 }}>
-                          <div style={{ width: '16px', height: '12px', borderRadius: '3px', backgroundColor: item.color }}></div> {item.label}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Floating Notification */}
-                  <div style={{
-                    marginTop: '2rem',
-                    width: '140px',
-                    backgroundColor: '#ffffff',
-                    padding: '0.75rem',
-                    borderRadius: '16px',
-                    border: '1px solid #f1f5f9',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    position: 'absolute',
-                    bottom: '-2rem',
-                    left: '-2rem'
-                  }}>
-                    <div style={{ width: '30px', height: '40px', borderRadius: '4px', border: '1px solid #8b5cf6', backgroundColor: '#faf5ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8b5cf6' }}>
-                      <Monitor size={14} />
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', lineHeight: '1.2' }}>5</div>
-                      <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Desktop</div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1184,156 +1145,217 @@ const LandingPage: React.FC = () => {
             {activeFeature === 'permissions' && (
               <div className="dashboard-ui-mockup" style={{
                 width: '100%',
-                maxWidth: '960px',
-                borderRadius: '12px',
+                maxWidth: '980px',
+                borderRadius: '20px',
                 backgroundColor: '#ffffff',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
-                margin: '0 auto 6rem',
+                boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(226, 232, 240, 0.8)',
+                margin: '0 auto 2rem',
                 position: 'relative',
                 zIndex: 10,
-                border: '1px solid #f3f4f6',
-                fontFamily: "'Inter', sans-serif"
+                border: '1px solid #f1f5f9',
+                textAlign: 'left'
               }}>
                 {/* Header */}
-                <div style={{ padding: '1.5rem 2rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{ padding: '1.25rem 1.75rem', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', background: '#f8fafc' }}>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                      <Shield size={22} color="#6366f1" strokeWidth={2.5} />
-                      <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#111827', margin: 0 }}>Audit Trail</h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
+                      <Shield size={20} color="#6366f1" strokeWidth={2.5} />
+                      <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#111827', margin: 0 }}>Compliance & Legal Audit Trail</h3>
                     </div>
-                    <p style={{ margin: 0, color: '#6b7280', fontSize: '0.9rem' }}>Comprehensive, compliance-ready activity log.</p>
+                    <p style={{ margin: 0, color: '#64748b', fontSize: '0.78rem' }}>Tamper-evident, court-admissible electronic activity log for cross-border diligence.</p>
                   </div>
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.75rem', border: '1px solid #e5e7eb', borderRadius: '6px', background: 'transparent', color: '#4b5563', fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s' }}>
-                      <Filter size={14} /> Filters
-                    </button>
-                    <button style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.75rem', border: '1px solid #e5e7eb', borderRadius: '6px', background: 'transparent', color: '#4b5563', fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s' }}>
-                      <Download size={14} /> Export CSV
-                    </button>
-                    <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.4rem 0.5rem', border: '1px solid #e5e7eb', borderRadius: '6px', background: 'transparent', color: '#4b5563', cursor: 'pointer', transition: 'all 0.2s' }}>
-                      <RefreshCw size={14} />
-                    </button>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#059669', fontSize: '0.75rem', fontWeight: 700, backgroundColor: '#d1fae5', padding: '0.35rem 0.75rem', borderRadius: '6px', border: '1px solid #a7f3d0' }}>
+                      <CheckCircle size={13} /> DIFC / GDPR / eIDAS Verified
+                    </span>
                   </div>
                 </div>
 
                 {/* Table Header */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(100px, 1fr) minmax(180px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(280px, 2.5fr)', padding: '0.75rem 2rem', borderBottom: '1px solid #f3f4f6', borderTop: '1px solid #f3f4f6', fontSize: '0.7rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: '#fafafa' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(90px, 1fr) minmax(170px, 1.4fr) minmax(140px, 1.3fr) minmax(130px, 1.2fr) minmax(260px, 2.4fr)', padding: '0.7rem 1.75rem', borderBottom: '1px solid #e2e8f0', fontSize: '0.68rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: '#fafafa' }}>
                   <div>TIMESTAMP (UTC)</div>
-                  <div>EVENT</div>
+                  <div>EVENT TYPE</div>
                   <div>USER & DEVICE</div>
-                  <div>LOCATION (IP)</div>
-                  <div>DOCUMENT / DETAILS</div>
+                  <div>LOCATION & IP</div>
+                  <div>DOCUMENT & DIGITAL EVIDENCE</div>
                 </div>
 
                 {/* Table Body */}
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   {[
                     {
-                      date: 'Feb 16',
-                      year: '2026',
+                      date: 'Today, 14:32:09',
+                      eventIcon: Eye,
+                      eventColor: '#3b82f6',
+                      eventBg: '#dbeafe',
+                      eventBorder: '#bfdbfe',
+                      eventText: 'Teaser Viewed (8m 42s)',
+                      user: 'Managing Director, DIFC Fund',
+                      device: 'Chrome on MacOS (M3 Max)',
+                      location: 'Dubai, UAE (DIFC Gate)',
+                      ip: '185.107.56.12',
+                      doc: 'Project_Azure_Executive_CIM.pdf',
+                      details: 'Watermark Stamped: alex.v@apexcap.ae • Dwell: Page 3 (3m 12s), Page 5 (4m 10s)'
+                    },
+                    {
+                      date: 'Today, 12:15:40',
+                      eventIcon: ScrollText,
+                      eventColor: '#7c3aed',
+                      eventBg: '#f5f3ff',
+                      eventBorder: '#ddd6fe',
+                      eventText: 'Click-Through NDA Signed',
+                      user: 'General Partner, London PE',
+                      device: 'Safari on iPad Pro',
+                      location: 'London, UK (Mayfair)',
+                      ip: '185.125.190.24',
+                      doc: 'Mutual_Cross_Border_NDA.pdf',
+                      details: 'Digital Signature Hash: 0x8f2a...c41e • OTP Verified via SMS (+44 7911...)'
+                    },
+                    {
+                      date: 'Yesterday, 19:40:11',
                       eventIcon: Download,
                       eventColor: '#10b981',
                       eventBg: '#d1fae5',
                       eventBorder: '#a7f3d0',
-                      eventText: 'Document Downloaded',
-                      user: 'Investor Partner (US)',
-                      device: 'Chrome on MacOS',
+                      eventText: 'Authorized Download',
+                      user: 'Partner, US Growth Syndicate',
+                      device: 'Chrome on Windows 11',
                       location: 'San Francisco, US',
                       ip: '104.28.19.42',
-                      doc: 'Series-A-PitchDeck-Final.pdf',
-                      details: null
+                      doc: 'Azure_Resort_Financial_Model.xlsx',
+                      details: 'Forensic Metadata Injected • Dynamic PDF Stamped: partner@summitcap.com'
                     },
                     {
-                      date: 'Feb 16',
-                      year: '2026',
-                      eventIcon: Eye,
-                      eventColor: '#3b82f6',
-                      eventBg: '#dbeafe',
-                      eventBorder: '#bfdbfe',
-                      eventText: 'Document Viewed',
-                      user: 'General Partner (UK)',
-                      device: 'Safari on iPad',
-                      location: 'London, UK',
-                      ip: '185.125.190.24',
-                      doc: 'M&A-Due-Diligence-Memo.pdf',
-                      details: 'viewer_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...'
-                    },
-                    {
-                      date: 'Feb 16',
-                      year: '2026',
-                      eventIcon: Eye,
-                      eventColor: '#3b82f6',
-                      eventBg: '#dbeafe',
-                      eventBorder: '#bfdbfe',
-                      eventText: 'Document Viewed',
-                      user: 'Managing Director, DIFC Fund',
-                      device: 'Chrome on Windows',
-                      location: 'Dubai, UAE',
-                      ip: '185.107.56.12',
-                      doc: 'CapTable-Valuation-Q1.pdf',
-                      details: 'viewer_agent: Mozilla/5.0 (Windows NT 10.0; Win64)...'
-                    },
-                    {
-                      date: 'Feb 16',
-                      year: '2026',
-                      eventIcon: FileText,
-                      eventColor: '#a855f7',
-                      eventBg: '#f3e8ff',
-                      eventBorder: '#e9d5ff',
-                      eventText: 'Document Uploaded',
-                      user: 'Deal Room Admin',
-                      device: 'Chrome on MacOS',
-                      location: 'Singapore',
+                      date: 'Yesterday, 16:05:22',
+                      eventIcon: ShieldAlert,
+                      eventColor: '#dc2626',
+                      eventBg: '#fef2f2',
+                      eventBorder: '#fecaca',
+                      eventText: 'DevTools Inspection Defeated',
+                      user: 'Anonymous Forward Recipient',
+                      device: 'Edge on Windows 10',
+                      location: 'Singapore (Raffles Place)',
                       ip: '165.225.112.90',
-                      doc: 'Cross-Border-NDA-Executed.pdf',
-                      details: 'bundleId: vdr_global_09, fileName: Cross-Border-NDA...'
+                      doc: 'Valuation_CapTable_Restricted.pdf',
+                      details: 'DevTools triggered • Screen automatically blanked • Link revoked'
                     }
                   ].map((row, i) => (
-                    <div key={i} style={{ display: 'grid', gridTemplateColumns: 'minmax(100px, 1fr) minmax(180px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(280px, 2.5fr)', padding: '1.25rem 2rem', borderBottom: i < 3 ? '1px solid #f3f4f6' : 'none', alignItems: 'start' }}>
-                      <div style={{ color: '#374151', fontSize: '0.85rem' }}>
-                        <div style={{ fontWeight: 500, color: '#4b5563' }}>{row.date}</div>
-                        <div style={{ color: '#9ca3af', marginTop: '0.1rem' }}>{row.year}</div>
-                      </div>
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: 'minmax(90px, 1fr) minmax(170px, 1.4fr) minmax(140px, 1.3fr) minmax(130px, 1.2fr) minmax(260px, 2.4fr)', padding: '1rem 1.75rem', borderBottom: i < 3 ? '1px solid #f1f5f9' : 'none', alignItems: 'start', background: '#ffffff' }}>
+                      <div style={{ color: '#475569', fontSize: '0.8rem', fontWeight: 600 }}>{row.date}</div>
 
                       <div>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.25rem 0.6rem', borderRadius: '20px', border: `1px solid ${row.eventBorder}`, backgroundColor: row.eventBg, color: row.eventColor, fontSize: '0.75rem', fontWeight: 600 }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.2rem 0.55rem', borderRadius: '20px', border: `1px solid ${row.eventBorder}`, backgroundColor: row.eventBg, color: row.eventColor, fontSize: '0.74rem', fontWeight: 700 }}>
                           <row.eventIcon size={12} strokeWidth={2.5} />
                           {row.eventText}
                         </div>
                       </div>
 
-                      <div style={{ fontSize: '0.85rem' }}>
-                        <div style={{ fontWeight: 600, color: '#374151' }}>{row.user}</div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#6b7280', marginTop: '0.3rem', fontSize: '0.8rem' }}>
+                      <div style={{ fontSize: '0.82rem' }}>
+                        <div style={{ fontWeight: 700, color: '#1e293b' }}>{row.user}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#64748b', marginTop: '0.25rem', fontSize: '0.74rem' }}>
                           <Monitor size={12} /> {row.device}
                         </div>
                       </div>
 
-                      <div style={{ fontSize: '0.85rem' }}>
-                        <div style={{ fontWeight: 500, color: '#374151' }}>{row.location}</div>
-                        <div style={{ color: '#9ca3af', marginTop: '0.3rem', fontSize: '0.8rem' }}>{row.ip}</div>
+                      <div style={{ fontSize: '0.82rem' }}>
+                        <div style={{ fontWeight: 600, color: '#1e293b' }}>{row.location}</div>
+                        <div style={{ color: '#94a3b8', marginTop: '0.25rem', fontSize: '0.74rem' }}>{row.ip}</div>
                       </div>
 
-                      <div style={{ fontSize: '0.85rem', overflow: 'hidden' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 500, color: '#4f46e5', marginBottom: row.details ? '0.5rem' : '0' }}>
+                      <div style={{ fontSize: '0.82rem', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600, color: '#4f46e5', marginBottom: '0.35rem' }}>
                           <FileText size={14} />
                           <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.doc}</span>
                         </div>
-                        {row.details && (
-                          <div style={{ backgroundColor: '#f9fafb', padding: '0.3rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', color: '#6b7280', fontFamily: 'monospace', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', border: '1px solid #f3f4f6' }}>
-                            {row.details}
-                          </div>
-                        )}
+                        <div style={{ backgroundColor: '#f8fafc', padding: '0.35rem 0.55rem', borderRadius: '6px', fontSize: '0.72rem', color: '#64748b', border: '1px solid #e2e8f0', lineHeight: 1.35 }}>
+                          {row.details}
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
 
-                {/* Footer */}
-                <div style={{ padding: '1rem 2rem', borderTop: '1px solid #f3f4f6', backgroundColor: '#fafafa', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ color: '#6b7280', fontSize: '0.8rem' }}>Showing 4 events</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#059669', fontSize: '0.8rem', fontWeight: 600, backgroundColor: '#d1fae5', padding: '0.4rem 0.75rem', borderRadius: '6px', border: '1px solid #a7f3d0' }}>
-                    <Shield size={14} /> HIPAA / NIST Compliant Log
+            {activeFeature === 'analytics' && (
+              <div className="dashboard-ui-mockup" style={{
+                width: '100%',
+                maxWidth: '980px',
+                borderRadius: '20px',
+                backgroundColor: '#ffffff',
+                boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(226, 232, 240, 0.8)',
+                margin: '0 auto 2rem',
+                position: 'relative',
+                zIndex: 10,
+                border: '1px solid #f1f5f9',
+                textAlign: 'left'
+              }}>
+                {/* Header */}
+                <div style={{ padding: '1.25rem 1.75rem', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', background: '#f8fafc' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
+                      <BarChart3 size={20} color="#7c3aed" />
+                      <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#111827', margin: 0 }}>Unified Investor Telemetry & Heatmap</h3>
+                    </div>
+                    <p style={{ margin: 0, color: '#64748b', fontSize: '0.78rem' }}>Live tracking: Project Azure CIM & Financial Model</p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', border: '1px solid #bbf7d0', backgroundColor: '#f0fdf4', color: '#16a34a', padding: '0.25rem 0.65rem', borderRadius: '16px', fontSize: '0.72rem', fontWeight: 700 }}>
+                    <div style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e', boxShadow: '0 0 8px #22c55e' }}></div>
+                    <span>LIVE TELEMETRY STREAM</span>
+                  </div>
+                </div>
+
+                <div style={{ padding: '1.75rem' }}>
+                  {/* KPI Cards */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                    {[
+                      { label: 'Total Impressions', val: '4,812', change: '+28% this week', color: '#4f46e5', icon: Eye },
+                      { label: 'Institutional Viewers', val: '342', change: 'PE, VC & Family Offices', color: '#059669', icon: Fingerprint },
+                      { label: 'Avg. Dwell Time', val: '4m 18s', change: 'High diligence intent', color: '#d97706', icon: Clock },
+                      { label: 'Completion Rate', val: '84.2%', change: 'Multi-slide review', color: '#7c3aed', icon: BarChart3 }
+                    ].map((kpi, i) => (
+                      <div key={i} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.15rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: kpi.color, fontSize: '0.76rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                          <kpi.icon size={14} />
+                          <span>{kpi.label}</span>
+                        </div>
+                        <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.25rem' }}>{kpi.val}</div>
+                        <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{kpi.change}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Page-by-Page Attention Heatmap */}
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
+                        Page-by-Page Investor Attention Heatmap (Project Azure CIM)
+                      </div>
+                      <span style={{ fontSize: '0.72rem', color: '#64748b' }}>Second-by-second reader dwell time</span>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                      {[
+                        { page: 'Page 1: Executive Deal Summary', time: '48s dwell', pct: 45, tag: 'High Interest', tagBg: '#eff6ff', tagColor: '#2563eb' },
+                        { page: 'Page 3: Historical RevPAR & Unit Economics', time: '1m 24s dwell', pct: 68, tag: 'High Scrutiny', tagBg: '#f5f3ff', tagColor: '#7c3aed' },
+                        { page: 'Page 5: 5-Year Financial Models & Cash Flows', time: '2m 12s dwell', pct: 95, tag: '🔥 PEAK ATTENTION', tagBg: '#fef2f2', tagColor: '#dc2626' },
+                        { page: 'Page 8: Debt Structure & Valuation Slabs', time: '1m 45s dwell', pct: 78, tag: 'Deal Terms Focus', tagBg: '#fff7ed', tagColor: '#ea580c' },
+                        { page: 'Page 12: Operator Management Agreement', time: '1m 10s dwell', pct: 55, tag: 'Legal Review', tagBg: '#ecfdf5', tagColor: '#059669' }
+                      ].map((item, idx) => (
+                        <div key={idx} style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '0.75rem 1rem' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem', fontSize: '0.78rem' }}>
+                            <span style={{ fontWeight: 600, color: '#1e293b' }}>{item.page}</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ color: '#64748b', fontWeight: 600 }}>{item.time}</span>
+                              <span style={{ fontSize: '0.65rem', fontWeight: 700, background: item.tagBg, color: item.tagColor, padding: '0.1rem 0.4rem', borderRadius: '4px' }}>{item.tag}</span>
+                            </div>
+                          </div>
+                          <div style={{ width: '100%', height: '7px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                            <div style={{ width: `${item.pct}%`, height: '100%', background: 'linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%)', borderRadius: '4px' }}></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1342,16 +1364,17 @@ const LandingPage: React.FC = () => {
             {activeFeature === 'security' && (
               <div className="dashboard-ui-mockup" style={{
                 width: '100%',
-                maxWidth: '960px',
-                borderRadius: '16px',
+                maxWidth: '980px',
+                borderRadius: '20px',
                 backgroundColor: '#0f172a',
-                boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
-                margin: '0 auto 6rem',
+                boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.35)',
+                margin: '0 auto 2rem',
                 position: 'relative',
                 zIndex: 10,
                 padding: '1.5rem',
                 fontFamily: "'Inter', sans-serif",
-                color: '#f8fafc'
+                color: '#f8fafc',
+                textAlign: 'left'
               }}>
                 {/* Header Navbar */}
                 <div style={{
@@ -1359,20 +1382,20 @@ const LandingPage: React.FC = () => {
                   padding: '1rem 1.5rem', borderRadius: '12px', border: '1px solid #334155'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b981' }}></div>
-                    <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#f8fafc' }}>
-                      Active DRM Vault: Confidential_Acquisition_Teaser_Q4.pdf
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b981', boxShadow: '0 0 10px #10b981' }}></div>
+                    <span style={{ fontSize: '0.92rem', fontWeight: 700, color: '#f8fafc' }}>
+                      Active Zero-Trust DRM Vault: Project_Azure_Acquisition_Teaser.pdf
                     </span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#10b981', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '0.25rem 0.65rem', borderRadius: '6px', fontWeight: 700 }}>
+                    <span style={{ fontSize: '0.72rem', color: '#10b981', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '0.25rem 0.65rem', borderRadius: '6px', fontWeight: 700 }}>
                       AES-256 GCM ZERO-KNOWLEDGE
                     </span>
                   </div>
                 </div>
 
                 {/* Main Content Area: Document View + Live Controls */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1.35fr 1fr', gap: '1.5rem', marginTop: '1.5rem', minHeight: '480px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.35fr 1fr', gap: '1.5rem', marginTop: '1.5rem', minHeight: '460px' }}>
                   {/* Left: Watermarked Document View */}
                   <div style={{
                     backgroundColor: '#ffffff',
@@ -1395,8 +1418,8 @@ const LandingPage: React.FC = () => {
                       transform: 'rotate(-25deg)',
                       pointerEvents: 'none',
                       zIndex: 10,
-                      opacity: 0.18,
-                      fontSize: '1rem',
+                      opacity: 0.22,
+                      fontSize: '0.95rem',
                       fontWeight: 900,
                       color: '#dc2626',
                       textAlign: 'center',
@@ -1410,7 +1433,7 @@ const LandingPage: React.FC = () => {
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #0f172a', paddingBottom: '0.5rem', marginBottom: '1.25rem' }}>
                         <div>
-                          <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.05em' }}>RESTRICTED ACCESS MEMO</span>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.05em' }}>RESTRICTED DILIGENCE MEMO</span>
                           <h4 style={{ margin: '0.2rem 0 0', fontSize: '1.05rem', fontWeight: 800, color: '#0f172a' }}>
                             PROJECT AZURE: $120M LUXURY RESORT ACQUISITION
                           </h4>
@@ -1462,9 +1485,9 @@ const LandingPage: React.FC = () => {
 
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                         {[
-                          { title: 'Dynamic Viewer Watermark', status: 'ACTIVE', desc: 'Overlays viewer phone, email & IP on every page', color: '#10b981' },
+                          { title: 'Dynamic Recipient Watermark', status: 'ACTIVE', desc: 'Overlays viewer phone, email & IP on every page', color: '#10b981' },
                           { title: 'International Mobile Gate', status: '+971 UAE', desc: 'OTP verification required before viewing', color: '#38bdf8' },
-                          { title: 'View-Only DRM Mode', status: 'ENFORCED', desc: 'Downloads, printing & clipboard blocked', color: '#fbbf24' },
+                          { title: 'Strict View-Only DRM Mode', status: 'ENFORCED', desc: 'Downloads, printing & clipboard blocked', color: '#fbbf24' },
                           { title: 'Burn-After-Reading Timer', status: '24H AUTO-REVOKE', desc: 'File automatically self-destructs', color: '#f43f5e' }
                         ].map((ctrl, i) => (
                           <div key={i} style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '0.75rem' }}>
@@ -1479,126 +1502,25 @@ const LandingPage: React.FC = () => {
                     </div>
 
                     <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #334155', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>1-Click Emergency Kill Switch:</span>
+                      <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>1-Click Remote Kill Switch:</span>
                       <button style={{
                         background: '#dc2626',
                         color: 'white',
                         border: 'none',
-                        padding: '0.45rem 0.9rem',
+                        padding: '0.5rem 1rem',
                         borderRadius: '6px',
-                        fontSize: '0.75rem',
+                        fontSize: '0.76rem',
                         fontWeight: 700,
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(220, 38, 38, 0.4)'
                       }}>
-                        Revoke Access Now
+                        Sever Active Viewers
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
             )}
-          </div>
-
-
-          <div className="transfer-animation-container">
-            <div className="transfer-scene">
-              {/* Sender Side */}
-              <div className="transfer-node sender-node">
-                <div className="node-avatar">
-                  <Upload size={32} />
-                </div>
-                <div className="node-label">Sender</div>
-                <div className="node-status">Uploading...</div>
-              </div>
-
-              {/* Transfer Path with Animated Documents */}
-              <div className="transfer-path">
-                <div className="transfer-line">
-                  <div className="transfer-pulse"></div>
-                </div>
-
-                {/* Animated Flying Documents */}
-                <div className="flying-doc doc-1">
-                  <FileText size={24} />
-                </div>
-                <div className="flying-doc doc-2">
-                  <File size={22} />
-                </div>
-                <div className="flying-doc doc-3">
-                  <FileCheck size={20} />
-                </div>
-
-                {/* Data Particles */}
-                <div className="particle particle-1"></div>
-                <div className="particle particle-2"></div>
-                <div className="particle particle-3"></div>
-                <div className="particle particle-4"></div>
-                <div className="particle particle-5"></div>
-                <div className="particle particle-6"></div>
-              </div>
-
-              {/* Receiver Side */}
-              <div className="transfer-node receiver-node">
-                <div className="node-avatar">
-                  <Download size={32} />
-                </div>
-                <div className="node-label">Receiver</div>
-                <div className="node-status">Receiving...</div>
-              </div>
-            </div>
-
-            {/* Security Badges */}
-            <div className="security-badges">
-              <div className="security-badge">
-                <Lock size={16} />
-                <span>Encrypted Storage</span>
-              </div>
-              <div className="security-badge">
-                <Shield size={16} />
-                <span>Secure Transfer</span>
-              </div>
-              <div className="security-badge">
-                <CheckCircle size={16} />
-                <span>Verified</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Security Section */}
-        <section className="security-section" id="security">
-          <span className="section-badge">Enterprise-Grade Security</span>
-          <h2>Enterprise-Grade Security for Your Files</h2>
-          <p style={{ maxWidth: '600px', margin: '1rem auto', color: '#6b7280' }}>
-            We take security seriously. Your data is encrypted and protected at every step.
-          </p>
-
-          <div className="security-content">
-            <div className="security-image">
-              <div style={{ background: 'linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%)', padding: '3rem', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Shield size={120} color="#6366f1" strokeWidth={1} />
-              </div>
-            </div>
-            <div className="security-details">
-              <h3>AES-256 Encryption Standard</h3>
-              <p style={{ marginBottom: '2rem', color: '#6b7280' }}>
-                Your files are encrypted in your browser using military-grade AES-256-GCM encryption before they ever reach our servers. We can't read your files, and neither can anyone else.
-              </p>
-              <ul className="security-list">
-                <li>
-                  <CheckCircle className="check-icon" size={24} />
-                  <span>Client-side encryption (Zero-Knowledge)</span>
-                </li>
-                <li>
-                  <CheckCircle className="check-icon" size={24} />
-                  <span>Granular access controls and permissions</span>
-                </li>
-                <li>
-                  <CheckCircle className="check-icon" size={24} />
-                  <span>Automatic expiration and self-destruct</span>
-                </li>
-              </ul>
-            </div>
           </div>
         </section>
 
@@ -1708,160 +1630,168 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Key Features Section */}
-        <section className="features-section" id="features">
-          <div className="features-header">
-            <span className="section-badge">Key Features</span>
-            <h2>Enterprise-Grade Document Security</h2>
-            <p style={{ maxWidth: '700px', margin: '1rem auto', color: '#6b7280', fontSize: '1.1rem' }}>
-              Comprehensive tools to secure, track, and control your sensitive documents with confidence.
+        {/* Key Features Section - Enterprise Bento Matrix */}
+        <section className="features-section" id="features" style={{
+          padding: '5rem 2rem',
+          background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)',
+          borderTop: '1px solid #e2e8f0',
+          borderBottom: '1px solid #e2e8f0'
+        }}>
+          <div className="features-header" style={{ maxWidth: '820px', margin: '0 auto 3.5rem', textAlign: 'center' }}>
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: '#eef2ff',
+              color: '#4f46e5',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+              padding: '0.3rem 0.8rem',
+              borderRadius: '20px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: '0.75rem'
+            }}>
+              <ShieldAlert size={14} />
+              Institutional Feature Matrix
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.75rem)', fontWeight: 800, color: '#0f172a', margin: '0 0 1rem', letterSpacing: '-0.025em' }}>
+              Built for High-Stakes Deals & Strict Diligence
+            </h2>
+            <p style={{ color: '#64748b', fontSize: '1.05rem', lineHeight: 1.6, margin: 0 }}>
+              Zero-knowledge cryptographic protection, second-by-second investor telemetry, and legal access governance combined in one unified platform.
             </p>
           </div>
-          <div className="features-grid">
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' }}>
-                  <Lock size={28} />
+
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1.5rem',
+            textAlign: 'left'
+          }}>
+            {[
+              {
+                title: 'Dynamic Forensic Watermarking',
+                desc: 'Overlay viewer verified email, phone (+971, +44, +1), IP, and exact UTC timestamp diagonally across every page to eliminate leaks.',
+                badge: 'Zero-Leak',
+                badgeBg: '#fef2f2',
+                badgeColor: '#dc2626',
+                icon: Droplets,
+                iconBg: '#eff6ff',
+                iconColor: '#2563eb'
+              },
+              {
+                title: 'Click-Through NDA Gateway',
+                desc: 'Enforce court-admissible electronic non-disclosure agreements with digital signature hashes prior to document decryption.',
+                badge: 'Legal Gate',
+                badgeBg: '#f5f3ff',
+                badgeColor: '#7c3aed',
+                icon: ScrollText,
+                iconBg: '#f5f3ff',
+                iconColor: '#7c3aed'
+              },
+              {
+                title: '1-Click Active Sessions Kill Switch',
+                desc: 'Instantly sever active viewers, blank running screens, and revoke access tokens remotely with a single emergency click.',
+                badge: 'Live Kill',
+                badgeBg: '#fff1f2',
+                badgeColor: '#e11d48',
+                icon: Power,
+                iconBg: '#fff1f2',
+                iconColor: '#e11d48'
+              },
+              {
+                title: 'Territory Geo-Fencing & IP Lock',
+                desc: 'Restrict access to specific countries (UAE, EU, UK, US, SG) and authorized corporate CIDR subnets to prevent unauthorized forwarding.',
+                badge: 'Geo-Defense',
+                badgeBg: '#eef2ff',
+                badgeColor: '#4f46e5',
+                icon: Globe,
+                iconBg: '#eef2ff',
+                iconColor: '#4f46e5'
+              },
+              {
+                title: 'Page-by-Page Attention Heatmaps',
+                desc: 'Gain second-by-second visibility into where prospective buyers dwell, which financial models they scrutinize, and where interest drops off.',
+                badge: 'Telemetry',
+                badgeBg: '#f0fdf4',
+                badgeColor: '#16a34a',
+                icon: BarChart3,
+                iconBg: '#f0fdf4',
+                iconColor: '#16a34a'
+              },
+              {
+                title: 'Zero-Knowledge Client Encryption',
+                desc: 'Browser-side AES-256-GCM encryption ensures pitch decks, cap tables, and financial audits stay completely unreadable to server hosts.',
+                badge: 'AES-256',
+                badgeBg: '#f1f5f9',
+                badgeColor: '#475569',
+                icon: Lock,
+                iconBg: '#f1f5f9',
+                iconColor: '#475569'
+              },
+              {
+                title: 'Real-Time WhatsApp & Email Alerts',
+                desc: 'Receive immediate notifications the exact second a General Partner, VIP investor, or corporate acquirer opens your presentation link.',
+                badge: 'Instant Alert',
+                badgeBg: '#f0fdf4',
+                badgeColor: '#15803d',
+                icon: Bell,
+                iconBg: '#f0fdf4',
+                iconColor: '#15803d'
+              },
+              {
+                title: 'eIDAS & DIFC Compliant Audit Logs',
+                desc: 'Maintain court-admissible, tamper-evident digital activity logs with timestamped electronic evidence certificates for cross-border deals.',
+                badge: 'eIDAS / DIFC',
+                badgeBg: '#ecfeff',
+                badgeColor: '#0891b2',
+                icon: FileCheck,
+                iconBg: '#ecfeff',
+                iconColor: '#0891b2'
+              }
+            ].map((feature, i) => (
+              <div key={i} style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '16px',
+                padding: '1.75rem',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.04)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: '1rem',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-3px)';
+                  e.currentTarget.style.boxShadow = '0 12px 24px -6px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(99, 102, 241, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.04)';
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <div style={{ padding: '0.55rem', borderRadius: '10px', background: feature.iconBg, color: feature.iconColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <feature.icon size={20} />
+                    </div>
+                    <span style={{ fontSize: '0.68rem', fontWeight: 800, background: feature.badgeBg, color: feature.badgeColor, padding: '0.15rem 0.5rem', borderRadius: '6px', border: '1px solid rgba(0,0,0,0.04)' }}>
+                      {feature.badge}
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#0f172a', margin: '0 0 0.5rem', letterSpacing: '-0.01em' }}>
+                    {feature.title}
+                  </h3>
+                  <p style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.55, margin: 0 }}>
+                    {feature.desc}
+                  </p>
                 </div>
               </div>
-              <h3>Password Protection</h3>
-              <p>Secure files with password-protected links. Add an extra layer of security ensuring only authorized recipients can access your sensitive documents.</p>
-              <div className="feature-highlight">🔐 Secure password protection</div>
-            </div>
-
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #ec4899 0%, #f472b6 100%)' }}>
-                  <Mail size={28} />
-                </div>
-              </div>
-              <h3>Email Verification</h3>
-              <p>Require recipients to verify their email address to access documents. Ensure your files reach the intended recipient and maintain audit compliance.</p>
-              <div className="feature-highlight">✉️ Identity assured</div>
-            </div>
-
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #10b981 0%, #34d399 100%)' }}>
-                  <Droplets size={28} />
-                </div>
-              </div>
-              <h3>Dynamic Watermarking</h3>
-              <p>Apply watermarks with viewer details and custom text. Prevent unauthorized sharing and maintain document traceability with personalized watermarks.</p>
-              <div className="feature-highlight">💧 Customizable branding</div>
-            </div>
-
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)' }}>
-                  <Download size={28} />
-                </div>
-              </div>
-              <h3>Download Controls</h3>
-              <p>Restrict or allow document downloads. Control how recipients interact with your files - view-only mode or full download permissions.</p>
-              <div className="feature-highlight">⚙️ Granular permissions</div>
-            </div>
-
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)' }}>
-                  <FileCheck size={28} />
-                </div>
-              </div>
-              <h3>Audit Trail</h3>
-              <p>Maintain a complete log of all user activity for compliance and transparency. Track every view, download, and interaction with detailed timestamps.</p>
-              <div className="feature-highlight">📊 Complete visibility</div>
-            </div>
-
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)' }}>
-                  <ScrollText size={28} />
-                </div>
-              </div>
-              <h3>NDA Agreements</h3>
-              <p>Require recipients to agree to Non-Disclosure Agreements before viewing. Legally protect your confidential information with digital signatures.</p>
-              <div className="feature-highlight">📝 Legal protection</div>
-            </div>
-
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #14b8a6 0%, #2dd4bf 100%)' }}>
-                  <Activity size={28} />
-                </div>
-              </div>
-              <h3>Real-time Analytics</h3>
-              <p>Track document views and engagement in real-time. Monitor who's viewing your documents as it happens with live dashboard updates.</p>
-              <div className="feature-highlight">⚡ Live tracking</div>
-            </div>
-
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' }}>
-                  <BarChart3 size={28} />
-                </div>
-              </div>
-              <h3>Page-by-Page Analytics</h3>
-              <p>Gain detailed insights into how viewers interact with individual pages. See which pages get the most attention and where readers drop off.</p>
-              <div className="feature-highlight">📈 Deep insights</div>
-            </div>
-
-            <div className="feature-card premium-card">
-              <div className="feature-icon-wrapper">
-                <div className="feature-icon" style={{ background: 'linear-gradient(135deg, #f43f5e 0%, #fb7185 100%)' }}>
-                  <Bell size={28} />
-                </div>
-              </div>
-              <h3>Instant Alerts</h3>
-              <p>Receive notifications when documents are viewed or shared. Stay informed with real-time alerts via email or in-app notifications.</p>
-              <div className="feature-highlight">🔔 Stay notified</div>
-            </div>
-          </div>
-        </section>
-
-        {/* Animated Features Showcase */}
-        <section className="animated-showcase">
-          <div className="showcase-container">
-            {/* Feature Wave 1 */}
-            <div className="showcase-item wave-1">
-              <div className="showcase-icon">
-                <Lock size={32} />
-              </div>
-              <h3>Password Protection</h3>
-              <p>Secure your files with password protection</p>
-            </div>
-
-            {/* Feature Wave 2 */}
-            <div className="showcase-item wave-2">
-              <div className="showcase-icon">
-                <Activity size={32} />
-              </div>
-              <h3>Real-Time Analytics</h3>
-              <p>Track views and engagement as it happens</p>
-            </div>
-
-            {/* Feature Wave 3 */}
-            <div className="showcase-item wave-3">
-              <div className="showcase-icon">
-                <Bell size={32} />
-              </div>
-              <h3>Instant Notifications</h3>
-              <p>Get alerted when documents are accessed</p>
-            </div>
-
-            {/* Feature Wave 4 */}
-            <div className="showcase-item wave-4">
-              <div className="showcase-icon">
-                <Droplets size={32} />
-              </div>
-              <h3>Custom Watermarks</h3>
-              <p>Protect against unauthorized sharing</p>
-            </div>
-
-            {/* Animated Background Elements */}
-            <div className="showcase-glow glow-1"></div>
-            <div className="showcase-glow glow-2"></div>
-            <div className="showcase-glow glow-3"></div>
+            ))}
           </div>
         </section>
 
@@ -1908,31 +1838,89 @@ const LandingPage: React.FC = () => {
 
         {/* CTA Section */}
         <section className="cta-section">
-          <div className="cta-card">
-            <span style={{ background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '20px', fontSize: '0.875rem', marginBottom: '1rem', display: 'inline-block' }}>Start for free</span>
-            <h2>Everything you need to share securely</h2>
-            <p style={{ maxWidth: '600px', margin: '0 auto', opacity: 0.9 }}>
-              Join thousands of professionals who trust DocTransfer for their document sharing needs.
+          <div className="cta-card" style={{
+            background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%)',
+            borderRadius: '24px',
+            padding: '4rem 2rem',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.35)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <span style={{
+              background: 'rgba(99, 102, 241, 0.25)',
+              color: '#c7d2fe',
+              border: '1px solid rgba(129, 140, 248, 0.4)',
+              padding: '0.35rem 0.95rem',
+              borderRadius: '20px',
+              fontSize: '0.82rem',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: '1.25rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem'
+            }}>
+              <Sparkles size={14} color="#818cf8" />
+              Start For Free • $0 / No Card Required
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.85rem)', fontWeight: 800, color: '#ffffff', margin: '0 0 1rem', letterSpacing: '-0.025em' }}>
+              Ready to Protect Your Next High-Stakes Deal?
+            </h2>
+            <p style={{ maxWidth: '640px', margin: '0 auto 2.25rem', color: '#cbd5e1', fontSize: '1.05rem', lineHeight: 1.6 }}>
+              Join venture funds, private equity firms, luxury real estate developers, and founders across Dubai, London, Singapore, and New York.
             </p>
-            <div className="cta-buttons">
-              <Link to="/pricing">
+            <div className="cta-buttons" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+              <Link to="/dataroom" style={{ textDecoration: 'none' }}>
                 <button style={{
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                  color: 'white',
+                  background: '#ffffff',
+                  color: '#0f172a',
                   border: 'none',
-                  padding: '0.75rem 2rem',
+                  padding: '0.85rem 2rem',
                   borderRadius: '12px',
                   fontWeight: 700,
-                  fontSize: '1.05rem',
+                  fontSize: '1rem',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 14px rgba(37, 99, 235, 0.4)',
-                  transition: 'transform 0.2s'
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.4)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
-                  onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                  onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                >Get Started Now</button>
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.backgroundColor = '#f8fafc'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.backgroundColor = '#ffffff'; }}
+                >
+                  <Sparkles size={16} color="#4f46e5" />
+                  <span>Create Deal Room Free</span>
+                  <ArrowRight size={16} />
+                </button>
               </Link>
-              <button style={{ background: 'transparent', border: '1px solid white', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '12px', fontWeight: 600, cursor: 'pointer' }}>Contact Sales</button>
+              <Link to="/pricing" style={{ textDecoration: 'none' }}>
+                <button style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  color: '#ffffff',
+                  padding: '0.85rem 1.75rem',
+                  borderRadius: '12px',
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.18)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'; }}
+                >
+                  Explore Pricing
+                </button>
+              </Link>
+            </div>
+            <div style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
+              <span>✓ Zero expensive monthly lock-in</span>
+              <span>✓ AES-256 client-side encryption</span>
+              <span>✓ Instant setup in under 60 seconds</span>
             </div>
           </div>
         </section>

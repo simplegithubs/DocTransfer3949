@@ -92,7 +92,7 @@ const CompareLayout: React.FC<CompareLayoutProps> = ({
                         </SignInButton>
                     </SignedOut>
                     <SignedIn>
-                        <Link to="/dataroom" style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', color: 'white', borderRadius: '8px', padding: '0.5rem 1.25rem', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>Dashboard</Link>
+                        <Link to="/dashboard" style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', color: 'white', borderRadius: '8px', padding: '0.5rem 1.25rem', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>Dashboard</Link>
                         <UserButton />
                     </SignedIn>
                 </div>
