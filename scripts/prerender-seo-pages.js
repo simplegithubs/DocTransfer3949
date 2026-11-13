@@ -839,13 +839,21 @@ function generateStaticHTML(template, route) {
     html = html.replace('</head>', `  ${structuredDataHtml}\n</head>`);
   }
   
-  // CRITICAL FIX: Inject visible, semantic SEO content inside #root for initial pass indexing.
-  // Googlebot reads and indexes clean visible HTML without any 1-pixel hidden CSS hacks. React replaces #root content upon client hydration.
-  // Match clean template, old visible article pattern, or previously hidden pattern
-  html = html.replace(
-    /<div id="root">(?:<div class="seo-[^"]*"[^>]*>)?(?:<article>[\s\S]*?<\/article>)?(?:<\/div>)?(?:<h1[^>]*>[^<]*<\/h1>)?<\/div>/,
-    `<div id="root"><div class="seo-prerendered-content" style="max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem;font-family:system-ui,-apple-system,sans-serif;color:#1e293b;line-height:1.6;">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://www.doctransfer.app">Explore DocTransfer Deal Rooms</a></p></noscript>`
-  );
+  // CRITICAL FIX: For the SPA shell (routePath === '/'), do NOT inject unstyled text into #root.
+  // The file dist/index.html serves as the fallback for all dynamic client-side routes (/dataroom, /dashboard, etc.).
+  // For dynamic routes, provide a sleek dark-themed loading skeleton so users never see unstyled text.
+  // For programmatic SEO pages (routePath !== '/'), inject rich semantic content with clean modern styling for Googlebot.
+  if (routePath === '/') {
+    html = html.replace(
+      /<div id="root">[\s\S]*?<\/div>(?:\s*<noscript>[\s\S]*?<\/noscript>)?/,
+      `<div id="root"><div id="app-loading-shell" style="min-height:100vh;background:#090d16;display:flex;align-items:center;justify-content:center;color:#64748b;font-family:system-ui,-apple-system,sans-serif;"><div style="text-align:center"><div style="width:40px;height:40px;border:3px solid #1e293b;border-top-color:#6366f1;border-radius:50%;animation:dt-spin 0.8s linear infinite;margin:0 auto 16px"></div><p style="font-size:14px;letter-spacing:0.05em;color:#94a3b8;font-weight:500">Loading DocTransfer...</p></div></div></div><style>@keyframes dt-spin{to{transform:rotate(360deg)}}</style>\n  <noscript><p style="color:#fff;text-align:center;padding:2rem">DocTransfer requires JavaScript for full interactivity. <a href="https://www.doctransfer.app" style="color:#818cf8">Explore DocTransfer Deal Rooms</a></p></noscript>`
+    );
+  } else {
+    html = html.replace(
+      /<div id="root">[\s\S]*?<\/div>(?:\s*<noscript>[\s\S]*?<\/noscript>)?/,
+      `<div id="root"><div class="seo-prerendered-content" style="max-width:1100px;margin:0 auto;padding:3rem 1.5rem;font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;color:#1e293b;line-height:1.7;">${seoBodyHtml}</div></div>\n  <noscript><p>DocTransfer requires JavaScript for the full interactive experience. <a href="https://www.doctransfer.app">Explore DocTransfer Deal Rooms</a></p></noscript>`
+    );
+  }
   
   return html;
 }
