@@ -663,11 +663,13 @@ const extraTemplateSeoData: Record<string, Partial<TemplateSEOContent>> = {
 import { templatesGroup } from './seo-pages/templatesGroup';
 import { verticalTemplatesGroup } from './seo-pages/verticalTemplatesGroup';
 import { scaleTemplatesGroup } from './seo-pages/scaleTemplatesGroup';
+import { dealmakerTemplatesGroup } from './seo-pages/dealmakerTemplatesGroup';
 
 export const templateSeoData: Record<string, TemplateSEOContent> = {
   ...templatesGroup,
   ...verticalTemplatesGroup,
-  ...scaleTemplatesGroup
+  ...scaleTemplatesGroup,
+  ...dealmakerTemplatesGroup
 };
 
 for (const slug in baseTemplateSeoData) {
