@@ -645,6 +645,536 @@ export const solutionsData: SolutionPage[] = [
       { question: 'Can I share DocTransfer links on WhatsApp instead of email?', answer: 'Yes! DocTransfer has native 1-click WhatsApp link generation. When shared, recipients see a clean, professional preview card and can view the document in any mobile browser with zero app installation.' },
       { question: 'Can we organize 30-year property title documents for banks and legal advocates?', answer: 'Absolutely. DocTransfer Virtual Data Rooms (VDR) include pre-structured folders for 7/12 extracts, Encumbrance Certificates (EC), Khata/Patta, RERA sanctions, and Bank APF approval documents.' }
     ]
+  },
+  {
+    slug: 'virtual-data-room-for-seed-fundraising',
+    title: 'Virtual Data Room for Seed & Angel Fundraising',
+    headline: 'Close Your Seed Round Faster with an Investor-Ready VDR',
+    subheadline: 'Organize your cap table, financial model, SAFE notes, and technical architecture in a high-speed zero-knowledge data room with per-slide VC dwell telemetry.',
+    category: 'deals-capital',
+    metaTitle: 'Virtual Data Room for Seed Fundraising & Angel Deals | DocTransfer',
+    metaDescription: 'Secure virtual data room built for early-stage founders raising seed capital. Share cap tables, models, and pitch decks with real-time VC engagement tracking.',
+    keywords: 'virtual data room seed fundraising, startup investor data room, angel fundraising vdr, share cap table safely seed round',
+    heroGradient: 'linear-gradient(135deg, #312e81 0%, #4338ca 100%)',
+    icon: 'Rocket',
+    painPoints: [
+      { title: 'Scattered Diligence Folders', description: 'Sending angel investors haphazard Google Drive links creates a messy, unprofessional impression during due diligence.' },
+      { title: 'Zero Reading Telemetry', description: 'Founders have no visibility into whether prospective lead angels actually opened the cap table or studied financial projections.' },
+      { title: 'Confidentiality Vulnerabilities', description: 'Proprietary product roadmaps and trade secrets forwarded to competing portfolio companies.' }
+    ],
+    features: [
+      { title: 'Slide-by-Slide Dwell Time', description: 'See exact dwell time spent on unit economics, churn cohorts, and competitive moat slides.', icon: 'BarChart2' },
+      { title: 'Dynamic Angel Watermarking', description: 'Overlay recipient angel email and IP across all shared deck and cap table slides.', icon: 'ShieldCheck' },
+      { title: 'Built-in YC SAFE Execution', description: 'Allow investors to electronically execute post-money SAFE agreements directly within the data room.', icon: 'FileSignature' },
+      { title: 'Granular Folder Isolation', description: 'Restrict sensitive employee option pools and code architectures until the lead term sheet is signed.', icon: 'Lock' }
+    ],
+    stats: [
+      { value: '42%', label: 'Faster Term Sheet Velocity' },
+      { value: '100%', label: 'Zero-Knowledge Encryption' },
+      { value: '$0', label: 'Core Plan for Early Founders' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Upload Seed Diligence Vault', description: 'Structure folders for Corporate Governance, Cap Table, Financials, and IP.' },
+      { step: 2, title: 'Generate Tracked Angel Links', description: 'Issue personalized links with dynamic watermarking to each angel syndicate or VC fund.' },
+      { step: 3, title: 'Track Engagement & Sign SAFEs', description: 'Monitor partner viewing sessions and execute SAFE notes with integrated e-signatures.' }
+    ],
+    relatedTemplates: [
+      { name: 'Post-Money SAFE Agreement', slug: 'post-money-safe-agreement-template' },
+      { name: 'Startup Term Sheet', slug: 'startup-term-sheet-template' }
+    ],
+    relatedTools: [
+      { name: 'Pitch Deck Analyzer', slug: 'pitch-deck-analyzer' },
+      { name: 'VDR Cost Calculator', slug: 'vdr-cost-calculator' }
+    ],
+    relatedGlossary: [
+      { name: 'SAFE Note', slug: 'safe-note' },
+      { name: 'Virtual Data Room (VDR)', slug: 'virtual-data-room' }
+    ],
+    relatedIntegrations: [
+      { name: 'Slack', slug: 'slack' },
+      { name: 'Google Drive', slug: 'google-drive' }
+    ],
+    faqs: [
+      { question: 'What should be included in a seed-stage data room?', answer: 'A seed data room should contain your pitch deck, cap table overview, Delaware formation certificate, founders IP assignment agreements, financial model, and customer testimonials.' },
+      { question: 'Can I track which VC partners forwarded my deck to their associates?', answer: 'Yes. DocTransfer detects multi-IP accesses and displays viewing sessions grouped by recipient link.' }
+    ]
+  },
+  {
+    slug: 'commercial-real-estate-closing-room-platform',
+    title: 'Commercial Real Estate Closing Room & Escrow Vault',
+    headline: 'Accelerate Commercial Property Closings Without Deal Leaks',
+    subheadline: 'Coordinate institutional property sales, NNN leases, rent rolls, and tenant estoppel certificates in an encrypted transaction vault with instant signature execution.',
+    category: 'deals-capital',
+    metaTitle: 'Commercial Real Estate Closing Room & Deal Vault | DocTransfer',
+    metaDescription: 'Secure closing room for commercial real estate transactions. Coordinate rent rolls, title reports, NNN leases, and purchase contracts with dynamic watermarking.',
+    keywords: 'commercial real estate closing room, cre deal room software, virtual data room real estate closing, rent roll due diligence vault',
+    heroGradient: 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)',
+    icon: 'Home',
+    painPoints: [
+      { title: 'Rent Roll & Tenant Lease Leaks', description: 'Unprotected tenant rosters and lease rates shared over insecure email get shopped across competing commercial brokerages.' },
+      { title: 'Multi-Party Closing Delays', description: 'Coordinating buyer, seller, lender, title officer, and legal counsel across disparate systems drags out closing timelines.' },
+      { title: 'Version Inconsistencies', description: 'Multiple revisions of lease amendments and purchase contract exhibits cause costly closing misunderstandings.' }
+    ],
+    features: [
+      { title: 'Dynamic Rent Roll Watermarks', description: 'Stamps buyer email, timestamp, and IP across all rent roll pages to enforce strict deal confidentiality.', icon: 'ShieldCheck' },
+      { title: 'Multi-Party Closing Workflows', description: 'Route purchase and sale agreements, title affidavits, and closing statements for verified digital signatures.', icon: 'FileSignature' },
+      { title: 'Buyer Engagement Heatmaps', description: 'See which potential acquirers spent the most time reviewing tenant lease expiries and CAM reconciliation exhibits.', icon: 'BarChart2' },
+      { title: 'One-Click Remote Document Revocation', description: 'Instantly cut off diligence access if a buyer defaults on their earnest money deposit.', icon: 'Lock' }
+    ],
+    stats: [
+      { value: '2.5x', label: 'Faster Closing Coordination' },
+      { value: 'Zero', label: 'Uncontrolled Deal Leaks' },
+      { value: '100%', label: 'ESIGN & UETA Compliance' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Upload Property Diligence Package', description: 'Organize Title Reports, Phase I Environmental, Rent Rolls, and NNN Leases.' },
+      { step: 2, title: 'Invite Qualified Buyers Under NDA', description: 'Require digital execution of the commercial confidentiality agreement before releasing the full vault.' },
+      { step: 3, title: 'Execute Final Closing Documents', description: 'Coordinate buyer and seller signatures on deeds, assignments, and closing statements.' }
+    ],
+    relatedTemplates: [
+      { name: 'Triple Net (NNN) Lease', slug: 'triple-net-nnn-lease-agreement-template' },
+      { name: 'Commercial Purchase Agreement', slug: 'commercial-real-estate-purchase-agreement-template' }
+    ],
+    relatedTools: [
+      { name: 'Rent Agreement Generator', slug: 'rent-agreement-generator' },
+      { name: 'PDF Watermarking Tool', slug: 'pdf-watermarking-tool' }
+    ],
+    relatedGlossary: [
+      { name: 'Virtual Data Room (VDR)', slug: 'virtual-data-room' },
+      { name: 'Audit Trail', slug: 'audit-trail' }
+    ],
+    relatedIntegrations: [
+      { name: 'Google Drive', slug: 'google-drive' },
+      { name: 'Dropbox', slug: 'dropbox' }
+    ],
+    faqs: [
+      { question: 'Can DocTransfer handle large commercial real estate packages (500+ pages)?', answer: 'Yes. DocTransfer renders large architectural drawings, title policies, and multi-tenant lease agreements smoothly with client-side performance optimizations.' },
+      { question: 'Does DocTransfer support tri-party lease assignments and landlord consents?', answer: 'Yes. You can configure multi-signer signature routings for landlords, assignors, and assignees with sequential or parallel signing.' }
+    ]
+  },
+  {
+    slug: 'zero-knowledge-encrypted-document-portal-for-lawyers',
+    title: 'Zero-Knowledge Encrypted Document Portal for Lawyers & Law Firms',
+    headline: 'Protect Attorney-Client Privilege with True Zero-Knowledge Security',
+    subheadline: 'Safeguard litigation work product, privilege logs, and M&A contract disclosures in an AES-256-GCM encrypted portal where even the host cannot read your files.',
+    category: 'workflow',
+    metaTitle: 'Zero-Knowledge Encrypted Document Portal for Law Firms | DocTransfer',
+    metaDescription: 'Client document portal for attorneys and law firms. Zero-knowledge client-side encryption protects attorney-client privilege, work product, and litigation files.',
+    keywords: 'encrypted document portal lawyers, zero knowledge legal file sharing, secure client portal law firm, attorney privilege file vault',
+    heroGradient: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+    icon: 'Scale',
+    painPoints: [
+      { title: 'Subpoena & Privilege Risks', description: 'Standard cloud storage providers hold encryption keys and can be compelled to disclose client files without firm notice.' },
+      { title: 'Insecure Email Attachments', description: 'Sending draft contracts and litigation exhibits over unencrypted email violates professional confidentiality duties.' },
+      { title: 'Unverifiable Document Delivery', description: 'Litigators struggle to prove exact date and time opposing counsel or witnesses received critical disclosures.' }
+    ],
+    features: [
+      { title: 'Browser-Level AES-256-GCM Encryption', description: 'Files are encrypted on your local machine before upload; server operators possess zero cryptographic keys.', icon: 'Lock' },
+      { title: 'Court-Admissible Audit Trails', description: 'Every view, download, and signature produces a SHA-256 hashed audit log meeting federal evidence standards.', icon: 'CheckCircle' },
+      { title: 'Dynamic Recipient Watermarking', description: 'Discourages unauthorized reproduction of confidential depositions and settlement drafts.', icon: 'ShieldCheck' },
+      { title: 'Integrated ESIGN Signatures', description: 'Execute settlement agreements, affidavits, and retainer letters with full statutory validity.', icon: 'FileSignature' }
+    ],
+    stats: [
+      { value: '256-bit', label: 'Military-Grade Encryption' },
+      { value: 'Zero', label: 'Server-Side Access to Content' },
+      { value: '100%', label: 'ABA Model Rule 1.6 Compliance' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Encrypt Files Locally', description: 'Select legal files in your browser; cryptographic keys are generated on-device.' },
+      { step: 2, title: 'Share Encrypted Portal Link', description: 'Deliver access keys directly to your client or co-counsel via secure channel.' },
+      { step: 3, title: 'Review Audit Telemetry', description: 'Verify receipt timestamps and track viewing duration with forensic audit certificates.' }
+    ],
+    relatedTemplates: [
+      { name: 'M&A NDA & Non-Circumvent', slug: 'ma-nda-non-circumvent-agreement-template' },
+      { name: 'PIIA Invention Assignment', slug: 'piia-invention-assignment-agreement-template' }
+    ],
+    relatedTools: [
+      { name: 'PDF Encryption Tool', slug: 'pdf-encryption-tool' },
+      { name: 'ESign Compliance Checker', slug: 'esign-compliance-checker' }
+    ],
+    relatedGlossary: [
+      { name: 'Zero-Knowledge Encryption', slug: 'zero-knowledge-encryption' },
+      { name: 'Audit Trail', slug: 'audit-trail' }
+    ],
+    relatedIntegrations: [
+      { name: 'Microsoft 365', slug: 'microsoft-365' },
+      { name: 'Google Drive', slug: 'google-drive' }
+    ],
+    faqs: [
+      { question: 'How does zero-knowledge encryption protect attorney-client privilege?', answer: 'Because files are encrypted locally in the lawyer\'s browser using client-side keys, DocTransfer servers only hold encrypted ciphertext. Even if served with a subpoena, DocTransfer cannot decrypt or surrender readable client files.' },
+      { question: 'Does DocTransfer comply with American Bar Association (ABA) cybersecurity guidelines?', answer: 'Yes. DocTransfer conforms to ABA Formal Opinion 477R regarding the transmission of highly sensitive client information through robust end-to-end encryption.' }
+    ]
+  },
+  {
+    slug: 'chartered-accountant-document-collection-vault',
+    title: 'Client Document Collection Vault for Chartered Accountants & CPAs',
+    headline: 'Stop Chasing Clients for Tax Returns & Bank Statements',
+    subheadline: 'Streamline tax filing, audit preparation, and corporate compliance with an automated document collection portal featuring client-side encryption and instant reminders.',
+    category: 'workflow',
+    metaTitle: 'Client Document Collection Vault for CPAs & Accountants | DocTransfer',
+    metaDescription: 'Secure client document portal for accountants and CPAs. Collect tax filings, audit workpapers, and KYC documents with automated reminders and encryption.',
+    keywords: 'accountant client document portal, cpa file collection software, secure tax document upload vault, ca practice document management',
+    heroGradient: 'linear-gradient(135deg, #064e3b 0%, #047857 100%)',
+    icon: 'FolderPlus',
+    painPoints: [
+      { title: 'Tax Season Inbox Chaos', description: 'Clients email sensitive W-2s, 1099s, and bank statements across dozens of disjointed email threads with missing attachments.' },
+      { title: 'Identity Theft & Tax Fraud Exposure', description: 'Unencrypted email attachments exposing Social Security Numbers and financial data risk severe IRS/data privacy fines.' },
+      { title: 'Endless Client Chasing', description: 'Accountants spend up to 20% of their billable hours sending repetitive follow-ups for missing signature pages.' }
+    ],
+    features: [
+      { title: 'One-Click Client Upload Portal', description: 'Clients drag and drop their tax documents into dedicated folders without needing to create complicated accounts.', icon: 'Upload' },
+      { title: 'Encrypted Form 8879 / Engagement Signing', description: 'Collect legally binding e-signatures on tax authorization forms and annual engagement letters.', icon: 'FileSignature' },
+      { title: 'Automated Status Tracking', description: 'Instantly view which clients have completed their tax document checklist and who needs automated reminders.', icon: 'BarChart2' },
+      { title: 'Client-Side Data Isolation', description: 'Sensitive payroll and tax filings are protected by AES-256 encryption meeting IRS Publication 4557 standards.', icon: 'ShieldCheck' }
+    ],
+    stats: [
+      { value: '70%', label: 'Less Time Spent Chasing Documents' },
+      { value: '100%', label: 'IRS Pub 4557 Compliance' },
+      { value: 'Zero', label: 'Account Friction for Clients' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Create Client Tax Checklist', description: 'Set up requested folders for Income Statements, Deductions, Bank Statements, and KYC.' },
+      { step: 2, title: 'Send Personalized Secure Upload Link', description: 'Clients receive a clean, branded upload portal to securely submit their files from mobile or desktop.' },
+      { step: 3, title: 'Review & Sign Tax Approvals', description: 'Deliver final returns and collect digital authorization signatures with audit certificates.' }
+    ],
+    relatedTemplates: [
+      { name: 'Master Services Agreement', slug: 'master-services-agreement-msa-template' },
+      { name: 'Board Resolution for Seed Financing', slug: 'board-resolution-seed-financing-template' }
+    ],
+    relatedTools: [
+      { name: 'PDF Encryption Tool', slug: 'pdf-encryption-tool' },
+      { name: 'ESign Compliance Checker', slug: 'esign-compliance-checker' }
+    ],
+    relatedGlossary: [
+      { name: 'Audit Trail', slug: 'audit-trail' },
+      { name: 'Zero-Knowledge Encryption', slug: 'zero-knowledge-encryption' }
+    ],
+    relatedIntegrations: [
+      { name: 'Google Drive', slug: 'google-drive' },
+      { name: 'Dropbox', slug: 'dropbox' }
+    ],
+    faqs: [
+      { question: 'Does DocTransfer meet IRS guidelines for protecting taxpayer data?', answer: 'Yes. DocTransfer adheres to IRS Publication 4557 standards for Safeguarding Taxpayer Data through zero-knowledge encryption, access controls, and tamper-evident audit logs.' },
+      { question: 'Do my clients need to create an account to upload files?', answer: 'No. Clients can upload their files directly through your secure branded portal link in seconds without remembering another password.' }
+    ]
+  },
+  {
+    slug: 'private-equity-deal-syndication-portal',
+    title: 'Private Equity Deal Syndication & LP Reporting Vault',
+    headline: 'Syndicate Capital & Manage LP Relationships Seamlessly',
+    subheadline: 'Deliver Private Placement Memorandums (PPM), subscription agreements, and quarterly capital account statements with dynamic investor watermarking.',
+    category: 'deals-capital',
+    metaTitle: 'Private Equity Deal Syndication & LP Reporting Vault | DocTransfer',
+    metaDescription: 'Secure deal syndication platform for private equity sponsors and syndicators. Share PPMs, track LP reading interest, and collect digital subscription signatures.',
+    keywords: 'private equity deal syndication software, lp investor portal private equity, ppm distribution tracking, real estate syndication data room',
+    heroGradient: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+    icon: 'TrendingUp',
+    painPoints: [
+      { title: 'Leaked Deal Teasers & PPMs', description: 'Syndication teasers forwarded to unauthorized co-investors or competing deal sponsors compromise exclusive terms.' },
+      { title: 'Uncertain LP Commitment Levels', description: 'Sponsors lack visibility into whether target institutional LPs or family offices have actually read the investment deck.' },
+      { title: 'Cumbersome Subscription Signing', description: 'Paper-based subscription packets with dozens of initials slow down capital calls and fund closings.' }
+    ],
+    features: [
+      { title: 'Dynamic LP Watermarking', description: 'Overlays LP name, email address, and IP across all PPM and financial model pages to guarantee confidentiality.', icon: 'ShieldCheck' },
+      { title: 'Investor Reading Duration Heatmaps', description: 'Measure exactly how much time each LP spends reviewing the waterfall distribution and historical track record.', icon: 'BarChart2' },
+      { title: 'Integrated Subscription E-Signing', description: 'LPs execute subscription agreements and accredited investor questionnaires digitally in a single session.', icon: 'FileSignature' },
+      { title: 'Secure Quarterly LP Reporting', description: 'Distribute K-1 tax forms and NAV performance updates into private, encrypted investor folders.', icon: 'FolderPlus' }
+    ],
+    stats: [
+      { value: '3x', label: 'Faster Capital Syndication' },
+      { value: '100%', label: 'Accredited Investor Audit Trail' },
+      { value: 'Zero', label: 'PPM Leakage Incidents' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Upload Deal Syndication Packet', description: 'Add your Offering Memorandum, Private Placement Memorandum (PPM), and Financial Model.' },
+      { step: 2, title: 'Issue Personalized LP Links', description: 'Send customized tracked links to prospective limited partners and family office advisors.' },
+      { step: 3, title: 'Collect Executed Subscriptions', description: 'Track investor reading engagement and finalize capital allocations with verified digital signatures.' }
+    ],
+    relatedTemplates: [
+      { name: 'Finder Fee Agreement Capital Raise', slug: 'finder-fee-agreement-capital-raise-template' },
+      { name: 'Stock Purchase Agreement (SPA)', slug: 'stock-purchase-agreement-spa-template' }
+    ],
+    relatedTools: [
+      { name: 'Due Diligence Scorecard', slug: 'due-diligence-scorecard' },
+      { name: 'VDR Cost Calculator', slug: 'vdr-cost-calculator' }
+    ],
+    relatedGlossary: [
+      { name: 'Virtual Data Room (VDR)', slug: 'virtual-data-room' },
+      { name: 'Audit Trail', slug: 'audit-trail' }
+    ],
+    relatedIntegrations: [
+      { name: 'Salesforce', slug: 'salesforce' },
+      { name: 'HubSpot', slug: 'hubspot' }
+    ],
+    faqs: [
+      { question: 'Can I track which prospective LPs are most engaged in a deal?', answer: 'Yes. DocTransfer delivers real-time dwell telemetry showing total reading seconds per slide, return visit frequency, and open alerts.' },
+      { question: 'Does DocTransfer support accredited investor verification workflows?', answer: 'Yes. You can bundle accreditation self-certifications and W-9/W-8BEN tax documents alongside the primary subscription agreement.' }
+    ]
+  },
+  {
+    slug: 'family-office-wealth-management-vault',
+    title: 'Family Office Secure Asset & Governance Document Vault',
+    headline: 'Multi-Generational Wealth Governance with Zero-Knowledge Privacy',
+    subheadline: 'Protect trust deeds, estate governance plans, private equity holdings, and real estate assets in a bank-grade encrypted family vault with strict role-based access.',
+    category: 'industry',
+    metaTitle: 'Family Office Document Vault & Wealth Governance | DocTransfer',
+    metaDescription: 'Zero-knowledge document vault for family offices and wealth managers. Protect trust deeds, private assets, and estate plans with military-grade encryption.',
+    keywords: 'family office document vault, wealth management secure file sharing, private trust document storage, family office governance software',
+    heroGradient: 'linear-gradient(135deg, #172554 0%, #1e3a8a 100%)',
+    icon: 'Lock',
+    painPoints: [
+      { title: 'Privacy Vulnerabilities on Public Clouds', description: 'Storing ultra-high-net-worth estate plans and trust holdings on consumer cloud platforms exposes families to targeted data breaches.' },
+      { title: 'Complex Multi-Generational Permissions', description: 'Balancing full trustee transparency with limited disclosure for younger generation beneficiaries is difficult with legacy software.' },
+      { title: 'Lack of Audit Logging', description: 'Families need clear, permanent verification of when external tax attorneys and wealth advisors access private records.' }
+    ],
+    features: [
+      { title: 'Client-Side AES-256 Vault Architecture', description: 'All assets, trusts, and deeds are encrypted in the browser, ensuring complete privacy even from cloud host staff.', icon: 'Lock' },
+      { title: 'Strict Role-Based Multi-Family Controls', description: 'Separate entities, trusts, and family branches into completely isolated compartments with custom view/sign rights.', icon: 'Users' },
+      { title: 'Immutable Access Audit Certificates', description: 'Every view and download by family members or external advisors is cryptographically logged with IP and timestamp.', icon: 'CheckCircle' },
+      { title: 'Secure Estate Execution', description: 'Execute trustee consents, property assignments, and wealth governance resolutions digitally.', icon: 'FileSignature' }
+    ],
+    stats: [
+      { value: '256-bit', label: 'End-to-End Client Encryption' },
+      { value: 'Zero', label: 'Third-Party Data Access' },
+      { value: '100%', label: 'Probate & Estate Privacy' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Structure Family Entity Folders', description: 'Establish secure folders for Family Trusts, Operating Businesses, Real Estate Holdings, and Tax Filings.' },
+      { step: 2, title: 'Assign Granular Access Roles', description: 'Provision distinct viewing permissions for Family Principals, Trustees, and External Counsel.' },
+      { step: 3, title: 'Execute Annual Governance Resolves', description: 'Coordinate trustee sign-offs and shareholder resolutions with tamper-evident e-signatures.' }
+    ],
+    relatedTemplates: [
+      { name: 'Revocable Living Trust Assignment', slug: 'revocable-living-trust-assignment-template' },
+      { name: 'Board Resolution for Seed Financing', slug: 'board-resolution-seed-financing-template' }
+    ],
+    relatedTools: [
+      { name: 'PDF Encryption Tool', slug: 'pdf-encryption-tool' },
+      { name: 'ESign Compliance Checker', slug: 'esign-compliance-checker' }
+    ],
+    relatedGlossary: [
+      { name: 'Zero-Knowledge Encryption', slug: 'zero-knowledge-encryption' },
+      { name: 'Virtual Data Room (VDR)', slug: 'virtual-data-room' }
+    ],
+    relatedIntegrations: [
+      { name: 'Microsoft 365', slug: 'microsoft-365' },
+      { name: 'Google Drive', slug: 'google-drive' }
+    ],
+    faqs: [
+      { question: 'Why do family offices prefer DocTransfer over standard cloud drives?', answer: 'DocTransfer offers client-side zero-knowledge encryption, dynamic watermarking, and granular reading duration telemetry, ensuring sensitive family net worth data remains strictly private.' },
+      { question: 'Can external attorneys and CPAs be granted temporary access?', answer: 'Yes. You can issue time-restricted, password-protected guest links with automated expiration timers.' }
+    ]
+  },
+  {
+    slug: 'biotech-pharma-clinical-trial-data-room',
+    title: 'Biotech & Pharma Clinical Trial Document Room',
+    headline: 'Protect Proprietary Molecules, Patents & Clinical Trial Protocols',
+    subheadline: 'Share investigational new drug (IND) filings, clinical protocols, and licensing packages with pharma partners under strict 21 CFR Part 11 compliant audit logging.',
+    category: 'industry',
+    metaTitle: 'Biotech & Pharma Clinical Trial Data Room | DocTransfer',
+    metaDescription: 'Secure virtual data room for biotech and pharmaceutical companies. Share patent filings, clinical trial protocols, and licensing packages with full audit trails.',
+    keywords: 'biotech virtual data room, clinical trial document room, pharma licensing due diligence, 21 cfr part 11 e-signatures',
+    heroGradient: 'linear-gradient(135deg, #022c22 0%, #064e3b 100%)',
+    icon: 'Shield',
+    painPoints: [
+      { title: 'Multi-Billion Dollar IP Vulnerabilities', description: 'Pre-patent chemical structures and assay protocols shared during pharma licensing talks face catastrophic theft risks.' },
+      { title: 'Strict Regulatory Compliance Burdens', description: 'FDA and global health agencies mandate strict audit trails and identity verification for electronic documents.' },
+      { title: 'Complex Diligence Across Time Zones', description: 'Licensing evaluations involve global scientific advisory boards needing rapid access without software installation friction.' }
+    ],
+    features: [
+      { title: 'Dynamic Multi-Language Watermarking', description: 'Overlays recipient scientist email, institution, and UTC timestamp across all molecular documentation.', icon: 'ShieldCheck' },
+      { title: 'Forensic Access Telemetry', description: 'Verify exactly which medical reviewers inspected clinical trial endpoints and adverse event reports.', icon: 'BarChart2' },
+      { title: '21 CFR Part 11 Compliant Signatures', description: 'Execute patent assignments and clinical licensing term sheets with verified cryptographic audit logs.', icon: 'FileSignature' },
+      { title: 'Instant Access Revocation', description: 'Cut off access to trade secrets immediately if out-licensing negotiations terminate without an agreement.', icon: 'Lock' }
+    ],
+    stats: [
+      { value: '100%', label: 'FDA 21 CFR Part 11 Audit Trail' },
+      { value: 'Zero', label: 'Pre-Publication IP Leaks' },
+      { value: '256-bit', label: 'Client-Side Data Protection' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Upload Trial & Patent Dossier', description: 'Structure folders for Pre-Clinical Data, Clinical Protocols, Regulatory Correspondence, and Patents.' },
+      { step: 2, title: 'Enforce Binding NDA Gate', description: 'Require partner pharmaceutical executives to execute a mutual NDA before accessing the scientific vault.' },
+      { step: 3, title: 'Track Diligence Velocity', description: 'Analyze partner review speed across individual study exhibits to gauge licensing interest.' }
+    ],
+    relatedTemplates: [
+      { name: 'M&A NDA & Non-Circumvent', slug: 'ma-nda-non-circumvent-agreement-template' },
+      { name: 'Master Services Agreement', slug: 'master-services-agreement-msa-template' }
+    ],
+    relatedTools: [
+      { name: 'Due Diligence Scorecard', slug: 'due-diligence-scorecard' },
+      { name: 'PDF Encryption Tool', slug: 'pdf-encryption-tool' }
+    ],
+    relatedGlossary: [
+      { name: 'Virtual Data Room (VDR)', slug: 'virtual-data-room' },
+      { name: 'Audit Trail', slug: 'audit-trail' }
+    ],
+    relatedIntegrations: [
+      { name: 'Microsoft 365', slug: 'microsoft-365' },
+      { name: 'Box', slug: 'box' }
+    ],
+    faqs: [
+      { question: 'Is DocTransfer suitable for pharmaceutical out-licensing transactions?', answer: 'Yes. DocTransfer provides granular folder controls, forensic dynamic watermarking, and tamper-evident audit logs required for institutional pharma transactions.' },
+      { question: 'Can I prevent recipients from printing or downloading sensitive assay reports?', answer: 'Yes. You can disable raw file downloads and printing, restricting reviewers to secure in-browser viewing only.' }
+    ]
+  },
+  {
+    slug: 'fintech-lending-borrower-document-portal',
+    title: 'Fintech & Loan Underwriting Borrower Document Portal',
+    headline: 'Close Commercial & Mortgage Loans in Record Time',
+    subheadline: 'Collect borrower tax returns, financial statements, and collateral deeds in an encrypted portal with real-time underwriting tracking and digital promissory note execution.',
+    category: 'workflow',
+    metaTitle: 'Fintech & Commercial Loan Borrower Document Portal | DocTransfer',
+    metaDescription: 'Secure borrower document collection portal for fintech lenders, mortgage brokers, and banks. Collect underwriting files and execute promissory notes online.',
+    keywords: 'fintech borrower portal, loan underwriting document collection, commercial loan closing portal, promissory note digital signature',
+    heroGradient: 'linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%)',
+    icon: 'DollarSign',
+    painPoints: [
+      { title: 'Underwriting Bottlenecks & Missing Files', description: 'Loan officers waste hours matching loose tax returns and P&L statements emailed by borrowers across weeks.' },
+      { title: 'GLBA & Financial Privacy Compliance', description: 'Handling unencrypted bank account numbers and tax filings over basic email risks severe Gramm-Leach-Bliley Act penalties.' },
+      { title: 'Borrower Drop-Off During Signing', description: 'Complicated closing portals force borrowers to print, scan, or struggle with login credentials, lowering closing conversion.' }
+    ],
+    features: [
+      { title: 'Mobile-First Borrower Upload Portal', description: 'Borrowers take photos of documents or drag and drop PDFs from their phone with zero login friction.', icon: 'Upload' },
+      { title: 'Instant Promissory Note E-Signing', description: 'Deliver final loan agreements and promissory notes for legally binding touch execution on any smartphone.', icon: 'FileSignature' },
+      { title: 'Underwriter Reading Telemetry', description: 'Loan committees can quickly verify which financial disclosures have been audited with permanent timestamps.', icon: 'BarChart2' },
+      { title: 'Bank-Grade AES-256 Encryption', description: 'Protect sensitive banking data with client-side encryption conforming to GLBA and financial security standards.', icon: 'ShieldCheck' }
+    ],
+    stats: [
+      { value: '4x', label: 'Faster Loan Processing' },
+      { value: '38%', label: 'Higher Borrower Completion Rate' },
+      { value: '100%', label: 'GLBA Data Privacy Compliance' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Send Borrower Document Checklist', description: 'Generate a secure portal link requesting Tax Returns, Bank Statements, and Operating Statements.' },
+      { step: 2, title: 'Borrower Submits Files', description: 'Borrower uploads required documents directly from mobile or desktop with automated status tracking.' },
+      { step: 3, title: 'Execute Loan Closing Packet', description: 'Deliver finalized Promissory Notes and Security Agreements for instant digital execution.' }
+    ],
+    relatedTemplates: [
+      { name: 'Unsecured Promissory Note', slug: 'promissory-note-unsecured-startup-template' },
+      { name: 'Convertible Promissory Note', slug: 'convertible-promissory-note-agreement-template' }
+    ],
+    relatedTools: [
+      { name: 'ESign Compliance Checker', slug: 'esign-compliance-checker' },
+      { name: 'PDF Encryption Tool', slug: 'pdf-encryption-tool' }
+    ],
+    relatedGlossary: [
+      { name: 'E-Signature', slug: 'electronic-signature' },
+      { name: 'Audit Trail', slug: 'audit-trail' }
+    ],
+    relatedIntegrations: [
+      { name: 'Salesforce', slug: 'salesforce' },
+      { name: 'Zapier', slug: 'zapier' }
+    ],
+    faqs: [
+      { question: 'Are electronic signatures on promissory notes legally binding for commercial loans?', answer: 'Yes. When executed in compliance with the federal ESIGN Act and state UETA, digital signatures on promissory notes carry full legal admissibility.' },
+      { question: 'Does DocTransfer notify loan officers when borrowers upload files?', answer: 'Yes. You receive real-time notifications via email or Slack as soon as borrowers upload required documents.' }
+    ]
+  },
+  {
+    slug: 'franchise-disclosure-document-portal',
+    title: 'Franchise Disclosure Document (FDD) Delivery & Receipt Tracking',
+    headline: 'Ensure 100% FTC Compliance for Franchise Sales',
+    subheadline: 'Deliver 100+ page Franchise Disclosure Documents (FDD) with court-admissible Item 23 receipt timestamps, per-page candidate analytics, and automated 14-day cooling-off tracking.',
+    category: 'workflow',
+    metaTitle: 'Franchise Disclosure Document (FDD) Portal & Receipt Tracking | DocTransfer',
+    metaDescription: 'Deliver Franchise Disclosure Documents (FDD) with FTC-compliant Item 23 receipt timestamps, dynamic candidate watermarking, and 14-day cooling-off tracking.',
+    keywords: 'franchise disclosure document tracking, fdd item 23 receipt tracking, franchise sales compliance software, ftc franchise cooling off tracker',
+    heroGradient: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+    icon: 'Award',
+    painPoints: [
+      { title: 'FTC 14-Day Rule Liability', description: 'Federal Trade Commission rules require franchisors to deliver the FDD at least 14 days before signing. Incomplete receipt proof invalidates sales.' },
+      { title: 'Candidate Ghosting', description: 'Franchise development teams have no insight into whether prospective franchisees actually reviewed Item 19 financial performance representations.' },
+      { title: 'FDD Leakage to Competitors', description: 'Proprietary unit economics and fee structures get forwarded to rival franchise systems without watermark tracking.' }
+    ],
+    features: [
+      { title: 'Tamper-Evident Item 23 Receipts', description: 'Collect signed Item 23 acknowledgment receipts with exact UTC timestamps and IP addresses for FTC compliance.', icon: 'CheckCircle' },
+      { title: 'Candidate Dwell-Time Telemetry', description: 'See how many minutes candidates spend evaluating Item 19 earnings representations and initial investment tables.', icon: 'BarChart2' },
+      { title: 'Dynamic Candidate Watermarking', description: 'Overlay candidate email and phone number across all FDD exhibits to stop competitor leaks.', icon: 'ShieldCheck' },
+      { title: 'Automated 14-Day Cooling-Off Timer', description: 'System tracks and validates the statutory 14-day waiting period before unlocking final franchise agreement signing.', icon: 'Clock' }
+    ],
+    stats: [
+      { value: '100%', label: 'FTC Rule 436 Compliance' },
+      { value: '14-Day', label: 'Automated Cooling-Off Tracking' },
+      { value: '3x', label: 'Higher Candidate Qualification Velocity' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Upload Registered FDD Dossier', description: 'Upload your annual FDD along with state-specific addenda and franchise agreement exhibits.' },
+      { step: 2, title: 'Deliver Tracked Candidate Link', description: 'Send a personalized link requiring verified Item 23 receipt sign-off upon first view.' },
+      { step: 3, title: 'Track 14-Day Window & Execute', description: 'Monitor candidate reading time and execute final franchise agreements once statutory cooling off ends.' }
+    ],
+    relatedTemplates: [
+      { name: 'Master Services Agreement', slug: 'master-services-agreement-msa-template' },
+      { name: 'PIIA Invention Assignment', slug: 'piia-invention-assignment-agreement-template' }
+    ],
+    relatedTools: [
+      { name: 'Reading Time Estimator', slug: 'reading-time-estimator' },
+      { name: 'ESign Compliance Checker', slug: 'esign-compliance-checker' }
+    ],
+    relatedGlossary: [
+      { name: 'Audit Trail', slug: 'audit-trail' },
+      { name: 'E-Signature', slug: 'electronic-signature' }
+    ],
+    relatedIntegrations: [
+      { name: 'HubSpot', slug: 'hubspot' },
+      { name: 'Salesforce', slug: 'salesforce' }
+    ],
+    faqs: [
+      { question: 'Does DocTransfer satisfy the FTC Rule for electronic FDD disclosure?', answer: 'Yes. The FTC Franchise Rule explicitly permits electronic delivery of FDDs provided receipt can be verified with date and time stamps, which DocTransfer delivers with cryptographic audit certificates.' },
+      { question: 'Can I track if a candidate reviewed the Item 19 Financial Performance Representations?', answer: 'Yes. DocTransfer shows exact second-by-second reading duration for Item 19 and all other sections.' }
+    ]
+  },
+  {
+    slug: 'cross-border-mergers-acquisitions-room',
+    title: 'Cross-Border M&A Diligence Room with Multi-Language Watermarks',
+    headline: 'Execute Global M&A Deals Across Jurisdictions with Confidence',
+    subheadline: 'Coordinate international acquisitions, multi-currency disclosures, and cross-border regulatory approvals in a high-security diligence vault with global time zone audit tracking.',
+    category: 'deals-capital',
+    metaTitle: 'Cross-Border M&A Data Room & Due Diligence | DocTransfer',
+    metaDescription: 'Secure virtual data room for cross-border M&A transactions. Support for international diligence, multi-language watermarking, and global time zone audit logs.',
+    keywords: 'cross border m&a data room, international due diligence vault, cross border acquisition software, foreign direct investment file sharing',
+    heroGradient: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)',
+    icon: 'Target',
+    painPoints: [
+      { title: 'Global Time Zone Diligence Lag', description: 'Coordinating buyers, investment banks, and legal advisors in New York, London, Dubai, and Singapore causes severe closing delays.' },
+      { title: 'Conflicting Cross-Border Privacy Laws', description: 'Navigating EU GDPR, UK GDPR, UAE PDPL, and US state privacy regulations exposes international deals to regulatory penalties.' },
+      { title: 'High-Risk Diligence Leakage', description: 'Cross-border bids involve multiple foreign consortiums, significantly multiplying the danger of confidential valuation leaks.' }
+    ],
+    features: [
+      { title: 'Multi-Language Dynamic Watermarks', description: 'Stamps viewer identity and timestamp across documents, deterring unauthorized leakage across international teams.', icon: 'ShieldCheck' },
+      { title: 'Unified Global Audit Logging', description: 'Standardized UTC audit logs ensure admissibility before arbitral tribunals (ICC, LCIA, SIAC) and domestic courts.', icon: 'CheckCircle' },
+      { title: 'Granular Multi-Bidder Isolation', description: 'Host simultaneous competitive bidding consortiums in isolated compartments without cross-bidder visibility.', icon: 'Users' },
+      { title: 'Zero-Knowledge Cryptographic Vault', description: 'Data is protected with AES-256-GCM encryption meeting strict international data sovereignty standards.', icon: 'Lock' }
+    ],
+    stats: [
+      { value: '24/7', label: 'Continuous Global Diligence' },
+      { value: '100%', label: 'GDPR, DIFC & US Compliance' },
+      { value: 'Zero', label: 'Cross-Bidder Information Leakage' }
+    ],
+    howItWorks: [
+      { step: 1, title: 'Upload Cross-Border Diligence Library', description: 'Organize files into Financials, Corporate Structure, Tax Treaties, and Regulatory Clearances.' },
+      { step: 2, title: 'Invite International Bidding Groups', description: 'Set up distinct access credentials and watermarks for each international bidding consortium.' },
+      { step: 3, title: 'Execute Final Acquisition SPA', description: 'Coordinate closing signatures across global executive teams with certified digital execution.' }
+    ],
+    relatedTemplates: [
+      { name: 'Stock Purchase Agreement (SPA)', slug: 'stock-purchase-agreement-spa-template' },
+      { name: 'Asset Purchase Agreement (APA)', slug: 'asset-purchase-agreement-apa-template' }
+    ],
+    relatedTools: [
+      { name: 'Due Diligence Scorecard', slug: 'due-diligence-scorecard' },
+      { name: 'VDR Cost Calculator', slug: 'vdr-cost-calculator' }
+    ],
+    relatedGlossary: [
+      { name: 'Virtual Data Room (VDR)', slug: 'virtual-data-room' },
+      { name: 'Zero-Knowledge Encryption', slug: 'zero-knowledge-encryption' }
+    ],
+    relatedIntegrations: [
+      { name: 'Microsoft 365', slug: 'microsoft-365' },
+      { name: 'Google Drive', slug: 'google-drive' }
+    ],
+    faqs: [
+      { question: 'Does DocTransfer comply with international cross-border data privacy standards?', answer: 'Yes. DocTransfer is architected to comply with EU GDPR, UK GDPR, DIFC Data Protection Law, and UAE PDPL regulations through zero-knowledge data encryption.' },
+      { question: 'Can multiple competing international buyers review the data room simultaneously?', answer: 'Yes. DocTransfer provides strict multi-tenant isolation, ensuring competing bidders cannot see or identify other active parties.' }
+    ]
   }
 ];
 
