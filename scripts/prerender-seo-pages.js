@@ -193,16 +193,16 @@ function collectAllRoutes() {
   const routes = [];
   
   // Static routes & Hubs
-  routes.push({ path: '/', title: 'DocTransfer | Free DocSend Alternative | Secure Document Sharing & VDR', description: 'The best free DocSend alternative. Securely share pitch decks, legal documents, and sensitive files with end-to-end encryption, dynamic watermarking, and real-time page-by-page analytics.', bodyContent: 'DocTransfer is the best free DocSend alternative for secure document sharing. Share pitch decks, legal documents, and sensitive files with end-to-end encryption, dynamic watermarking, and real-time page-by-page analytics. Features include e-signatures, password protection, virtual data rooms, and document tracking. Start sharing documents securely for free today.' });
-  routes.push({ path: '/pricing', title: 'Pricing - DocTransfer | Free & Premium Plans', description: 'Compare DocTransfer pricing plans. Start free forever with premium document sharing features, or upgrade for advanced analytics and team collaboration.', bodyContent: 'DocTransfer Pricing Plans. Free tier includes unlimited document sharing, e-signatures, page-by-page analytics, dynamic watermarking, and password protection. Premium plans available for advanced virtual data rooms, custom branding, and enterprise security features.' });
-  routes.push({ path: '/comparisons', title: 'Document Sharing Platform Comparisons - DocTransfer', description: 'Compare DocTransfer with other document sharing platforms. See detailed feature comparisons with DocSend, PandaDoc, DocuSign, and more.', bodyContent: 'Compare DocTransfer with leading document sharing platforms. Detailed feature, pricing, and security comparisons with DocuSign, PandaDoc, Adobe Sign, DocSend, and more. See why DocTransfer offers better value with free e-signatures, end-to-end encryption, and page-level analytics.' });
-  routes.push({ path: '/alternatives', title: 'Best Document Sharing Alternatives 2026 - DocTransfer', description: 'Explore the best alternatives to popular document sharing platforms. Find the right free DocSend, DocuSign, and PandaDoc alternatives for your needs.', bodyContent: 'Explore the best alternatives to popular document sharing and e-signature platforms. DocTransfer is the leading free alternative to DocuSign, PandaDoc, DocSend, and Adobe Sign. Get unlimited signatures, encrypted document sharing, and real-time analytics without expensive subscriptions.' });
-  routes.push({ path: '/templates', title: '100+ Free Legal & Business Document Templates - DocTransfer', description: 'Download, customize, and electronically sign 100+ legal contracts, NDAs, HR agreements, and business forms for free.', bodyContent: 'Free Legal Document Templates. Access 100+ standardized contracts, non-disclosure agreements, offer letters, lease agreements, and corporate resolutions. Legally binding and fully customizable.' });
-  routes.push({ path: '/tools', title: 'Free Online Document Security & Analytics Micro-Tools - DocTransfer', description: 'Explore our free suite of interactive document tools: Pitch Deck Analyzer, NDA Generator, VDR Cost Calculator, and PDF Watermarker.', bodyContent: 'Free Document Tools Hub. Analyze pitch decks, generate legally-enforceable NDAs, calculate virtual data room costs, and apply dynamic watermarks online without signing up.' });
+  routes.push({ path: '/', title: 'DocTransfer — #1 Free DocSend Alternative & Secure Virtual Data Room', description: 'Share pitch decks, contracts & due diligence vaults with client-side AES-256 encryption, dynamic recipient watermarking, and real-time page analytics. 100% Free — no credit card required.', bodyContent: 'DocTransfer is the best free DocSend alternative for secure document sharing. Share pitch decks, legal documents, and sensitive files with end-to-end encryption, dynamic watermarking, and real-time page-by-page analytics. Features include e-signatures, password protection, virtual data rooms, and document tracking. Start sharing documents securely for free today.' });
+  routes.push({ path: '/pricing', title: 'DocTransfer Pricing — 100% Free Tier & Affordable Virtual Data Rooms', description: 'Compare DocTransfer pricing plans. Start free forever with premium document sharing features, or upgrade for advanced analytics and team collaboration. 100% Free — no credit card required.', bodyContent: 'DocTransfer Pricing Plans. Free tier includes unlimited document sharing, e-signatures, page-by-page analytics, dynamic watermarking, and password protection. Premium plans available for advanced virtual data rooms, custom branding, and enterprise security features.' });
+  routes.push({ path: '/comparisons', title: 'Document Security & VDR Comparisons (2027 Guide) | DocTransfer', description: 'Compare DocTransfer with other document sharing platforms. See detailed feature comparisons with DocSend, PandaDoc, DocuSign, and more. 100% Free — no credit card required.', bodyContent: 'Compare DocTransfer with leading document sharing platforms. Detailed feature, pricing, and security comparisons with DocuSign, PandaDoc, Adobe Sign, DocSend, and more. See why DocTransfer offers better value with free e-signatures, end-to-end encryption, and page-level analytics.' });
+  routes.push({ path: '/alternatives', title: 'Top Free Document Sharing & E-Signature Alternatives (2027) | DocTransfer', description: 'Explore the best alternatives to popular document sharing platforms. Find the right free DocSend, DocuSign, and PandaDoc alternatives for your needs. 100% Free — no credit card required.', bodyContent: 'Explore the best alternatives to popular document sharing and e-signature platforms. DocTransfer is the leading free alternative to DocuSign, PandaDoc, DocSend, and Adobe Sign. Get unlimited signatures, encrypted document sharing, and real-time analytics without expensive subscriptions.' });
+  routes.push({ path: '/templates', title: '100+ Free Legal & Business Document Templates (Word & PDF Download) — DocTransfer', description: 'Download, customize, and electronically sign 100+ legal contracts, NDAs, HR agreements, and business forms for free. 100% Free — no credit card required.', bodyContent: 'Free Legal Document Templates. Access 100+ standardized contracts, non-disclosure agreements, offer letters, lease agreements, and corporate resolutions. Legally binding and fully customizable.' });
+  routes.push({ path: '/tools', title: 'Free Deal & Document Security Tools (Deck Analyzer, VDR Calculator) | DocTransfer', description: 'Explore our free suite of interactive document tools: Pitch Deck Analyzer, NDA Generator, VDR Cost Calculator, and PDF Watermarker. 100% Free — no credit card required.', bodyContent: 'Free Document Tools Hub. Analyze pitch decks, generate legally-enforceable NDAs, calculate virtual data room costs, and apply dynamic watermarks online without signing up.' });
   routes.push({ path: '/integrations', title: 'DocTransfer Integrations & Cloud Storage Connectors', description: 'Connect DocTransfer with Google Drive, OneDrive, Box, Dropbox, Salesforce, HubSpot, Slack, and Zapier for seamless automated workflows.', bodyContent: 'DocTransfer Integrations Hub. Seamlessly connect DocTransfer with your cloud storage, CRM, and team communication stack. Layer page analytics and encryption onto your existing tools.' });
-  routes.push({ path: '/glossary', title: 'Document Security & E-Signature Glossary (2026)', description: 'Complete dictionary and reference guide for virtual data rooms, e-signatures, zero-knowledge encryption, and document compliance terms.', bodyContent: 'Document Security & E-Signature Glossary. Definitions, statutory references, and architectural explanations for key terms in secure file transfer, compliance, and venture capital deals.' });
+  routes.push({ path: '/glossary', title: 'Document Security & E-Signature Glossary (2027)', description: 'Complete dictionary and reference guide for virtual data rooms, e-signatures, zero-knowledge encryption, and document compliance terms.', bodyContent: 'Document Security & E-Signature Glossary. Definitions, statutory references, and architectural explanations for key terms in secure file transfer, compliance, and venture capital deals.' });
   routes.push({ path: '/solutions', title: 'Industry Document Solutions - DocTransfer', description: 'Tailored document sharing, tracking, and signing solutions for Fundraising, M&A Due Diligence, Legal, Healthcare, Real Estate, and Startups.', bodyContent: 'DocTransfer Industry Solutions. Discover compliant, high-security document portals customized for legal practices, healthcare records, real estate closings, and venture fundraising.' });
-  routes.push({ path: '/docsend-alternative', title: 'DocSend Alternative Hub - Why Teams Switch to DocTransfer', description: 'Discover why thousands of founders and sales teams switch from DocSend to DocTransfer. Unlimited page analytics and e-signatures for $0.', bodyContent: 'DocSend Alternative Hub. Complete migration guides, feature breakdowns, and pricing comparisons showing why DocTransfer is the superior free DocSend alternative.' });
+  routes.push({ path: '/docsend-alternative', title: 'Best Free DocSend Alternative (2027) — Zero Per-User Fees | DocTransfer', description: 'Discover why thousands of founders and sales teams switch from DocSend to DocTransfer. Unlimited page analytics and e-signatures for $0. 100% Free — no credit card required.', bodyContent: 'DocSend Alternative Hub. Complete migration guides, feature breakdowns, and pricing comparisons showing why DocTransfer is the superior free DocSend alternative.' });
   routes.push({ path: '/research', title: 'State of Document Security & Pitch Deck Benchmarks - DocTransfer Research', description: 'Empirical research and data on investor reading habits, NDA execution velocity, and data room security benchmarks.', bodyContent: 'DocTransfer Research & Industry Benchmarks. Data-driven insights on pitch deck engagement, contract signing velocity, and cloud file security trends.' });
   routes.push({ path: '/blog', title: 'Blog - DocTransfer | Document Security & Sharing Guides', description: 'Expert guides on document security, e-signatures, and secure file sharing. Learn best practices for protecting sensitive business documents.', bodyContent: 'The DocTransfer Blog. Expert guides on document security, electronic signatures, secure file sharing, and business document management. Learn best practices for protecting sensitive documents, understanding NDA agreements, and managing contracts digitally.' });
   routes.push({ path: '/press', title: 'Press Kit & Official Trust Badges - DocTransfer', description: 'Download official DocTransfer trust badges, logos, and media resources. Embed verified e-signature and encryption badges on your site.', bodyContent: 'DocTransfer Press Kit & Media Resources. Download verified security and trust badges for pitch decks, investor data rooms, and website footers. Contact our media relations team.' });
@@ -741,13 +741,94 @@ function buildStructuredData(route) {
   return schemas.map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n  ');
 }
 
+function optimizeTitleForCTR(rawTitle, category, slug) {
+  let cleanName = slug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase())
+    .replace(/ Template$/i, '')
+    .trim();
+
+  // Modernize date references to 2027
+  let title = (rawTitle || '').replace(/\(2025\)|\(2026\)|2025|2026/g, '2027');
+
+  if (category === 'templates' || slug.includes('template') || slug.includes('agreement') || slug.includes('contract')) {
+    let base = title ? title.split(' | ')[0].split(' - ')[0].trim() : `Free ${cleanName} Template`;
+    base = base.replace(/^DocTransfer Solution for\s*/i, '').replace(/^What is\s*/i, '').replace(/^Free\s+/i, '').trim();
+    if (!base.toLowerCase().includes('template')) base = `${base} Template`;
+    return `Free ${base} (Word & PDF Download) — Fill & Sign Online | DocTransfer`;
+  }
+
+  if (category === 'alternatives' || slug.includes('alternative') || category === 'docsend-alternative') {
+    let base = title ? title.split(' | ')[0].split(' - ')[0].trim() : cleanName;
+    base = base.replace(/^Best\s+/i, '').replace(/^Free\s+/i, '').trim();
+    if (!base.toLowerCase().includes('alternative')) base = `${base} Alternative`;
+    return `Best Free ${base} (2027) — Zero-Knowledge E2EE | DocTransfer`;
+  }
+
+  if (category === 'comparisons' || slug.includes('-vs-')) {
+    let base = title ? title.split(' | ')[0].split(' - ')[0].trim() : cleanName;
+    base = base.replace(/\s*\(2027 Review\)/i, '').replace(/\s*\(2026 Review\)/i, '').trim();
+    return `${base} (2027 Review) — Features & Pricing Compared | DocTransfer`;
+  }
+
+  if (category === 'how-to' || slug.startsWith('how-to')) {
+    let base = title ? title.split(' | ')[0].split(' - ')[0].trim() : cleanName;
+    base = base.replace(/^How to\s+/i, '').trim();
+    return `How to ${base} (Free Guide) | DocTransfer`;
+  }
+
+  if (category === 'tools') {
+    let base = title ? title.split(' | ')[0].split(' - ')[0].trim() : cleanName;
+    return `${base} (Free Online Tool) — Instant & Secure | DocTransfer`;
+  }
+
+  if (category === 'industry') {
+    let base = title ? title.split(' | ')[0].split(' - ')[0].trim() : cleanName;
+    base = base.replace(/^DocTransfer Solution for\s*/i, '').trim();
+    return `${base} (Secure Document Vault & VDR) | DocTransfer`;
+  }
+
+  if (title) {
+    if (!title.includes('DocTransfer')) return `${title} | DocTransfer`;
+    return title;
+  }
+
+  return `${cleanName} — Secure Document Sharing | DocTransfer`;
+}
+
+function optimizeDescriptionForCTR(rawDesc, category, slug) {
+  const cleanName = slug.replace(/-/g, ' ');
+  let desc = rawDesc ? rawDesc.trim() : `Learn about ${cleanName} on DocTransfer. Securely share, track, and electronically sign confidential documents with AES-256 encryption.`;
+  if (!desc.includes('100% Free') && !desc.includes('No credit card required') && !desc.includes('Free forever')) {
+    if (desc.endsWith('.')) {
+      desc = `${desc} 100% Free — no credit card required.`;
+    } else {
+      desc = `${desc}. 100% Free — no credit card required.`;
+    }
+  }
+  return desc;
+}
+
 // ============================================================
 // 4. Generate static HTML files for each route
 // ============================================================
 
 function generateStaticHTML(template, route) {
-  const { path: routePath, title, description, pageData } = route;
+  const { path: routePath, title: rawTitle, description: rawDesc, pageData } = route;
   const canonicalUrl = `${BASE_URL}${routePath === '/' ? '' : routePath}`;
+  
+  // Extract category and slug from routePath
+  const parts = routePath.split('/').filter(Boolean);
+  const category = parts[0] || '';
+  const slug = parts[1] || parts[0] || '';
+
+  const title = routePath === '/' 
+    ? 'DocTransfer — #1 Free DocSend Alternative & Secure Virtual Data Room'
+    : optimizeTitleForCTR(rawTitle, category, slug);
+    
+  const description = routePath === '/'
+    ? 'Share pitch decks, contracts & due diligence vaults with client-side AES-256 encryption, dynamic recipient watermarking, and real-time page analytics. 100% Free — no credit card required.'
+    : optimizeDescriptionForCTR(rawDesc, category, slug);
   
   let html = template;
   
