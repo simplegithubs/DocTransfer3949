@@ -664,12 +664,14 @@ import { templatesGroup } from './seo-pages/templatesGroup';
 import { verticalTemplatesGroup } from './seo-pages/verticalTemplatesGroup';
 import { scaleTemplatesGroup } from './seo-pages/scaleTemplatesGroup';
 import { dealmakerTemplatesGroup } from './seo-pages/dealmakerTemplatesGroup';
+import { proposalTemplatesGroup } from './seo-pages/proposalTemplatesGroup';
 
 export const templateSeoData: Record<string, TemplateSEOContent> = {
   ...templatesGroup,
   ...verticalTemplatesGroup,
   ...scaleTemplatesGroup,
-  ...dealmakerTemplatesGroup
+  ...dealmakerTemplatesGroup,
+  ...proposalTemplatesGroup
 };
 
 for (const slug in baseTemplateSeoData) {
